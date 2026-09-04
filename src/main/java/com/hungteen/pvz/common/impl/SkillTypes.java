@@ -5,10 +5,10 @@ import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.ISkillType;
 import com.hungteen.pvz.utils.ArrayUtil;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
@@ -336,12 +336,12 @@ public class SkillTypes {
 
         @Override
         public MutableComponent getText() {
-            return Component.translatable("skill." + this.getModID() + "." + this.toString());
+            return Component.translatable("skill." + this.getModID() + "." + this);
         }
 
         @Override
         public MutableComponent getDescription() {
-            return Component.translatable("skill." + this.getModID() + "." + this.toString() + ".desc");
+            return Component.translatable("skill." + this.getModID() + "." + this + ".desc");
         }
 
         @Override

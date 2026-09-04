@@ -1,15 +1,14 @@
 modLoader="javafml" 
 license="GNU LESSER GENERAL PUBLIC LICENSE" 
 loaderVersion="[43,)" 
-issueTrackerURL="https://github.com/HungTeen/pvzmod/issues"
+issueTrackerURL="https://github.com/ExoticRubikCube/pvzmod1.5"
 
 [[mods]]
 modId="pvz"
 version="0.6.5"
 displayName="Plants vs Zombies"
-authors="_HungTeen_, Wolf__Crystal, Grass_Carp"
-logoFile="logo.png" 
-displayURL="https://space.bilibili.com/362855464" 
+authors="SuSen36, _HungTeen_, Wolf__Crystal, Grass_Carp"
+logoFile="logo.png"
 credits="Men_Tian_Bai, InkyTheSheep, Chompy, XXTT, 136(some of challenges), True Bebra(Russian translation) and so on."
 description="A mod that brings Plants vs Zombies to Minecraft !"
 configBackground="pvz:textures/block/amethyst_block.png"

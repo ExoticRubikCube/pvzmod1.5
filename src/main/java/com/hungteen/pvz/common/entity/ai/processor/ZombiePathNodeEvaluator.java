@@ -1,11 +1,10 @@
 package com.hungteen.pvz.common.entity.ai.processor;
 
 import com.hungteen.pvz.common.entity.zombie.base.SwimmerZombieEntity;
-
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.PathNavigationRegion;
 
 public class ZombiePathNodeEvaluator extends AmphibiousNodeEvaluator {
 

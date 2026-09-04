@@ -1,15 +1,14 @@
 package com.hungteen.pvz.common.network;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.IPAZType;
 import com.hungteen.pvz.utils.PlayerUtil;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class PAZStatsPacket {
 

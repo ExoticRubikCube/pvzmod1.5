@@ -4,8 +4,8 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.bullet.ButterEntity;
 import com.hungteen.pvz.common.entity.bullet.PultBulletEntity;
 import com.hungteen.pvz.common.impl.plant.CustomPlants;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public class ButterPultEntity extends KernelPultEntity {

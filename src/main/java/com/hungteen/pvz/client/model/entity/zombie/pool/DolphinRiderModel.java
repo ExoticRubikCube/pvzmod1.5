@@ -1,21 +1,19 @@
 package com.hungteen.pvz.client.model.entity.zombie.pool;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.zombie.pool.DolphinRiderEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -41,18 +39,18 @@ public class DolphinRiderModel extends EntityModel<DolphinRiderEntity> {
 
 public DolphinRiderModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.zombie = root.getChild("zombie");
-		this.left_leg = root.getChild("left_leg");
-		this.right_leg = root.getChild("right_leg");
-		this.body = root.getChild("body");
-		this.left_hand = root.getChild("left_hand");
-		this.right_hand = root.getChild("right_hand");
-		this.head = root.getChild("head");
-		this.dolphin = root.getChild("dolphin");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
+		this.zombie = this.total.getChild("zombie");
+		this.left_leg = this.zombie.getChild("left_leg");
+		this.right_leg = this.zombie.getChild("right_leg");
+		this.body = this.zombie.getChild("body");
+		this.left_hand = this.zombie.getChild("left_hand");
+		this.right_hand = this.zombie.getChild("right_hand");
+		this.head = this.zombie.getChild("head");
+		this.dolphin = this.total.getChild("dolphin");
+		this.bone = this.dolphin.getChild("bone");
+		this.bone2 = this.dolphin.getChild("bone2");
+		this.bone3 = this.dolphin.getChild("bone3");
+		this.bone4 = this.dolphin.getChild("bone4");
 	}
 
 	public static LayerDefinition createBodyLayer() {

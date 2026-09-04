@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.explosion;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.explosion.BambooLordEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -58,34 +51,34 @@ public class BambooLordModel extends PVZPlantModel<BambooLordEntity> {
 
 public BambooLordModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.worm = root.getChild("worm");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.body = root.getChild("body");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.cube_r5 = root.getChild("cube_r5");
-		this.down = root.getChild("down");
-		this.cube_r6 = root.getChild("cube_r6");
-		this.cube_r7 = root.getChild("cube_r7");
-		this.head = root.getChild("head");
-		this.cube_r8 = root.getChild("cube_r8");
-		this.face = root.getChild("face");
-		this.leaves = root.getChild("leaves");
-		this.leaf1 = root.getChild("leaf1");
-		this.cube_r9 = root.getChild("cube_r9");
-		this.bone2 = root.getChild("bone2");
-		this.cube_r10 = root.getChild("cube_r10");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.leaf2 = root.getChild("leaf2");
-		this.cube_r11 = root.getChild("cube_r11");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
-		this.leaf3 = root.getChild("leaf3");
-		this.cube_r12 = root.getChild("cube_r12");
-		this.bone9 = root.getChild("bone9");
-		this.bone10 = root.getChild("bone10");
+		this.worm = this.total.getChild("worm");
+		this.cube_r1 = this.worm.getChild("cube_r1");
+		this.cube_r2 = this.worm.getChild("cube_r2");
+		this.cube_r3 = this.worm.getChild("cube_r3");
+		this.body = this.total.getChild("body");
+		this.cube_r4 = this.body.getChild("cube_r4");
+		this.cube_r5 = this.body.getChild("cube_r5");
+		this.down = this.body.getChild("down");
+		this.cube_r6 = this.down.getChild("cube_r6");
+		this.cube_r7 = this.down.getChild("cube_r7");
+		this.head = this.body.getChild("head");
+		this.cube_r8 = this.head.getChild("cube_r8");
+		this.face = this.total.getChild("face");
+		this.leaves = this.total.getChild("leaves");
+		this.leaf1 = this.leaves.getChild("leaf1");
+		this.cube_r9 = this.leaf1.getChild("cube_r9");
+		this.bone2 = this.leaf1.getChild("bone2");
+		this.cube_r10 = this.bone2.getChild("cube_r10");
+		this.bone3 = this.bone2.getChild("bone3");
+		this.bone4 = this.bone3.getChild("bone4");
+		this.leaf2 = this.leaves.getChild("leaf2");
+		this.cube_r11 = this.leaf2.getChild("cube_r11");
+		this.bone6 = this.leaf2.getChild("bone6");
+		this.bone7 = this.bone6.getChild("bone7");
+		this.leaf3 = this.leaves.getChild("leaf3");
+		this.cube_r12 = this.leaf3.getChild("cube_r12");
+		this.bone9 = this.leaf3.getChild("bone9");
+		this.bone10 = this.bone9.getChild("bone10");
 	}
 
 	public static LayerDefinition createBodyLayer() {

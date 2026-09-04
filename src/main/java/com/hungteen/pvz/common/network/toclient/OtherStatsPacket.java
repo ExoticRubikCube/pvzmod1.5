@@ -1,18 +1,17 @@
 package com.hungteen.pvz.common.network.toclient;
 
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.misc.PVZPacketTypes;
 import com.hungteen.pvz.utils.PlayerUtil;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class OtherStatsPacket{
 
 	private final PVZPacketTypes type;
-	private int pos;
+	private final int pos;
 	private int data = 0;
 	private boolean flag = false;
 

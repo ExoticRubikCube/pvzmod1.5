@@ -6,9 +6,9 @@ import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 

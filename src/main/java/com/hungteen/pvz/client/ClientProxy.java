@@ -11,41 +11,25 @@ import com.hungteen.pvz.common.item.armor.FootballArmorItem;
 import com.hungteen.pvz.common.item.armor.GigaArmorItem;
 import com.hungteen.pvz.common.item.tool.GardenCompassItem;
 import com.hungteen.pvz.utils.StringUtil;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.server.commands.LocateCommand;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Registry;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-
-import java.util.Optional;
-
-import static com.hungteen.pvz.common.world.biome.BiomeRegister.ZEN_GARDEN;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -56,14 +40,10 @@ public class ClientProxy extends CommonProxy {
     public void init() {
     }
 
-    ;
-
     @Override
     public void postInit() {
         this.addLayersForRender();
     }
-
-    ;
 
     @Override
     public void setUpClient() {
@@ -79,7 +59,7 @@ public class ClientProxy extends CommonProxy {
 
             private final Angle wobble = new Angle();
             private final Angle wobbleRandom = new Angle();
-            private int tick = 0;
+            private final int tick = 0;
             private BlockPos pos = null;
 
             @Override

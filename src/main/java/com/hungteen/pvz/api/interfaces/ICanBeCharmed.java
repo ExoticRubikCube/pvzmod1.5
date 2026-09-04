@@ -1,8 +1,8 @@
 package com.hungteen.pvz.api.interfaces;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.world.entity.LivingEntity;
+
+import javax.annotation.Nullable;
 
 /**
  * use to check can entity be charmed.

@@ -3,8 +3,8 @@ package com.hungteen.pvz.common.enchantment;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 /**
  * @program: pvzmod-1.16.5

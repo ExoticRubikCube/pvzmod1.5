@@ -1,27 +1,22 @@
 package com.hungteen.pvz.client.model.entity.zombie.roof;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.client.model.entity.PVZEntityModel;
-import com.hungteen.pvz.common.entity.zombie.roof.GargantuarEntity.GargantuarType;
 import com.hungteen.pvz.common.entity.zombie.roof.GargantuarEntity;
+import com.hungteen.pvz.common.entity.zombie.roof.GargantuarEntity.GargantuarType;
 import com.hungteen.pvz.utils.AnimationUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -78,49 +73,49 @@ public class GargantuarModel<T extends GargantuarEntity> extends PVZEntityModel<
 
 public GargantuarModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.left_leg = root.getChild("left_leg");
-		this.right_leg = root.getChild("right_leg");
-		this.up = root.getChild("up");
-		this.back = root.getChild("back");
-		this.imp = root.getChild("imp");
-		this.left_leg3 = root.getChild("left_leg3");
-		this.right_leg3 = root.getChild("right_leg3");
-		this.up3 = root.getChild("up3");
-		this.body3 = root.getChild("body3");
-		this.right_arm2 = root.getChild("right_arm2");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.left_arm2 = root.getChild("left_arm2");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.head3 = root.getChild("head3");
-		this.head = root.getChild("head");
-		this.angry = root.getChild("angry");
-		this.bone3 = root.getChild("bone3");
-		this.hurt2 = root.getChild("hurt2");
-		this.hurt21 = root.getChild("hurt21");
-		this.hurt22 = root.getChild("hurt22");
-		this.hurt23 = root.getChild("hurt23");
-		this.right_arm = root.getChild("right_arm");
-		this.left_arm = root.getChild("left_arm");
-		this.hurt1 = root.getChild("hurt1");
-		this.hurt11 = root.getChild("hurt11");
-		this.pole = root.getChild("pole");
-		this.sign = root.getChild("sign");
-		this.bone = root.getChild("bone");
-		this.doll = root.getChild("doll");
-		this.right_leg2 = root.getChild("right_leg2");
-		this.rightleg_r1 = root.getChild("rightleg_r1");
-		this.left_leg2 = root.getChild("left_leg2");
-		this.leftleg_r1 = root.getChild("leftleg_r1");
-		this.up2 = root.getChild("up2");
-		this.body2 = root.getChild("body2");
-		this.body_r1 = root.getChild("body_r1");
-		this.left_hand = root.getChild("left_hand");
-		this.lefthand_r1 = root.getChild("lefthand_r1");
-		this.right_hand = root.getChild("right_hand");
-		this.righthand_r1 = root.getChild("righthand_r1");
-		this.head2 = root.getChild("head2");
-		this.head_r1 = root.getChild("head_r1");
-		this.body = root.getChild("body");
+		this.left_leg = this.total.getChild("left_leg");
+		this.right_leg = this.total.getChild("right_leg");
+		this.up = this.total.getChild("up");
+		this.back = this.up.getChild("back");
+		this.imp = this.back.getChild("imp");
+		this.left_leg3 = this.imp.getChild("left_leg3");
+		this.right_leg3 = this.imp.getChild("right_leg3");
+		this.up3 = this.imp.getChild("up3");
+		this.body3 = this.up3.getChild("body3");
+		this.right_arm2 = this.up3.getChild("right_arm2");
+		this.cube_r1 = this.right_arm2.getChild("cube_r1");
+		this.left_arm2 = this.up3.getChild("left_arm2");
+		this.cube_r2 = this.left_arm2.getChild("cube_r2");
+		this.head3 = this.up3.getChild("head3");
+		this.head = this.up.getChild("head");
+		this.angry = this.head.getChild("angry");
+		this.bone3 = this.head.getChild("bone3");
+		this.hurt2 = this.head.getChild("hurt2");
+		this.hurt21 = this.hurt2.getChild("hurt21");
+		this.hurt22 = this.hurt2.getChild("hurt22");
+		this.hurt23 = this.hurt2.getChild("hurt23");
+		this.right_arm = this.up.getChild("right_arm");
+		this.left_arm = this.up.getChild("left_arm");
+		this.hurt1 = this.left_arm.getChild("hurt1");
+		this.hurt11 = this.hurt1.getChild("hurt11");
+		this.pole = this.left_arm.getChild("pole");
+		this.sign = this.left_arm.getChild("sign");
+		this.bone = this.sign.getChild("bone");
+		this.doll = this.left_arm.getChild("doll");
+		this.right_leg2 = this.doll.getChild("right_leg2");
+		this.rightleg_r1 = this.right_leg2.getChild("rightleg_r1");
+		this.left_leg2 = this.doll.getChild("left_leg2");
+		this.leftleg_r1 = this.left_leg2.getChild("leftleg_r1");
+		this.up2 = this.doll.getChild("up2");
+		this.body2 = this.up2.getChild("body2");
+		this.body_r1 = this.body2.getChild("body_r1");
+		this.left_hand = this.up2.getChild("left_hand");
+		this.lefthand_r1 = this.left_hand.getChild("lefthand_r1");
+		this.right_hand = this.up2.getChild("right_hand");
+		this.righthand_r1 = this.right_hand.getChild("righthand_r1");
+		this.head2 = this.up2.getChild("head2");
+		this.head_r1 = this.head2.getChild("head_r1");
+		this.body = this.up.getChild("body");
 	}
 
 	public static LayerDefinition createBodyLayer() {

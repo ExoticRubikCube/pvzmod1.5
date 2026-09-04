@@ -11,7 +11,6 @@ import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;

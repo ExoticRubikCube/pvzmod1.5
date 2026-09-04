@@ -2,217 +2,229 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "min": 3.0,
-        "max": 5.0,
-        "type": "minecraft:uniform"
-      },
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:diamond"
+          "name": "minecraft:diamond",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:iron_ingot",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 2.0,
+                "type": "minecraft:uniform",
                 "max": 7.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:gold_ingot",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:emerald"
+          "name": "minecraft:emerald",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 2.0,
+                "type": "minecraft:uniform",
                 "max": 6.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 2.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:wheat"
+          "name": "minecraft:wheat",
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 4.0,
+                "type": "minecraft:uniform",
                 "max": 10.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 4.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "pvz:pea"
+          "name": "pvz:pea",
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:porkchop"
+          "name": "minecraft:porkchop",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "pvz:pea_shooter_enjoy_card"
+          "name": "pvz:pea_shooter_enjoy_card",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "pvz:sun_flower_enjoy_card"
+          "name": "pvz:sun_flower_enjoy_card",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "pvz:cherry_bomb_enjoy_card"
+          "name": "pvz:cherry_bomb_enjoy_card",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "pvz:wall_nut_enjoy_card"
+          "name": "pvz:wall_nut_enjoy_card",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
-          "name": "pvz:potato_mine_enjoy_card"
+          "name": "pvz:potato_mine_enjoy_card",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:book"
+          "name": "minecraft:book",
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
-          "name": "minecraft:golden_apple"
+          "name": "minecraft:golden_apple",
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:enchanted_golden_apple"
+          "name": "minecraft:enchanted_golden_apple",
+          "weight": 2
         },
         {
           "type": "minecraft:empty",
           "weight": 15
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5.0,
+        "min": 3.0
+      }
     },
     {
-      "rolls": 3,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:book"
+          "name": "minecraft:book",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 8.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:rotten_flesh"
+          "name": "minecraft:rotten_flesh",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
-                "min": 1.0,
+                "type": "minecraft:uniform",
                 "max": 8.0,
-                "type": "minecraft:uniform"
-              }
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:string"
+          "name": "minecraft:string",
+          "weight": 10
         }
-      ]
+      ],
+      "rolls": 3.0
     }
   ]
 }

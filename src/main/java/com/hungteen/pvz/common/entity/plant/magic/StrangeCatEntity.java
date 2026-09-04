@@ -3,24 +3,19 @@ package com.hungteen.pvz.common.entity.plant.magic;
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZNearestTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.event.PVZLivingEvents;
 import com.hungteen.pvz.common.impl.plant.MemePlants;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlantUtil;
-
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 

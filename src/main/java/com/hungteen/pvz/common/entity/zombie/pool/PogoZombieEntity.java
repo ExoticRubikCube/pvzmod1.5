@@ -3,21 +3,21 @@ package com.hungteen.pvz.common.entity.zombie.pool;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public class PogoZombieEntity extends PVZZombieEntity implements IHasMetal {

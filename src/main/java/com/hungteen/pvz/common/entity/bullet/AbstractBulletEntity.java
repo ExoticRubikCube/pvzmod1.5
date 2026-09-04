@@ -1,26 +1,25 @@
 package com.hungteen.pvz.common.entity.bullet;
 
 import com.hungteen.pvz.PVZConfig;
-import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.common.entity.AbstractOwnerEntity;
 import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
 import com.hungteen.pvz.utils.EntityUtil;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -31,15 +30,17 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	protected IntOpenHashSet hitEntities;
 	protected float airSlowDown = 0.99F;
 	protected float attackDamage = 0F;
-	public boolean bulletmerge = PVZConfig.COMMON_CONFIG.EntitySettings.PlantSetting.PlantBulletMerge.get();
+	public boolean bulletmerge;
 	
 	public AbstractBulletEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
+		this.bulletmerge = PVZConfig.COMMON_CONFIG.EntitySettings.PlantSetting.PlantBulletMerge.get();
 		this.setNoGravity(true);
 	}
 
 	public AbstractBulletEntity(EntityType<?> type, Level worldIn, LivingEntity livingEntityIn) {
 		super(type, worldIn, livingEntityIn);
+		this.bulletmerge = PVZConfig.COMMON_CONFIG.EntitySettings.PlantSetting.PlantBulletMerge.get();
 		this.summonByOwner(livingEntityIn);
 		this.setNoGravity(true);
 	}
@@ -117,8 +118,7 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 		for (this.setXRot((float) (Mth.atan2(vec3d.y, f)
 				* (double) (180F / (float) Math.PI))); this.getXRot()
 						- this.xRotO < -180.0F; this.xRotO -= 360.0F) {
-			;
-		}
+        }
 		while (this.getXRot() - this.xRotO >= 180.0F) {
 			this.xRotO += 360.0F;
 		}
@@ -186,15 +186,10 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	
 	protected boolean checkLive(HitResult result) {
 		if (result.getType() == HitResult.Type.ENTITY) {// attack entity
-			if (EntityUtil.canTargetEntity(getThrower(), ((EntityHitResult) result).getEntity())) {
-				return false;
-			}
-			return true;
-		} else if (result.getType() == HitResult.Type.BLOCK) {
+            return !EntityUtil.canTargetEntity(getThrower(), ((EntityHitResult) result).getEntity());
+        } else if (result.getType() == HitResult.Type.BLOCK) {
 			final Block block = level.getBlockState(((BlockHitResult) result).getBlockPos()).getBlock();
-			if (block instanceof BushBlock) {
-				return true;
-			}
+            return block instanceof BushBlock;
 		}
 		return false;
 	}

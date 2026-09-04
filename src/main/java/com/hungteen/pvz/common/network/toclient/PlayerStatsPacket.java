@@ -1,18 +1,17 @@
 package com.hungteen.pvz.common.network.toclient;
 
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.function.Supplier;
+
 public class PlayerStatsPacket{
 
-	private int type;
-	private int data;
+	private final int type;
+	private final int data;
 	
 	public PlayerStatsPacket(int x, int y) {
 		this.type = x;

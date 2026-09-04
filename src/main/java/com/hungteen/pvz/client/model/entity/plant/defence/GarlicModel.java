@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.defence;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.defence.GarlicEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -40,16 +33,16 @@ public class GarlicModel extends PVZPlantModel<GarlicEntity> {
 
 public GarlicModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.hair = root.getChild("hair");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.face = root.getChild("face");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.cube_r5 = root.getChild("cube_r5");
-		this.cube_r6 = root.getChild("cube_r6");
-		this.cube_r7 = root.getChild("cube_r7");
+		this.body = this.total.getChild("body");
+		this.hair = this.body.getChild("hair");
+		this.cube_r1 = this.hair.getChild("cube_r1");
+		this.cube_r2 = this.hair.getChild("cube_r2");
+		this.cube_r3 = this.hair.getChild("cube_r3");
+		this.face = this.total.getChild("face");
+		this.cube_r4 = this.face.getChild("cube_r4");
+		this.cube_r5 = this.face.getChild("cube_r5");
+		this.cube_r6 = this.face.getChild("cube_r6");
+		this.cube_r7 = this.face.getChild("cube_r7");
 	}
 
 	public static LayerDefinition createBodyLayer() {

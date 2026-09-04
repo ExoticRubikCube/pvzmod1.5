@@ -2,16 +2,15 @@ package com.hungteen.pvz.common.container;
 
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.tool.plant.CardPackItem;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class CardPackContainer extends PVZContainer {
 
-	private Container backpack;
+	private final Container backpack;
 	private ItemStackHandler cardBar;
 	private final Player player;
 	private final ItemStack stack;

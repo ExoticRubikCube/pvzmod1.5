@@ -1,22 +1,20 @@
 package com.hungteen.pvz.client.model.entity.creature;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.creature.FoodieZombieEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -45,22 +43,22 @@ public class FoodieZombieModel extends EntityModel<FoodieZombieEntity> {
 
 	public FoodieZombieModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.head = root.getChild("head");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
-		this.right_hand = root.getChild("right_hand");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.bone5 = root.getChild("bone5");
-		this.left_hand = root.getChild("left_hand");
-		this.armor = root.getChild("armor");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.body = root.getChild("body");
-		this.right_leg = root.getChild("right_leg");
-		this.right_foot = root.getChild("right_foot");
-		this.left_leg = root.getChild("left_leg");
-		this.left_foot = root.getChild("left_foot");
+		this.head = this.total.getChild("head");
+		this.bone6 = this.head.getChild("bone6");
+		this.bone7 = this.bone6.getChild("bone7");
+		this.right_hand = this.total.getChild("right_hand");
+		this.bone3 = this.right_hand.getChild("bone3");
+		this.bone4 = this.bone3.getChild("bone4");
+		this.bone5 = this.right_hand.getChild("bone5");
+		this.left_hand = this.total.getChild("left_hand");
+		this.armor = this.left_hand.getChild("armor");
+		this.bone = this.armor.getChild("bone");
+		this.bone2 = this.armor.getChild("bone2");
+		this.body = this.total.getChild("body");
+		this.right_leg = this.total.getChild("right_leg");
+		this.right_foot = this.right_leg.getChild("right_foot");
+		this.left_leg = this.total.getChild("left_leg");
+		this.left_foot = this.left_leg.getChild("left_foot");
 	}
 
 	public static LayerDefinition createBodyLayer() {

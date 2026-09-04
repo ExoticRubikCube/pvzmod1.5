@@ -1,10 +1,10 @@
 package com.hungteen.pvz.utils;
 
 import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class MathUtil {

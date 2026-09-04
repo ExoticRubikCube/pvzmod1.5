@@ -4,9 +4,9 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.base.PlantDefenderEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 

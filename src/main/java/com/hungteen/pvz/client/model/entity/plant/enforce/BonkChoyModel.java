@@ -1,23 +1,16 @@
 package com.hungteen.pvz.client.model.entity.plant.enforce;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.enforce.BonkChoyEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -53,28 +46,28 @@ public class BonkChoyModel extends PVZPlantModel<BonkChoyEntity> {
 
 	public BonkChoyModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.hair = root.getChild("hair");
-		this.bone2 = root.getChild("bone2");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.bone7 = root.getChild("bone7");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.right_arm = root.getChild("right_arm");
-		this.right1 = root.getChild("right1");
-		this.right2 = root.getChild("right2");
-		this.right3 = root.getChild("right3");
-		this.right4 = root.getChild("right4");
-		this.right5 = root.getChild("right5");
-		this.left_arm = root.getChild("left_arm");
-		this.left1 = root.getChild("left1");
-		this.left2 = root.getChild("left2");
-		this.left3 = root.getChild("left3");
-		this.left4 = root.getChild("left4");
-		this.left5 = root.getChild("left5");
-		this.face = root.getChild("face");
-		this.body = root.getChild("body");
+		this.hair = this.total.getChild("hair");
+		this.bone2 = this.hair.getChild("bone2");
+		this.cube_r1 = this.bone2.getChild("cube_r1");
+		this.bone7 = this.hair.getChild("bone7");
+		this.bone5 = this.hair.getChild("bone5");
+		this.bone6 = this.hair.getChild("bone6");
+		this.bone3 = this.hair.getChild("bone3");
+		this.bone4 = this.hair.getChild("bone4");
+		this.right_arm = this.total.getChild("right_arm");
+		this.right1 = this.right_arm.getChild("right1");
+		this.right2 = this.right1.getChild("right2");
+		this.right3 = this.right2.getChild("right3");
+		this.right4 = this.right3.getChild("right4");
+		this.right5 = this.right4.getChild("right5");
+		this.left_arm = this.total.getChild("left_arm");
+		this.left1 = this.left_arm.getChild("left1");
+		this.left2 = this.left1.getChild("left2");
+		this.left3 = this.left2.getChild("left3");
+		this.left4 = this.left3.getChild("left4");
+		this.left5 = this.left4.getChild("left5");
+		this.face = this.total.getChild("face");
+		this.body = this.total.getChild("body");
 	}
 
 	public static LayerDefinition createBodyLayer() {

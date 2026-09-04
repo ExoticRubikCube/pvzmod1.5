@@ -2,9 +2,9 @@ package com.hungteen.pvz.common.entity.ai.goal.attack;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
 
 public class PVZZombieAttackGoal extends PVZMeleeAttackGoal {

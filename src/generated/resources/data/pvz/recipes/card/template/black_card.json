@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " A ",
-    "ABA",
-    " A "
-  ],
   "key": {
     "A": {
       "tag": "pvz:card/black_materials"
@@ -13,6 +8,11 @@
       "item": "pvz:origin_essence"
     }
   },
+  "pattern": [
+    " A ",
+    "ABA",
+    " A "
+  ],
   "result": {
     "item": "pvz:black_card"
   }

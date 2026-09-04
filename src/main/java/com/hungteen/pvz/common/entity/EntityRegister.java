@@ -54,21 +54,20 @@ import com.hungteen.pvz.common.entity.zombie.zombotany.*;
 import com.hungteen.pvz.common.impl.plant.PlantType;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityType.EntityFactory;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.RegistryObject;
-
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 

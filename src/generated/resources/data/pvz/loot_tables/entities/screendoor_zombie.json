@@ -2,40 +2,50 @@
   "type": "minecraft:entity",
   "pools": [
     {
-      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.15,
+          "condition": "minecraft:random_chance_with_looting",
+          "looting_multiplier": 0.01
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "minecraft:rotten_flesh"
         }
       ],
+      "functions": [
+        {
+          "add": false,
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 2.0,
+            "min": 0.0
+          },
+          "function": "minecraft:set_count"
+        },
+        {
+          "count": {
+            "type": "minecraft:uniform",
+            "max": 1.0,
+            "min": 0.0
+          },
+          "function": "minecraft:looting_enchant"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
       "conditions": [
         {
+          "chance": 0.01,
           "condition": "minecraft:random_chance_with_looting",
-          "chance": 0.15,
           "looting_multiplier": 0.01
         }
       ],
-      "functions": [
-        {
-          "function": "minecraft:set_count",
-          "count": {
-            "min": 0.0,
-            "max": 2.0,
-            "type": "minecraft:uniform"
-          }
-        },
-        {
-          "function": "minecraft:looting_enchant",
-          "count": {
-            "min": 0.0,
-            "max": 1.0
-          }
-        }
-      ]
-    },
-    {
-      "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
@@ -50,29 +60,24 @@
           "name": "pvz:nut"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:random_chance_with_looting",
-          "chance": 0.01,
-          "looting_multiplier": 0.01
-        }
-      ]
+      "rolls": 1.0
     },
     {
-      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.005,
+          "condition": "minecraft:random_chance_with_looting",
+          "looting_multiplier": 0.01
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "pvz:screen_door"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:random_chance_with_looting",
-          "chance": 0.005,
-          "looting_multiplier": 0.01
-        }
-      ]
+      "rolls": 1.0
     }
   ]
 }

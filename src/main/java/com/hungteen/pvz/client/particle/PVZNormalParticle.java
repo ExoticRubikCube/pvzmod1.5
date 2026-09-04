@@ -1,8 +1,8 @@
 package com.hungteen.pvz.client.particle;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.multiplayer.ClientLevel;
 
 public abstract class PVZNormalParticle extends TextureSheetParticle{
 

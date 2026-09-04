@@ -1,8 +1,8 @@
 package com.hungteen.pvz.api.raid;
 
-import java.util.List;
-
 import com.google.gson.JsonObject;
+
+import java.util.List;
 
 public interface IWaveComponent {
 

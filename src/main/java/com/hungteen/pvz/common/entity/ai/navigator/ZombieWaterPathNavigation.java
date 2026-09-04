@@ -1,12 +1,12 @@
 package com.hungteen.pvz.common.entity.ai.navigator;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 
 public class ZombieWaterPathNavigation extends WaterBoundPathNavigation {
 

@@ -20,12 +20,12 @@ import com.hungteen.pvz.common.world.invasion.MissionManager;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.PacketDistributor;
 
@@ -84,7 +84,7 @@ public class PlayerDataManager {
 				CompoundTag statsTag = baseTag.getCompound("player_stats");
 			    for(Resources res : Resources.values()) {
 			    	if(statsTag.contains("player_" + res.toString())) {
-				        this.resources.put(res, statsTag.getInt("player_" + res.toString()));
+				        this.resources.put(res, statsTag.getInt("player_" + res));
 			    	}
 			    }
 			}

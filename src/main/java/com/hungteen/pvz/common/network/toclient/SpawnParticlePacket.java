@@ -1,21 +1,20 @@
 package com.hungteen.pvz.common.network.toclient;
 
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.particle.ParticleRegister;
-
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class SpawnParticlePacket {
 
-	private int type;
-	private double x;
-	private double y;
-	private double z;
+	private final int type;
+	private final double x;
+	private final double y;
+	private final double z;
 	
 	public SpawnParticlePacket(int type, double x, double y, double z) {
 		this.x = x;

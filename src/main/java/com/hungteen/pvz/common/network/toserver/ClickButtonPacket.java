@@ -1,21 +1,20 @@
 package com.hungteen.pvz.common.network.toserver;
 
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.client.gui.GuiHandler;
 import com.hungteen.pvz.common.container.CardFusionContainer;
 import com.hungteen.pvz.common.container.EssenceAltarContainer;
 import com.hungteen.pvz.common.container.FragmentSpliceContainer;
 import com.hungteen.pvz.common.container.SlotMachineContainer;
 import com.hungteen.pvz.common.container.shop.AbstractDaveShopContainer;
-
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class ClickButtonPacket {
 
@@ -56,17 +55,15 @@ public class ClickButtonPacket {
 						((AbstractDaveShopContainer) player.containerMenu).onSell(message.num);
 					}
 				} else if(message.type == GuiHandler.FRAGMENT_SPLICE) {
-					if(player.containerMenu instanceof FragmentSpliceContainer) {
-						FragmentSpliceContainer container = (FragmentSpliceContainer) player.containerMenu;
-						if(message.op == 0) {
+					if(player.containerMenu instanceof FragmentSpliceContainer container) {
+                        if(message.op == 0) {
 							container.onCraft();
 						}
 					}
 				} else if(message.type == GuiHandler.SLOT_MACHINE) {
-					if(player.containerMenu instanceof SlotMachineContainer) {
+					if(player.containerMenu instanceof SlotMachineContainer container) {
 						if (PlayerUtil.getResource(player,Resources.LOTTERY_CHANCE) > 0) {
-							SlotMachineContainer container = (SlotMachineContainer) player.containerMenu;
-							if (message.op == 0) {
+                            if (message.op == 0) {
 								container.te.slowStart(player);
 							} else {
 								container.te.fastStart(player);
@@ -76,14 +73,12 @@ public class ClickButtonPacket {
 						}
 					}
 				} else if(message.type == GuiHandler.ESSENCE_ALTAR) {
-					if(player.containerMenu instanceof EssenceAltarContainer) {
-						EssenceAltarContainer container = (EssenceAltarContainer) player.containerMenu;
-						container.learnSkillAt(message.op);
+					if(player.containerMenu instanceof EssenceAltarContainer container) {
+                        container.learnSkillAt(message.op);
 					}
 				} else if(message.type == GuiHandler.CARD_FUSION) {
-					if(player.containerMenu instanceof CardFusionContainer) {
-						CardFusionContainer container = (CardFusionContainer) player.containerMenu;
-						if(message.op == 0) {
+					if(player.containerMenu instanceof CardFusionContainer container) {
+                        if(message.op == 0) {
 							container.onCraft();
 						}
 					}

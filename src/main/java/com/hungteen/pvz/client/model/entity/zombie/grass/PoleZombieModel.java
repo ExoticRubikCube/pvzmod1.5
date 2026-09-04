@@ -1,5 +1,6 @@
 package com.hungteen.pvz.client.model.entity.zombie.grass;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.enums.BodyType;
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
@@ -7,19 +8,14 @@ import com.hungteen.pvz.common.entity.zombie.grass.PoleZombieEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Optional;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.Optional;
+
 // Made with Blockbench 3.6.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -43,16 +39,16 @@ public class PoleZombieModel extends PVZZombieModel<PoleZombieEntity> {
 
 public PoleZombieModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.right_leg = root.getChild("right_leg");
-		this.left_leg = root.getChild("left_leg");
-		this.up = root.getChild("up");
-		this.body = root.getChild("body");
-		this.left_hand = root.getChild("left_hand");
-		this.left_hand2 = root.getChild("left_hand2");
-		this.right_hand = root.getChild("right_hand");
-		this.right_hand2 = root.getChild("right_hand2");
-		this.pole = root.getChild("pole");
-		this.head = root.getChild("head");
+		this.right_leg = this.total.getChild("right_leg");
+		this.left_leg = this.total.getChild("left_leg");
+		this.up = this.total.getChild("up");
+		this.body = this.up.getChild("body");
+		this.left_hand = this.up.getChild("left_hand");
+		this.left_hand2 = this.left_hand.getChild("left_hand2");
+		this.right_hand = this.up.getChild("right_hand");
+		this.right_hand2 = this.right_hand.getChild("right_hand2");
+		this.pole = this.right_hand2.getChild("pole");
+		this.head = this.up.getChild("head");
 	}
 
 	public static LayerDefinition createBodyLayer() {

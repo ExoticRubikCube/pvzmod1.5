@@ -1,11 +1,11 @@
 package com.hungteen.pvz.common.entity.bullet;
 
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity.BungeeTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,10 +13,9 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
 public class TargetArrowEntity extends AbstractArrow {
@@ -36,9 +35,8 @@ public class TargetArrowEntity extends AbstractArrow {
 				this.remove(RemovalReason.KILLED);
 				return ;
 			} else {
-				if(this.getOwner() instanceof BungeeZombieEntity) {
-					BungeeZombieEntity bungee = (BungeeZombieEntity) this.getOwner();
-					if(EntityUtil.isEntityValid(bungee.getStealTarget())) {
+				if(this.getOwner() instanceof BungeeZombieEntity bungee) {
+                    if(EntityUtil.isEntityValid(bungee.getStealTarget())) {
 						this.shoot(bungee.getStealTarget());
 					} else {
 						this.remove(RemovalReason.KILLED);

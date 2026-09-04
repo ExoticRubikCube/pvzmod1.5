@@ -1,17 +1,16 @@
 package com.hungteen.pvz.common.capability.player;
 
 import com.hungteen.pvz.common.capability.CapabilityHandler;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class PlayerDataProvider implements ICapabilitySerializable<CompoundTag> {
 	
-	private IPlayerDataCapability player_data_capability = new PlayerDataCapability();
+	private final IPlayerDataCapability player_data_capability = new PlayerDataCapability();
 
 	
 	public PlayerDataProvider(Player player) {

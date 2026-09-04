@@ -9,10 +9,10 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;
@@ -49,8 +49,8 @@ this.remove(RemovalReason.KILLED);
 			if(target instanceof LivingEntity && EntityUtil.isEntityCold((LivingEntity) target)) {
 				++ cnt;
 			}
-		};
-		Player player = EntityUtil.getEntityOwner(level, this);
+		}
+        Player player = EntityUtil.getEntityOwner(level, this);
 		if(player != null && player instanceof ServerPlayer) {
 			EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) player, this, cnt);
 		}

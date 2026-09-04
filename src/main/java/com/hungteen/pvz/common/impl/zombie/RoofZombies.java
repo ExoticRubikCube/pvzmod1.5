@@ -3,12 +3,11 @@ package com.hungteen.pvz.common.impl.zombie;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.types.IZombieType;
 import com.hungteen.pvz.client.model.entity.zombie.roof.*;
-import com.hungteen.pvz.common.impl.RankTypes;
 import com.hungteen.pvz.common.entity.EntityRegister;
+import com.hungteen.pvz.common.impl.RankTypes;
 import com.hungteen.pvz.common.misc.PVZLoot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class RoofZombies extends ZombieType {

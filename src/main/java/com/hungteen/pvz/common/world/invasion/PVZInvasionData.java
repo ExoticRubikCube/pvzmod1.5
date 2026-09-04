@@ -2,12 +2,12 @@ package com.hungteen.pvz.common.world.invasion;
 
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.utils.ConfigUtil;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 
 public class PVZInvasionData extends SavedData {
 

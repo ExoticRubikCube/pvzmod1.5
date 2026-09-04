@@ -1,24 +1,21 @@
 package com.hungteen.pvz.client.model.entity.zombie.grass;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.grass.GigaFootballZombieEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Optional;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import java.util.Optional;
 
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -54,28 +51,28 @@ public class GigaFootballZombieModel extends PVZZombieModel<GigaFootballZombieEn
 
 public GigaFootballZombieModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.right_leg = root.getChild("right_leg");
-		this.left_leg = root.getChild("left_leg");
-		this.up = root.getChild("up");
-		this.left_hand = root.getChild("left_hand");
-		this.bone = root.getChild("bone");
-		this.hand = root.getChild("hand");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
-		this.right_hand = root.getChild("right_hand");
-		this.bone2 = root.getChild("bone2");
-		this.hand2 = root.getChild("hand2");
-		this.bone8 = root.getChild("bone8");
-		this.bone9 = root.getChild("bone9");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.bone12 = root.getChild("bone12");
-		this.head = root.getChild("head");
-		this.helmet = root.getChild("helmet");
-		this.body = root.getChild("body");
+		this.right_leg = this.total.getChild("right_leg");
+		this.left_leg = this.total.getChild("left_leg");
+		this.up = this.total.getChild("up");
+		this.left_hand = this.up.getChild("left_hand");
+		this.bone = this.left_hand.getChild("bone");
+		this.hand = this.left_hand.getChild("hand");
+		this.bone3 = this.hand.getChild("bone3");
+		this.bone4 = this.hand.getChild("bone4");
+		this.bone5 = this.hand.getChild("bone5");
+		this.bone6 = this.hand.getChild("bone6");
+		this.bone7 = this.hand.getChild("bone7");
+		this.right_hand = this.up.getChild("right_hand");
+		this.bone2 = this.right_hand.getChild("bone2");
+		this.hand2 = this.right_hand.getChild("hand2");
+		this.bone8 = this.hand2.getChild("bone8");
+		this.bone9 = this.hand2.getChild("bone9");
+		this.bone10 = this.hand2.getChild("bone10");
+		this.bone11 = this.hand2.getChild("bone11");
+		this.bone12 = this.hand2.getChild("bone12");
+		this.head = this.up.getChild("head");
+		this.helmet = this.head.getChild("helmet");
+		this.body = this.up.getChild("body");
 	}
 
 	public static LayerDefinition createBodyLayer() {

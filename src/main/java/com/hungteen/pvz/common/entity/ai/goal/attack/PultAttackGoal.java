@@ -1,14 +1,13 @@
 package com.hungteen.pvz.common.entity.ai.goal.attack;
 
-import java.util.EnumSet;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.interfaces.IPult;
-
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+
+import java.util.EnumSet;
 
 public class PultAttackGoal extends Goal {
 

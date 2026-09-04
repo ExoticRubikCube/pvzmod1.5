@@ -1,22 +1,18 @@
 package com.hungteen.pvz.client.model.entity.plant.defence;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.defence.WaterGuardEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -33,12 +29,12 @@ public class WaterGuardModel extends PVZPlantModel<WaterGuardEntity> {
 
 	public WaterGuardModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.side = root.getChild("side");
-		this.side2 = root.getChild("side2");
-		this.side3 = root.getChild("side3");
-		this.side4 = root.getChild("side4");
-		this.side5 = root.getChild("side5");
-		this.side6 = root.getChild("side6");
+		this.side = this.total.getChild("side");
+		this.side2 = this.total.getChild("side2");
+		this.side3 = this.total.getChild("side3");
+		this.side4 = this.total.getChild("side4");
+		this.side5 = this.total.getChild("side5");
+		this.side6 = this.total.getChild("side6");
 	}
 
 	public static LayerDefinition createBodyLayer() {

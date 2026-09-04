@@ -1,8 +1,5 @@
 package com.hungteen.pvz.client.gui.screen;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.hungteen.pvz.client.gui.GuiHandler;
 import com.hungteen.pvz.client.gui.widget.DisplayField;
 import com.hungteen.pvz.common.container.SlotMachineContainer;
@@ -13,15 +10,17 @@ import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
 import com.hungteen.pvz.utils.enums.Resources;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @OnlyIn(Dist.CLIENT)
 public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> {

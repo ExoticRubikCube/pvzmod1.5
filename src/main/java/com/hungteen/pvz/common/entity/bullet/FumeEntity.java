@@ -1,27 +1,22 @@
 package com.hungteen.pvz.common.entity.bullet;
 
+import com.hungteen.pvz.client.particle.ParticleRegister;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PVZItemBulletEntity;
 import com.hungteen.pvz.common.entity.plant.toxic.GloomShroomEntity;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import com.hungteen.pvz.common.entity.EntityRegister;
-import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.utils.WorldUtil;
-
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 
 public class FumeEntity extends PVZItemBulletEntity{
 
@@ -83,11 +78,8 @@ this.remove(RemovalReason.KILLED);
 	protected boolean checkLive(HitResult result) {
 		if(result.getType() == HitResult.Type.BLOCK) {
     		Block block = level.getBlockState(((BlockHitResult)result).getBlockPos()).getBlock();
-    		if(block instanceof BushBlock) {
-    			return true;
-    		}
-    		return false;
-    	}
+            return block instanceof BushBlock;
+        }
     	return true;
 	}
 	

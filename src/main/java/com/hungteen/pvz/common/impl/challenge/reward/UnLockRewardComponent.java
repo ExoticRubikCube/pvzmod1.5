@@ -7,9 +7,9 @@ import com.hungteen.pvz.api.interfaces.IChallenge;
 import com.hungteen.pvz.api.raid.IRewardComponent;
 import com.hungteen.pvz.api.types.IPAZType;
 import com.hungteen.pvz.utils.PlayerUtil;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.List;

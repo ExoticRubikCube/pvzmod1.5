@@ -11,18 +11,18 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 import java.util.EnumSet;
 
@@ -250,7 +250,7 @@ public class GargantuarEntity extends PVZZombieEntity {
 	
 	private final class CrushAttackGoal extends Goal {
 
-		protected final GargantuarEntity attacker;
+		private final GargantuarEntity attacker;
 		
 		public CrushAttackGoal(GargantuarEntity creature) {
 			this.attacker = creature;
@@ -271,7 +271,7 @@ public class GargantuarEntity extends PVZZombieEntity {
 		public void tick() {
 			if(this.attacker.canNormalUpdate() && this.attacker.getAttackTime() > 0) {
 				this.attacker.setAttackTime(this.attacker.getAttackTime() - 1);
-				if(this.attacker.getAttackTime() == this.attacker.getCrushCD() * 1 / 3) {
+				if(this.attacker.getAttackTime() == this.attacker.getCrushCD() / 3) {
 					this.attacker.doHurtTarget(this.attacker.getTarget());
 				}
 			}
@@ -281,7 +281,7 @@ public class GargantuarEntity extends PVZZombieEntity {
 	
 	private final class ThrowImpGoal extends Goal {
 
-		protected final GargantuarEntity attacker;
+		private final GargantuarEntity attacker;
 		
 		public ThrowImpGoal(GargantuarEntity creature) {
 			this.attacker = creature;
@@ -312,7 +312,7 @@ public class GargantuarEntity extends PVZZombieEntity {
 		public void tick() {
 			if(this.attacker.canNormalUpdate() && this.attacker.getAttackTime() < 0) {
 				this.attacker.setAttackTime(this.attacker.getAttackTime() + 1);
-				if(this.attacker.hasImp() && - this.attacker.getAttackTime() == this.attacker.getThrowCD() * 1 / 4) {
+				if(this.attacker.hasImp() && - this.attacker.getAttackTime() == this.attacker.getThrowCD() / 4) {
 					this.attacker.throwImp(this.attacker.getTarget());
 				}
 			}

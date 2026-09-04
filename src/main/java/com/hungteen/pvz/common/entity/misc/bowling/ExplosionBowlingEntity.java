@@ -1,15 +1,14 @@
 package com.hungteen.pvz.common.entity.misc.bowling;
 
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 public class ExplosionBowlingEntity extends AbstractBowlingEntity {
 

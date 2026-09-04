@@ -22,7 +22,14 @@ import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.hungteen.pvz.utils.others.WeightList;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,16 +39,9 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -538,7 +538,7 @@ public abstract class AbstractDaveEntity extends PathfinderMob implements IHasGr
 		private final int lvl;
 		private final int priority;
 
-		private GoodTypes(String tag, int lvl, int priority){
+		GoodTypes(String tag, int lvl, int priority){
 			this.tag = tag;
 			this.lvl = lvl;
 			this.priority = priority;

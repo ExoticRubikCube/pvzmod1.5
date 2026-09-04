@@ -9,16 +9,16 @@ import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 
 public class ScaredyShroomEntity extends PlantShooterEntity {

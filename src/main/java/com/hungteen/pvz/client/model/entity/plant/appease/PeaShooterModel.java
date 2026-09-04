@@ -1,21 +1,19 @@
 package com.hungteen.pvz.client.model.entity.plant.appease;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.appease.PeaShooterEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Optional;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
+import java.util.Optional;
+
 // Made with Blockbench 4.1.3
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
@@ -39,16 +37,16 @@ public class PeaShooterModel extends PlantShooterModel<PeaShooterEntity> {
 
 public PeaShooterModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.stick_r1 = root.getChild("stick_r1");
-		this.head = root.getChild("head");
-		this.hair = root.getChild("hair");
-		this.leafl_r1 = root.getChild("leafl_r1");
-		this.down = root.getChild("down");
-		this.n_r1 = root.getChild("n_r1");
-		this.w_r1 = root.getChild("w_r1");
-		this.e_r1 = root.getChild("e_r1");
-		this.s_r1 = root.getChild("s_r1");
+		this.body = this.total.getChild("body");
+		this.stick_r1 = this.body.getChild("stick_r1");
+		this.head = this.body.getChild("head");
+		this.hair = this.head.getChild("hair");
+		this.leafl_r1 = this.hair.getChild("leafl_r1");
+		this.down = this.total.getChild("down");
+		this.n_r1 = this.down.getChild("n_r1");
+		this.w_r1 = this.down.getChild("w_r1");
+		this.e_r1 = this.down.getChild("e_r1");
+		this.s_r1 = this.down.getChild("s_r1");
 	}
 
 	public static LayerDefinition createBodyLayer() {

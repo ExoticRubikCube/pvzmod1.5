@@ -1,16 +1,10 @@
 package com.hungteen.pvz.common.entity.misc;
 
-import net.minecraftforge.fluids.FluidType;
-
 import com.hungteen.pvz.common.entity.zombie.PVZZombieToolBase;
-
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidType;
 
 public class DuckyTubeEntity extends PVZZombieToolBase {
 

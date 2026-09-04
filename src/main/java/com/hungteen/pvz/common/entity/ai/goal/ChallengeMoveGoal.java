@@ -1,10 +1,9 @@
 package com.hungteen.pvz.common.entity.ai.goal;
 
 import com.hungteen.pvz.common.world.challenge.Challenge;
-
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.core.BlockPos;
 
 /**
  * @program: pvzmod-1.16.5
@@ -37,10 +36,7 @@ public class ChallengeMoveGoal extends Goal {
         if(this.owner.distanceToSqr(this.center.getX(), this.center.getY(), this.center.getZ()) < 100){
             return false;
         }
-        if(++ tick < 60) {
-        	return false;
-        }
-        return true;
+        return ++tick >= 60;
     }
 
     @Override

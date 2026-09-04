@@ -1,7 +1,5 @@
 package com.hungteen.pvz.common.item.armor;
 
-import java.util.function.Supplier;
-
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
@@ -9,6 +7,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.function.Supplier;
 
 public enum PVZArmorMaterial implements ArmorMaterial {
 
@@ -29,8 +29,8 @@ public enum PVZArmorMaterial implements ArmorMaterial {
 	private final float knockbackResistance;
 	private final LazyLoadedValue<Ingredient> repairMaterial;
 
-	private PVZArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn,
-	                         SoundEvent equipSoundIn, float toughnessIn, float kb, Supplier<Ingredient> repairMaterialSupplier) {
+	PVZArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn,
+                     SoundEvent equipSoundIn, float toughnessIn, float kb, Supplier<Ingredient> repairMaterialSupplier) {
 		this.name = nameIn;
 		this.maxDamageFactor = maxDamageFactorIn;
 		this.damageReductionAmountArray = damageReductionAmountsIn;

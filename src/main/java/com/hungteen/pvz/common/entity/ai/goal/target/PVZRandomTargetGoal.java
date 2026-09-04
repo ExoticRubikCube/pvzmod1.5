@@ -1,12 +1,11 @@
 package com.hungteen.pvz.common.entity.ai.goal.target;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.hungteen.pvz.utils.EntityUtil;
-
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PVZRandomTargetGoal extends PVZTargetGoal {
 

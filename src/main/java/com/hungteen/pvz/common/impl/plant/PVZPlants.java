@@ -9,7 +9,6 @@ import com.hungteen.pvz.client.model.entity.plant.arma.KernelPultModel;
 import com.hungteen.pvz.client.model.entity.plant.arma.MelonPultModel;
 import com.hungteen.pvz.client.model.entity.plant.assist.*;
 import com.hungteen.pvz.client.model.entity.plant.defence.GarlicModel;
-import com.hungteen.pvz.client.model.entity.plant.defence.PumpkinModel;
 import com.hungteen.pvz.client.model.entity.plant.defence.TallNutModel;
 import com.hungteen.pvz.client.model.entity.plant.defence.WallNutModel;
 import com.hungteen.pvz.client.model.entity.plant.enforce.ChomperModel;

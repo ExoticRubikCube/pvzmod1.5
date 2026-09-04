@@ -2,13 +2,11 @@ package com.hungteen.pvz.common.container;
 
 import com.hungteen.pvz.common.block.special.SunConverterBlock;
 import com.hungteen.pvz.common.tileentity.SunConverterTileEntity;
-
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class SunConverterContainer extends AbstractContainerMenu {

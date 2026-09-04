@@ -1,24 +1,24 @@
 package com.hungteen.pvz.common.entity.zombie.other;
 
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.grass.TombStoneEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.CustomZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.PVZLoot;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 public class MournerZombieEntity extends PVZZombieEntity{
@@ -28,7 +28,7 @@ public class MournerZombieEntity extends PVZZombieEntity{
 	
 	public MournerZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
-		this.setRightShake(this.getRandom().nextInt(2) == 0 ? true : false);
+		this.setRightShake(this.getRandom().nextInt(2) == 0);
 		this.canLostHand = false;
 	}
 	

@@ -1,22 +1,19 @@
 package com.hungteen.pvz.client.model.entity.plant.ice;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.ice.SnowPeaEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Optional;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
+import java.util.Optional;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -44,20 +41,20 @@ public class SnowPeaModel extends PlantShooterModel<SnowPeaEntity> {
 
 public SnowPeaModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.head = root.getChild("head");
-		this.hair = root.getChild("hair");
-		this.u_r1 = root.getChild("u_r1");
-		this.m_r1 = root.getChild("m_r1");
-		this.wu_r1 = root.getChild("wu_r1");
-		this.wd_r1 = root.getChild("wd_r1");
-		this.ed_r1 = root.getChild("ed_r1");
-		this.eu_r1 = root.getChild("eu_r1");
-		this.down = root.getChild("down");
-		this.n_r1 = root.getChild("n_r1");
-		this.w_r1 = root.getChild("w_r1");
-		this.e_r1 = root.getChild("e_r1");
-		this.s_r1 = root.getChild("s_r1");
+		this.body = this.total.getChild("body");
+		this.head = this.body.getChild("head");
+		this.hair = this.head.getChild("hair");
+		this.u_r1 = this.hair.getChild("u_r1");
+		this.m_r1 = this.hair.getChild("m_r1");
+		this.wu_r1 = this.hair.getChild("wu_r1");
+		this.wd_r1 = this.hair.getChild("wd_r1");
+		this.ed_r1 = this.hair.getChild("ed_r1");
+		this.eu_r1 = this.hair.getChild("eu_r1");
+		this.down = this.total.getChild("down");
+		this.n_r1 = this.down.getChild("n_r1");
+		this.w_r1 = this.down.getChild("w_r1");
+		this.e_r1 = this.down.getChild("e_r1");
+		this.s_r1 = this.down.getChild("s_r1");
 	}
 
 	public static LayerDefinition createBodyLayer() {

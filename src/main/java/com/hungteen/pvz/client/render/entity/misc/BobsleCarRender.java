@@ -5,21 +5,20 @@ import com.hungteen.pvz.common.entity.misc.BobsleCarEntity;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import com.mojang.math.Vector3f;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BobsleCarRender extends EntityRenderer<BobsleCarEntity>{
 
-	private EntityModel<BobsleCarEntity> model;
+	private final EntityModel<BobsleCarEntity> model;
 	
 	public BobsleCarRender(EntityRendererProvider.Context context) {
 		super(context);

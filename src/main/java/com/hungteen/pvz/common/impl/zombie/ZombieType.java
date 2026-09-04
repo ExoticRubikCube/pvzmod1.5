@@ -7,11 +7,11 @@ import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.impl.*;
 import com.hungteen.pvz.common.world.spawn.SpawnChecker;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -84,7 +84,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	 * the resource to save entity render picture.
 	 */
 	protected ResourceLocation getEntityResource() {
-		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/zombie/" + this.getCategoryName() + "/" + this.toString() + ".png");
+		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/zombie/" + this.getCategoryName() + "/" + this + ".png");
 	}
 	
 	@Override
@@ -149,7 +149,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	 * get zombie translation text.
 	 */
 	public Component getTranslateText() {
-		return Component.translatable("entity." + this.getModID() + "." + this.toString());
+		return Component.translatable("entity." + this.getModID() + "." + this);
 	}
 	
 	/**
@@ -159,21 +159,21 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	
 	public static final class ZombieFeatures{
 		//common.
-		protected int sunCost = 9999;
-		protected int requiredLevel = 100;
-		protected int xpPoint = 0;
-		protected float renderScale = 0.5F;
-		protected ICoolDown coolDown = CoolDowns.DEFAULT;
-		protected IRankType rankType = RankTypes.WHITE;
-		protected ResourceLocation entityRenderResource;
-		protected ResourceLocation lootTable;
-		protected Supplier<EntityType<? extends Mob>> entitySup;
-		protected Supplier<? extends Item> summonCardSup;
-		protected Supplier<? extends Item> enjoyCardSup;
-		protected List<ISkillType> skillTypes = new ArrayList<>();
+        private int sunCost = 9999;
+		private int requiredLevel = 100;
+		private int xpPoint = 0;
+		private float renderScale = 0.5F;
+		private ICoolDown coolDown = CoolDowns.DEFAULT;
+		private IRankType rankType = RankTypes.WHITE;
+		private ResourceLocation entityRenderResource;
+		private ResourceLocation lootTable;
+		private Supplier<EntityType<? extends Mob>> entitySup;
+		private Supplier<? extends Item> summonCardSup;
+		private Supplier<? extends Item> enjoyCardSup;
+		private List<ISkillType> skillTypes = new ArrayList<>();
 		//unique.
-		protected Optional<IZombieModel<? extends IZombieEntity>> zombieModel1 = Optional.empty();
-		protected Optional<IZombieModel<? extends IZombieEntity>> zombieModel2 = Optional.empty();
+        private Optional<IZombieModel<? extends IZombieEntity>> zombieModel1 = Optional.empty();
+		private Optional<IZombieModel<? extends IZombieEntity>> zombieModel2 = Optional.empty();
 
 		public ZombieFeatures cost(int cost) {
 			this.sunCost = cost;
@@ -237,7 +237,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 		}
 
 		public ZombieFeatures eatCommonSkill(Collection<ISkillType> skills){
-			this.skillTypes.addAll(List.of(SkillTypes.HIGH_EAT_DAMAGE));
+			this.skillTypes.add(SkillTypes.HIGH_EAT_DAMAGE);
 			return this.commonSkill(skills);
 		}
 		

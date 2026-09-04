@@ -1,21 +1,16 @@
 package com.hungteen.pvz.client.model.entity.misc;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.misc.FireCrackersEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -72,49 +67,49 @@ public class FireCrackersModel extends EntityModel<FireCrackersEntity> {
 
 public FireCrackersModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.bombs = root.getChild("bombs");
-		this.bone = root.getChild("bone");
-		this.bomb1 = root.getChild("bomb1");
-		this.bomb2 = root.getChild("bomb2");
-		this.bone2 = root.getChild("bone2");
-		this.bomb3 = root.getChild("bomb3");
-		this.bomb4 = root.getChild("bomb4");
-		this.bone3 = root.getChild("bone3");
-		this.bomb5 = root.getChild("bomb5");
-		this.bomb6 = root.getChild("bomb6");
-		this.bone4 = root.getChild("bone4");
-		this.bomb7 = root.getChild("bomb7");
-		this.bomb8 = root.getChild("bomb8");
-		this.bone5 = root.getChild("bone5");
-		this.bomb9 = root.getChild("bomb9");
-		this.bomb10 = root.getChild("bomb10");
-		this.bone6 = root.getChild("bone6");
-		this.bomb11 = root.getChild("bomb11");
-		this.bomb12 = root.getChild("bomb12");
-		this.bone7 = root.getChild("bone7");
-		this.bomb13 = root.getChild("bomb13");
-		this.bomb14 = root.getChild("bomb14");
-		this.bone8 = root.getChild("bone8");
-		this.bomb15 = root.getChild("bomb15");
-		this.bomb16 = root.getChild("bomb16");
-		this.bone9 = root.getChild("bone9");
-		this.bomb17 = root.getChild("bomb17");
-		this.bomb18 = root.getChild("bomb18");
-		this.bone10 = root.getChild("bone10");
-		this.bomb19 = root.getChild("bomb19");
-		this.bomb20 = root.getChild("bomb20");
-		this.bone11 = root.getChild("bone11");
-		this.bomb21 = root.getChild("bomb21");
-		this.bomb22 = root.getChild("bomb22");
-		this.bone12 = root.getChild("bone12");
-		this.bomb23 = root.getChild("bomb23");
-		this.bomb24 = root.getChild("bomb24");
-		this.bone13 = root.getChild("bone13");
-		this.bomb25 = root.getChild("bomb25");
-		this.bomb26 = root.getChild("bomb26");
-		this.bone14 = root.getChild("bone14");
-		this.bomb27 = root.getChild("bomb27");
-		this.bomb28 = root.getChild("bomb28");
+		this.bombs = this.total.getChild("bombs");
+		this.bone = this.bombs.getChild("bone");
+		this.bomb1 = this.bone.getChild("bomb1");
+		this.bomb2 = this.bone.getChild("bomb2");
+		this.bone2 = this.bombs.getChild("bone2");
+		this.bomb3 = this.bone2.getChild("bomb3");
+		this.bomb4 = this.bone2.getChild("bomb4");
+		this.bone3 = this.bombs.getChild("bone3");
+		this.bomb5 = this.bone3.getChild("bomb5");
+		this.bomb6 = this.bone3.getChild("bomb6");
+		this.bone4 = this.bombs.getChild("bone4");
+		this.bomb7 = this.bone4.getChild("bomb7");
+		this.bomb8 = this.bone4.getChild("bomb8");
+		this.bone5 = this.bombs.getChild("bone5");
+		this.bomb9 = this.bone5.getChild("bomb9");
+		this.bomb10 = this.bone5.getChild("bomb10");
+		this.bone6 = this.bombs.getChild("bone6");
+		this.bomb11 = this.bone6.getChild("bomb11");
+		this.bomb12 = this.bone6.getChild("bomb12");
+		this.bone7 = this.bombs.getChild("bone7");
+		this.bomb13 = this.bone7.getChild("bomb13");
+		this.bomb14 = this.bone7.getChild("bomb14");
+		this.bone8 = this.bombs.getChild("bone8");
+		this.bomb15 = this.bone8.getChild("bomb15");
+		this.bomb16 = this.bone8.getChild("bomb16");
+		this.bone9 = this.bombs.getChild("bone9");
+		this.bomb17 = this.bone9.getChild("bomb17");
+		this.bomb18 = this.bone9.getChild("bomb18");
+		this.bone10 = this.bombs.getChild("bone10");
+		this.bomb19 = this.bone10.getChild("bomb19");
+		this.bomb20 = this.bone10.getChild("bomb20");
+		this.bone11 = this.bombs.getChild("bone11");
+		this.bomb21 = this.bone11.getChild("bomb21");
+		this.bomb22 = this.bone11.getChild("bomb22");
+		this.bone12 = this.bombs.getChild("bone12");
+		this.bomb23 = this.bone12.getChild("bomb23");
+		this.bomb24 = this.bone12.getChild("bomb24");
+		this.bone13 = this.bombs.getChild("bone13");
+		this.bomb25 = this.bone13.getChild("bomb25");
+		this.bomb26 = this.bone13.getChild("bomb26");
+		this.bone14 = this.bombs.getChild("bone14");
+		this.bomb27 = this.bone14.getChild("bomb27");
+		this.bomb28 = this.bone14.getChild("bomb28");
 	}
 
 	public static LayerDefinition createBodyLayer() {

@@ -1,23 +1,20 @@
 package com.hungteen.pvz.client.model.entity.zombie.pool;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.zombie.pool.ZombieDolphinEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -38,13 +35,13 @@ public class ZombieDolphinModel extends EntityModel<ZombieDolphinEntity> {
 
 public ZombieDolphinModel(ModelPart root) {
 		this.body = root.getChild("body");
-		this.head = root.getChild("head");
-		this.nose = root.getChild("nose");
-		this.tail = root.getChild("tail");
-		this.tail_fin = root.getChild("tail_fin");
-		this.back_fin = root.getChild("back_fin");
-		this.left_fin = root.getChild("left_fin");
-		this.right_fin = root.getChild("right_fin");
+		this.head = this.body.getChild("head");
+		this.nose = this.head.getChild("nose");
+		this.tail = this.body.getChild("tail");
+		this.tail_fin = this.tail.getChild("tail_fin");
+		this.back_fin = this.body.getChild("back_fin");
+		this.left_fin = this.body.getChild("left_fin");
+		this.right_fin = this.body.getChild("right_fin");
 	}
 
 	public static LayerDefinition createBodyLayer() {

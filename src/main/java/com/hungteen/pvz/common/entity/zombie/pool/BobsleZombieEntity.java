@@ -1,13 +1,13 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public class BobsleZombieEntity extends PVZZombieEntity{

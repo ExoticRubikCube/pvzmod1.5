@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.common.advancement.predicate.AmountPredicate;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.EntityPredicate;

@@ -1,32 +1,30 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
-import com.hungteen.pvz.client.model.entity.plant.arma.MelonPultModel;
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZRandomTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.appease.SplitPeaEntity;
 import com.hungteen.pvz.common.entity.plant.arma.MelonPultEntity;
-import com.hungteen.pvz.common.entity.plant.base.PlantPultEntity;
 import com.hungteen.pvz.common.entity.plant.ice.WinterMelonEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZLoot;
-import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {

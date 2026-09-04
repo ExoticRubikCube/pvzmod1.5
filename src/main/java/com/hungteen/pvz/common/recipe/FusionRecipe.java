@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hungteen.pvz.utils.StringUtil;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;

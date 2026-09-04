@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, value = Dist.CLIENT)
 public class OverlayEvents {
 
-	private static Minecraft mc = Minecraft.getInstance();
+	private static final Minecraft mc = Minecraft.getInstance();
 
 	@SubscribeEvent
 	public static void onPostRenderOverlay(RenderGuiEvent.Post ev) {
@@ -42,9 +42,8 @@ public class OverlayEvents {
 				PVZOverlayHandler.renderMission(stack, width, height);
 			}
 			
-			if(mc.player.getVehicle() instanceof CobCannonEntity) {
-				CobCannonEntity cob = (CobCannonEntity) mc.player.getVehicle();
-				if(cob.getCornNum() > 0) {
+			if(mc.player.getVehicle() instanceof CobCannonEntity cob) {
+                if(cob.getCornNum() > 0) {
 					PVZOverlayHandler.renderTargetAim(stack, width, height);
 				}
 			}

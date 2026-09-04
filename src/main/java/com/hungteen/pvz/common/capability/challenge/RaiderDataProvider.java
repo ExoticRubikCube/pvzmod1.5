@@ -1,11 +1,8 @@
 package com.hungteen.pvz.common.capability.challenge;
 
 import com.hungteen.pvz.common.capability.CapabilityHandler;
-import com.hungteen.pvz.common.capability.player.IPlayerDataCapability;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;

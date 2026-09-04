@@ -1,10 +1,9 @@
 package com.hungteen.pvz.compat.jade;
 
-import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.compat.jade.provider.PVZEntityProvider;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;

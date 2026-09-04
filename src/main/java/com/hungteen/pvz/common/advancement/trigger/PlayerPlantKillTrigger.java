@@ -45,7 +45,7 @@ public class PlayerPlantKillTrigger extends SimpleCriterionTrigger<PlayerPlantKi
 		}
 
 		public boolean test(ServerPlayer player, Entity entity, DamageSource source) {
-			return !this.killingBlow.matches(player, source) ? false : this.entity.matches(player, entity);
+			return this.killingBlow.matches(player, source) && this.entity.matches(player, entity);
 		}
 
 		public JsonElement func_200288_b() {

@@ -5,23 +5,20 @@ import com.hungteen.pvz.common.entity.plant.spear.CatTailEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraft.world.entity.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
-
-import static java.lang.Math.*;
-import static net.minecraft.util.Mth.sign;
 
 public class ThornEntity extends AbstractBulletEntity {
 
@@ -29,7 +26,7 @@ public class ThornEntity extends AbstractBulletEntity {
 			EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> THORN_STATE = SynchedEntityData.defineId(ThornEntity.class,
 			EntityDataSerializers.INT);
-	private IntOpenHashSet set = new IntOpenHashSet();
+	private final IntOpenHashSet set = new IntOpenHashSet();
 	private LivingEntity thornTarget;
 	private int extraHitCount = 0;
 

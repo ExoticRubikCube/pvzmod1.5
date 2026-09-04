@@ -1,28 +1,28 @@
 package com.hungteen.pvz.common.entity.zombie.other;
 
-import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
-import com.hungteen.pvz.common.impl.zombie.CustomZombies;
-import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.entity.EntityRegister;
+import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
+import com.hungteen.pvz.common.impl.zombie.CustomZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
+import com.hungteen.pvz.common.item.ItemRegister;
+import com.hungteen.pvz.common.misc.PVZLoot;
+import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class TrickZombieEntity extends PVZZombieEntity{
 

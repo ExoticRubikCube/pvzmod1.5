@@ -1,12 +1,5 @@
 {
   "type": "pvz:fragment_splice",
-  "pattern": [
-    "AAAAA",
-    "ABBBA",
-    "ABCBA",
-    "ABBBA",
-    "AAAAA"
-  ],
   "key": {
     "A": {
       "item": "pvz:grave_buster_enjoy_card"
@@ -18,6 +11,13 @@
       "tag": "pvz:card/white_cards"
     }
   },
+  "pattern": [
+    "AAAAA",
+    "ABBBA",
+    "ABCBA",
+    "ABBBA",
+    "AAAAA"
+  ],
   "result": {
     "item": "pvz:grave_buster_card"
   }

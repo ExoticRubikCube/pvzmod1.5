@@ -5,15 +5,14 @@ import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
-
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.event.level.BlockEvent;
 
 public class BlockEventHandler {

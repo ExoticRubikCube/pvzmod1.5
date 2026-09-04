@@ -1,9 +1,5 @@
 package com.hungteen.pvz.data.recipe;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.IPlantType;
@@ -13,22 +9,23 @@ import com.hungteen.pvz.common.impl.RankTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
-
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
 
 import static net.minecraft.resources.ResourceLocation.fromNamespaceAndPath;
 
@@ -155,7 +152,7 @@ public class RecipeGenerator extends RecipeProvider{
 					.define('B', type.getEssence().getEssenceItem())
 					.define('C', type.getRank().getCardTag())
 					.unlockedBy("has_essence", has(type.getEssence().getEssenceItem()))
-					.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "fragment_splice/" + type.toString() + "_card"));
+					.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "fragment_splice/" + type + "_card"));
 			}
 			
 		});

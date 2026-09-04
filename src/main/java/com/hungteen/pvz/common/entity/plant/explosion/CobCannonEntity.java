@@ -1,8 +1,5 @@
 package com.hungteen.pvz.common.entity.plant.explosion;
 
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.common.ForgeMod;
-
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZRandomTargetGoal;
@@ -17,27 +14,28 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fluids.FluidType;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

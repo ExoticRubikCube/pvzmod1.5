@@ -1,12 +1,5 @@
 {
   "type": "pvz:fragment_splice",
-  "pattern": [
-    "AAAAA",
-    "ABBBA",
-    "ABCBA",
-    "ABBBA",
-    "AAAAA"
-  ],
   "key": {
     "A": {
       "item": "pvz:strange_cat_enjoy_card"
@@ -18,6 +11,13 @@
       "tag": "pvz:card/purple_cards"
     }
   },
+  "pattern": [
+    "AAAAA",
+    "ABBBA",
+    "ABCBA",
+    "ABBBA",
+    "AAAAA"
+  ],
   "result": {
     "item": "pvz:strange_cat_card"
   }

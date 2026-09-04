@@ -1,23 +1,19 @@
 package com.hungteen.pvz.client.model.entity.plant.magic;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.magic.CoffeeBeanEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.2
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -36,11 +32,11 @@ public class CoffeeBeanModel extends PVZPlantModel<CoffeeBeanEntity> {
 
 public CoffeeBeanModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.right_wing = root.getChild("right_wing");
-		this.left_wing = root.getChild("left_wing");
+		this.body = this.total.getChild("body");
+		this.cube_r1 = this.body.getChild("cube_r1");
+		this.cube_r2 = this.body.getChild("cube_r2");
+		this.right_wing = this.total.getChild("right_wing");
+		this.left_wing = this.total.getChild("left_wing");
 	}
 
 	public static LayerDefinition createBodyLayer() {

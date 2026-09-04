@@ -55,7 +55,7 @@ public enum Resources {
 	public final int min;
 	public final int max;
 	
-	private Resources(int min, int max) {
+	Resources(int min, int max) {
 		this.min = min;
 		this.max = max;
 	}

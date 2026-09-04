@@ -1,24 +1,22 @@
 package com.hungteen.pvz.client.model.entity.zombie.roof;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.common.entity.zombie.base.EdgarRobotEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -48,22 +46,22 @@ public class EdgarRobotModel<T extends EdgarRobotEntity> extends EntityModel<T> 
 
 public EdgarRobotModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.left_leg = root.getChild("left_leg");
-		this.left_shoo = root.getChild("left_shoo");
-		this.right_leg = root.getChild("right_leg");
-		this.right_shoo = root.getChild("right_shoo");
-		this.up = root.getChild("up");
-		this.body = root.getChild("body");
-		this.pipe1 = root.getChild("pipe1");
-		this.pipe2 = root.getChild("pipe2");
-		this.head = root.getChild("head");
-		this.mouse = root.getChild("mouse");
-		this.lace = root.getChild("lace");
-		this.red_eyes = root.getChild("red_eyes");
-		this.yellow_eyes = root.getChild("yellow_eyes");
-		this.blue_eyes = root.getChild("blue_eyes");
-		this.left_arm = root.getChild("left_arm");
-		this.right_arm = root.getChild("right_arm");
+		this.left_leg = this.total.getChild("left_leg");
+		this.left_shoo = this.left_leg.getChild("left_shoo");
+		this.right_leg = this.total.getChild("right_leg");
+		this.right_shoo = this.right_leg.getChild("right_shoo");
+		this.up = this.total.getChild("up");
+		this.body = this.up.getChild("body");
+		this.pipe1 = this.body.getChild("pipe1");
+		this.pipe2 = this.body.getChild("pipe2");
+		this.head = this.up.getChild("head");
+		this.mouse = this.head.getChild("mouse");
+		this.lace = this.head.getChild("lace");
+		this.red_eyes = this.head.getChild("red_eyes");
+		this.yellow_eyes = this.head.getChild("yellow_eyes");
+		this.blue_eyes = this.head.getChild("blue_eyes");
+		this.left_arm = this.up.getChild("left_arm");
+		this.right_arm = this.up.getChild("right_arm");
 	}
 
 	public static LayerDefinition createBodyLayer() {

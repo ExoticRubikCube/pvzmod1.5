@@ -1,13 +1,12 @@
 package com.hungteen.pvz.common.entity.ai.navigator;
 
 import com.hungteen.pvz.common.entity.ai.processor.ZombiePathNodeEvaluator;
-
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Vec3i;
-import net.minecraft.world.level.Level;
 
 public class ZombiePathNavigation extends GroundPathNavigation {
 

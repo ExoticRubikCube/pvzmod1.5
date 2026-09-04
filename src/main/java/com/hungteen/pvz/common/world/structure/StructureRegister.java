@@ -7,30 +7,27 @@ import com.hungteen.pvz.common.world.structure.shop.DaveVillaStructure;
 import com.hungteen.pvz.common.world.structure.shop.SunTempleComponents;
 import com.hungteen.pvz.common.world.structure.shop.SunTempleStructure;
 import com.hungteen.pvz.common.world.structure.zombie.*;
-import com.hungteen.pvz.utils.BiomeUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.Structure.StructureSettings;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 import java.util.Map;
-
-import com.hungteen.pvz.PVZConfig;
 
 public class StructureRegister {
 	public static final DeferredRegister<Structure> STRUCTURES = DeferredRegister.create(Registry.STRUCTURE_REGISTRY, PVZMod.MOD_ID);
@@ -76,46 +73,34 @@ public class StructureRegister {
 
 	public static final RegistryObject<StructureSet> BUCKET_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("bucket_house",
 			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(BUCKET_HOUSE), 1)),
-					new RandomSpreadStructurePlacement(dis(0), sep(0), RandomSpreadType.LINEAR, 998244353)));
+					new RandomSpreadStructurePlacement(36, 18, RandomSpreadType.LINEAR, 998244353)));
 	public static final RegistryObject<StructureSet> DOLPHIN_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("dolphin_house",
 			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(DOLPHIN_HOUSE), 1)),
-					new RandomSpreadStructurePlacement(dis(1), sep(1), RandomSpreadType.LINEAR, 165745799)));
+					new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 165745799)));
 	public static final RegistryObject<StructureSet> GRAVE_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("grave_house",
 			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(GRAVE_HOUSE), 1)),
-					new RandomSpreadStructurePlacement(dis(2), sep(2), RandomSpreadType.LINEAR, 165745797)));
+					new RandomSpreadStructurePlacement(28, 14, RandomSpreadType.LINEAR, 165745797)));
 	public static final RegistryObject<StructureSet> YETI_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("yeti_house",
 			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(YETI_HOUSE), 1)),
-					new RandomSpreadStructurePlacement(dis(3), sep(3), RandomSpreadType.LINEAR, 165745795)));
+					new RandomSpreadStructurePlacement(28, 14, RandomSpreadType.LINEAR, 165745795)));
 	public static final RegistryObject<StructureSet> DAVE_VILLA_SET = FeatureRegister.STRUCTURE_SETS.register("dave_villa",
 			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(DAVE_VILLA), 1)),
-					new RandomSpreadStructurePlacement(dis(4), sep(4), RandomSpreadType.LINEAR, 165745793)));
+					new RandomSpreadStructurePlacement(40, 20, RandomSpreadType.LINEAR, 165745793)));
 	public static final RegistryObject<StructureSet> SUN_TEMPLE_SET = FeatureRegister.STRUCTURE_SETS.register("sun_temple",
 			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(SUN_TEMPLE), 1)),
-					new RandomSpreadStructurePlacement(dis(5), sep(5), RandomSpreadType.LINEAR, 165745791)));
+					new RandomSpreadStructurePlacement(36, 18, RandomSpreadType.LINEAR, 165745791)));
 
 	private static StructureSettings defaultSurfaceSettings() {
-		return new StructureSettings(HolderSet.direct(List.of()), Map.of(),
+		final TagKey<Biome> overworldTag = TagKey.create(Registry.BIOME_REGISTRY,
+				new ResourceLocation("forge", "is_overworld"));
+		final HolderSet<Biome> biomes = BuiltinRegistries.BIOME.getOrCreateTag(overworldTag);
+		return new StructureSettings(biomes, Map.of(),
 				GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE);
 	}
 
 	@SuppressWarnings("unchecked")
 	private static Holder<Structure> holder(RegistryObject<? extends Structure> ro) {
 		return Holder.direct(ro.get());
-	}
-
-	private static int dis(int idx) {
-		List<Integer> ls = List.of(
-				PVZConfig.COMMON_CONFIG.WorldSettings.BucketHouseDistance.get(),
-				PVZConfig.COMMON_CONFIG.WorldSettings.DolphinHouseDistance.get(),
-				PVZConfig.COMMON_CONFIG.WorldSettings.GraveHouseDistance.get(),
-				PVZConfig.COMMON_CONFIG.WorldSettings.YetiHouseDistance.get(),
-				PVZConfig.COMMON_CONFIG.WorldSettings.DaveVillaDistance.get(),
-				PVZConfig.COMMON_CONFIG.WorldSettings.SunTempleDistance.get());
-		return ls.get(idx);
-	}
-
-	private static int sep(int idx) {
-		return Math.max(1, dis(idx) / 2);
 	}
 
 	public static void setupStructures() {

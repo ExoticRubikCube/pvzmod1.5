@@ -33,7 +33,7 @@ public class ConfigUtil {
 	public static int getPlayerInitialGroup() {
 		return PVZConfig.COMMON_CONFIG.EntitySettings.PlayerInitialGroup.get();
 	}
-	
+
 	public static int getGenOriginOreChance() {
 		return PVZConfig.COMMON_CONFIG.WorldSettings.GenOriginOreChance.get();
 	}
@@ -44,7 +44,7 @@ public class ConfigUtil {
 	public static int getGenLunarStoneChance() {
 		return PVZConfig.COMMON_CONFIG.WorldSettings.GenLunarStoneChance.get();
 	}
-	
+
 	public static int getBaseSun() {
 		return PVZConfig.COMMON_CONFIG.EntitySettings.PlayerBaseSunAmount.get();
 	}
@@ -66,15 +66,15 @@ public class ConfigUtil {
 	public static boolean renderSunBar() {
 		return PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderSunBar.get();
 	}
-	
+
 	public static boolean renderMoneyBar() {
 		return PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderMoneyBar.get();
 	}
-	
+
 	public static boolean renderGemBar() {
 		return PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderGemBar.get();
 	}
-	
+
 	public static boolean renderTreeLevel() {
 		return PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderTreeLevel.get();
 	}

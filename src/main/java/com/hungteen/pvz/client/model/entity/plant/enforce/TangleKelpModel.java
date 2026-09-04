@@ -1,22 +1,18 @@
 package com.hungteen.pvz.client.model.entity.plant.enforce;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.enforce.TangleKelpEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -44,20 +40,20 @@ public class TangleKelpModel extends PVZPlantModel<TangleKelpEntity> {
 
 public TangleKelpModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.c1 = root.getChild("c1");
-		this.c2 = root.getChild("c2");
-		this.f1 = root.getChild("f1");
-		this.n_r1 = root.getChild("n_r1");
-		this.s_r1 = root.getChild("s_r1");
-		this.f2 = root.getChild("f2");
-		this.n_r2 = root.getChild("n_r2");
-		this.s_r2 = root.getChild("s_r2");
-		this.f3 = root.getChild("f3");
-		this.n_r3 = root.getChild("n_r3");
-		this.s_r3 = root.getChild("s_r3");
-		this.f4 = root.getChild("f4");
-		this.n_r4 = root.getChild("n_r4");
-		this.s_r4 = root.getChild("s_r4");
+		this.c1 = this.total.getChild("c1");
+		this.c2 = this.total.getChild("c2");
+		this.f1 = this.total.getChild("f1");
+		this.n_r1 = this.f1.getChild("n_r1");
+		this.s_r1 = this.f1.getChild("s_r1");
+		this.f2 = this.total.getChild("f2");
+		this.n_r2 = this.f2.getChild("n_r2");
+		this.s_r2 = this.f2.getChild("s_r2");
+		this.f3 = this.total.getChild("f3");
+		this.n_r3 = this.f3.getChild("n_r3");
+		this.s_r3 = this.f3.getChild("s_r3");
+		this.f4 = this.total.getChild("f4");
+		this.n_r4 = this.f4.getChild("n_r4");
+		this.s_r4 = this.f4.getChild("s_r4");
 	}
 
 	public static LayerDefinition createBodyLayer() {

@@ -1,23 +1,16 @@
 package com.hungteen.pvz.client.model.entity.plant.light;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.light.TwinSunFlowerEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -64,39 +57,39 @@ public class TwinSunFlowerModel extends PVZPlantModel<TwinSunFlowerEntity> {
 
 public TwinSunFlowerModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.left_flower = root.getChild("left_flower");
-		this.head2 = root.getChild("head2");
-		this.HUABAN7 = root.getChild("HUABAN7");
-		this.HUABAN8 = root.getChild("HUABAN8");
-		this.HUABAN9 = root.getChild("HUABAN9");
-		this.HUABAN10 = root.getChild("HUABAN10");
-		this.HUABAN11 = root.getChild("HUABAN11");
-		this.HUABAN12 = root.getChild("HUABAN12");
-		this.body2 = root.getChild("body2");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.left_hand2 = root.getChild("left_hand2");
-		this.right_hand2 = root.getChild("right_hand2");
-		this.right_flower = root.getChild("right_flower");
-		this.body3 = root.getChild("body3");
-		this.right_hand3 = root.getChild("right_hand3");
-		this.left_hand3 = root.getChild("left_hand3");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.head3 = root.getChild("head3");
-		this.HUABAN2 = root.getChild("HUABAN2");
-		this.HUABAN3 = root.getChild("HUABAN3");
-		this.HUABAN4 = root.getChild("HUABAN4");
-		this.HUABAN5 = root.getChild("HUABAN5");
-		this.HUABAN6 = root.getChild("HUABAN6");
-		this.HUABAN13 = root.getChild("HUABAN13");
-		this.leaves = root.getChild("leaves");
-		this.YEZI_1 = root.getChild("YEZI_1");
-		this.YEZI_2 = root.getChild("YEZI_2");
-		this.YEZI_3 = root.getChild("YEZI_3");
-		this.YEZI_4 = root.getChild("YEZI_4");
+		this.left_flower = this.total.getChild("left_flower");
+		this.head2 = this.left_flower.getChild("head2");
+		this.HUABAN7 = this.head2.getChild("HUABAN7");
+		this.HUABAN8 = this.HUABAN7.getChild("HUABAN8");
+		this.HUABAN9 = this.HUABAN8.getChild("HUABAN9");
+		this.HUABAN10 = this.head2.getChild("HUABAN10");
+		this.HUABAN11 = this.HUABAN10.getChild("HUABAN11");
+		this.HUABAN12 = this.HUABAN11.getChild("HUABAN12");
+		this.body2 = this.left_flower.getChild("body2");
+		this.bone = this.body2.getChild("bone");
+		this.bone2 = this.bone.getChild("bone2");
+		this.cube_r1 = this.bone2.getChild("cube_r1");
+		this.left_hand2 = this.body2.getChild("left_hand2");
+		this.right_hand2 = this.body2.getChild("right_hand2");
+		this.right_flower = this.total.getChild("right_flower");
+		this.body3 = this.right_flower.getChild("body3");
+		this.right_hand3 = this.body3.getChild("right_hand3");
+		this.left_hand3 = this.body3.getChild("left_hand3");
+		this.bone3 = this.body3.getChild("bone3");
+		this.bone4 = this.bone3.getChild("bone4");
+		this.cube_r2 = this.bone4.getChild("cube_r2");
+		this.head3 = this.right_flower.getChild("head3");
+		this.HUABAN2 = this.head3.getChild("HUABAN2");
+		this.HUABAN3 = this.HUABAN2.getChild("HUABAN3");
+		this.HUABAN4 = this.HUABAN3.getChild("HUABAN4");
+		this.HUABAN5 = this.head3.getChild("HUABAN5");
+		this.HUABAN6 = this.HUABAN5.getChild("HUABAN6");
+		this.HUABAN13 = this.HUABAN6.getChild("HUABAN13");
+		this.leaves = this.total.getChild("leaves");
+		this.YEZI_1 = this.leaves.getChild("YEZI_1");
+		this.YEZI_2 = this.leaves.getChild("YEZI_2");
+		this.YEZI_3 = this.leaves.getChild("YEZI_3");
+		this.YEZI_4 = this.leaves.getChild("YEZI_4");
 	}
 
 	public static LayerDefinition createBodyLayer() {

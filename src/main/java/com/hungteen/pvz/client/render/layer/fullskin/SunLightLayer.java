@@ -7,11 +7,10 @@ import com.hungteen.pvz.common.entity.plant.base.PlantProducerEntity;
 import com.hungteen.pvz.common.entity.plant.light.GoldLeafEntity;
 import com.hungteen.pvz.common.entity.zombie.other.RaZombieEntity;
 import com.hungteen.pvz.utils.StringUtil;
-
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,9 +33,8 @@ public class SunLightLayer<T extends LivingEntity, M extends EntityModel<T>> ext
 			return tick > 0&& tick <= 60;
 		}
 		if(entity instanceof PVZPlantEntity && ((PVZPlantEntity) entity).getGoldTime() + 20 > GoldLeafEntity.GOLD_GEN_CD) return true;
-		if(entity instanceof RaZombieEntity && ((RaZombieEntity) entity).checkCanWorkNow()) return true;
-		return false;
-	}
+        return entity instanceof RaZombieEntity && ((RaZombieEntity) entity).checkCanWorkNow();
+    }
 
 	@Override
 	protected ResourceLocation getResourceLocation(T entity) {

@@ -1,25 +1,23 @@
 package com.hungteen.pvz.client.model.entity.zombie.pool;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.client.model.entity.PVZEntityModel;
 import com.hungteen.pvz.common.entity.zombie.pool.ZomboniEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -83,56 +81,56 @@ public class ZomboniModel extends PVZEntityModel<ZomboniEntity> implements IZomb
 
 public ZomboniModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.car = root.getChild("car");
-		this.lunzi = root.getChild("lunzi");
-		this.tyre_leftfront = root.getChild("tyre_leftfront");
-		this.bone14 = root.getChild("bone14");
-		this.bone12 = root.getChild("bone12");
-		this.bone13 = root.getChild("bone13");
-		this.bone15 = root.getChild("bone15");
-		this.bone16 = root.getChild("bone16");
-		this.bone17 = root.getChild("bone17");
-		this.tyre_leftfront2 = root.getChild("tyre_leftfront2");
-		this.bone2 = root.getChild("bone2");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
-		this.tyre_leftfront3 = root.getChild("tyre_leftfront3");
-		this.bone8 = root.getChild("bone8");
-		this.bone9 = root.getChild("bone9");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.bone18 = root.getChild("bone18");
-		this.bone19 = root.getChild("bone19");
-		this.tyre_leftfront4 = root.getChild("tyre_leftfront4");
-		this.bone20 = root.getChild("bone20");
-		this.bone21 = root.getChild("bone21");
-		this.bone22 = root.getChild("bone22");
-		this.bone23 = root.getChild("bone23");
-		this.bone24 = root.getChild("bone24");
-		this.bone25 = root.getChild("bone25");
-		this.chair = root.getChild("chair");
-		this.bone = root.getChild("bone");
-		this.mid = root.getChild("mid");
-		this.bone26 = root.getChild("bone26");
-		this.ice = root.getChild("ice");
-		this.front = root.getChild("front");
-		this.level1 = root.getChild("level1");
-		this.level2 = root.getChild("level2");
-		this.gai = root.getChild("gai");
-		this.ice2 = root.getChild("ice2");
-		this.zombie = root.getChild("zombie");
-		this.head = root.getChild("head");
-		this.bone27 = root.getChild("bone27");
-		this.bone28 = root.getChild("bone28");
-		this.bone29 = root.getChild("bone29");
-		this.right_hand = root.getChild("right_hand");
-		this.left_hand = root.getChild("left_hand");
-		this.body = root.getChild("body");
-		this.right_leg = root.getChild("right_leg");
-		this.left_leg = root.getChild("left_leg");
+		this.car = this.total.getChild("car");
+		this.lunzi = this.car.getChild("lunzi");
+		this.tyre_leftfront = this.lunzi.getChild("tyre_leftfront");
+		this.bone14 = this.tyre_leftfront.getChild("bone14");
+		this.bone12 = this.bone14.getChild("bone12");
+		this.bone13 = this.bone14.getChild("bone13");
+		this.bone15 = this.tyre_leftfront.getChild("bone15");
+		this.bone16 = this.bone15.getChild("bone16");
+		this.bone17 = this.bone15.getChild("bone17");
+		this.tyre_leftfront2 = this.lunzi.getChild("tyre_leftfront2");
+		this.bone2 = this.tyre_leftfront2.getChild("bone2");
+		this.bone3 = this.bone2.getChild("bone3");
+		this.bone4 = this.bone2.getChild("bone4");
+		this.bone5 = this.tyre_leftfront2.getChild("bone5");
+		this.bone6 = this.bone5.getChild("bone6");
+		this.bone7 = this.bone5.getChild("bone7");
+		this.tyre_leftfront3 = this.lunzi.getChild("tyre_leftfront3");
+		this.bone8 = this.tyre_leftfront3.getChild("bone8");
+		this.bone9 = this.bone8.getChild("bone9");
+		this.bone10 = this.bone8.getChild("bone10");
+		this.bone11 = this.tyre_leftfront3.getChild("bone11");
+		this.bone18 = this.bone11.getChild("bone18");
+		this.bone19 = this.bone11.getChild("bone19");
+		this.tyre_leftfront4 = this.lunzi.getChild("tyre_leftfront4");
+		this.bone20 = this.tyre_leftfront4.getChild("bone20");
+		this.bone21 = this.bone20.getChild("bone21");
+		this.bone22 = this.bone20.getChild("bone22");
+		this.bone23 = this.tyre_leftfront4.getChild("bone23");
+		this.bone24 = this.bone23.getChild("bone24");
+		this.bone25 = this.bone23.getChild("bone25");
+		this.chair = this.car.getChild("chair");
+		this.bone = this.chair.getChild("bone");
+		this.mid = this.car.getChild("mid");
+		this.bone26 = this.mid.getChild("bone26");
+		this.ice = this.mid.getChild("ice");
+		this.front = this.car.getChild("front");
+		this.level1 = this.front.getChild("level1");
+		this.level2 = this.front.getChild("level2");
+		this.gai = this.front.getChild("gai");
+		this.ice2 = this.front.getChild("ice2");
+		this.zombie = this.total.getChild("zombie");
+		this.head = this.zombie.getChild("head");
+		this.bone27 = this.head.getChild("bone27");
+		this.bone28 = this.head.getChild("bone28");
+		this.bone29 = this.head.getChild("bone29");
+		this.right_hand = this.zombie.getChild("right_hand");
+		this.left_hand = this.zombie.getChild("left_hand");
+		this.body = this.zombie.getChild("body");
+		this.right_leg = this.zombie.getChild("right_leg");
+		this.left_leg = this.zombie.getChild("left_leg");
 	}
 
 	public static LayerDefinition createBodyLayer() {

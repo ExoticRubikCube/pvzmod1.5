@@ -1,26 +1,17 @@
 package com.hungteen.pvz.common.world.spawn;
 
-import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.PVZMod;
-import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
-import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
-import com.hungteen.pvz.utils.BiomeUtil;
-
-import net.minecraft.world.level.block.Blocks;
+import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.util.RandomSource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -83,7 +74,7 @@ public class EntitySpawnRegister {
 
 		SpawnPlacements.register(EntityRegister.BUNGEE_ZOMBIE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(type, world, spawnType, pos, rand) ->
-						world.canSeeSky(pos) && world.canSeeSky(pos.offset(0, -5, 0)) && SpawnChecker.canZombieSpawn((EntityType) type, world, spawnType, pos, rand));
+						world.canSeeSky(pos) && world.canSeeSky(pos.offset(0, -5, 0)) && SpawnChecker.canZombieSpawn(type, world, spawnType, pos, rand));
 		SpawnPlacements.register(EntityRegister.LADDER_ZOMBIE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpawnChecker::canZombieSpawn);
 		SpawnPlacements.register(EntityRegister.CATAPULT_ZOMBIE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpawnChecker::canZombieSpawn);
 		SpawnPlacements.register(EntityRegister.GARGANTUAR.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpawnChecker::canZombieSpawn);

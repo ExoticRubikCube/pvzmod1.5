@@ -8,13 +8,13 @@ import com.hungteen.pvz.api.paz.IPlantInfo;
 import com.hungteen.pvz.api.types.IEssenceType;
 import com.hungteen.pvz.api.types.IPAZType;
 import com.hungteen.pvz.api.types.IPlantType;
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.advancement.trigger.PlantSuperTrigger;
 import com.hungteen.pvz.common.entity.AbstractPAZEntity;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.PVZLookRandomlyGoal;
 import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
-import com.hungteen.pvz.common.entity.plant.explosion.CobCannonEntity;
 import com.hungteen.pvz.common.entity.plant.explosion.DoomShroomEntity;
 import com.hungteen.pvz.common.entity.plant.light.GoldLeafEntity;
 import com.hungteen.pvz.common.entity.plant.magic.CoffeeBeanEntity;
@@ -24,9 +24,8 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.ConfigUtil;
@@ -35,36 +34,34 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.*;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -257,9 +254,9 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 	@Override
 	public void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list) {
 		super.addAlmanacEntries(list);
-		list.addAll(List.of(
+		list.add(
                 Pair.of(PAZAlmanacs.HEALTH, this.getSkillValue(SkillTypes.PLANT_MORE_LIFE))
-        ));
+        );
 	}
 
 	/**
@@ -378,8 +375,8 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 					d1 = d1 * d3;
 					d0 = d0 * 0.05000000074505806D;
 					d1 = d1 * 0.05000000074505806D;
-					d0 = d0 * (double) (1.0F - 0F);
-					d1 = d1 * (double) (1.0F - 0F);
+					d0 = d0;
+					d1 = d1;
 					if (!entityIn.isVehicle()) {
 						entityIn.push(d0, 0.0D, d1);
 					}
@@ -441,9 +438,7 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 			if (((Mob) target).getTarget() == this) {
 				return true;
 			}
-			if (target instanceof TombStoneEntity) {
-				return true;
-			}
+            return target instanceof TombStoneEntity;
 		}
 		return false;
 	}
@@ -564,9 +559,8 @@ this.remove(RemovalReason.KILLED);
 	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
 		if (! level.isClientSide()) {
 			ItemStack stack = player.getItemInHand(hand);
-			if (stack.getItem() instanceof PlantCardItem) {// plant card right click plant entity
-				PlantCardItem item = (PlantCardItem) stack.getItem();
-				if(PlantCardItem.checkSunAndHealPlant(player, this, item, stack)) {
+			if (stack.getItem() instanceof PlantCardItem item) {// plant card right click plant entity
+                if(PlantCardItem.checkSunAndHealPlant(player, this, item, stack)) {
 				} else if(PlantCardItem.checkSunAndUpgradePlant(player, this, item, stack)){
 				} else if(PlantCardItem.checkSunAndOuterPlant(player, this, item, stack)) {
 				} else if(PlantCardItem.checkSunAndInteractEntity(player, this, item, stack, type -> {

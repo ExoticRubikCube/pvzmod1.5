@@ -2,14 +2,13 @@ package com.hungteen.pvz.client.render.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.Entity;
-import com.mojang.math.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -35,7 +34,7 @@ public class DancerLightLayer<T extends Entity> extends RenderLayer<T, EntityMod
            ivertexbuilder2.vertex(matrix4f, 0.0f, - 10.0f, 0.0f).color(128, 0, 128, 255).endVertex();
            ivertexbuilder2.vertex(matrix4f, - 0.866f * f3, 2, (- 0.5F * f3)).color(128, 0, 128, 20).endVertex();
            ivertexbuilder2.vertex(matrix4f, 0.866f * f3, 2, (- 0.5F * f3)).color(128, 0, 128, 20).endVertex();
-           ivertexbuilder2.vertex(matrix4f, 0.0f, 2, (1.0F * f3)).color(128, 0, 128, 20).endVertex();
+           ivertexbuilder2.vertex(matrix4f, 0.0f, 2, (f3)).color(128, 0, 128, 20).endVertex();
            ivertexbuilder2.vertex(matrix4f, - 0.866f * f3, 2, (- 0.5F * f3)).color(128 , 0, 128, 20).endVertex();
         }
         matrixStackIn.popPose();

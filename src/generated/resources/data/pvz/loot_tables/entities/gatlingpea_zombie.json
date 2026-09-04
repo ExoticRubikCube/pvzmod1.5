@@ -2,20 +2,21 @@
   "type": "minecraft:entity",
   "pools": [
     {
-      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.004,
+          "condition": "minecraft:random_chance_with_looting",
+          "looting_multiplier": 0.01
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "pvz:gatling_pea_enjoy_card"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:random_chance_with_looting",
-          "chance": 0.004,
-          "looting_multiplier": 0.01
-        }
-      ]
+      "rolls": 1.0
     }
   ]
 }

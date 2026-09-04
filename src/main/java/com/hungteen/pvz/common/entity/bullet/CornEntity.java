@@ -1,24 +1,19 @@
 package com.hungteen.pvz.common.entity.bullet;
 
 import com.hungteen.pvz.common.advancement.trigger.EntityEffectAmountTrigger;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.roof.GargantuarEntity;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 public class CornEntity extends PultBulletEntity {

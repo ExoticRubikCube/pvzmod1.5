@@ -4,28 +4,22 @@ package com.hungteen.pvz.common.block.plants;
 import com.hungteen.pvz.common.entity.plant.spear.CatTailEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.pool.ZombieDolphinEntity;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 

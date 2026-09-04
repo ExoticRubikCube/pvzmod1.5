@@ -11,15 +11,14 @@ import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toclient.PlaySoundPacket;
 import com.hungteen.pvz.common.world.invasion.Invasion;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,7 +28,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static java.lang.Math.*;
+import static java.lang.Math.log10;
+import static java.lang.Math.round;
 
 public class PlayerUtil {
 
@@ -124,7 +124,7 @@ public class PlayerUtil {
 	
 	public static boolean isPAZLocked(Player player, IPAZType plant) {
 		final PlayerDataManager manager = getManager(player);
-		return manager != null ? manager.isPAZLocked(plant) : true;
+		return manager == null || manager.isPAZLocked(plant);
 	}
 
 	@Nonnull

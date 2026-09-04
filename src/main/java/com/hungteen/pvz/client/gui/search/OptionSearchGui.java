@@ -11,9 +11,9 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -86,7 +86,7 @@ public class OptionSearchGui extends GuiComponent implements GuiEventListener {
 		String s = this.searchBar.getValue();
 		if (! s.isEmpty()) {
 			list.removeIf((a) -> {
-				String now = a.getType().getText().getString();
+				String now = a.type().getText().getString();
 				return ! AlgorithmUtil.KMP.kmp(now, s.toLowerCase());
 			});
 

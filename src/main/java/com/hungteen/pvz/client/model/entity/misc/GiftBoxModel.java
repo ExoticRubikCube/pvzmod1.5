@@ -1,21 +1,20 @@
 package com.hungteen.pvz.client.model.entity.misc;// Made with Blockbench 4.1.3
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.misc.GiftBoxEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;public class GiftBoxModel extends EntityModel<GiftBoxEntity> {
+
+public class GiftBoxModel extends EntityModel<GiftBoxEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "gift_box"), "main");
 
 	private final ModelPart total;
@@ -29,10 +28,10 @@ import net.minecraft.client.model.geom.ModelLayerLocation;public class GiftBoxMo
 
 public GiftBoxModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.cover_r1 = root.getChild("cover_r1");
-		this.tape1_r1 = root.getChild("tape1_r1");
-		this.tape2_r1 = root.getChild("tape2_r1");
-		this.tapehang1_r1 = root.getChild("tapehang1_r1");
+		this.cover_r1 = this.total.getChild("cover_r1");
+		this.tape1_r1 = this.total.getChild("tape1_r1");
+		this.tape2_r1 = this.total.getChild("tape2_r1");
+		this.tapehang1_r1 = this.total.getChild("tapehang1_r1");
 	}
 
 	public static LayerDefinition createBodyLayer() {

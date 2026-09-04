@@ -3,9 +3,9 @@ package com.hungteen.pvz.common.entity;
 import com.hungteen.pvz.PVZMod;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * @program: pvzmod-1.16.5

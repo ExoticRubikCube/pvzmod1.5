@@ -1,21 +1,20 @@
 package com.hungteen.pvz.client.model.entity.te;// Made with Blockbench 4.1.3
 
+import com.hungteen.pvz.PVZMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;public class OriginModel extends EntityModel<Entity> {
+public class OriginModel extends EntityModel<Entity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "origin"), "main");
 
 	private final ModelPart total;
@@ -27,8 +26,8 @@ import net.minecraft.client.model.geom.ModelLayerLocation;public class OriginMod
 
 public OriginModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.center = root.getChild("center");
-		this.layer = root.getChild("layer");
+		this.center = this.total.getChild("center");
+		this.layer = this.total.getChild("layer");
 	}
 
 	public static LayerDefinition createBodyLayer() {

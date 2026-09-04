@@ -1,10 +1,9 @@
 package com.hungteen.pvz.utils;
 
-import java.util.Comparator;
-
 import com.mojang.datafixers.util.Pair;
-
 import net.minecraft.world.entity.Entity;
+
+import java.util.Comparator;
 
 public class AlgorithmUtil {
 
@@ -77,7 +76,7 @@ public class AlgorithmUtil {
 		            break;
 		        }
 		        preFixStr = preFixStr.substring(0, preFixStr.length() - 1);
-		        suffFixStr = suffFixStr.substring(1, suffFixStr.length());
+		        suffFixStr = suffFixStr.substring(1);
 		    }
 		 
 		    return 0;

@@ -6,15 +6,15 @@ import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.others.WeightList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 
@@ -50,7 +50,7 @@ public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 		if(! this.level.isClientSide()) {
 			BlockPos pos = this.blockPosition();
 			this.setPos(pos.getX() + 0.5, this.getY(), pos.getZ() + 0.5);
-			if (-- lifeRange < 0 && (level.getDayTime() % 24000 < 12000 ? random.nextInt(100) == 0 : false) && level.getNearestPlayer(this, 20) == null){
+			if (-- lifeRange < 0 && (level.getDayTime() % 24000 < 12000 && random.nextInt(100) == 0) && level.getNearestPlayer(this, 20) == null){
 this.remove(RemovalReason.KILLED);
 			}//*0.6.4 to avoid tombstones from accumulating.
 		}
@@ -60,9 +60,8 @@ this.remove(RemovalReason.KILLED);
 	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
 		if (! level.isClientSide()) {
 			ItemStack stack = player.getItemInHand(hand);
-			if (stack.getItem() instanceof PlantCardItem) {// plant card right click plant entity
-				PlantCardItem item = (PlantCardItem) stack.getItem();
-				if(PlantCardItem.checkSunAndInteractEntity(player, this, item, stack, type -> {
+			if (stack.getItem() instanceof PlantCardItem item) {// plant card right click plant entity
+                if(PlantCardItem.checkSunAndInteractEntity(player, this, item, stack, type -> {
 					return type == PVZPlants.GRAVE_BUSTER;
 				}, plantEntity -> {
 					if(plantEntity instanceof GraveBusterEntity) {

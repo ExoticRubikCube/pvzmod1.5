@@ -2,12 +2,10 @@ package com.hungteen.pvz.common.block.special;
 
 import com.hungteen.pvz.common.block.AbstractFacingBlock;
 import com.hungteen.pvz.common.tileentity.SunFlowerTrophyTileEntity;
-
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class SunFlowerTrophyBlock extends AbstractFacingBlock implements EntityBlock {
 

@@ -2,8 +2,8 @@ package com.hungteen.pvz.common.item;
 
 import com.hungteen.pvz.api.types.IRankType;
 import com.hungteen.pvz.common.impl.RankTypes;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.Rarity;
 
 /**
  * @program: pvzmod-1.16.5

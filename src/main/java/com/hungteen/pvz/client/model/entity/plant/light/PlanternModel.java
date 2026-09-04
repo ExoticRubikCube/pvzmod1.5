@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.light;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.light.PlanternEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -38,14 +31,14 @@ public class PlanternModel extends PVZPlantModel<PlanternEntity> {
 
 public PlanternModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.head = root.getChild("head");
-		this.bottom = root.getChild("bottom");
-		this.stick1 = root.getChild("stick1");
-		this.stick2 = root.getChild("stick2");
-		this.stick3 = root.getChild("stick3");
-		this.stick4 = root.getChild("stick4");
-		this.stick5 = root.getChild("stick5");
-		this.stick6 = root.getChild("stick6");
+		this.head = this.total.getChild("head");
+		this.bottom = this.total.getChild("bottom");
+		this.stick1 = this.total.getChild("stick1");
+		this.stick2 = this.total.getChild("stick2");
+		this.stick3 = this.total.getChild("stick3");
+		this.stick4 = this.total.getChild("stick4");
+		this.stick5 = this.total.getChild("stick5");
+		this.stick6 = this.total.getChild("stick6");
 	}
 
 	public static LayerDefinition createBodyLayer() {

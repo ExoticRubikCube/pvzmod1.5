@@ -1,12 +1,12 @@
 package com.hungteen.pvz.common.entity.zombie.base;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 public abstract class SwimmerZombieEntity extends PVZZombieEntity{
 

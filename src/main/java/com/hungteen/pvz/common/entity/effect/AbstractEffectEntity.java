@@ -1,12 +1,11 @@
 package com.hungteen.pvz.common.entity.effect;
 
 import com.hungteen.pvz.common.entity.PVZEntityBase;
-
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

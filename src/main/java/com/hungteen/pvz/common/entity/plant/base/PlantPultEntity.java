@@ -10,12 +10,12 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.interfaces.IPult;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;

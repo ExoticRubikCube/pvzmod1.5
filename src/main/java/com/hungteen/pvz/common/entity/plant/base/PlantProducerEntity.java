@@ -6,13 +6,12 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class PlantProducerEntity extends PVZPlantEntity {
@@ -31,9 +30,9 @@ public abstract class PlantProducerEntity extends PVZPlantEntity {
 	@Override
 	public void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list) {
 		super.addAlmanacEntries(list);
-		list.addAll(List.of(
+		list.add(
                 Pair.of(PAZAlmanacs.GEN_CD, this.getGenCD())
-        ));
+        );
 	}
 
 	/**

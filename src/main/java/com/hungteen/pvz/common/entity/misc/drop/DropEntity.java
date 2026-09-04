@@ -2,17 +2,17 @@ package com.hungteen.pvz.common.entity.misc.drop;
 
 import com.hungteen.pvz.api.interfaces.ICollectible;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 public abstract class DropEntity extends Mob implements ICollectible {
 
@@ -124,8 +124,7 @@ this.remove(RemovalReason.KILLED);
 
 	@Override
 	protected void playBlockFallSound() {
-		return ;
-	}
+    }
 	
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
@@ -165,7 +164,7 @@ this.remove(RemovalReason.KILLED);
 		this.entityData.set(STATE, state.ordinal());
 	}
 	
-	public static enum DropStates {
+	public enum DropStates {
 		NORMAL,
 		ABSORB,
 		STEAL

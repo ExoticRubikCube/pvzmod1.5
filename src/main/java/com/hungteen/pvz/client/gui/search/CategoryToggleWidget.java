@@ -82,6 +82,6 @@ public class CategoryToggleWidget extends AbstractWidget {
 	public enum SearchCategories {
 		ALL,
 		PLANTS,
-		ZOMBIES;
-	}
+		ZOMBIES
+    }
 }

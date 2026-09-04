@@ -4,9 +4,9 @@ import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;

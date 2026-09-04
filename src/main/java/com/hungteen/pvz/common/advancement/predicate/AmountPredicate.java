@@ -48,7 +48,7 @@ public class AmountPredicate {
 	}
 
 	public static class Builder {
-		private MinMaxBounds.Ints dealt = MinMaxBounds.Ints.ANY;
+		private final MinMaxBounds.Ints dealt = MinMaxBounds.Ints.ANY;
 
 		public static Builder create() {
 			return new Builder();

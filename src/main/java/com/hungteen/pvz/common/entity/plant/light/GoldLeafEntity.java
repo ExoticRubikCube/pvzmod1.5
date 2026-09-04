@@ -6,14 +6,13 @@ import com.hungteen.pvz.common.block.special.GoldTileBlock;
 import com.hungteen.pvz.common.entity.plant.base.PlantBomberEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.OtherPlants;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class GoldLeafEntity extends PlantBomberEntity {
 

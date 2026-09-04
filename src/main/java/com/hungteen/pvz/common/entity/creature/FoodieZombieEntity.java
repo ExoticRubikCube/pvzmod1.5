@@ -1,46 +1,36 @@
 package com.hungteen.pvz.common.entity.creature;
 
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.WaterTemptGoal;
 import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import com.hungteen.pvz.common.entity.zombie.pool.SnorkelZombieEntity;
 import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.misc.PVZLoot;
-import com.hungteen.pvz.common.entity.EntityRegister;
-
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.BreathAirGoal;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FollowParentGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 
 public class FoodieZombieEntity extends Animal {
 
@@ -181,9 +171,9 @@ this.remove(RemovalReason.KILLED);
 
 			this.doDeathSpawn();
 		}
-	};
+	}
 
-	private void doDeathSpawn() {
+    private void doDeathSpawn() {
 		if (!level.isClientSide()) {
 			SnorkelZombieEntity snorkel = EntityRegister.SNORKEL_ZOMBIE.get().create(level);
 			snorkel.setPos(this.getX(), this.getY(), this.getZ());

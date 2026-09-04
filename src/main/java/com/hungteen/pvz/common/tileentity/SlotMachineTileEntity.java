@@ -1,13 +1,5 @@
 package com.hungteen.pvz.common.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.events.LotteryEvent;
 import com.hungteen.pvz.common.advancement.trigger.SlotMachineTrigger;
@@ -22,28 +14,28 @@ import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.hungteen.pvz.utils.others.WeightList;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
-import net.minecraft.world.Container;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.Nameable;
-import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * 1. get resource of lottery type. 2. press button to choose fast start or slow
@@ -170,8 +162,7 @@ public class SlotMachineTileEntity extends PVZTileEntity implements MenuProvider
 		final int rightId = this.getOptionMap().get(this.SlotOptions[this.currentPos][2]);
 		this.isRunning = false;
 		if (leftId != midId && midId != rightId && leftId != rightId) {// nothing equal.
-			return;
-		} else if (leftId == midId && midId == rightId) { // all equal.
+        } else if (leftId == midId && midId == rightId) { // all equal.
 			this.genBonusResult(leftId, 3);
 		} else if (leftId == midId) {
 			this.genBonusResult(leftId, 1);

@@ -1,10 +1,10 @@
 package com.hungteen.pvz.common.item.material;
 
 import com.hungteen.pvz.common.item.PVZMiscItem;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;

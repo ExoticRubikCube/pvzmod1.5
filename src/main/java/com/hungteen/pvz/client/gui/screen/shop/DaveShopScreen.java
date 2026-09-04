@@ -4,8 +4,8 @@ import com.hungteen.pvz.common.container.shop.AbstractDaveShopContainer;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

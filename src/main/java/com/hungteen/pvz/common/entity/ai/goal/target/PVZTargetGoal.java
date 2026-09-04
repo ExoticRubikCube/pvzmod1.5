@@ -78,12 +78,9 @@ public abstract class PVZTargetGoal extends Goal{
 
 	protected boolean checkOther(LivingEntity entity) {
 		//invisible entity need closer, except it has light eyes effect.
-		if(this.mustSee && entity.isInvisible() && this.mob.distanceToSqr(entity) > 100 
-				&& ! this.mob.hasEffect(EffectRegister.LIGHT_EYE_EFFECT.get())) {
-			return false;
-		}
-		return true;
-	}
+        return !this.mustSee || !entity.isInvisible() || !(this.mob.distanceToSqr(entity) > 100)
+                || this.mob.hasEffect(EffectRegister.LIGHT_EYE_EFFECT.get());
+    }
 
 	protected AABB getAABB() {
 		return new AABB(this.mob.getX() + width, this.mob.getY() + this.upperHeight,

@@ -1,20 +1,20 @@
 package com.hungteen.pvz.common.entity.zombie.roof;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 
 public class ImpEntity extends PVZZombieEntity {
 

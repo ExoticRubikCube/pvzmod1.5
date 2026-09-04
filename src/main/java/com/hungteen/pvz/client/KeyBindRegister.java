@@ -1,13 +1,12 @@
 package com.hungteen.pvz.client;
 
+import com.hungteen.pvz.PVZMod;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.hungteen.pvz.PVZMod;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = PVZMod.MOD_ID)

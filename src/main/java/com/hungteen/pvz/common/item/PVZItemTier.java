@@ -1,8 +1,8 @@
 package com.hungteen.pvz.common.item;
 
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadedValue;
 
 import java.util.function.Supplier;
 
@@ -19,8 +19,8 @@ public enum PVZItemTier implements Tier {
 	private final int enchantability;
 	private final LazyLoadedValue<Ingredient> repairMaterial;
 
-	private PVZItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn,
-			int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+	PVZItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn,
+                int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
 		this.harvestLevel = harvestLevelIn;
 		this.maxUses = maxUsesIn;
 		this.efficiency = efficiencyIn;

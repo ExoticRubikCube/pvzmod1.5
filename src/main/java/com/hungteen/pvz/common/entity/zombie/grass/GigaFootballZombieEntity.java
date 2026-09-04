@@ -8,12 +8,12 @@ import com.hungteen.pvz.utils.EffectUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public class GigaFootballZombieEntity extends FootballZombieEntity {

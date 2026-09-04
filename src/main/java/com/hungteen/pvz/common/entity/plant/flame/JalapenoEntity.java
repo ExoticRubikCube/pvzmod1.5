@@ -12,12 +12,12 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.*;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 
 public class JalapenoEntity extends PlantBomberEntity{
 

@@ -4,6 +4,7 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.container.PeaGunContainer;
 import com.hungteen.pvz.common.container.inventory.ItemInventory;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.event.PVZPlayerEvents;
 import com.hungteen.pvz.common.event.events.PeaGunShootEvent;
@@ -15,40 +16,38 @@ import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
 import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.*;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -382,11 +381,11 @@ public class PeaGunItem extends Item {
 			opt = LazyOptional.of(() -> new InvWrapper(getInventory(stack)));
 		}
 
-		@Nonnull
-		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-			return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
+			@Nonnull
+			@Override
+			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+				return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
+			}
 		}
-	}
 
 }

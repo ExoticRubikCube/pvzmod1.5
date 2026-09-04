@@ -29,27 +29,28 @@ import com.hungteen.pvz.compat.jade.provider.PVZEntityProvider;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.animal.FlyingAnimal;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.client.renderer.EffectInstance;
-import net.minecraft.world.scores.Team;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.phys.*;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Team;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -300,11 +301,8 @@ public class EntityUtil {
 	 */
 	public static boolean isOnGround(Entity entity){
 		BlockPos pos = entity.blockPosition().below();
-		if(!entity.level.isEmptyBlock(pos) && (entity.getY() - pos.getY()) <= 1.00001) {
-			return true;
-		}
-		return false;
-	}
+        return !entity.level.isEmptyBlock(pos) && (entity.getY() - pos.getY()) <= 1.00001;
+    }
 	
 	/**
 	 * check if entity is on snow.
@@ -399,7 +397,7 @@ public class EntityUtil {
 			final Team team1 = getEntityTeam(attacker.level, attacker);
 		    final Team team2 = getEntityTeam(attacker.level, target);
 			if(team1 != null && team2 != null) {
-				return isEntityCharmed(attacker) ^ isEntityCharmed(target) ? team1.isAlliedTo(team2) : ! team1.isAlliedTo(team2);
+				return (isEntityCharmed(attacker) ^ isEntityCharmed(target)) == team1.isAlliedTo(team2);
 			}
 		}
 		if(attacker instanceof LivingEntity) {//target the entity who attack it before.
@@ -427,7 +425,7 @@ public class EntityUtil {
 			final Team team1 = getEntityTeam(attacker.level, attacker);
 			final Team team2 = getEntityTeam(attacker.level, target);
 			if(team1 != null && team2 != null) {
-				return isEntityCharmed(attacker) ^ isEntityCharmed(target) ? team1.isAlliedTo(team2) : ! team1.isAlliedTo(team2);
+				return (isEntityCharmed(attacker) ^ isEntityCharmed(target)) == team1.isAlliedTo(team2);
 			}
 		}
 		return EntityGroupHander.checkCanAttack(getEntityGroup(attacker), getEntityGroup(target));
@@ -437,14 +435,14 @@ public class EntityUtil {
 	 * both entity belong to the same side of group.
 	 */
 	public static boolean isFriendly(Entity a, Entity b){
-		return (a == null || b == null) ? false : ! EntityGroupHander.checkCanTarget(getEntityGroup(a), getEntityGroup(b));
+		return a != null && b != null && !EntityGroupHander.checkCanTarget(getEntityGroup(a), getEntityGroup(b));
 	}
 
 	/**
 	 * both entity belong to different side of group.
 	 */
 	public static boolean isEnemy(Entity a, Entity b){
-		return (a == null || b == null) ? false : EntityGroupHander.checkCanTarget(getEntityGroup(a), getEntityGroup(b));
+		return a != null && b != null && EntityGroupHander.checkCanTarget(getEntityGroup(a), getEntityGroup(b));
 	}
 
 	public static PVZGroupType getEntityGroup(Entity entity) {

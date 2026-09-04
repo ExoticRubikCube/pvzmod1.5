@@ -1,9 +1,8 @@
 package com.hungteen.pvz.api.interfaces;
 
-import java.util.Optional;
-
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.world.effect.MobEffectInstance;
+
+import java.util.Optional;
 
 public interface IIceEffect {
 

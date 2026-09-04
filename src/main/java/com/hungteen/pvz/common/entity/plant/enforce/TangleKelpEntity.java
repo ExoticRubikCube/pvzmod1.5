@@ -1,29 +1,21 @@
 package com.hungteen.pvz.common.entity.plant.enforce;
 
-import net.minecraftforge.fluids.FluidType;
-
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.plant.base.PlantCloserEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlantUtil;
-
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidType;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TangleKelpEntity extends PlantCloserEntity{
@@ -76,9 +68,9 @@ this.remove(RemovalReason.KILLED);
 	@Override
 	public void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list) {
 		super.addAlmanacEntries(list);
-		list.addAll(List.of(
+		list.add(
                 Pair.of(PAZAlmanacs.ATTACK_DAMAGE, this.getAttackDamage())
-        ));
+        );
 	}
 
 	public float getAttackDamage(){

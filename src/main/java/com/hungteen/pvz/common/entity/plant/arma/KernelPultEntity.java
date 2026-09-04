@@ -10,13 +10,13 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -93,9 +93,9 @@ public class KernelPultEntity extends PlantPultEntity {
 	@Override
 	public float getSuperDamage() {
 		return 2 * this.getAttackDamage();
-	};
+	}
 
-	@Override
+    @Override
 	public float getAttackDamage() {
 		return this.getSkillValue(SkillTypes.MORE_KERNEL_DAMAGE);
 	}
@@ -140,7 +140,7 @@ public class KernelPultEntity extends PlantPultEntity {
 		return PVZPlants.KERNEL_PULT;
 	}
 
-	public static enum CornTypes{
+	public enum CornTypes{
 		KERNEL,
 		BUTTER,
 		ROCKET

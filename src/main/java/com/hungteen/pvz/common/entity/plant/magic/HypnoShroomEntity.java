@@ -13,8 +13,8 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.world.entity.*;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 
 public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {

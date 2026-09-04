@@ -5,21 +5,21 @@ import com.hungteen.pvz.common.advancement.trigger.InvasionTrigger;
 import com.hungteen.pvz.common.datapack.InvasionTypeLoader;
 import com.hungteen.pvz.common.event.PVZServerEvents;
 import com.hungteen.pvz.common.event.events.InvasionEvent;
-import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.others.WeightList;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
@@ -200,7 +200,7 @@ public class InvasionManager {
      * if it is still in safe day, then the dif must less than 0.
      */
     private static long getSafeDayDif(Level world) {
-        return world.getGameTime() - getSafeDayLength(world) * 24000;
+        return world.getGameTime() - getSafeDayLength(world) * 24000L;
     }
 
     public static int getSafeDayLength(Level world) {

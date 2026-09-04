@@ -11,11 +11,11 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
 
 public class LadderZombieEntity extends DefenceZombieEntity implements IHasMetal {
@@ -51,14 +51,13 @@ public class LadderZombieEntity extends DefenceZombieEntity implements IHasMetal
 	
 	public static boolean canTargetPutLadder(Entity target) {
 		//can not put ladder or already has ladder on.
-		if(! (target instanceof PVZPlantEntity) || hasLadderOnEntity(target)) {
+		if(! (target instanceof PVZPlantEntity plant) || hasLadderOnEntity(target)) {
 			return false;
 		}
 		if(target instanceof PlantDefenderEntity) {
 			return true;
 		}
-		PVZPlantEntity plant = (PVZPlantEntity) target;
-		return plant.getOuterPlantInfo().isPresent();
+        return plant.getOuterPlantInfo().isPresent();
 	}
 	
 	/**

@@ -8,11 +8,11 @@ import com.hungteen.pvz.common.item.spawn.card.ImitaterCardItem;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
 import com.hungteen.pvz.common.tileentity.EssenceAltarTileEntity;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -133,9 +133,7 @@ public class EssenceAltarContainer extends PVZContainer{
 		if(getPAZType().isPresent()){
 			final IPAZType type = getPAZType().get();
 			if(type.getEssence().getEssenceItem().equals(getEssence().getItem()) && getEssence().getCount() >= LEARN_COST){
-				if(getMaterial().is(type.getRank().getMaterial()) && getMaterial().getCount() >= LEARN_COST){
-					return true;
-				}
+                return getMaterial().is(type.getRank().getMaterial()) && getMaterial().getCount() >= LEARN_COST;
 			}
 		}
 		return false;

@@ -1,21 +1,19 @@
 package com.hungteen.pvz.client.model.entity.npc;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.npc.PennyEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -71,48 +69,48 @@ public class PennyModel extends EntityModel<PennyEntity> {
 
 public PennyModel(ModelPart root) {
 		this.car = root.getChild("car");
-		this.head = root.getChild("head");
-		this.bone10 = root.getChild("bone10");
-		this.bone = root.getChild("bone");
-		this.light = root.getChild("light");
-		this.bone9 = root.getChild("bone9");
-		this.bone2 = root.getChild("bone2");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.bone6 = root.getChild("bone6");
-		this.bone5 = root.getChild("bone5");
-		this.body = root.getChild("body");
-		this.top = root.getChild("top");
-		this.tail = root.getChild("tail");
-		this.tyres = root.getChild("tyres");
-		this.tyre_1 = root.getChild("tyre_1");
-		this.bone14 = root.getChild("bone14");
-		this.bone12 = root.getChild("bone12");
-		this.bone13 = root.getChild("bone13");
-		this.bone15 = root.getChild("bone15");
-		this.bone16 = root.getChild("bone16");
-		this.bone17 = root.getChild("bone17");
-		this.tyre_2 = root.getChild("tyre_2");
-		this.bone8 = root.getChild("bone8");
-		this.bone11 = root.getChild("bone11");
-		this.bone18 = root.getChild("bone18");
-		this.bone19 = root.getChild("bone19");
-		this.bone20 = root.getChild("bone20");
-		this.bone21 = root.getChild("bone21");
-		this.tyre_3 = root.getChild("tyre_3");
-		this.bone22 = root.getChild("bone22");
-		this.bone23 = root.getChild("bone23");
-		this.bone24 = root.getChild("bone24");
-		this.bone25 = root.getChild("bone25");
-		this.bone26 = root.getChild("bone26");
-		this.bone27 = root.getChild("bone27");
-		this.tyre_4 = root.getChild("tyre_4");
-		this.bone28 = root.getChild("bone28");
-		this.bone29 = root.getChild("bone29");
-		this.bone30 = root.getChild("bone30");
-		this.bone31 = root.getChild("bone31");
-		this.bone32 = root.getChild("bone32");
-		this.bone33 = root.getChild("bone33");
+		this.head = this.car.getChild("head");
+		this.bone10 = this.head.getChild("bone10");
+		this.bone = this.bone10.getChild("bone");
+		this.light = this.bone10.getChild("light");
+		this.bone9 = this.head.getChild("bone9");
+		this.bone2 = this.bone9.getChild("bone2");
+		this.bone3 = this.bone9.getChild("bone3");
+		this.bone4 = this.head.getChild("bone4");
+		this.bone6 = this.bone4.getChild("bone6");
+		this.bone5 = this.bone4.getChild("bone5");
+		this.body = this.car.getChild("body");
+		this.top = this.body.getChild("top");
+		this.tail = this.car.getChild("tail");
+		this.tyres = this.car.getChild("tyres");
+		this.tyre_1 = this.tyres.getChild("tyre_1");
+		this.bone14 = this.tyre_1.getChild("bone14");
+		this.bone12 = this.bone14.getChild("bone12");
+		this.bone13 = this.bone14.getChild("bone13");
+		this.bone15 = this.tyre_1.getChild("bone15");
+		this.bone16 = this.bone15.getChild("bone16");
+		this.bone17 = this.bone15.getChild("bone17");
+		this.tyre_2 = this.tyres.getChild("tyre_2");
+		this.bone8 = this.tyre_2.getChild("bone8");
+		this.bone11 = this.bone8.getChild("bone11");
+		this.bone18 = this.bone8.getChild("bone18");
+		this.bone19 = this.tyre_2.getChild("bone19");
+		this.bone20 = this.bone19.getChild("bone20");
+		this.bone21 = this.bone19.getChild("bone21");
+		this.tyre_3 = this.tyres.getChild("tyre_3");
+		this.bone22 = this.tyre_3.getChild("bone22");
+		this.bone23 = this.bone22.getChild("bone23");
+		this.bone24 = this.bone22.getChild("bone24");
+		this.bone25 = this.tyre_3.getChild("bone25");
+		this.bone26 = this.bone25.getChild("bone26");
+		this.bone27 = this.bone25.getChild("bone27");
+		this.tyre_4 = this.tyres.getChild("tyre_4");
+		this.bone28 = this.tyre_4.getChild("bone28");
+		this.bone29 = this.bone28.getChild("bone29");
+		this.bone30 = this.bone28.getChild("bone30");
+		this.bone31 = this.tyre_4.getChild("bone31");
+		this.bone32 = this.bone31.getChild("bone32");
+		this.bone33 = this.bone31.getChild("bone33");
 	}
 
 	public static LayerDefinition createBodyLayer() {

@@ -1,18 +1,17 @@
 package com.hungteen.pvz.common.network.toserver;
 
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.common.entity.plant.explosion.CobCannonEntity;
-
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.function.Supplier;
+
 public class EntityInteractPacket {
-	private int type;
-	private int op;
-	private int num;
+	private final int type;
+	private final int op;
+	private final int num;
 	
 	public EntityInteractPacket(int type, int op, int num) {
 		this.type = type;
@@ -37,9 +36,8 @@ public class EntityInteractPacket {
 			final ServerPlayer player = ctx.get().getSender();
 			ctx.get().enqueueWork(()->{
 		    	Entity entity = player.level.getEntity(message.type);
-		    	if(entity instanceof CobCannonEntity) {
-		    		CobCannonEntity cob = (CobCannonEntity) entity;
-		    		cob.checkAndAttack();
+		    	if(entity instanceof CobCannonEntity cob) {
+                    cob.checkAndAttack();
 		    	}
 		    });
 		    ctx.get().setPacketHandled(true);

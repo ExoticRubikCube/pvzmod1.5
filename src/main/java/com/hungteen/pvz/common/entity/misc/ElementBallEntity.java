@@ -11,15 +11,15 @@ import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,9 +60,8 @@ public class ElementBallEntity extends AbstractOwnerEntity {
 	 * {@link #killElementBalls(LivingEntity, float, ElementTypes)}
 	 */
 	public void onKilledByPlants(LivingEntity entity) {
-		if(entity instanceof PVZPlantEntity) {
-			PVZPlantEntity plant = (PVZPlantEntity) entity;
-			plant.getOwnerUUID().ifPresent((uuid) -> {
+		if(entity instanceof PVZPlantEntity plant) {
+            plant.getOwnerUUID().ifPresent((uuid) -> {
 			    Player player = level.getPlayerByUUID(uuid);
 			    if(player != null) {
 				    PlantCardItem item = (this.getElementBallType() == ElementTypes.FLAME ? ItemRegister.ICE_SHROOM_CARD.get() : ItemRegister.JALAPENO_CARD.get());
@@ -122,8 +121,8 @@ this.remove(RemovalReason.KILLED);
 	}
 
 	private void findTarget() {
-		if(this.random.nextInt(this.SEARCH_CD) == 0) {
-			final List<LivingEntity> list = EntityUtil.getTargetableLivings(this, EntityUtil.getEntityAABB(this, this.SEARCH_RANGE, this.SEARCH_RANGE))
+		if(this.random.nextInt(SEARCH_CD) == 0) {
+			final List<LivingEntity> list = EntityUtil.getTargetableLivings(this, EntityUtil.getEntityAABB(this, SEARCH_RANGE, SEARCH_RANGE))
 					.stream().filter(target -> true).collect(Collectors.toList());
 			if(! list.isEmpty()) {
 				this.target = list.get(0);

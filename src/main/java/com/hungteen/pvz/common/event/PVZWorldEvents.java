@@ -1,9 +1,8 @@
 package com.hungteen.pvz.common.event;
 
 import com.hungteen.pvz.PVZMod;
-import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
-
+import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

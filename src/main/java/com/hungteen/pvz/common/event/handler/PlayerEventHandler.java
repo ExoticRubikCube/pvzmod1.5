@@ -25,18 +25,18 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.util.Mth;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -49,8 +49,7 @@ public class PlayerEventHandler {
     public static void quickRemoveByPlayer(Player player, Entity entity, ItemStack stack) {
         if(! PlayerUtil.isPlayerSurvival(player) || ((entity instanceof AbstractPAZEntity) && ((AbstractPAZEntity)entity).getOwnerUUID().isPresent() && player.getUUID().equals(((AbstractPAZEntity) entity).getOwnerUUID().get()))){
             boolean removed = false;
-            if(entity instanceof PVZPlantEntity && stack.getItem() instanceof ShovelItem) {
-                final PVZPlantEntity plantEntity = (PVZPlantEntity) entity;
+            if(entity instanceof PVZPlantEntity plantEntity && stack.getItem() instanceof ShovelItem) {
                 if (plantEntity.getOuterPlantInfo().isPresent()) {//has outer plant, shovel outer plant.
                     SunEntity.spawnSunsByAmount(player.level, plantEntity.blockPosition(), EnchantmentUtil.getSunShovelAmount(stack, plantEntity.getOuterPlantInfo().get().getSunCost()));
                     plantEntity.removeOuterPlant();

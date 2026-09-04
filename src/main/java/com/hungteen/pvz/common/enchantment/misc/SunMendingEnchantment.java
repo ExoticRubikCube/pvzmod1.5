@@ -2,14 +2,13 @@ package com.hungteen.pvz.common.enchantment.misc;
 
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
-
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Mth;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 public class SunMendingEnchantment extends PVZEnchantment {
 

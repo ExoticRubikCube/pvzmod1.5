@@ -6,13 +6,13 @@ import com.hungteen.pvz.common.entity.bullet.itembullet.MetalItemEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.SporeEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ import java.util.List;
 public class PVZEntityDamageSource extends EntityDamageSource {
 
 	private final List<MobEffectInstance> effects = new ArrayList<>();
-	private Entity attackOwner;
-	private Entity attacker;
+	private final Entity attackOwner;
+	private final Entity attacker;
 	private boolean isAppease = false;//shooter.
 	private boolean isParabola = false;//pult.
 	private boolean isIceDamage = false;

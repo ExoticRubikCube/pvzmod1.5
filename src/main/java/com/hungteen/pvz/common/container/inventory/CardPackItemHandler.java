@@ -1,15 +1,14 @@
 package com.hungteen.pvz.common.container.inventory;
 
-import java.util.HashMap;
-
 import com.hungteen.pvz.utils.PlayerUtil;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.util.HashMap;
+
 public class CardPackItemHandler extends ItemStackHandler {
 	
-	private HashMap<Integer, Integer> map = new HashMap<>();
+	private final HashMap<Integer, Integer> map = new HashMap<>();
 	private final Player player;
 	private final int slotNum;
 	

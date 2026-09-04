@@ -1,22 +1,22 @@
 package com.hungteen.pvz.common.entity.ai.movement;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
@@ -108,11 +108,9 @@ public class ZombieMoveController extends MoveControl {
 		PathNavigation pathnavigator = this.mob.getNavigation();
 		if (pathnavigator != null) {
 			NodeEvaluator nodeprocessor = pathnavigator.getNodeEvaluator();
-			if (nodeprocessor != null && nodeprocessor.getBlockPathType(this.mob.level,
-					Mth.floor(this.mob.getX() + (double) p_234024_1_), Mth.floor(this.mob.getY()),
-					Mth.floor(this.mob.getZ() + (double) p_234024_2_)) != BlockPathTypes.WALKABLE) {
-				return false;
-			}
+            return nodeprocessor == null || nodeprocessor.getBlockPathType(this.mob.level,
+                    Mth.floor(this.mob.getX() + (double) p_234024_1_), Mth.floor(this.mob.getY()),
+                    Mth.floor(this.mob.getZ() + (double) p_234024_2_)) == BlockPathTypes.WALKABLE;
 		}
 		return true;
 	}

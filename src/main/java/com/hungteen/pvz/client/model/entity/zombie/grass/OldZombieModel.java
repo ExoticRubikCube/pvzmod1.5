@@ -1,22 +1,19 @@
 package com.hungteen.pvz.client.model.entity.zombie.grass;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.grass.OldZombieEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Optional;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
+import java.util.Optional;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -43,19 +40,19 @@ public class OldZombieModel extends PVZZombieModel<OldZombieEntity> {
 
 public OldZombieModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.left_leg = root.getChild("left_leg");
-		this.right_leg = root.getChild("right_leg");
-		this.up = root.getChild("up");
-		this.body = root.getChild("body");
-		this.head = root.getChild("head");
-		this.bone3 = root.getChild("bone3");
-		this.normal_eyes = root.getChild("normal_eyes");
-		this.red_eyes = root.getChild("red_eyes");
-		this.right_hand = root.getChild("right_hand");
-		this.left_hand = root.getChild("left_hand");
-		this.paper = root.getChild("paper");
-		this.bone2 = root.getChild("bone2");
-		this.bone = root.getChild("bone");
+		this.left_leg = this.total.getChild("left_leg");
+		this.right_leg = this.total.getChild("right_leg");
+		this.up = this.total.getChild("up");
+		this.body = this.up.getChild("body");
+		this.head = this.up.getChild("head");
+		this.bone3 = this.head.getChild("bone3");
+		this.normal_eyes = this.head.getChild("normal_eyes");
+		this.red_eyes = this.head.getChild("red_eyes");
+		this.right_hand = this.up.getChild("right_hand");
+		this.left_hand = this.up.getChild("left_hand");
+		this.paper = this.right_hand.getChild("paper");
+		this.bone2 = this.paper.getChild("bone2");
+		this.bone = this.paper.getChild("bone");
 	}
 
 	public static LayerDefinition createBodyLayer() {

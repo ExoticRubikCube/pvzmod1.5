@@ -1,9 +1,8 @@
 package com.hungteen.pvz.client.particle;
 
 import com.hungteen.pvz.PVZMod;
-
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

@@ -1,22 +1,20 @@
 package com.hungteen.pvz.client.model.entity.zombie.other;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.zombie.other.CoffinEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.2
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -74,49 +72,49 @@ public class CoffinModel extends EntityModel<CoffinEntity> {
 
 public CoffinModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.coffin = root.getChild("coffin");
-		this.bone2 = root.getChild("bone2");
-		this.bone3 = root.getChild("bone3");
-		this.bone = root.getChild("bone");
-		this.zombie1 = root.getChild("zombie1");
-		this.right_leg = root.getChild("right_leg");
-		this.left_leg = root.getChild("left_leg");
-		this.up = root.getChild("up");
-		this.body = root.getChild("body");
-		this.left_hand = root.getChild("left_hand");
-		this.right_hand = root.getChild("right_hand");
-		this.righthand_r1 = root.getChild("righthand_r1");
-		this.head = root.getChild("head");
-		this.bone4 = root.getChild("bone4");
-		this.zombie2 = root.getChild("zombie2");
-		this.right_leg2 = root.getChild("right_leg2");
-		this.left_leg2 = root.getChild("left_leg2");
-		this.up2 = root.getChild("up2");
-		this.body2 = root.getChild("body2");
-		this.left_hand2 = root.getChild("left_hand2");
-		this.lefthand_r1 = root.getChild("lefthand_r1");
-		this.right_hand2 = root.getChild("right_hand2");
-		this.head2 = root.getChild("head2");
-		this.bone5 = root.getChild("bone5");
-		this.zombie3 = root.getChild("zombie3");
-		this.right_leg3 = root.getChild("right_leg3");
-		this.left_leg3 = root.getChild("left_leg3");
-		this.up3 = root.getChild("up3");
-		this.body3 = root.getChild("body3");
-		this.left_hand3 = root.getChild("left_hand3");
-		this.right_hand3 = root.getChild("right_hand3");
-		this.righthand_r2 = root.getChild("righthand_r2");
-		this.head3 = root.getChild("head3");
-		this.bone6 = root.getChild("bone6");
-		this.zombie4 = root.getChild("zombie4");
-		this.right_leg4 = root.getChild("right_leg4");
-		this.left_leg4 = root.getChild("left_leg4");
-		this.up4 = root.getChild("up4");
-		this.body4 = root.getChild("body4");
-		this.left_hand4 = root.getChild("left_hand4");
-		this.right_hand4 = root.getChild("right_hand4");
-		this.head4 = root.getChild("head4");
-		this.bone7 = root.getChild("bone7");
+		this.coffin = this.total.getChild("coffin");
+		this.bone2 = this.coffin.getChild("bone2");
+		this.bone3 = this.bone2.getChild("bone3");
+		this.bone = this.coffin.getChild("bone");
+		this.zombie1 = this.total.getChild("zombie1");
+		this.right_leg = this.zombie1.getChild("right_leg");
+		this.left_leg = this.zombie1.getChild("left_leg");
+		this.up = this.zombie1.getChild("up");
+		this.body = this.up.getChild("body");
+		this.left_hand = this.up.getChild("left_hand");
+		this.right_hand = this.up.getChild("right_hand");
+		this.righthand_r1 = this.right_hand.getChild("righthand_r1");
+		this.head = this.up.getChild("head");
+		this.bone4 = this.head.getChild("bone4");
+		this.zombie2 = this.total.getChild("zombie2");
+		this.right_leg2 = this.zombie2.getChild("right_leg2");
+		this.left_leg2 = this.zombie2.getChild("left_leg2");
+		this.up2 = this.zombie2.getChild("up2");
+		this.body2 = this.up2.getChild("body2");
+		this.left_hand2 = this.up2.getChild("left_hand2");
+		this.lefthand_r1 = this.left_hand2.getChild("lefthand_r1");
+		this.right_hand2 = this.up2.getChild("right_hand2");
+		this.head2 = this.up2.getChild("head2");
+		this.bone5 = this.head2.getChild("bone5");
+		this.zombie3 = this.total.getChild("zombie3");
+		this.right_leg3 = this.zombie3.getChild("right_leg3");
+		this.left_leg3 = this.zombie3.getChild("left_leg3");
+		this.up3 = this.zombie3.getChild("up3");
+		this.body3 = this.up3.getChild("body3");
+		this.left_hand3 = this.up3.getChild("left_hand3");
+		this.right_hand3 = this.up3.getChild("right_hand3");
+		this.righthand_r2 = this.right_hand3.getChild("righthand_r2");
+		this.head3 = this.up3.getChild("head3");
+		this.bone6 = this.head3.getChild("bone6");
+		this.zombie4 = this.total.getChild("zombie4");
+		this.right_leg4 = this.zombie4.getChild("right_leg4");
+		this.left_leg4 = this.zombie4.getChild("left_leg4");
+		this.up4 = this.zombie4.getChild("up4");
+		this.body4 = this.up4.getChild("body4");
+		this.left_hand4 = this.up4.getChild("left_hand4");
+		this.right_hand4 = this.up4.getChild("right_hand4");
+		this.head4 = this.up4.getChild("head4");
+		this.bone7 = this.head4.getChild("bone7");
 	}
 
 	public static LayerDefinition createBodyLayer() {

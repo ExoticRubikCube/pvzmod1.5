@@ -1,18 +1,17 @@
 package com.hungteen.pvz.common.entity.plant.base;
 
-import javax.annotation.Nonnull;
-
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZNearestTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
-
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
 
 /**
  * Closer Plants will be attack after several ticks focusing on its target.

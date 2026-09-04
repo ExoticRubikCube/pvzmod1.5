@@ -1,23 +1,17 @@
 package com.hungteen.pvz.client.model.entity.plant.appease;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.appease.SplitPeaEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Optional;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.Optional;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -42,17 +36,17 @@ public class SplitPeaModel extends PlantShooterModel<SplitPeaEntity> {
 
 public SplitPeaModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.head = root.getChild("head");
-		this.back = root.getChild("back");
-		this.mouth_r1 = root.getChild("mouth_r1");
-		this.head_r1 = root.getChild("head_r1");
-		this.front = root.getChild("front");
-		this.down = root.getChild("down");
-		this.n_r1 = root.getChild("n_r1");
-		this.w_r1 = root.getChild("w_r1");
-		this.e_r1 = root.getChild("e_r1");
-		this.s_r1 = root.getChild("s_r1");
+		this.body = this.total.getChild("body");
+		this.head = this.body.getChild("head");
+		this.back = this.head.getChild("back");
+		this.mouth_r1 = this.back.getChild("mouth_r1");
+		this.head_r1 = this.back.getChild("head_r1");
+		this.front = this.head.getChild("front");
+		this.down = this.total.getChild("down");
+		this.n_r1 = this.down.getChild("n_r1");
+		this.w_r1 = this.down.getChild("w_r1");
+		this.e_r1 = this.down.getChild("e_r1");
+		this.s_r1 = this.down.getChild("s_r1");
 	}
 
 	public static LayerDefinition createBodyLayer() {

@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.assist;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.assist.BloverEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -72,48 +65,48 @@ public class BloverModel extends PVZPlantModel<BloverEntity> {
 
 public BloverModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.head = root.getChild("head");
-		this.bone = root.getChild("bone");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.cube_r5 = root.getChild("cube_r5");
-		this.cube_r6 = root.getChild("cube_r6");
-		this.cube_r7 = root.getChild("cube_r7");
-		this.cube_r8 = root.getChild("cube_r8");
-		this.cube_r9 = root.getChild("cube_r9");
-		this.cube_r10 = root.getChild("cube_r10");
-		this.cube_r11 = root.getChild("cube_r11");
-		this.fan = root.getChild("fan");
-		this.bone4 = root.getChild("bone4");
-		this.cube_r12 = root.getChild("cube_r12");
-		this.cube_r13 = root.getChild("cube_r13");
-		this.cube_r14 = root.getChild("cube_r14");
-		this.cube_r15 = root.getChild("cube_r15");
-		this.cube_r16 = root.getChild("cube_r16");
-		this.cube_r17 = root.getChild("cube_r17");
-		this.cube_r18 = root.getChild("cube_r18");
-		this.cube_r19 = root.getChild("cube_r19");
-		this.bone3 = root.getChild("bone3");
-		this.cube_r20 = root.getChild("cube_r20");
-		this.cube_r21 = root.getChild("cube_r21");
-		this.cube_r22 = root.getChild("cube_r22");
-		this.cube_r23 = root.getChild("cube_r23");
-		this.cube_r24 = root.getChild("cube_r24");
-		this.cube_r25 = root.getChild("cube_r25");
-		this.cube_r26 = root.getChild("cube_r26");
-		this.cube_r27 = root.getChild("cube_r27");
-		this.bone2 = root.getChild("bone2");
-		this.cube_r28 = root.getChild("cube_r28");
-		this.cube_r29 = root.getChild("cube_r29");
-		this.cube_r30 = root.getChild("cube_r30");
-		this.cube_r31 = root.getChild("cube_r31");
-		this.cube_r32 = root.getChild("cube_r32");
-		this.cube_r33 = root.getChild("cube_r33");
-		this.cube_r34 = root.getChild("cube_r34");
-		this.cube_r35 = root.getChild("cube_r35");
-		this.body = root.getChild("body");
+		this.head = this.total.getChild("head");
+		this.bone = this.head.getChild("bone");
+		this.cube_r1 = this.bone.getChild("cube_r1");
+		this.cube_r2 = this.bone.getChild("cube_r2");
+		this.cube_r3 = this.bone.getChild("cube_r3");
+		this.cube_r4 = this.bone.getChild("cube_r4");
+		this.cube_r5 = this.bone.getChild("cube_r5");
+		this.cube_r6 = this.bone.getChild("cube_r6");
+		this.cube_r7 = this.bone.getChild("cube_r7");
+		this.cube_r8 = this.bone.getChild("cube_r8");
+		this.cube_r9 = this.bone.getChild("cube_r9");
+		this.cube_r10 = this.bone.getChild("cube_r10");
+		this.cube_r11 = this.bone.getChild("cube_r11");
+		this.fan = this.head.getChild("fan");
+		this.bone4 = this.fan.getChild("bone4");
+		this.cube_r12 = this.bone4.getChild("cube_r12");
+		this.cube_r13 = this.bone4.getChild("cube_r13");
+		this.cube_r14 = this.bone4.getChild("cube_r14");
+		this.cube_r15 = this.bone4.getChild("cube_r15");
+		this.cube_r16 = this.bone4.getChild("cube_r16");
+		this.cube_r17 = this.bone4.getChild("cube_r17");
+		this.cube_r18 = this.bone4.getChild("cube_r18");
+		this.cube_r19 = this.bone4.getChild("cube_r19");
+		this.bone3 = this.fan.getChild("bone3");
+		this.cube_r20 = this.bone3.getChild("cube_r20");
+		this.cube_r21 = this.bone3.getChild("cube_r21");
+		this.cube_r22 = this.bone3.getChild("cube_r22");
+		this.cube_r23 = this.bone3.getChild("cube_r23");
+		this.cube_r24 = this.bone3.getChild("cube_r24");
+		this.cube_r25 = this.bone3.getChild("cube_r25");
+		this.cube_r26 = this.bone3.getChild("cube_r26");
+		this.cube_r27 = this.bone3.getChild("cube_r27");
+		this.bone2 = this.fan.getChild("bone2");
+		this.cube_r28 = this.bone2.getChild("cube_r28");
+		this.cube_r29 = this.bone2.getChild("cube_r29");
+		this.cube_r30 = this.bone2.getChild("cube_r30");
+		this.cube_r31 = this.bone2.getChild("cube_r31");
+		this.cube_r32 = this.bone2.getChild("cube_r32");
+		this.cube_r33 = this.bone2.getChild("cube_r33");
+		this.cube_r34 = this.bone2.getChild("cube_r34");
+		this.cube_r35 = this.bone2.getChild("cube_r35");
+		this.body = this.total.getChild("body");
 	}
 
 	public static LayerDefinition createBodyLayer() {

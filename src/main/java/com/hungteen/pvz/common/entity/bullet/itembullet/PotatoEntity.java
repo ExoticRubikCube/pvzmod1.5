@@ -1,17 +1,16 @@
 package com.hungteen.pvz.common.entity.bullet.itembullet;
 
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.explosion.PotatoMineEntity;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.PlantUtil;
-
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 
 public class PotatoEntity extends PVZItemBulletEntity{
 

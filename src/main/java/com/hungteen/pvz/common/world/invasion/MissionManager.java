@@ -5,9 +5,9 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.hungteen.pvz.utils.others.WeightList;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 
 public class MissionManager {
 

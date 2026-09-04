@@ -1,22 +1,18 @@
 package com.hungteen.pvz.client.model.entity.plant.assist;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.assist.GraveBusterEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -77,53 +73,53 @@ public class GraveBusterModel extends PVZPlantModel<GraveBusterEntity> {
 
 public GraveBusterModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.mouse = root.getChild("mouse");
-		this.front = root.getChild("front");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.m1 = root.getChild("m1");
-		this.m2 = root.getChild("m2");
-		this.back = root.getChild("back");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.m5 = root.getChild("m5");
-		this.m6 = root.getChild("m6");
-		this.left = root.getChild("left");
-		this.bone9 = root.getChild("bone9");
-		this.m4 = root.getChild("m4");
-		this.m3 = root.getChild("m3");
-		this.bone12 = root.getChild("bone12");
-		this.right = root.getChild("right");
-		this.bone13 = root.getChild("bone13");
-		this.m7 = root.getChild("m7");
-		this.m8 = root.getChild("m8");
-		this.bone16 = root.getChild("bone16");
-		this.head = root.getChild("head");
-		this.right_wine = root.getChild("right_wine");
-		this.bone17 = root.getChild("bone17");
-		this.bone18 = root.getChild("bone18");
-		this.bone19 = root.getChild("bone19");
-		this.bone20 = root.getChild("bone20");
-		this.left_wine = root.getChild("left_wine");
-		this.bone25 = root.getChild("bone25");
-		this.bone26 = root.getChild("bone26");
-		this.bone31 = root.getChild("bone31");
-		this.bone32 = root.getChild("bone32");
-		this.back_wine = root.getChild("back_wine");
-		this.bone21 = root.getChild("bone21");
-		this.bone22 = root.getChild("bone22");
-		this.bone29 = root.getChild("bone29");
-		this.bone30 = root.getChild("bone30");
-		this.front_wine = root.getChild("front_wine");
-		this.bone24 = root.getChild("bone24");
-		this.bone23 = root.getChild("bone23");
-		this.bone28 = root.getChild("bone28");
-		this.bone27 = root.getChild("bone27");
-		this.bone33 = root.getChild("bone33");
-		this.bone34 = root.getChild("bone34");
-		this.bone35 = root.getChild("bone35");
-		this.bone36 = root.getChild("bone36");
+		this.body = this.total.getChild("body");
+		this.mouse = this.total.getChild("mouse");
+		this.front = this.mouse.getChild("front");
+		this.bone = this.front.getChild("bone");
+		this.bone2 = this.front.getChild("bone2");
+		this.m1 = this.front.getChild("m1");
+		this.m2 = this.front.getChild("m2");
+		this.back = this.mouse.getChild("back");
+		this.bone5 = this.back.getChild("bone5");
+		this.bone6 = this.back.getChild("bone6");
+		this.m5 = this.back.getChild("m5");
+		this.m6 = this.back.getChild("m6");
+		this.left = this.mouse.getChild("left");
+		this.bone9 = this.left.getChild("bone9");
+		this.m4 = this.left.getChild("m4");
+		this.m3 = this.left.getChild("m3");
+		this.bone12 = this.left.getChild("bone12");
+		this.right = this.mouse.getChild("right");
+		this.bone13 = this.right.getChild("bone13");
+		this.m7 = this.right.getChild("m7");
+		this.m8 = this.right.getChild("m8");
+		this.bone16 = this.right.getChild("bone16");
+		this.head = this.total.getChild("head");
+		this.right_wine = this.head.getChild("right_wine");
+		this.bone17 = this.right_wine.getChild("bone17");
+		this.bone18 = this.right_wine.getChild("bone18");
+		this.bone19 = this.right_wine.getChild("bone19");
+		this.bone20 = this.right_wine.getChild("bone20");
+		this.left_wine = this.head.getChild("left_wine");
+		this.bone25 = this.left_wine.getChild("bone25");
+		this.bone26 = this.left_wine.getChild("bone26");
+		this.bone31 = this.left_wine.getChild("bone31");
+		this.bone32 = this.left_wine.getChild("bone32");
+		this.back_wine = this.head.getChild("back_wine");
+		this.bone21 = this.back_wine.getChild("bone21");
+		this.bone22 = this.back_wine.getChild("bone22");
+		this.bone29 = this.back_wine.getChild("bone29");
+		this.bone30 = this.bone29.getChild("bone30");
+		this.front_wine = this.head.getChild("front_wine");
+		this.bone24 = this.front_wine.getChild("bone24");
+		this.bone23 = this.front_wine.getChild("bone23");
+		this.bone28 = this.front_wine.getChild("bone28");
+		this.bone27 = this.bone28.getChild("bone27");
+		this.bone33 = this.head.getChild("bone33");
+		this.bone34 = this.head.getChild("bone34");
+		this.bone35 = this.head.getChild("bone35");
+		this.bone36 = this.head.getChild("bone36");
 	}
 
 	public static LayerDefinition createBodyLayer() {

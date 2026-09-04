@@ -1,33 +1,31 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
-import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
-import net.minecraft.world.entity.animal.Dolphin;
-import net.minecraftforge.fluids.FluidType;
-
 import com.hungteen.pvz.common.entity.ai.goal.attack.PVZZombieAttackGoal;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fluids.FluidType;
 
 public class ZombieDolphinEntity extends PVZZombieEntity {
 

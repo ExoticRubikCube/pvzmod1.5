@@ -11,13 +11,13 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.level.Level;
 
 import java.util.List;

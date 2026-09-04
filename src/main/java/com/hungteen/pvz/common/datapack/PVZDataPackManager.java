@@ -4,8 +4,8 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.impl.plant.PlantType;
 import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toclient.DatapackPacket;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.network.PacketDistributor;
 

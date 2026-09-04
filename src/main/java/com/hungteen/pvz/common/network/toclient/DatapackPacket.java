@@ -13,9 +13,9 @@ import java.util.function.Supplier;
 
 public class DatapackPacket {
 
-	private String type;
-	private String res;
-	private String data;
+	private final String type;
+	private final String res;
+	private final String data;
 
 	public DatapackPacket(String type, String res, String data) {
 		this.type = type;

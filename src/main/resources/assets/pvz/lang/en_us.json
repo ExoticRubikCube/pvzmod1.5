@@ -1245,5 +1245,10 @@
     "misc.pvz.cd.slow":"Slow",
     "misc.pvz.cd.very_slow":"Very Slow",
     "misc.pvz.cd.huge_slow":"Huge Slow",
-    "misc.pvz.cd.super_slow":"Super Slow"
+    "misc.pvz.cd.super_slow":"Super Slow",
+    "_comment21": "--------------------------------------------Jade-------------------------------------------",
+    "config.jade.plugin_pvz.pvz_entity": "PVZ Entity",
+    "config.jade.plugin_pvz.show_owner": "Show Owner",
+    "config.jade.plugin_pvz.show_defence_health": "Show Defence Health",
+    "config.jade.plugin_pvz.show_skills": "Show Skills"
 }

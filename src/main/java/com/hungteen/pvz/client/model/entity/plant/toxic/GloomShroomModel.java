@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.toxic;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.toxic.GloomShroomEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -45,21 +38,21 @@ public class GloomShroomModel extends PVZPlantModel<GloomShroomEntity> {
 
 public GloomShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.head = root.getChild("head");
-		this.face = root.getChild("face");
-		this.shoot = root.getChild("shoot");
-		this.shoot1 = root.getChild("shoot1");
-		this.shoot2 = root.getChild("shoot2");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.shoot3 = root.getChild("shoot3");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.shoot4 = root.getChild("shoot4");
-		this.shoot5 = root.getChild("shoot5");
-		this.shoot6 = root.getChild("shoot6");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.shoot7 = root.getChild("shoot7");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.shoot8 = root.getChild("shoot8");
+		this.head = this.total.getChild("head");
+		this.face = this.head.getChild("face");
+		this.shoot = this.head.getChild("shoot");
+		this.shoot1 = this.shoot.getChild("shoot1");
+		this.shoot2 = this.shoot.getChild("shoot2");
+		this.cube_r1 = this.shoot2.getChild("cube_r1");
+		this.shoot3 = this.shoot.getChild("shoot3");
+		this.cube_r2 = this.shoot3.getChild("cube_r2");
+		this.shoot4 = this.shoot.getChild("shoot4");
+		this.shoot5 = this.shoot.getChild("shoot5");
+		this.shoot6 = this.shoot.getChild("shoot6");
+		this.cube_r3 = this.shoot6.getChild("cube_r3");
+		this.shoot7 = this.shoot.getChild("shoot7");
+		this.cube_r4 = this.shoot7.getChild("cube_r4");
+		this.shoot8 = this.shoot.getChild("shoot8");
 	}
 
 	public static LayerDefinition createBodyLayer() {

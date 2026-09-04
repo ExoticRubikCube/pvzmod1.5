@@ -11,28 +11,26 @@ import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,7 +103,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 	protected void renderTitle(PoseStack stack, SearchOption a) {
 		stack.pushPose();
 		int dx = this.leftPos + 49 + 94 / 2, dy = this.topPos + 9;
-		StringUtil.drawCenteredScaledString(stack, this.font, a.getType().getText().getString(), dx, dy, Colors.WHITE, 1f);
+		StringUtil.drawCenteredScaledString(stack, this.font, a.type().getText().getString(), dx, dy, Colors.WHITE, 1f);
 		stack.popPose();
 	}
 	
@@ -137,19 +135,19 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 		}
 		posX += len;
 		{
-			if(a.getType() instanceof IPlantType){
-				ItemStack itemStack = new ItemStack(a.getType().getEssence().getEssenceItem());
+			if(a.type() instanceof IPlantType){
+				ItemStack itemStack = new ItemStack(a.type().getEssence().getEssenceItem());
 				this.itemRenderer.renderGuiItem(itemStack, this.leftPos + posX, this.topPos + posY);
 			}
 		}
 		posX += len;
 		{
-			this.itemRenderer.renderGuiItem(new ItemStack(a.getType().getRank().getTemplateCard()), this.leftPos + posX, this.topPos + posY);
+			this.itemRenderer.renderGuiItem(new ItemStack(a.type().getRank().getTemplateCard()), this.leftPos + posX, this.topPos + posY);
 		}
 		posX += len;
 		{
 			this.minecraft.getTextureManager().bindForSetup(TEXTURE);
-			if(a.getType().getSkills().isEmpty()) {
+			if(a.type().getSkills().isEmpty()) {
 				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 16, 16, 16);
 			} else {
 				blit(stack, this.leftPos + posX, this.topPos + posY, 240, 16, 16, 16);
@@ -171,8 +169,8 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 			posX += len;
 			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
 				
-				if(this.option.getType() instanceof IPlantType){
-					Item item = this.option.getType().getEssence().getEssenceItem();
+				if(this.option.type() instanceof IPlantType){
+					Item item = this.option.type().getEssence().getEssenceItem();
 					this.minecraft.screen.renderComponentTooltip(stack, List.of(
                             Component.translatable("item.pvz." + ForgeRegistries.ITEMS.getKey(item).getPath())
                     ), mouseX, mouseY);
@@ -180,7 +178,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 			}
 			posX += len;
 			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
-				Item cardItem = this.option.getType().getRank().getTemplateCard();
+				Item cardItem = this.option.type().getRank().getTemplateCard();
                 if (this.minecraft != null && this.minecraft.screen != null) {
                     this.minecraft.screen.renderComponentTooltip(stack, List.of(
                             Component.translatable(cardItem.getDescriptionId())
@@ -190,7 +188,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 			posX += len;
 			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
 				List<Component> list = new ArrayList<>();
-				this.option.getType().getSkills().forEach(skill -> {
+				this.option.type().getSkills().forEach(skill -> {
 					list.add(skill.getText().withStyle(ChatFormatting.GREEN));
 				});
 				if(list.isEmpty()) {
@@ -222,7 +220,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 		if(this.getRenderEntity(option) == null){
 			return;
 		}
-		scale /= option.getType().getRenderScale();
+		scale /= option.type().getRenderScale();
 		float f = (float)Math.atan(vecX / 40.0F);
 		float f1 = (float)Math.atan(vecY / 40.0F);
 		PoseStack matrixstack = new PoseStack();
@@ -261,21 +259,21 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 	}
 
 	public Mob getRenderEntity(SearchOption option){
-		if(option.getType().getEntityType().isPresent()) {
+		if(option.type().getEntityType().isPresent()) {
 			if (option.equals(this.option)) {
-				return this.renderEntity == null ? this.renderEntity = option.getType().getEntityType().get().create(this.minecraft.level) : this.renderEntity;
+				return this.renderEntity == null ? this.renderEntity = option.type().getEntityType().get().create(this.minecraft.level) : this.renderEntity;
 			} else {
 				this.currentPos = 0;
 			}
 			this.option = option;
-			return this.renderEntity = option.getType().getEntityType().get().create(this.minecraft.level);
+			return this.renderEntity = option.type().getEntityType().get().create(this.minecraft.level);
 		}
 		return null;
 	}
 	
 	@Override
 	public boolean isOptionUnLocked(SearchOption option) {
-		return ! PlayerUtil.isPAZLocked(this.minecraft.player, option.getType());
+		return ! PlayerUtil.isPAZLocked(this.minecraft.player, option.type());
 	}
 
 	@Override

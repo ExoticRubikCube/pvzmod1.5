@@ -1,41 +1,39 @@
 package com.hungteen.pvz.common.block.plants;
 
-import net.minecraft.util.RandomSource;
-
 import com.hungteen.pvz.common.item.ItemRegister;
-
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ToxicShroomBlock extends BushBlock implements BonemealableBlock {
 	public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
@@ -96,15 +94,14 @@ public class ToxicShroomBlock extends BushBlock implements BonemealableBlock {
 	}
 
 	public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
-		if (entityIn instanceof LivingEntity && !(entityIn instanceof Monster)) {
+		if (entityIn instanceof LivingEntity living && !(entityIn instanceof Monster)) {
 			entityIn.makeStuckInBlock(state, new Vec3(0.8F, 0.75D, 0.8F));
 			if (!worldIn.isClientSide && state.getValue(AGE) == 3
 					&& (entityIn.xOld != entityIn.getX() || entityIn.zOld != entityIn.getZ())) {
 				double d0 = Math.abs(entityIn.getX() - entityIn.xOld);
 				double d1 = Math.abs(entityIn.getZ() - entityIn.zOld);
 				if (d0 >= (double) 0.003F || d1 >= (double) 0.003F) {
-					LivingEntity living = (LivingEntity) entityIn;
-					living.addEffect(new MobEffectInstance(MobEffects.POISON, POISON_TICK, POISON_LVL, false, false));
+                    living.addEffect(new MobEffectInstance(MobEffects.POISON, POISON_TICK, POISON_LVL, false, false));
 				}
 			}
 		}

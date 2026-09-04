@@ -17,13 +17,13 @@ import com.hungteen.pvz.utils.enums.Colors;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	private static final ResourceLocation TEXTURE = StringUtil.prefix("textures/gui/container/essence_altar.png");
 	private static final int MAX_ENTRY_COUNT = 4;
 	private final RecipeManager recipeManager = new RecipeManager();
-	private EssenceButton[] buttons = new EssenceButton[MAX_ENTRY_COUNT];
+	private final EssenceButton[] buttons = new EssenceButton[MAX_ENTRY_COUNT];
 	private IPAZType tmpType;
 	private int currentPos = 0;
 	private int mouseX;

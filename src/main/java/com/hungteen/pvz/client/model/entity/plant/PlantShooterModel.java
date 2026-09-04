@@ -1,11 +1,10 @@
 package com.hungteen.pvz.client.model.entity.plant;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-
 import net.minecraft.client.model.geom.ModelPart;
+
+import java.util.Optional;
 
 public abstract class PlantShooterModel<T extends PlantShooterEntity> extends PVZPlantModel<T> {
 

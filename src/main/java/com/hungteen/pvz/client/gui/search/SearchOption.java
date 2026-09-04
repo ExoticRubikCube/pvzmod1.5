@@ -11,19 +11,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchOption {
+public record SearchOption(IPAZType type) {
 
 	private static final List<SearchOption> OPTIONS = new ArrayList<>();
 	private static final Map<SearchOption, Integer> OPTION_MAP = new HashMap<>();
 
 	static {
 		PVZAPI.get().getPAZs().forEach(type -> {
-			if(type.getSummonCard().isPresent()){
+			if (type.getSummonCard().isPresent()) {
 				putAlmanac(new SearchOption(type));
 			}
 		});
 	}
-	
+
 	private static void putAlmanac(SearchOption a) {
 		OPTION_MAP.put(a, OPTIONS.size());
 		OPTIONS.add(a);
@@ -34,8 +34,8 @@ public class SearchOption {
 	}
 
 	public static ItemStack getItemStackByOption(SearchOption a) {
-		if(a.getType().getSummonCard().isPresent()){
-			return new ItemStack(a.getType().getSummonCard().get());
+		if (a.type().getSummonCard().isPresent()) {
+			return new ItemStack(a.type().getSummonCard().get());
 		}
 		return ItemStack.EMPTY;
 	}
@@ -46,36 +46,28 @@ public class SearchOption {
 	public static List<SearchOption> getSearchOptionsByCategory(CategoryToggleWidget.SearchCategories category) {
 		List<SearchOption> list = new ArrayList<>();
 		SearchOption.OPTIONS.forEach((a) -> {
-			if(category == CategoryToggleWidget.SearchCategories.ALL){
+			if (category == CategoryToggleWidget.SearchCategories.ALL) {
 				list.add(a);
-			} else if(a.isPlantType() && category == CategoryToggleWidget.SearchCategories.PLANTS){
+			} else if (a.isPlantType() && category == CategoryToggleWidget.SearchCategories.PLANTS) {
 				list.add(a);
-			} else if(a.isZombieType() && category == CategoryToggleWidget.SearchCategories.ZOMBIES){
+			} else if (a.isZombieType() && category == CategoryToggleWidget.SearchCategories.ZOMBIES) {
 				list.add(a);
 			}
 		});
 		return list;
 	}
 
-	private final IPAZType type;
-	public SearchOption(IPAZType type) {
-		this.type = type;
-	}
 
-	public IPAZType getType() {
-		return this.type;
-	}
-	
 	public boolean isPlantType() {
 		return this.type instanceof IPlantType;
 	}
-	
+
 	public boolean isZombieType() {
 		return this.type instanceof IZombieType;
 	}
-	
+
 	public int ordinal() {
 		return OPTION_MAP.get(this);
 	}
-	
+
 }

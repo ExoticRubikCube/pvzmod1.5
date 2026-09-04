@@ -1,31 +1,31 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
 import com.hungteen.pvz.api.types.IPlantType;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.attack.PVZZombieAttackGoal;
 import com.hungteen.pvz.common.entity.ai.navigator.ZombieWaterPathNavigation;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -76,8 +76,7 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 			}
 			if(this.isOnGround() && EntityUtil.isEntityValid(this)) {
 				this.separate();
-				return ;
-			}
+            }
 		}
 	}
 	

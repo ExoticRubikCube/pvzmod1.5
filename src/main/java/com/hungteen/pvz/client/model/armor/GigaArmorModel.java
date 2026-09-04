@@ -2,19 +2,14 @@ package com.hungteen.pvz.client.model.armor;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
-
-import java.lang.reflect.Field;
-import java.util.Map;
+import net.minecraft.world.entity.LivingEntity;
 
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
@@ -31,41 +26,29 @@ public class GigaArmorModel extends HumanoidModel<LivingEntity> {
 	private final EquipmentSlot slot;
 
 	public GigaArmorModel(EquipmentSlot slot, float scale) {
-		super(createHumanoidMesh().getRoot().bake(64, 64));
+		super(createMesh().getRoot().bake(64, 64));
 		this.slot = slot;
-
-		ModelPart root = LayerDefinition.create(createMesh(), 64, 64).bakeRoot();
-		helmet = root.getChild("helmet");
-		chestplate = root.getChild("chestplate");
-		right_hand_armor = root.getChild("right_hand_armor");
-		bone2 = right_hand_armor.getChild("bone2");
-		left_hand_armor = root.getChild("left_hand_armor");
-		bone = left_hand_armor.getChild("bone");
-
-		attachChild(this.head, "helmet", helmet);
-		attachChild(this.body, "chestplate", chestplate);
-		attachChild(this.rightArm, "right_hand_armor", right_hand_armor);
-		attachChild(this.leftArm, "left_hand_armor", left_hand_armor);
-	}
-
-	private static MeshDefinition createHumanoidMesh() {
-		MeshDefinition mesh = new MeshDefinition();
-		PartDefinition root = mesh.getRoot();
-		root.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.ZERO);
-		root.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
-		root.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.ZERO);
-		root.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.ZERO);
-		root.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.ZERO);
-		root.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.ZERO);
-		root.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.ZERO);
-		return mesh;
+		this.helmet = this.head.getChild("helmet");
+		this.chestplate = this.body.getChild("chestplate");
+		this.right_hand_armor = this.rightArm.getChild("right_hand_armor");
+		this.bone2 = this.right_hand_armor.getChild("bone2");
+		this.left_hand_armor = this.leftArm.getChild("left_hand_armor");
+		this.bone = this.left_hand_armor.getChild("bone");
 	}
 
 	private static MeshDefinition createMesh() {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition root = mesh.getRoot();
 
-		PartDefinition helmetPd = root.addOrReplaceChild("helmet",
+		PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.ZERO);
+		root.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
+		PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.ZERO);
+		PartDefinition rightArm = root.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.ZERO);
+		PartDefinition leftArm = root.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.ZERO);
+		root.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.ZERO);
+		root.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.ZERO);
+
+		head.addOrReplaceChild("helmet",
 			CubeListBuilder.create()
 				.texOffs(30, 54).addBox(-4.0F, -9.0F, -5.0F, 8.0F, 1.0F, 9.0F)
 				.texOffs(46, 44).addBox(-4.0F, -8.0F, 4.0F, 8.0F, 8.0F, 1.0F)
@@ -79,7 +62,7 @@ public class GigaArmorModel extends HumanoidModel<LivingEntity> {
 				.texOffs(58, 58).addBox(2.0F, -8.0F, -5.0F, 1.0F, 1.0F, 1.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition chestplatePd = root.addOrReplaceChild("chestplate",
+		body.addOrReplaceChild("chestplate",
 			CubeListBuilder.create()
 				.texOffs(0, 51).addBox(-4.0F, -12.0F, -3.0F, 8.0F, 12.0F, 1.0F)
 				.texOffs(0, 38).addBox(-4.0F, -12.0F, 2.0F, 8.0F, 12.0F, 1.0F)
@@ -87,7 +70,7 @@ public class GigaArmorModel extends HumanoidModel<LivingEntity> {
 				.texOffs(18, 51).addBox(4.0F, -9.0F, -2.0F, 1.0F, 9.0F, 4.0F),
 			PartPose.offset(0.0F, 12.0F, 0.0F));
 
-		PartDefinition rightHandPd = root.addOrReplaceChild("right_hand_armor",
+		PartDefinition rightHandPd = rightArm.addOrReplaceChild("right_hand_armor",
 			CubeListBuilder.create()
 				.texOffs(28, 43).addBox(-5.0F, -2.0F, -2.0F, 3.0F, 1.0F, 4.0F)
 				.texOffs(28, 38).addBox(-2.0F, -2.0F, 2.0F, 4.0F, 4.0F, 1.0F)
@@ -110,7 +93,7 @@ public class GigaArmorModel extends HumanoidModel<LivingEntity> {
 				.texOffs(28, 59).addBox(-3.5355F, -1.7071F, -2.0F, 4.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(-3.0F, 2.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
-		PartDefinition leftHandPd = root.addOrReplaceChild("left_hand_armor",
+		PartDefinition leftHandPd = leftArm.addOrReplaceChild("left_hand_armor",
 			CubeListBuilder.create()
 				.texOffs(50, 59).addBox(2.0F, -2.0F, -2.0F, 3.0F, 1.0F, 4.0F)
 				.texOffs(48, 53).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 1.0F, 4.0F)
@@ -149,17 +132,5 @@ public class GigaArmorModel extends HumanoidModel<LivingEntity> {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;
-	}
-
-	private static void attachChild(ModelPart parent, String name, ModelPart child) {
-		try {
-			Field field = ModelPart.class.getDeclaredField("children");
-			field.setAccessible(true);
-			@SuppressWarnings("unchecked")
-			Map<String, ModelPart> children = (Map<String, ModelPart>) field.get(parent);
-			children.put(name, child);
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Failed to attach ModelPart '" + name + "' to parent at runtime (1.19 ModelPart children is private)", e);
-		}
 	}
 }

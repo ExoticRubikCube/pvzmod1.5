@@ -2,11 +2,10 @@ package com.hungteen.pvz.common.enchantment.card.plantcard;
 
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
-
 import com.hungteen.pvz.common.enchantment.PVZEnchantmentTypes;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class SoillessPlantEnchantment extends PVZEnchantment {
 

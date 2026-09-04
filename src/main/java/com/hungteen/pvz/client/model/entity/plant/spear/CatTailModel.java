@@ -1,23 +1,19 @@
 package com.hungteen.pvz.client.model.entity.plant.spear;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.spear.CatTailEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 4.1.3
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
@@ -44,19 +40,19 @@ public class CatTailModel extends PVZPlantModel<CatTailEntity> {
 
 public CatTailModel(ModelPart root) {
 		this.bone = root.getChild("bone");
-		this.buttom = root.getChild("buttom");
-		this.head = root.getChild("head");
-		this.hat_r1 = root.getChild("hat_r1");
-		this.left_ear = root.getChild("left_ear");
-		this.in_r1 = root.getChild("in_r1");
-		this.lear_r1 = root.getChild("lear_r1");
-		this.right_ear = root.getChild("right_ear");
-		this.in_r2 = root.getChild("in_r2");
-		this.rear_r1 = root.getChild("rear_r1");
-		this.tail = root.getChild("tail");
-		this.spike_r1 = root.getChild("spike_r1");
-		this.sec_r1 = root.getChild("sec_r1");
-		this.fir_r1 = root.getChild("fir_r1");
+		this.buttom = this.bone.getChild("buttom");
+		this.head = this.bone.getChild("head");
+		this.hat_r1 = this.head.getChild("hat_r1");
+		this.left_ear = this.head.getChild("left_ear");
+		this.in_r1 = this.left_ear.getChild("in_r1");
+		this.lear_r1 = this.left_ear.getChild("lear_r1");
+		this.right_ear = this.head.getChild("right_ear");
+		this.in_r2 = this.right_ear.getChild("in_r2");
+		this.rear_r1 = this.right_ear.getChild("rear_r1");
+		this.tail = this.bone.getChild("tail");
+		this.spike_r1 = this.tail.getChild("spike_r1");
+		this.sec_r1 = this.tail.getChild("sec_r1");
+		this.fir_r1 = this.tail.getChild("fir_r1");
 	}
 
 	public static LayerDefinition createBodyLayer() {

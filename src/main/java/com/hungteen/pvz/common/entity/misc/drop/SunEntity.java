@@ -1,8 +1,5 @@
 package com.hungteen.pvz.common.entity.misc.drop;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
@@ -10,15 +7,18 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
+
 /**
  * @program: pvzmod-1.18.x
  * @author: HungTeen

@@ -1,18 +1,18 @@
 package com.hungteen.pvz.common.entity.zombie.base;
 
 import com.hungteen.pvz.api.enums.BodyType;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public abstract class CarZombieEntity extends PVZZombieEntity {

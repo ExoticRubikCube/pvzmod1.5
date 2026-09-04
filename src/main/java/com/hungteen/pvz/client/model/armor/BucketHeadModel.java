@@ -18,8 +18,8 @@ public class BucketHeadModel extends HumanoidModel<LivingEntity> {
 	private final ModelPart total;
 	private final ModelPart pole;
 	public BucketHeadModel(ModelPart root) {
-        super(root);
-		this.total = root.getChild("total");
+		super(root);
+		this.total = this.head.getChild("total");
 		this.pole = this.total.getChild("pole");
 	}
 
@@ -27,7 +27,15 @@ public class BucketHeadModel extends HumanoidModel<LivingEntity> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition total = partdefinition.addOrReplaceChild("total", CubeListBuilder.create()
+		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.ZERO);
+		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
+		partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.ZERO);
+		partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.ZERO);
+		partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.ZERO);
+		partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.ZERO);
+		partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.ZERO);
+
+		PartDefinition total = head.addOrReplaceChild("total", CubeListBuilder.create()
 						.texOffs(23, 43).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F)
 						.texOffs(0, 52).addBox(-5.0F, 0.0F, -5.0F, 1.0F, 1.0F, 10.0F)
 						.texOffs(0, 40).addBox(4.0F, 0.0F, -5.0F, 1.0F, 1.0F, 10.0F)

@@ -2,8 +2,8 @@ package com.hungteen.pvz.common.entity.zombie.part;
 
 import com.hungteen.pvz.common.entity.zombie.base.DefenceZombieEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 public class PVZHealthPartEntity extends PVZZombiePartEntity{

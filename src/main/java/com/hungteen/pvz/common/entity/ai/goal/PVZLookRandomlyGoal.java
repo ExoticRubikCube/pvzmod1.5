@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 
 public class PVZLookRandomlyGoal extends RandomLookAroundGoal{
 
-	private Mob plant;
+	private final Mob plant;
 	
 	public PVZLookRandomlyGoal(Mob entitylivingIn) {
 		super(entitylivingIn);
@@ -24,11 +24,8 @@ public class PVZLookRandomlyGoal extends RandomLookAroundGoal{
 		if(this.plant instanceof PVZPlantEntity && !((PVZPlantEntity) this.plant).canNormalUpdate()) {
 			return false;
 		}
-		if(this.plant instanceof PVZZombieEntity && !((PVZZombieEntity) this.plant).canNormalUpdate()) {
-			return false;
-		}
-		return true;
-	}
+        return !(this.plant instanceof PVZZombieEntity) || ((PVZZombieEntity) this.plant).canNormalUpdate();
+    }
 	
 	@Override
 	public boolean canContinueToUse() {

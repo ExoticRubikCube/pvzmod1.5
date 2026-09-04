@@ -11,9 +11,9 @@ import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Arrays;
 
@@ -52,10 +52,10 @@ public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 		StringUtil.drawCenteredScaledString(stack, font, Component.translatable("block.pvz.card_fusion_table").getString(), this.leftPos + this.imageWidth / 2, this.topPos + 8, Colors.BLACK, 1F);
 		final float percent1 = this.menu.te.array.get(0) * 100.0F / CardFusionTileEntity.CRAFT_SUN_COST;
 		final float percent2 = this.menu.te.array.get(1) * 100.0F / CardFusionTileEntity.CRAFT_ESSENCE_COST;
-		StringUtil.drawCenteredScaledString(stack, font, "" + String.format("%.0f%%", percent1), this.leftPos + 19, this.topPos + 53, Colors.BLACK, 0.8F);
-		StringUtil.drawCenteredScaledString(stack, font, "" + String.format("%.0f%%", percent2), this.leftPos + 161, this.topPos + 53, Colors.BLACK, 0.8F);
-	    StringUtil.drawCenteredScaledString(stack, font, "" + String.format("%.0f%%", percent1), this.leftPos + 18, this.topPos + 52, Colors.WHITE, 0.8F);
-		StringUtil.drawCenteredScaledString(stack, font, "" + String.format("%.0f%%", percent2), this.leftPos + 160, this.topPos + 52, Colors.WHITE, 0.8F);
+		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent1), this.leftPos + 19, this.topPos + 53, Colors.BLACK, 0.8F);
+		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent2), this.leftPos + 161, this.topPos + 53, Colors.BLACK, 0.8F);
+	    StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent1), this.leftPos + 18, this.topPos + 52, Colors.WHITE, 0.8F);
+		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent2), this.leftPos + 160, this.topPos + 52, Colors.WHITE, 0.8F);
 	}
 	
 	@Override

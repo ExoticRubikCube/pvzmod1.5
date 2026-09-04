@@ -4,14 +4,12 @@ import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.Zombotanies;
 import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public class PeaShooterZombieEntity extends AbstractZombotanyEntity {

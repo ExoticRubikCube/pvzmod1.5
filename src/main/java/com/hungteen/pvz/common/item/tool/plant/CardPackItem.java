@@ -4,27 +4,25 @@ import com.hungteen.pvz.common.container.CardPackContainer;
 import com.hungteen.pvz.common.container.inventory.ItemInventory;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -85,11 +83,11 @@ public class CardPackItem extends Item {
 			opt = LazyOptional.of(() -> new InvWrapper(getInventory(stack)));
 		}
 
-		@Nonnull
-		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-			return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
+			@Nonnull
+			@Override
+			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+				return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
+			}
 		}
-	}
 
 }

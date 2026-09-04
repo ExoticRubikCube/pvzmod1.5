@@ -1,23 +1,16 @@
 package com.hungteen.pvz.client.model.entity.plant.assist;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.assist.MagnetShroomEntity;
 import com.hungteen.pvz.remove.MetalTypes;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -73,48 +66,48 @@ public class MagnetShroomModel extends PVZPlantModel<MagnetShroomEntity> {
 
 public MagnetShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.plate = root.getChild("plate");
-		this.bone3 = root.getChild("bone3");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.bone4 = root.getChild("bone4");
-		this.face = root.getChild("face");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.elect = root.getChild("elect");
-		this.magnets = root.getChild("magnets");
-		this.magnet = root.getChild("magnet");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
-		this.bone8 = root.getChild("bone8");
-		this.bone9 = root.getChild("bone9");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.bone12 = root.getChild("bone12");
-		this.bone13 = root.getChild("bone13");
-		this.bone14 = root.getChild("bone14");
-		this.rest_magnet = root.getChild("rest_magnet");
-		this.bone2 = root.getChild("bone2");
-		this.bone15 = root.getChild("bone15");
-		this.bone16 = root.getChild("bone16");
-		this.bone17 = root.getChild("bone17");
-		this.bone18 = root.getChild("bone18");
-		this.bone19 = root.getChild("bone19");
-		this.bone20 = root.getChild("bone20");
-		this.bone21 = root.getChild("bone21");
-		this.bone22 = root.getChild("bone22");
-		this.bone23 = root.getChild("bone23");
-		this.absorb_magnet = root.getChild("absorb_magnet");
-		this.bone24 = root.getChild("bone24");
-		this.bone25 = root.getChild("bone25");
-		this.bone26 = root.getChild("bone26");
-		this.bone27 = root.getChild("bone27");
-		this.bone28 = root.getChild("bone28");
-		this.bone29 = root.getChild("bone29");
-		this.bone30 = root.getChild("bone30");
-		this.bone31 = root.getChild("bone31");
-		this.bone32 = root.getChild("bone32");
-		this.bone33 = root.getChild("bone33");
+		this.plate = this.total.getChild("plate");
+		this.bone3 = this.plate.getChild("bone3");
+		this.cube_r1 = this.bone3.getChild("cube_r1");
+		this.bone4 = this.plate.getChild("bone4");
+		this.face = this.total.getChild("face");
+		this.cube_r2 = this.face.getChild("cube_r2");
+		this.cube_r3 = this.face.getChild("cube_r3");
+		this.elect = this.total.getChild("elect");
+		this.magnets = this.total.getChild("magnets");
+		this.magnet = this.magnets.getChild("magnet");
+		this.bone5 = this.magnet.getChild("bone5");
+		this.bone6 = this.magnet.getChild("bone6");
+		this.bone7 = this.magnet.getChild("bone7");
+		this.bone8 = this.magnet.getChild("bone8");
+		this.bone9 = this.magnet.getChild("bone9");
+		this.bone10 = this.magnet.getChild("bone10");
+		this.bone11 = this.magnet.getChild("bone11");
+		this.bone12 = this.magnet.getChild("bone12");
+		this.bone13 = this.magnet.getChild("bone13");
+		this.bone14 = this.magnet.getChild("bone14");
+		this.rest_magnet = this.magnets.getChild("rest_magnet");
+		this.bone2 = this.rest_magnet.getChild("bone2");
+		this.bone15 = this.rest_magnet.getChild("bone15");
+		this.bone16 = this.rest_magnet.getChild("bone16");
+		this.bone17 = this.rest_magnet.getChild("bone17");
+		this.bone18 = this.rest_magnet.getChild("bone18");
+		this.bone19 = this.rest_magnet.getChild("bone19");
+		this.bone20 = this.rest_magnet.getChild("bone20");
+		this.bone21 = this.rest_magnet.getChild("bone21");
+		this.bone22 = this.rest_magnet.getChild("bone22");
+		this.bone23 = this.rest_magnet.getChild("bone23");
+		this.absorb_magnet = this.magnets.getChild("absorb_magnet");
+		this.bone24 = this.absorb_magnet.getChild("bone24");
+		this.bone25 = this.absorb_magnet.getChild("bone25");
+		this.bone26 = this.absorb_magnet.getChild("bone26");
+		this.bone27 = this.absorb_magnet.getChild("bone27");
+		this.bone28 = this.absorb_magnet.getChild("bone28");
+		this.bone29 = this.absorb_magnet.getChild("bone29");
+		this.bone30 = this.absorb_magnet.getChild("bone30");
+		this.bone31 = this.absorb_magnet.getChild("bone31");
+		this.bone32 = this.absorb_magnet.getChild("bone32");
+		this.bone33 = this.absorb_magnet.getChild("bone33");
 	}
 
 	public static LayerDefinition createBodyLayer() {

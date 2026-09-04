@@ -7,19 +7,7 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.misc.PVZSpawnEggItem;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -27,7 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
@@ -36,7 +23,7 @@ import java.util.Set;
 
 public class ItemModelGenerator extends ItemModelProvider {
 
-	private Set<Item> addedItems = new HashSet<>();
+	private final Set<Item> addedItems = new HashSet<>();
 
 	public ItemModelGenerator(DataGenerator generator, ExistingFileHelper helper) {
 		super(generator, PVZMod.MOD_ID, helper);
@@ -81,7 +68,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 				getBuilder(itemKey.getPath()).parent(getExistingFile(ResourceLocation.fromNamespaceAndPath("minecraft", "item/template_spawn_egg")));
 			} else if (i instanceof PlantCardItem) { // for plant cards
 				IPlantType plant = ((PlantCardItem) i).plantType;
-				ResourceLocation plantResource = ResourceLocation.fromNamespaceAndPath(plant.getModID(), "screenshot/plant/" + plant.toString());
+				ResourceLocation plantResource = ResourceLocation.fromNamespaceAndPath(plant.getModID(), "screenshot/plant/" + plant);
 				addedItems.add(i);
 				if (((PlantCardItem) i).isEnjoyCard) {
 					ResourceLocation r = StringUtil.prefix("item/misc/mega_card");

@@ -1,18 +1,17 @@
 package com.hungteen.pvz.common.entity.misc.drop;
 
 import com.hungteen.pvz.PVZConfig;
-import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
+import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class CoinEntity extends DropEntity {
@@ -70,12 +69,12 @@ public class CoinEntity extends DropEntity {
 		return PVZConfig.COMMON_CONFIG.EntitySettings.EntityLiveTick.CoinLiveTick.get();
 	}
 
-	public static enum CoinType {
+	public enum CoinType {
 		COPPER(1), SILVER(10), GOLD(100);
 
 		public final int money;
 
-		private CoinType(int money) {
+		CoinType(int money) {
 			this.money = money;
 		}
 	}

@@ -1,22 +1,20 @@
 package com.hungteen.pvz.client.model.entity.zombie.grass;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.zombie.custom.GigaTombStoneEntity;
 import com.hungteen.pvz.common.entity.zombie.grass.AbstractTombStoneEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.8.4
 // Exported for Minecraft version 1.15 - 1.16
 // Paste this class into your mod and generate all required imports
@@ -32,8 +30,8 @@ public class TombStoneModel<T extends AbstractTombStoneEntity> extends EntityMod
 
 public TombStoneModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.logo = root.getChild("logo");
-		this.red_logo = root.getChild("red_logo");
+		this.logo = this.total.getChild("logo");
+		this.red_logo = this.total.getChild("red_logo");
 	}
 
 	public static LayerDefinition createBodyLayer() {

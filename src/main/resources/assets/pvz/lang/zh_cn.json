@@ -1245,5 +1245,10 @@
   "misc.pvz.cd.slow": "慢",
   "misc.pvz.cd.very_slow": "很慢",
   "misc.pvz.cd.huge_slow": "非常慢",
-  "misc.pvz.cd.super_slow": "超级慢"
+  "misc.pvz.cd.super_slow": "超级慢",
+  "_comment21": "--------------------------------------------Jade-------------------------------------------",
+  "config.jade.plugin_pvz.pvz_entity": "PVZ 实体",
+  "config.jade.plugin_pvz.show_owner": "显示主人",
+  "config.jade.plugin_pvz.show_defence_health": "显示防御血量",
+  "config.jade.plugin_pvz.show_skills": "显示技能"
 }

@@ -3,14 +3,13 @@ package com.hungteen.pvz.common.entity.npc;
 import com.hungteen.pvz.common.container.provider.PVZContainerProvider;
 import com.hungteen.pvz.common.container.shop.SunShopContainer;
 import com.hungteen.pvz.utils.StringUtil;
-
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;

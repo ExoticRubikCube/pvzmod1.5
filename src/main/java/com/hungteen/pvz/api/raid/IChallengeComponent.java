@@ -2,10 +2,10 @@ package com.hungteen.pvz.api.raid;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
 

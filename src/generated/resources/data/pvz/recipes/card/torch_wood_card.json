@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "AAA",
-    "ABA",
-    "ACA"
-  ],
   "key": {
     "A": {
       "item": "pvz:flame_essence"
@@ -16,6 +11,11 @@
       "tag": "pvz:card/purple_cards"
     }
   },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "ACA"
+  ],
   "result": {
     "item": "pvz:torch_wood_card"
   }

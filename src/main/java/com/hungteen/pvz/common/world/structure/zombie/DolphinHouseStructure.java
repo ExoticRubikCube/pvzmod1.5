@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.world.structure.zombie;
 
+import com.hungteen.pvz.common.world.structure.StructureRegister;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Rotation;
@@ -9,8 +10,6 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
 import java.util.Optional;
-
-import com.hungteen.pvz.common.world.structure.StructureRegister;
 
 public class DolphinHouseStructure extends Structure {
 

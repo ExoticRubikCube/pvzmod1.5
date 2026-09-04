@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.toxic;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.toxic.SeaShroomEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -61,37 +54,37 @@ public class SeaShroomModel extends PVZPlantModel<SeaShroomEntity> {
 
 public SeaShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.tail = root.getChild("tail");
-		this.bone = root.getChild("bone");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.bone2 = root.getChild("bone2");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.bone3 = root.getChild("bone3");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.bone4 = root.getChild("bone4");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.bone5 = root.getChild("bone5");
-		this.cube_r5 = root.getChild("cube_r5");
-		this.bone6 = root.getChild("bone6");
-		this.cube_r6 = root.getChild("cube_r6");
-		this.bone7 = root.getChild("bone7");
-		this.cube_r7 = root.getChild("cube_r7");
-		this.bone8 = root.getChild("bone8");
-		this.cube_r8 = root.getChild("cube_r8");
-		this.bone9 = root.getChild("bone9");
-		this.cube_r9 = root.getChild("cube_r9");
-		this.bone10 = root.getChild("bone10");
-		this.cube_r10 = root.getChild("cube_r10");
-		this.bone11 = root.getChild("bone11");
-		this.cube_r11 = root.getChild("cube_r11");
-		this.bone12 = root.getChild("bone12");
-		this.cube_r12 = root.getChild("cube_r12");
-		this.bone13 = root.getChild("bone13");
-		this.cube_r13 = root.getChild("cube_r13");
-		this.bone14 = root.getChild("bone14");
-		this.cube_r14 = root.getChild("cube_r14");
-		this.bone15 = root.getChild("bone15");
-		this.cube_r15 = root.getChild("cube_r15");
+		this.tail = this.total.getChild("tail");
+		this.bone = this.tail.getChild("bone");
+		this.cube_r1 = this.bone.getChild("cube_r1");
+		this.bone2 = this.bone.getChild("bone2");
+		this.cube_r2 = this.bone2.getChild("cube_r2");
+		this.bone3 = this.bone2.getChild("bone3");
+		this.cube_r3 = this.bone3.getChild("cube_r3");
+		this.bone4 = this.tail.getChild("bone4");
+		this.cube_r4 = this.bone4.getChild("cube_r4");
+		this.bone5 = this.bone4.getChild("bone5");
+		this.cube_r5 = this.bone5.getChild("cube_r5");
+		this.bone6 = this.bone5.getChild("bone6");
+		this.cube_r6 = this.bone6.getChild("cube_r6");
+		this.bone7 = this.tail.getChild("bone7");
+		this.cube_r7 = this.bone7.getChild("cube_r7");
+		this.bone8 = this.bone7.getChild("bone8");
+		this.cube_r8 = this.bone8.getChild("cube_r8");
+		this.bone9 = this.bone8.getChild("bone9");
+		this.cube_r9 = this.bone9.getChild("cube_r9");
+		this.bone10 = this.tail.getChild("bone10");
+		this.cube_r10 = this.bone10.getChild("cube_r10");
+		this.bone11 = this.bone10.getChild("bone11");
+		this.cube_r11 = this.bone11.getChild("cube_r11");
+		this.bone12 = this.bone11.getChild("bone12");
+		this.cube_r12 = this.bone12.getChild("cube_r12");
+		this.bone13 = this.tail.getChild("bone13");
+		this.cube_r13 = this.bone13.getChild("cube_r13");
+		this.bone14 = this.bone13.getChild("bone14");
+		this.cube_r14 = this.bone14.getChild("cube_r14");
+		this.bone15 = this.bone14.getChild("bone15");
+		this.cube_r15 = this.bone15.getChild("cube_r15");
 	}
 
 	public static LayerDefinition createBodyLayer() {

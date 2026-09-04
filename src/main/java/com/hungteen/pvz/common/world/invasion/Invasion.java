@@ -13,30 +13,32 @@ import com.hungteen.pvz.common.network.toclient.OtherStatsPacket;
 import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.hungteen.pvz.utils.others.WeightList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.Level;
-import net.minecraft.util.RandomSource;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.hungteen.pvz.common.world.invasion.InvasionManager.suitableInvasionPos;
 
@@ -64,12 +66,12 @@ public class Invasion {
     private static int tick = 0;
     private int currentCount = 0;
     /* wave */
-    private int[] waveTime = new int[InvasionManager.MAX_WAVE_NUM];
-    private boolean[] waveTriggered = new boolean[InvasionManager.MAX_WAVE_NUM];
+    private final int[] waveTime = new int[InvasionManager.MAX_WAVE_NUM];
+    private final boolean[] waveTriggered = new boolean[InvasionManager.MAX_WAVE_NUM];
     private int currentWave = 0;
     private int totalWaveCount = 0;
     /* mission */
-    private int[] killQueue = new int[MissionManager.KILL_IN_SECOND];
+    private final int[] killQueue = new int[MissionManager.KILL_IN_SECOND];
     public int killInSecond = 0;
     public int killPos = 0;
     /* misc */
@@ -425,15 +427,11 @@ public class Invasion {
     }
 
     public void addAssistInvasion(ResourceLocation resourceLocation) {
-        if (!this.activeResources.contains(resourceLocation)) {
-            this.activeResources.add(resourceLocation);
-        }
+        this.activeResources.add(resourceLocation);
     }
 
     public void removeAssistInvasion(ResourceLocation resourceLocation) {
-        if (this.activeResources.contains(resourceLocation)) {
-            this.activeResources.remove(resourceLocation);
-        }
+        this.activeResources.remove(resourceLocation);
     }
 
     public void clearInvasion() {

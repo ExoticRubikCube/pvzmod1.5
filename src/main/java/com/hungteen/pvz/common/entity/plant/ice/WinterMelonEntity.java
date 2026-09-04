@@ -6,10 +6,9 @@ import com.hungteen.pvz.common.entity.bullet.MelonEntity.MelonStates;
 import com.hungteen.pvz.common.entity.plant.arma.MelonPultEntity;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.potion.EffectRegister;
-
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;

@@ -53,9 +53,8 @@ public class PVZInputEvents {
 	@SubscribeEvent
 	public static void onMouseDown(InputEvent.MouseButton.Pre ev) {
 		if(ClientProxy.MC.isWindowActive() && ClientProxy.MC.player != null) {
-			if(ClientProxy.MC.player.getVehicle() instanceof CobCannonEntity) {
-				CobCannonEntity cob = (CobCannonEntity) ClientProxy.MC.player.getVehicle();
-				if(ClientProxy.MC.player.getMainHandItem().isEmpty() && cob.getCornNum() > 0 && ClientProxy.MC.options.keyUse.consumeClick()) {
+			if(ClientProxy.MC.player.getVehicle() instanceof CobCannonEntity cob) {
+                if(ClientProxy.MC.player.getMainHandItem().isEmpty() && cob.getCornNum() > 0 && ClientProxy.MC.options.keyUse.consumeClick()) {
 				    PVZPacketHandler.CHANNEL.sendToServer(new EntityInteractPacket(cob.getId(), 0, 0));
 				}
 			}
@@ -92,8 +91,7 @@ public class PVZInputEvents {
 		return pos == 0 ? ConfigUtil.renderSunBar() :
 			pos == 1 ? ConfigUtil.renderMoneyBar() :
 			pos == 2 ? ConfigUtil.renderGemBar() :
-			pos == 3 ? ConfigUtil.renderTreeLevel() :
-			false;
+            pos == 3 && ConfigUtil.renderTreeLevel();
 	}
 	
 }

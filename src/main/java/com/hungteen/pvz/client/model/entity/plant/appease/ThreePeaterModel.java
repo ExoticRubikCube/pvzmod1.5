@@ -1,23 +1,16 @@
 package com.hungteen.pvz.client.model.entity.plant.appease;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.appease.ThreePeaterEntity;
 import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.9.2
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
@@ -60,35 +53,35 @@ public class ThreePeaterModel extends PlantShooterModel<ThreePeaterEntity> {
 
 public ThreePeaterModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.leaves = root.getChild("leaves");
-		this.body = root.getChild("body");
-		this.left_up = root.getChild("left_up");
-		this.left_body = root.getChild("left_body");
-		this.left_head = root.getChild("left_head");
-		this.bone7 = root.getChild("bone7");
-		this.bone8 = root.getChild("bone8");
-		this.bone9 = root.getChild("bone9");
-		this.bone13 = root.getChild("bone13");
-		this.bone14 = root.getChild("bone14");
-		this.bone15 = root.getChild("bone15");
-		this.bone16 = root.getChild("bone16");
-		this.bone17 = root.getChild("bone17");
-		this.bone18 = root.getChild("bone18");
-		this.mid_up = root.getChild("mid_up");
-		this.mid_body = root.getChild("mid_body");
-		this.mid_head = root.getChild("mid_head");
-		this.bone4 = root.getChild("bone4");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.bone12 = root.getChild("bone12");
-		this.right_up = root.getChild("right_up");
-		this.right_body = root.getChild("right_body");
-		this.right_head = root.getChild("right_head");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.bone3 = root.getChild("bone3");
+		this.leaves = this.total.getChild("leaves");
+		this.body = this.total.getChild("body");
+		this.left_up = this.body.getChild("left_up");
+		this.left_body = this.left_up.getChild("left_body");
+		this.left_head = this.left_up.getChild("left_head");
+		this.bone7 = this.left_head.getChild("bone7");
+		this.bone8 = this.bone7.getChild("bone8");
+		this.bone9 = this.bone8.getChild("bone9");
+		this.bone13 = this.left_head.getChild("bone13");
+		this.bone14 = this.bone13.getChild("bone14");
+		this.bone15 = this.bone14.getChild("bone15");
+		this.bone16 = this.left_head.getChild("bone16");
+		this.bone17 = this.bone16.getChild("bone17");
+		this.bone18 = this.bone17.getChild("bone18");
+		this.mid_up = this.body.getChild("mid_up");
+		this.mid_body = this.mid_up.getChild("mid_body");
+		this.mid_head = this.mid_up.getChild("mid_head");
+		this.bone4 = this.mid_head.getChild("bone4");
+		this.bone5 = this.bone4.getChild("bone5");
+		this.bone6 = this.bone5.getChild("bone6");
+		this.bone10 = this.mid_head.getChild("bone10");
+		this.bone11 = this.bone10.getChild("bone11");
+		this.bone12 = this.bone11.getChild("bone12");
+		this.right_up = this.body.getChild("right_up");
+		this.right_body = this.right_up.getChild("right_body");
+		this.right_head = this.right_up.getChild("right_head");
+		this.bone = this.right_head.getChild("bone");
+		this.bone2 = this.bone.getChild("bone2");
+		this.bone3 = this.bone2.getChild("bone3");
 	}
 
 	public static LayerDefinition createBodyLayer() {

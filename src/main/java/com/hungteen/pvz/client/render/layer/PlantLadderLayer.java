@@ -7,21 +7,20 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import com.mojang.math.Vector3f;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class PlantLadderLayer<T extends PVZPlantEntity> extends RenderLayer<T, EntityModel<T>>{
 
-	private static final ResourceLocation LADDER_TEX = StringUtil.prefix("textures/entity/misc/ladder.png");;
-	private PVZPlantRender<T> plantRender;
-	private LadderModel<T> model;
+	private static final ResourceLocation LADDER_TEX = StringUtil.prefix("textures/entity/misc/ladder.png");
+    private PVZPlantRender<T> plantRender;
+	private final LadderModel<T> model;
 
 	public PlantLadderLayer(RenderLayerParent<T, EntityModel<T>> entityRendererIn) {
 		super(entityRendererIn);

@@ -1,22 +1,22 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
 import com.hungteen.pvz.PVZConfig;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.misc.drop.JewelEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
-import com.hungteen.pvz.common.entity.EntityRegister;
+import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 public class YetiZombieEntity extends PVZZombieEntity{

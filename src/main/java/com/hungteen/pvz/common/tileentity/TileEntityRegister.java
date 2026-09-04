@@ -3,15 +3,14 @@ package com.hungteen.pvz.common.tileentity;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.render.tileentity.SunConverterTER;
 import com.hungteen.pvz.common.block.BlockRegister;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class TileEntityRegister {
 

@@ -1,22 +1,18 @@
 package com.hungteen.pvz.client.model.entity.plant.enforce;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.enforce.ChomperEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -60,36 +56,36 @@ public class ChomperModel extends PVZPlantModel<ChomperEntity> {
 
 	public ChomperModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.bone3 = root.getChild("bone3");
-		this.bone22 = root.getChild("bone22");
-		this.head = root.getChild("head");
-		this.bone14 = root.getChild("bone14");
-		this.bone15 = root.getChild("bone15");
-		this.up_mouse = root.getChild("up_mouse");
-		this.bone9 = root.getChild("bone9");
-		this.bone8 = root.getChild("bone8");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.bone12 = root.getChild("bone12");
-		this.bone13 = root.getChild("bone13");
-		this.down_mouse = root.getChild("down_mouse");
-		this.leaf = root.getChild("leaf");
-		this.bone16 = root.getChild("bone16");
-		this.bone17 = root.getChild("bone17");
-		this.bone18 = root.getChild("bone18");
-		this.bone19 = root.getChild("bone19");
-		this.bone20 = root.getChild("bone20");
-		this.bone21 = root.getChild("bone21");
-		this.tongue = root.getChild("tongue");
-		this.tongue2 = root.getChild("tongue2");
-		this.root = root.getChild("root");
-		this.bone4 = root.getChild("bone4");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
+		this.body = this.total.getChild("body");
+		this.bone = this.body.getChild("bone");
+		this.bone2 = this.bone.getChild("bone2");
+		this.bone3 = this.bone2.getChild("bone3");
+		this.bone22 = this.bone3.getChild("bone22");
+		this.head = this.body.getChild("head");
+		this.bone14 = this.head.getChild("bone14");
+		this.bone15 = this.bone14.getChild("bone15");
+		this.up_mouse = this.head.getChild("up_mouse");
+		this.bone9 = this.up_mouse.getChild("bone9");
+		this.bone8 = this.bone9.getChild("bone8");
+		this.bone10 = this.up_mouse.getChild("bone10");
+		this.bone11 = this.bone10.getChild("bone11");
+		this.bone12 = this.up_mouse.getChild("bone12");
+		this.bone13 = this.bone12.getChild("bone13");
+		this.down_mouse = this.head.getChild("down_mouse");
+		this.leaf = this.head.getChild("leaf");
+		this.bone16 = this.leaf.getChild("bone16");
+		this.bone17 = this.leaf.getChild("bone17");
+		this.bone18 = this.leaf.getChild("bone18");
+		this.bone19 = this.leaf.getChild("bone19");
+		this.bone20 = this.leaf.getChild("bone20");
+		this.bone21 = this.leaf.getChild("bone21");
+		this.tongue = this.head.getChild("tongue");
+		this.tongue2 = this.tongue.getChild("tongue2");
+		this.root = this.total.getChild("root");
+		this.bone4 = this.root.getChild("bone4");
+		this.bone5 = this.root.getChild("bone5");
+		this.bone6 = this.root.getChild("bone6");
+		this.bone7 = this.root.getChild("bone7");
 	}
 
 	public static LayerDefinition createBodyLayer() {

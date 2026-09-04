@@ -4,12 +4,12 @@ import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.util.Mth;
 
 public class EntityGroupHander {
 

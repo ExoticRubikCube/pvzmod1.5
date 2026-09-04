@@ -4,11 +4,10 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity.VariantType;
 import com.hungteen.pvz.utils.StringUtil;
-
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

@@ -10,15 +10,15 @@ import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.impl.*;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -141,7 +141,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	 */
 	protected ResourceLocation genEntityResource() {
 		final String sep = this.getEssence().toString();
-		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/plant/" + sep + "/" + this.toString() + ".png");
+		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/plant/" + sep + "/" + this + ".png");
 	}
 	
 	@Override
@@ -208,28 +208,28 @@ public abstract class PlantType extends PAZType implements IPlantType {
 
 	public static final class PlantFeatures{
 		//common.
-		protected int sunCost = 9999;
-		protected int requiredLevel = 100;
-		protected int xpPoint = 0;
-		protected float renderScale = 0.5F;
-		protected ICoolDown coolDown = CoolDowns.DEFAULT;
-		protected IRankType rankType = RankTypes.WHITE;
-		protected ResourceLocation entityRenderResource;
-		protected ResourceLocation lootTable;
-		protected Supplier<EntityType<? extends Mob>> entitySup;
-		protected Supplier<? extends Item> summonCardSup;
-		protected Supplier<? extends Item> enjoyCardSup;
-		protected List<ISkillType> skillTypes = new ArrayList<>();
+        private int sunCost = 9999;
+		private int requiredLevel = 100;
+		private int xpPoint = 0;
+		private float renderScale = 0.5F;
+		private ICoolDown coolDown = CoolDowns.DEFAULT;
+		private IRankType rankType = RankTypes.WHITE;
+		private ResourceLocation entityRenderResource;
+		private ResourceLocation lootTable;
+		private Supplier<EntityType<? extends Mob>> entitySup;
+		private Supplier<? extends Item> summonCardSup;
+		private Supplier<? extends Item> enjoyCardSup;
+		private List<ISkillType> skillTypes = new ArrayList<>();
 		//unique.
-		protected IEssenceType plantEssence = EssenceTypes.APPEASE;
-		protected Supplier<IPlantModel<? extends IPlantEntity>> plantModelSupplier;
-		protected Supplier<IPlantType> upgradeFrom;
-		protected Supplier<IPlantType> upgradeTo;
-		protected Supplier<Block> plantBlock;
-		protected Supplier<IPlantInfo> outerPlant;
-		protected ICardPlacement cardPlacement = Placements.COMMON;
-		protected boolean isShroomPlant;
-		protected boolean isWaterPlant;
+        private IEssenceType plantEssence = EssenceTypes.APPEASE;
+		private Supplier<IPlantModel<? extends IPlantEntity>> plantModelSupplier;
+		private Supplier<IPlantType> upgradeFrom;
+		private Supplier<IPlantType> upgradeTo;
+		private Supplier<Block> plantBlock;
+		private Supplier<IPlantInfo> outerPlant;
+		private ICardPlacement cardPlacement = Placements.COMMON;
+		private boolean isShroomPlant;
+		private boolean isWaterPlant;
 
 		public PlantFeatures cost(int cost) {
 			this.sunCost = cost;
@@ -282,7 +282,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		}
 
 		public PlantFeatures cdSkill(Collection<ISkillType> skills){
-			this.skillTypes.addAll(List.of(SkillTypes.FAST_CD));
+			this.skillTypes.add(SkillTypes.FAST_CD);
 			return this.skill(skills);
 		}
 
@@ -292,7 +292,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		}
 
 		public PlantFeatures commonSunSkill(Collection<ISkillType> skills){
-			this.skillTypes.addAll(List.of(SkillTypes.LESS_SUN));
+			this.skillTypes.add(SkillTypes.LESS_SUN);
 			return this.commonSkill(skills);
 		}
 
@@ -375,11 +375,10 @@ public abstract class PlantType extends PAZType implements IPlantType {
 								final String name = entry1.getKey();
 								final JsonElement element1 = entry1.getValue();
 								final Optional<IPlantType> opt = PVZAPI.get().getPlantTypeByID(modId + ":" + name);
-								if(opt.get() instanceof PlantType && element1.isJsonObject()){
+								if(opt.get() instanceof PlantType type && element1.isJsonObject()){
 									//modify attributes.
 									final JsonObject obj = element1.getAsJsonObject();
-									final PlantType type = (PlantType) opt.get();
-									//sun amount.
+                                    //sun amount.
 									final int sunCost = GsonHelper.getAsInt(obj, StringUtil.JSON_SUN_COST, -1);
 									if(sunCost >= 0){
 										type.sunCost(sunCost);

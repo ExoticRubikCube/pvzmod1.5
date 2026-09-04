@@ -1,23 +1,16 @@
 package com.hungteen.pvz.client.model.entity.plant.spear;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.spear.SpikeRockEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -50,25 +43,25 @@ public class SpikeRockModel extends PVZPlantModel<SpikeRockEntity> {
 
 public SpikeRockModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.t1 = root.getChild("t1");
-		this.spike1 = root.getChild("spike1");
-		this.t2 = root.getChild("t2");
-		this.spike2 = root.getChild("spike2");
-		this.t3 = root.getChild("t3");
-		this.spike3 = root.getChild("spike3");
-		this.spikes = root.getChild("spikes");
-		this.spike15 = root.getChild("spike15");
-		this.spike14 = root.getChild("spike14");
-		this.spike13 = root.getChild("spike13");
-		this.spike12 = root.getChild("spike12");
-		this.spike11 = root.getChild("spike11");
-		this.spike10 = root.getChild("spike10");
-		this.spike9 = root.getChild("spike9");
-		this.spike8 = root.getChild("spike8");
-		this.spike7 = root.getChild("spike7");
-		this.spike6 = root.getChild("spike6");
-		this.spike5 = root.getChild("spike5");
-		this.spike4 = root.getChild("spike4");
+		this.t1 = this.total.getChild("t1");
+		this.spike1 = this.t1.getChild("spike1");
+		this.t2 = this.total.getChild("t2");
+		this.spike2 = this.t2.getChild("spike2");
+		this.t3 = this.total.getChild("t3");
+		this.spike3 = this.t3.getChild("spike3");
+		this.spikes = this.total.getChild("spikes");
+		this.spike15 = this.spikes.getChild("spike15");
+		this.spike14 = this.spikes.getChild("spike14");
+		this.spike13 = this.spikes.getChild("spike13");
+		this.spike12 = this.spikes.getChild("spike12");
+		this.spike11 = this.spikes.getChild("spike11");
+		this.spike10 = this.spikes.getChild("spike10");
+		this.spike9 = this.spikes.getChild("spike9");
+		this.spike8 = this.spikes.getChild("spike8");
+		this.spike7 = this.spikes.getChild("spike7");
+		this.spike6 = this.spikes.getChild("spike6");
+		this.spike5 = this.spikes.getChild("spike5");
+		this.spike4 = this.spikes.getChild("spike4");
 	}
 
 	public static LayerDefinition createBodyLayer() {

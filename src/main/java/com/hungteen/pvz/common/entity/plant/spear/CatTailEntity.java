@@ -11,9 +11,9 @@ import com.hungteen.pvz.common.entity.zombie.pool.BalloonZombieEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 import java.util.HashSet;

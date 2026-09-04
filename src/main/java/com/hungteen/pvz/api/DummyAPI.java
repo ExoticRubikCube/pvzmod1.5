@@ -1,27 +1,16 @@
 package com.hungteen.pvz.api;
 
 import com.hungteen.pvz.api.PVZAPI.IPVZAPI;
-import com.hungteen.pvz.api.raid.IAmountComponent;
-import com.hungteen.pvz.api.raid.IPlacementComponent;
-import com.hungteen.pvz.api.raid.IChallengeComponent;
-import com.hungteen.pvz.api.raid.IRewardComponent;
-import com.hungteen.pvz.api.raid.ISpawnComponent;
-import com.hungteen.pvz.api.raid.IWaveComponent;
+import com.hungteen.pvz.api.raid.*;
 import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.world.challenge.Challenge;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**

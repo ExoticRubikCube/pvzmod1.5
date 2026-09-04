@@ -1,8 +1,8 @@
 package com.hungteen.pvz.common.item.material;
 
 import com.hungteen.pvz.api.types.IRankType;
-import com.hungteen.pvz.common.item.PVZMiscItem;
 import com.hungteen.pvz.common.item.PVZItemGroups;
+import com.hungteen.pvz.common.item.PVZMiscItem;
 
 public class TemplateCardItem extends PVZMiscItem {
 

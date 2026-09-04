@@ -8,25 +8,25 @@ import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack {
@@ -146,8 +146,7 @@ this.remove(RemovalReason.KILLED);
 			this.moveBackToOrigin();
 			if(this.getStealTarget() != null && this.getAttackTime() < - 100) {
 				this.dealDamageAndRemove();
-				return ;
-			}
+            }
 		}
 	}
 	
@@ -204,8 +203,7 @@ this.remove(RemovalReason.KILLED);
 			this.getStealTarget().startRiding(this);
 			if(this.getAttackTime() < - 100) {
 				this.dealDamageAndRemove();
-				return ;
-			}
+            }
 		}
 	}
 	
@@ -237,8 +235,7 @@ this.remove(RemovalReason.KILLED);
 			this.setAttackTime(this.getAttackTime() - 1);
 			if(this.getAttackTime() < - 60) {
 this.remove(RemovalReason.KILLED);
-				return ;
-			}
+            }
 		}
 	}
 
@@ -511,7 +508,7 @@ this.remove(RemovalReason.KILLED);
 		PUSH_BACK,
 	}
 	
-	public static enum BungeeTypes {
+	public enum BungeeTypes {
 		STEAL,//wait, shoot, down, up
 		HELP,//down, up
 		SUMMON//down, up

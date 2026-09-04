@@ -1,24 +1,20 @@
 package com.hungteen.pvz.client.model.entity.plant.magic;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.magic.StrangeCatEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -52,26 +48,26 @@ public class StrangeCatModel extends PVZPlantModel<StrangeCatEntity> {
 
 public StrangeCatModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.bone4 = root.getChild("bone4");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.legs = root.getChild("legs");
-		this.left_ear = root.getChild("left_ear");
-		this.bone3 = root.getChild("bone3");
-		this.bone2 = root.getChild("bone2");
-		this.right_ear = root.getChild("right_ear");
-		this.bone7 = root.getChild("bone7");
-		this.bone8 = root.getChild("bone8");
-		this.tail = root.getChild("tail");
-		this.tail1 = root.getChild("tail1");
-		this.tail2 = root.getChild("tail2");
-		this.tail3 = root.getChild("tail3");
-		this.tail4 = root.getChild("tail4");
-		this.tail5 = root.getChild("tail5");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.tail6 = root.getChild("tail6");
+		this.body = this.total.getChild("body");
+		this.bone4 = this.body.getChild("bone4");
+		this.bone5 = this.bone4.getChild("bone5");
+		this.bone6 = this.bone4.getChild("bone6");
+		this.legs = this.total.getChild("legs");
+		this.left_ear = this.total.getChild("left_ear");
+		this.bone3 = this.left_ear.getChild("bone3");
+		this.bone2 = this.left_ear.getChild("bone2");
+		this.right_ear = this.total.getChild("right_ear");
+		this.bone7 = this.right_ear.getChild("bone7");
+		this.bone8 = this.right_ear.getChild("bone8");
+		this.tail = this.total.getChild("tail");
+		this.tail1 = this.tail.getChild("tail1");
+		this.tail2 = this.tail.getChild("tail2");
+		this.tail3 = this.tail.getChild("tail3");
+		this.tail4 = this.tail.getChild("tail4");
+		this.tail5 = this.tail.getChild("tail5");
+		this.bone10 = this.tail5.getChild("bone10");
+		this.bone11 = this.tail5.getChild("bone11");
+		this.tail6 = this.tail.getChild("tail6");
 	}
 
 	public static LayerDefinition createBodyLayer() {

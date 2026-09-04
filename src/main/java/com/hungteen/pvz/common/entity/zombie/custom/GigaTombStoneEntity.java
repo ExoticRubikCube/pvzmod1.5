@@ -3,8 +3,8 @@ package com.hungteen.pvz.common.entity.zombie.custom;
 import com.hungteen.pvz.common.entity.zombie.grass.AbstractTombStoneEntity;
 import com.hungteen.pvz.common.impl.zombie.CustomZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public class GigaTombStoneEntity extends AbstractTombStoneEntity {

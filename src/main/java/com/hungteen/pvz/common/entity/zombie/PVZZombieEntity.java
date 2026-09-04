@@ -34,38 +34,38 @@ import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -516,9 +516,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 				this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
 			}
 
-			if (entityIn instanceof Player) {
-				Player playerentity = (Player) entityIn;
-				this.maybeDisableShield(playerentity, this.getMainHandItem(),
+			if (entityIn instanceof Player playerentity) {
+                this.maybeDisableShield(playerentity, this.getMainHandItem(),
 						playerentity.isUsingItem() ? playerentity.getUseItem() : ItemStack.EMPTY);
 			}
 
@@ -627,8 +626,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 					d1 = d1 * d3;
 					d0 = d0 * 0.05000000074505806D;
 					d1 = d1 * 0.05000000074505806D;
-					d0 = d0 * (double) (1.0F - 0F);
-					d1 = d1 * (double) (1.0F - 0F);
+					d0 = d0;
+					d1 = d1;
 					if (!this.isVehicle()) {
 						this.push(-d0, 0.0D, -d1);
 					}
@@ -679,11 +678,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 */
 	protected boolean shouldCollideWithEntity(LivingEntity target) {
 		if (this.getTarget() == target) {
-			if (target instanceof SquashEntity || target instanceof SpikeWeedEntity) {
-				return false;
-			}
-			return true;
-		}
+            return !(target instanceof SquashEntity) && !(target instanceof SpikeWeedEntity);
+        }
 		if (target instanceof PVZZombieEntity) {
 			return this.canCollideWithZombie && ((PVZZombieEntity) target).canCollideWithZombie;
 		}

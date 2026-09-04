@@ -1,9 +1,8 @@
 package com.hungteen.pvz.common.block.plants;
 
 import com.hungteen.pvz.common.item.ItemRegister;
-
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.CropBlock;
 
 public class CornBlock extends CropBlock {
 

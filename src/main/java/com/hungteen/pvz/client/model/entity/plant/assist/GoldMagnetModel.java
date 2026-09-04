@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.assist;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.assist.GoldMagnetEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -59,35 +52,35 @@ public class GoldMagnetModel extends PVZPlantModel<GoldMagnetEntity> {
 
 public GoldMagnetModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.plate = root.getChild("plate");
-		this.bone3 = root.getChild("bone3");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.bone4 = root.getChild("bone4");
-		this.bone15 = root.getChild("bone15");
-		this.bone16 = root.getChild("bone16");
-		this.bone17 = root.getChild("bone17");
-		this.bone18 = root.getChild("bone18");
-		this.bone19 = root.getChild("bone19");
-		this.bone20 = root.getChild("bone20");
-		this.magnet = root.getChild("magnet");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.bone7 = root.getChild("bone7");
-		this.bone8 = root.getChild("bone8");
-		this.bone9 = root.getChild("bone9");
-		this.bone10 = root.getChild("bone10");
-		this.bone11 = root.getChild("bone11");
-		this.bone12 = root.getChild("bone12");
-		this.bone13 = root.getChild("bone13");
-		this.bone14 = root.getChild("bone14");
-		this.face = root.getChild("face");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.elect = root.getChild("elect");
-		this.base = root.getChild("base");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.leave1 = root.getChild("leave1");
+		this.plate = this.total.getChild("plate");
+		this.bone3 = this.plate.getChild("bone3");
+		this.cube_r1 = this.bone3.getChild("cube_r1");
+		this.bone4 = this.plate.getChild("bone4");
+		this.bone15 = this.plate.getChild("bone15");
+		this.bone16 = this.plate.getChild("bone16");
+		this.bone17 = this.plate.getChild("bone17");
+		this.bone18 = this.plate.getChild("bone18");
+		this.bone19 = this.plate.getChild("bone19");
+		this.bone20 = this.plate.getChild("bone20");
+		this.magnet = this.total.getChild("magnet");
+		this.bone5 = this.magnet.getChild("bone5");
+		this.bone6 = this.magnet.getChild("bone6");
+		this.bone7 = this.magnet.getChild("bone7");
+		this.bone8 = this.magnet.getChild("bone8");
+		this.bone9 = this.magnet.getChild("bone9");
+		this.bone10 = this.magnet.getChild("bone10");
+		this.bone11 = this.magnet.getChild("bone11");
+		this.bone12 = this.magnet.getChild("bone12");
+		this.bone13 = this.magnet.getChild("bone13");
+		this.bone14 = this.magnet.getChild("bone14");
+		this.face = this.total.getChild("face");
+		this.cube_r2 = this.face.getChild("cube_r2");
+		this.cube_r3 = this.face.getChild("cube_r3");
+		this.elect = this.total.getChild("elect");
+		this.base = this.total.getChild("base");
+		this.bone = this.base.getChild("bone");
+		this.bone2 = this.base.getChild("bone2");
+		this.leave1 = this.base.getChild("leave1");
 	}
 
 	public static LayerDefinition createBodyLayer() {

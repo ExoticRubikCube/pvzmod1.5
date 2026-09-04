@@ -4,17 +4,14 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.misc.tag.PVZBlockTags;
-
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;

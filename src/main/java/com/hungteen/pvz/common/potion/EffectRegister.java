@@ -1,17 +1,16 @@
 package com.hungteen.pvz.common.potion;
 
-import java.util.UUID;
-
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.enums.Colors;
-
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.UUID;
 
 public class EffectRegister {
 

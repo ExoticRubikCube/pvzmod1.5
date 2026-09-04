@@ -1,14 +1,14 @@
 package com.hungteen.pvz.common.entity.ai.goal;
 
-import java.util.EnumSet;
-
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+
+import java.util.EnumSet;
 
 public class WaterTemptGoal extends Goal {
 	private static final TargetingConditions ENTITY_PREDICATE =  TargetingConditions.forNonCombat()

@@ -1,11 +1,11 @@
 package com.hungteen.pvz.common.entity.ai.navigator;
 
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 public class LavaZombiePathNavigation extends GroundPathNavigation {
 
@@ -15,8 +15,8 @@ public class LavaZombiePathNavigation extends GroundPathNavigation {
 
 	@Override
 	protected boolean hasValidPathType(BlockPathTypes p_230287_1_) {
-		return p_230287_1_ != BlockPathTypes.LAVA && p_230287_1_ != BlockPathTypes.DAMAGE_FIRE
-				&& p_230287_1_ != BlockPathTypes.DANGER_FIRE ? super.hasValidPathType(p_230287_1_) : true;
+		return p_230287_1_ == BlockPathTypes.LAVA || p_230287_1_ == BlockPathTypes.DAMAGE_FIRE
+                || p_230287_1_ == BlockPathTypes.DANGER_FIRE || super.hasValidPathType(p_230287_1_);
 	}
 
 	@Override

@@ -1,17 +1,16 @@
 package com.hungteen.pvz.common.entity.zombie.part;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.PVZMultiPartEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class PVZZombiePartEntity extends PVZMultiPartEntity{
 

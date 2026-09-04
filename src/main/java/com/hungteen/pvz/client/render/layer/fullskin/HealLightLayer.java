@@ -18,11 +18,8 @@ public class HealLightLayer<T extends LivingEntity, M extends EntityModel<T>> ex
 
 	@Override
 	protected boolean canRender(T entity) {
-		if(entity instanceof AngelStarFruitEntity && ((AngelStarFruitEntity) entity).lightTick > 0) {
-			return true;
-		}
-		return false;
-	}
+        return entity instanceof AngelStarFruitEntity && ((AngelStarFruitEntity) entity).lightTick > 0;
+    }
 
 	@Override
 	protected ResourceLocation getResourceLocation(T entity) {

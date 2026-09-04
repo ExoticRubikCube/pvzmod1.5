@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.magic;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.magic.MariGoldEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -45,21 +38,21 @@ public class MariGoldModel<T extends MariGoldEntity> extends PVZPlantModel<T> {
 
 public MariGoldModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.head = root.getChild("head");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.HUABAN = root.getChild("HUABAN");
-		this.HUABAN2 = root.getChild("HUABAN2");
-		this.HUABAN3 = root.getChild("HUABAN3");
-		this.HUABAN4 = root.getChild("HUABAN4");
-		this.HUABAN5 = root.getChild("HUABAN5");
-		this.HUABAN6 = root.getChild("HUABAN6");
-		this.body = root.getChild("body");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.YEZI_4 = root.getChild("YEZI_4");
-		this.YEZI_3 = root.getChild("YEZI_3");
-		this.YEZI_1 = root.getChild("YEZI_1");
-		this.YEZI_2 = root.getChild("YEZI_2");
+		this.head = this.total.getChild("head");
+		this.cube_r1 = this.head.getChild("cube_r1");
+		this.cube_r2 = this.head.getChild("cube_r2");
+		this.HUABAN = this.head.getChild("HUABAN");
+		this.HUABAN2 = this.HUABAN.getChild("HUABAN2");
+		this.HUABAN3 = this.HUABAN2.getChild("HUABAN3");
+		this.HUABAN4 = this.head.getChild("HUABAN4");
+		this.HUABAN5 = this.HUABAN4.getChild("HUABAN5");
+		this.HUABAN6 = this.HUABAN5.getChild("HUABAN6");
+		this.body = this.total.getChild("body");
+		this.cube_r3 = this.body.getChild("cube_r3");
+		this.YEZI_4 = this.total.getChild("YEZI_4");
+		this.YEZI_3 = this.total.getChild("YEZI_3");
+		this.YEZI_1 = this.total.getChild("YEZI_1");
+		this.YEZI_2 = this.total.getChild("YEZI_2");
 	}
 
 	public static LayerDefinition createBodyLayer() {

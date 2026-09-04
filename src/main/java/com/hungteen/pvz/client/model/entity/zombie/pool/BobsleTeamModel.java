@@ -1,24 +1,22 @@
 package com.hungteen.pvz.client.model.entity.zombie.pool;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.client.model.entity.PVZEntityModel;
 import com.hungteen.pvz.common.entity.zombie.pool.BobsleTeamEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -78,51 +76,51 @@ public class BobsleTeamModel extends PVZEntityModel<BobsleTeamEntity> implements
 
 public BobsleTeamModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.z1 = root.getChild("z1");
-		this.head = root.getChild("head");
-		this.right_hand = root.getChild("right_hand");
-		this.left_hand = root.getChild("left_hand");
-		this.body = root.getChild("body");
-		this.right_leg = root.getChild("right_leg");
-		this.left_leg = root.getChild("left_leg");
-		this.z2 = root.getChild("z2");
-		this.head2 = root.getChild("head2");
-		this.right_hand2 = root.getChild("right_hand2");
-		this.left_hand2 = root.getChild("left_hand2");
-		this.body2 = root.getChild("body2");
-		this.right_leg2 = root.getChild("right_leg2");
-		this.left_leg2 = root.getChild("left_leg2");
-		this.mid = root.getChild("mid");
-		this.left = root.getChild("left");
-		this.right = root.getChild("right");
-		this.z3 = root.getChild("z3");
-		this.head3 = root.getChild("head3");
-		this.right_hand3 = root.getChild("right_hand3");
-		this.left_hand3 = root.getChild("left_hand3");
-		this.body3 = root.getChild("body3");
-		this.right_leg3 = root.getChild("right_leg3");
-		this.left_leg3 = root.getChild("left_leg3");
-		this.z4 = root.getChild("z4");
-		this.head4 = root.getChild("head4");
-		this.right_hand4 = root.getChild("right_hand4");
-		this.left_hand4 = root.getChild("left_hand4");
-		this.body4 = root.getChild("body4");
-		this.right_leg4 = root.getChild("right_leg4");
-		this.left_leg4 = root.getChild("left_leg4");
-		this.Head = root.getChild("Head");
-		this.wheal = root.getChild("wheal");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.wheal2 = root.getChild("wheal2");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.wheal3 = root.getChild("wheal3");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.wheal4 = root.getChild("wheal4");
-		this.bone7 = root.getChild("bone7");
-		this.bone8 = root.getChild("bone8");
-		this.tail = root.getChild("tail");
+		this.z1 = this.total.getChild("z1");
+		this.head = this.z1.getChild("head");
+		this.right_hand = this.z1.getChild("right_hand");
+		this.left_hand = this.z1.getChild("left_hand");
+		this.body = this.z1.getChild("body");
+		this.right_leg = this.z1.getChild("right_leg");
+		this.left_leg = this.z1.getChild("left_leg");
+		this.z2 = this.total.getChild("z2");
+		this.head2 = this.z2.getChild("head2");
+		this.right_hand2 = this.z2.getChild("right_hand2");
+		this.left_hand2 = this.z2.getChild("left_hand2");
+		this.body2 = this.z2.getChild("body2");
+		this.right_leg2 = this.z2.getChild("right_leg2");
+		this.left_leg2 = this.z2.getChild("left_leg2");
+		this.mid = this.total.getChild("mid");
+		this.left = this.mid.getChild("left");
+		this.right = this.mid.getChild("right");
+		this.z3 = this.total.getChild("z3");
+		this.head3 = this.z3.getChild("head3");
+		this.right_hand3 = this.z3.getChild("right_hand3");
+		this.left_hand3 = this.z3.getChild("left_hand3");
+		this.body3 = this.z3.getChild("body3");
+		this.right_leg3 = this.z3.getChild("right_leg3");
+		this.left_leg3 = this.z3.getChild("left_leg3");
+		this.z4 = this.total.getChild("z4");
+		this.head4 = this.z4.getChild("head4");
+		this.right_hand4 = this.z4.getChild("right_hand4");
+		this.left_hand4 = this.z4.getChild("left_hand4");
+		this.body4 = this.z4.getChild("body4");
+		this.right_leg4 = this.z4.getChild("right_leg4");
+		this.left_leg4 = this.z4.getChild("left_leg4");
+		this.Head = this.total.getChild("Head");
+		this.wheal = this.total.getChild("wheal");
+		this.bone = this.wheal.getChild("bone");
+		this.bone2 = this.wheal.getChild("bone2");
+		this.wheal2 = this.total.getChild("wheal2");
+		this.bone3 = this.wheal2.getChild("bone3");
+		this.bone4 = this.wheal2.getChild("bone4");
+		this.wheal3 = this.total.getChild("wheal3");
+		this.bone5 = this.wheal3.getChild("bone5");
+		this.bone6 = this.wheal3.getChild("bone6");
+		this.wheal4 = this.total.getChild("wheal4");
+		this.bone7 = this.wheal4.getChild("bone7");
+		this.bone8 = this.wheal4.getChild("bone8");
+		this.tail = this.total.getChild("tail");
 	}
 
 	public static LayerDefinition createBodyLayer() {

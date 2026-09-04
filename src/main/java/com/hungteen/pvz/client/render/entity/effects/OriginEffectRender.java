@@ -4,14 +4,13 @@ import com.hungteen.pvz.common.entity.effect.OriginEffectEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -80,7 +79,7 @@ public class OriginEffectRender extends EntityRenderer<OriginEffectEntity>{
 			ivertexbuilder2.vertex(matrix4f, 0.0f, 0f, 0.0f).color(c1, c2, c3, 255).endVertex();
 			ivertexbuilder2.vertex(matrix4f, - 0.866f * f3, - len, (- 0.5F * f3)).color(c1, c2, c3, 20).endVertex();
 			ivertexbuilder2.vertex(matrix4f, 0.866f * f3, - len, (- 0.5F * f3)).color(c1, c2, c3, 20).endVertex();
-			ivertexbuilder2.vertex(matrix4f, 0.0f, - len, (1.0F * f3)).color(c1, c2, c3, 20).endVertex();
+			ivertexbuilder2.vertex(matrix4f, 0.0f, - len, (f3)).color(c1, c2, c3, 20).endVertex();
 			ivertexbuilder2.vertex(matrix4f, - 0.866f * f3, - len, (- 0.5F * f3)).color(c1, c2, c3, 20).endVertex();
 		}
 		matrixStackIn.popPose();

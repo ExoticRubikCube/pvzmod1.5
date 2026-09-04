@@ -48,7 +48,7 @@ public class PVZTradeTrigger extends SimpleCriterionTrigger<PVZTradeTrigger.Inst
 		}
 
 		public boolean test(ServerPlayer player, Entity entity, int amount) {
-			return !this.amount.test(player, amount) ? false : this.entity.matches(player, entity);
+			return this.amount.test(player, amount) && this.entity.matches(player, entity);
 		}
 
 		public JsonElement func_200288_b() {

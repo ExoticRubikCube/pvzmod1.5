@@ -5,8 +5,8 @@ import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

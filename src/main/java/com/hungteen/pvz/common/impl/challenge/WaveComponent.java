@@ -16,7 +16,7 @@ import java.util.List;
 public class WaveComponent implements IWaveComponent {
 
 	public static final String NAME = "default";
-	private List<ISpawnComponent> spawns = new ArrayList<>();
+	private final List<ISpawnComponent> spawns = new ArrayList<>();
 	private IPlacementComponent placement;
 	private int duration;
 	private int preCD;

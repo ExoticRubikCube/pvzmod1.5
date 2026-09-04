@@ -1,13 +1,13 @@
 package com.hungteen.pvz.common.network;
 
-import java.util.function.Supplier;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.function.Supplier;
+
 public class OpenGuiPacket {
 
-	private int type;
+	private final int type;
 
 	public OpenGuiPacket(int type) {
 		this.type = type;

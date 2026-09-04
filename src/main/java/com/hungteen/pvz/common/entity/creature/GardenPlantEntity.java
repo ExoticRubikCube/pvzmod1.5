@@ -3,11 +3,11 @@ package com.hungteen.pvz.common.entity.creature;
 import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.api.interfaces.IHasGroup;
 import com.hungteen.pvz.api.interfaces.IHasOwner;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;

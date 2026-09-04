@@ -1,20 +1,18 @@
 package com.hungteen.pvz.common.entity.ai.goal;
 
-import javax.annotation.Nullable;
-
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
+
+import javax.annotation.Nullable;
 
 public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 	
@@ -97,8 +95,7 @@ public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 	}
 	
 	private boolean tryFindBlock() {
-		return this.blockPos != null && this.isValidTarget(this.mob.level, this.blockPos) ? true
-				: this.findNearestBlock();
+		return this.blockPos != null && this.isValidTarget(this.mob.level, this.blockPos) || this.findNearestBlock();
 	}
 
 	protected int getBreakTime(Mob entity) {

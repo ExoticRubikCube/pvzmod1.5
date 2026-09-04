@@ -14,18 +14,18 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.others.WeightList;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
@@ -409,10 +409,7 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
             if(-- this.edgarRobot.shootBallTick > 0){
                 return false;
             }
-            if(this.edgarRobot.getTarget() != null && this.edgarRobot.getRobotState() == EdgarStates.NORMAL){
-                return true;
-            }
-            return false;
+            return this.edgarRobot.getTarget() != null && this.edgarRobot.getRobotState() == EdgarStates.NORMAL;
         }
 
         @Override
@@ -456,10 +453,7 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
             if(-- this.edgarRobot.stealPlantTick > 0){
                 return false;
             }
-            if(this.edgarRobot.getTarget() != null && this.edgarRobot.getRobotState() == EdgarStates.NORMAL && this.edgarRobot.nearbyPlantCount > 10){
-                return true;
-            }
-            return false;
+            return this.edgarRobot.getTarget() != null && this.edgarRobot.getRobotState() == EdgarStates.NORMAL && this.edgarRobot.nearbyPlantCount > 10;
         }
 
         @Override
@@ -500,10 +494,7 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
             if(-- this.edgarRobot.throwCarTick > 0){
                 return false;
             }
-            if(this.edgarRobot.getTarget() != null && this.edgarRobot.getRobotState() == EdgarStates.NORMAL && this.edgarRobot.nearbyPlantCount > 40){
-                return true;
-            }
-            return false;
+            return this.edgarRobot.getTarget() != null && this.edgarRobot.getRobotState() == EdgarStates.NORMAL && this.edgarRobot.nearbyPlantCount > 40;
         }
 
         @Override

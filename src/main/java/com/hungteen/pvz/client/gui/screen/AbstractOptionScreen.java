@@ -5,10 +5,10 @@ import com.hungteen.pvz.client.gui.search.OptionSearchGui;
 import com.hungteen.pvz.client.gui.search.SearchOption;
 import com.hungteen.pvz.common.container.AbstractOptionContainer;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

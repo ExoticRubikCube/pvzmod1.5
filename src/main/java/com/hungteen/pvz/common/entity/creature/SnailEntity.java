@@ -1,20 +1,19 @@
 package com.hungteen.pvz.common.entity.creature;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.AlgorithmUtil.EntitySorter;
 import com.hungteen.pvz.utils.EntityUtil;
-
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public class SnailEntity extends Animal {
 

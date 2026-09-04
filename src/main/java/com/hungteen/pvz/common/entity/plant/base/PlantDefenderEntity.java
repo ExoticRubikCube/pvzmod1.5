@@ -7,10 +7,10 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
@@ -48,11 +48,8 @@ public abstract class PlantDefenderEntity extends PVZPlantEntity implements ICan
 		if(entity instanceof ICanBeAttracted && ! ((ICanBeAttracted) entity).canBeAttractedBy(this)) {
 			return false;
 		}
-		if(! this.getSensing().hasLineOfSight(entity)) {
-			return false;
-		}
-		return true;
-	}
+        return this.getSensing().hasLineOfSight(entity);
+    }
 	
 	@Override
 	public void attract(LivingEntity target) {

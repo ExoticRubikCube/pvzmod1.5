@@ -10,15 +10,15 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlantUtil;
 import com.hungteen.pvz.utils.WorldUtil;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.Direction;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
@@ -159,7 +159,7 @@ public class ImitaterEntity extends PlantBomberEntity {
 		return PVZPlants.IMITATER;
 	}
 	
-	public static enum ImitateType{
+	public enum ImitateType{
 		SUMMON,
 		OUTER
 	}

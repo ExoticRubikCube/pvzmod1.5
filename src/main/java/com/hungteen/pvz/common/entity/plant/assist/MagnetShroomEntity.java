@@ -17,12 +17,12 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -86,8 +86,8 @@ public class MagnetShroomEntity extends PVZPlantEntity {
 			metal.setAttackDamage(this.getAttackDamage());
 			level.addFreshEntity(metal);
 			if(-- cnt == 0) return ;
-		};
-	}
+		}
+    }
 	
 	/**
 	 * {@link #normalPlantTick()}

@@ -13,12 +13,7 @@ import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +34,7 @@ public class PVZOverlayHandler {
 	private static final int SLOT_SIDE = 22;
 	private static final int SLOT_DELAY_CD = 20;
 	private static final int TEX_SZ = 256;
-	private static int SlotDelay = 0;
+	private static final int SlotDelay = 0;
 
 	/**
 	 * {@link OverlayEvents#onPostRenderOverlay(net.minecraftforge.client.event.RenderGuiEvent.Post)}

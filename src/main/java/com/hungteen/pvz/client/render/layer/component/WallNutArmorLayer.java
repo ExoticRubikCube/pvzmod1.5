@@ -3,8 +3,8 @@ package com.hungteen.pvz.client.render.layer.component;
 import com.hungteen.pvz.client.model.entity.plant.defence.WallNutModel;
 import com.hungteen.pvz.common.entity.plant.defence.WallNutEntity;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 
 /**

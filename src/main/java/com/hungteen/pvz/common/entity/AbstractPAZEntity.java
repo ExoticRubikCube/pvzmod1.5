@@ -1,7 +1,6 @@
 package com.hungteen.pvz.common.entity;
 
 import com.hungteen.pvz.PVZConfig;
-import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.paz.IPAZEntity;
 import com.hungteen.pvz.api.types.IRankType;
@@ -12,34 +11,32 @@ import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
 import com.hungteen.pvz.common.event.PVZLivingEvents;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.others.WeightList;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.players.OldUsersConverter;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -72,14 +69,22 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
     public boolean canGiveXP = false;
 
     static {
-        //init drop list.
-        final int p = PVZConfig.COMMON_CONFIG.EntitySettings.DropChanceMultiper.get();
+        populateNormalDropList(10);
+    }
+
+    private static void populateNormalDropList(final int p) {
+        NORMAL_DROP_LIST.clear();
         final int pp = p * p;
         NORMAL_DROP_LIST.addItem(DropType.SILVER, p * p * p);
         NORMAL_DROP_LIST.addItem(DropType.GOLD, p * p);
         NORMAL_DROP_LIST.addItem(DropType.JEWEL, p);
         NORMAL_DROP_LIST.addItem(DropType.CHOCOLATE, p);
         NORMAL_DROP_LIST.setTotal(pp * pp);
+    }
+
+    public static void refreshFromConfig() {
+        final int p = PVZConfig.COMMON_CONFIG.EntitySettings.DropChanceMultiper.get();
+        populateNormalDropList(p);
     }
 
     public AbstractPAZEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
@@ -219,8 +224,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
      */
     public static void damageOuterDefence(final LivingHurtEvent ev) {
         float amount = ev.getAmount();
-        if(ev.getEntity() instanceof AbstractPAZEntity && ((AbstractPAZEntity) ev.getEntity()).canOuterDefend(ev.getSource())){
-            final AbstractPAZEntity pazEntity = (AbstractPAZEntity) ev.getEntity();
+        if(ev.getEntity() instanceof AbstractPAZEntity pazEntity && ((AbstractPAZEntity) ev.getEntity()).canOuterDefend(ev.getSource())){
             final double life = pazEntity.getOuterDefenceLife();
             if(life > 0){
                 if(life > amount){
@@ -242,8 +246,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
      */
     public static void damageInnerDefence(final LivingDamageEvent ev) {
         float amount = ev.getAmount();
-        if(ev.getEntity() instanceof AbstractPAZEntity){
-            final AbstractPAZEntity pazEntity = (AbstractPAZEntity) ev.getEntity();
+        if(ev.getEntity() instanceof AbstractPAZEntity pazEntity){
             final double life = pazEntity.getInnerDefenceLife();
             if(life > 0){
                 if(life > amount){

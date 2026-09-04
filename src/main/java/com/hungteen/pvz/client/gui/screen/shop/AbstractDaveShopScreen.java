@@ -12,15 +12,14 @@ import com.hungteen.pvz.utils.enums.Colors;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

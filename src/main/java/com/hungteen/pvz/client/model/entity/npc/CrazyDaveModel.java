@@ -1,22 +1,20 @@
 package com.hungteen.pvz.client.model.entity.npc;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.npc.CrazyDaveEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -38,14 +36,14 @@ public class CrazyDaveModel extends EntityModel<CrazyDaveEntity> {
 
 public CrazyDaveModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.right_leg = root.getChild("right_leg");
-		this.left_leg = root.getChild("left_leg");
-		this.up = root.getChild("up");
-		this.body = root.getChild("body");
-		this.left_hand = root.getChild("left_hand");
-		this.right_hand = root.getChild("right_hand");
-		this.head = root.getChild("head");
-		this.hat = root.getChild("hat");
+		this.right_leg = this.total.getChild("right_leg");
+		this.left_leg = this.total.getChild("left_leg");
+		this.up = this.total.getChild("up");
+		this.body = this.up.getChild("body");
+		this.left_hand = this.up.getChild("left_hand");
+		this.right_hand = this.up.getChild("right_hand");
+		this.head = this.up.getChild("head");
+		this.hat = this.head.getChild("hat");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -100,7 +98,7 @@ public CrazyDaveModel(ModelPart root) {
         this.left_leg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
         this.right_hand.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
         this.left_hand.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-        this.hat.yRot= ageInTicks*1.0f;
+        this.hat.yRot= ageInTicks;
 	}
 
 	@Override

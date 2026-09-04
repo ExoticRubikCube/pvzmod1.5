@@ -4,12 +4,11 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.client.model.entity.plant.magic.StrangeCatModel;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.impl.*;
 import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.entity.EntityRegister;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class MemePlants extends PlantType {

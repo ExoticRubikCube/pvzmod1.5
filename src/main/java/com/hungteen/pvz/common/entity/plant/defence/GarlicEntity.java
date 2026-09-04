@@ -8,8 +8,8 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.world.entity.*;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 
 import java.util.Collections;

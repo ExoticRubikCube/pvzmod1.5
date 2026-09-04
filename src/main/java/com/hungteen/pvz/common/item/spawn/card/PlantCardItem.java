@@ -28,36 +28,35 @@ import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -428,15 +427,13 @@ public class PlantCardItem extends SummonCardItem {
 		final ItemStack plantStack = getPlantStack(heldStack);
 		final IPlantType plantType = ((PlantCardItem) plantStack.getItem()).plantType;
 		if(plantType.getUpgradeFrom().isPresent() && plantEntity.getPlantType().equals(plantType.getUpgradeFrom().get())) {
-			if(plantEntity.canBeUpgrade(player) && PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, plantEntity.blockPosition(), (plant) -> {
-				if(plant instanceof ImitaterEntity) {
-					((ImitaterEntity) plant).setImitateAction((p) -> plantEntity.onPlantUpgrade(p));
-				} else {
-					plantEntity.onPlantUpgrade(plant);
-				}
-			})) {
-				return true;
-			}
+            return plantEntity.canBeUpgrade(player) && PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, plantEntity.blockPosition(), (plant) -> {
+                if (plant instanceof ImitaterEntity) {
+                    ((ImitaterEntity) plant).setImitateAction((p) -> plantEntity.onPlantUpgrade(p));
+                } else {
+                    plantEntity.onPlantUpgrade(plant);
+                }
+            });
 		}
 		return false;
 	}
@@ -456,17 +453,14 @@ public class PlantCardItem extends SummonCardItem {
 		if(! pre.test(plantType)) {
 			return false;
 		}
-		if(PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, entity.blockPosition(), plantEntity -> {
-			if(plantEntity instanceof ImitaterEntity) {
-				((ImitaterEntity) plantEntity).setImitateAction(p -> con.accept(p));
-			} else {
-				con.accept(plantEntity);
-			}
-		})) {
-			return true;
-		}
-		return false;
-	}
+        return PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, entity.blockPosition(), plantEntity -> {
+            if (plantEntity instanceof ImitaterEntity) {
+                ((ImitaterEntity) plantEntity).setImitateAction(p -> con.accept(p));
+            } else {
+                con.accept(plantEntity);
+            }
+        });
+    }
 	
 	/**
 	 * check card cd and sun cost, and other predicates, finally consume sun.

@@ -1,8 +1,8 @@
 package com.hungteen.pvz.common.entity.zombie.zombotany;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 public abstract class AbstractZombotanyEntity extends PVZZombieEntity {

@@ -1,11 +1,11 @@
 package com.hungteen.pvz.utils.others;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.util.RandomSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import net.minecraft.util.RandomSource;
 
 public class WeightList<T> {
 	

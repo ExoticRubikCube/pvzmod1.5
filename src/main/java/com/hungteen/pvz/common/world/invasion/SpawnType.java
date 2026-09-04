@@ -1,11 +1,11 @@
 package com.hungteen.pvz.common.world.invasion;
 
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
 public class SpawnType{
 
@@ -64,10 +64,7 @@ public class SpawnType{
             return world.getBlockState(pos.below()).getBlock() == Blocks.SNOW || world.getBlockState(pos.below()).getBlock() == Blocks.SNOW_BLOCK;
         } else if(getPlaceType() == PlaceType.SNOW_AND_LAND){
             return world.getBlockState(pos.below()).getBlock() == Blocks.SNOW || (world.getBlockState(pos.below()).isValidSpawn(world, pos.below(), this.spawnType) && world.getBlockState(pos.below()).getFluidState().isEmpty());
-        } else if(getPlaceType() == PlaceType.SKY){
-            return true;
-        }
-        return false;
+        } else return getPlaceType() == PlaceType.SKY;
     }
 
     public enum PlaceType{

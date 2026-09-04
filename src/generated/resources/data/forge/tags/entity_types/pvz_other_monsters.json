@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "minecraft:blaze",
     "minecraft:cave_spider",
@@ -30,6 +29,7 @@
     "minecraft:stray",
     "minecraft:vex",
     "minecraft:vindicator",
+    "minecraft:warden",
     "minecraft:witch",
     "minecraft:wither",
     "minecraft:wither_skeleton",

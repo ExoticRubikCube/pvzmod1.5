@@ -1,22 +1,15 @@
 package com.hungteen.pvz.client.model.entity.plant.enforce;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.enforce.UmbrellaLeafEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -68,44 +61,44 @@ public class UmbrellaLeafModel extends PVZPlantModel<UmbrellaLeafEntity> {
 
 public UmbrellaLeafModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.body = root.getChild("body");
-		this.leaves = root.getChild("leaves");
-		this.leaf1 = root.getChild("leaf1");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.leaf2 = root.getChild("leaf2");
-		this.cube_r5 = root.getChild("cube_r5");
-		this.cube_r6 = root.getChild("cube_r6");
-		this.cube_r7 = root.getChild("cube_r7");
-		this.cube_r8 = root.getChild("cube_r8");
-		this.leaf3 = root.getChild("leaf3");
-		this.cube_r9 = root.getChild("cube_r9");
-		this.cube_r10 = root.getChild("cube_r10");
-		this.cube_r11 = root.getChild("cube_r11");
-		this.cube_r12 = root.getChild("cube_r12");
-		this.leaf4 = root.getChild("leaf4");
-		this.cube_r13 = root.getChild("cube_r13");
-		this.cube_r14 = root.getChild("cube_r14");
-		this.cube_r15 = root.getChild("cube_r15");
-		this.cube_r16 = root.getChild("cube_r16");
-		this.leaf5 = root.getChild("leaf5");
-		this.cube_r17 = root.getChild("cube_r17");
-		this.cube_r18 = root.getChild("cube_r18");
-		this.cube_r19 = root.getChild("cube_r19");
-		this.cube_r20 = root.getChild("cube_r20");
-		this.leaf6 = root.getChild("leaf6");
-		this.cube_r21 = root.getChild("cube_r21");
-		this.cube_r22 = root.getChild("cube_r22");
-		this.cube_r23 = root.getChild("cube_r23");
-		this.cube_r24 = root.getChild("cube_r24");
-		this.leaf7 = root.getChild("leaf7");
-		this.cube_r25 = root.getChild("cube_r25");
-		this.cube_r26 = root.getChild("cube_r26");
-		this.cube_r27 = root.getChild("cube_r27");
-		this.cube_r28 = root.getChild("cube_r28");
-		this.face = root.getChild("face");
+		this.body = this.total.getChild("body");
+		this.leaves = this.total.getChild("leaves");
+		this.leaf1 = this.leaves.getChild("leaf1");
+		this.cube_r1 = this.leaf1.getChild("cube_r1");
+		this.cube_r2 = this.leaf1.getChild("cube_r2");
+		this.cube_r3 = this.leaf1.getChild("cube_r3");
+		this.cube_r4 = this.leaf1.getChild("cube_r4");
+		this.leaf2 = this.leaves.getChild("leaf2");
+		this.cube_r5 = this.leaf2.getChild("cube_r5");
+		this.cube_r6 = this.leaf2.getChild("cube_r6");
+		this.cube_r7 = this.leaf2.getChild("cube_r7");
+		this.cube_r8 = this.leaf2.getChild("cube_r8");
+		this.leaf3 = this.leaves.getChild("leaf3");
+		this.cube_r9 = this.leaf3.getChild("cube_r9");
+		this.cube_r10 = this.leaf3.getChild("cube_r10");
+		this.cube_r11 = this.leaf3.getChild("cube_r11");
+		this.cube_r12 = this.leaf3.getChild("cube_r12");
+		this.leaf4 = this.leaves.getChild("leaf4");
+		this.cube_r13 = this.leaf4.getChild("cube_r13");
+		this.cube_r14 = this.leaf4.getChild("cube_r14");
+		this.cube_r15 = this.leaf4.getChild("cube_r15");
+		this.cube_r16 = this.leaf4.getChild("cube_r16");
+		this.leaf5 = this.leaves.getChild("leaf5");
+		this.cube_r17 = this.leaf5.getChild("cube_r17");
+		this.cube_r18 = this.leaf5.getChild("cube_r18");
+		this.cube_r19 = this.leaf5.getChild("cube_r19");
+		this.cube_r20 = this.leaf5.getChild("cube_r20");
+		this.leaf6 = this.leaves.getChild("leaf6");
+		this.cube_r21 = this.leaf6.getChild("cube_r21");
+		this.cube_r22 = this.leaf6.getChild("cube_r22");
+		this.cube_r23 = this.leaf6.getChild("cube_r23");
+		this.cube_r24 = this.leaf6.getChild("cube_r24");
+		this.leaf7 = this.leaves.getChild("leaf7");
+		this.cube_r25 = this.leaf7.getChild("cube_r25");
+		this.cube_r26 = this.leaf7.getChild("cube_r26");
+		this.cube_r27 = this.leaf7.getChild("cube_r27");
+		this.cube_r28 = this.leaf7.getChild("cube_r28");
+		this.face = this.total.getChild("face");
 	}
 
 	public static LayerDefinition createBodyLayer() {

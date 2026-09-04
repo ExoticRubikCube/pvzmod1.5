@@ -5,19 +5,14 @@ import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -48,9 +43,8 @@ public class SunStorageSaplingItem extends Item {
 	
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
-		if(entityLiving instanceof Player) {
-			Player player = (Player) entityLiving;
-			if(! worldIn.isClientSide) {
+		if(entityLiving instanceof Player player) {
+            if(! worldIn.isClientSide) {
 				player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent((l) -> {
 					int sunNum = l.getPlayerData().getResource(Resources.SUN_NUM);
 					int lvl = l.getPlayerData().getResource(Resources.TREE_LVL);
@@ -77,9 +71,8 @@ public class SunStorageSaplingItem extends Item {
 	}
 	
 	public static boolean isSunStorageFull(ItemStack stack) {
-		if(stack.getItem() instanceof SunStorageSaplingItem) {
-			SunStorageSaplingItem item = (SunStorageSaplingItem) stack.getItem();
-			int amount = getStorageSunAmount(stack);
+		if(stack.getItem() instanceof SunStorageSaplingItem item) {
+            int amount = getStorageSunAmount(stack);
 			return (item.MAX_STORAGE_NUM <= amount);
 		}
 		return true;

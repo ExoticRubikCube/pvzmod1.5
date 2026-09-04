@@ -6,12 +6,11 @@ import com.hungteen.pvz.client.model.entity.zombie.other.MournerZombieModel;
 import com.hungteen.pvz.client.model.entity.zombie.other.NobleZombieModel;
 import com.hungteen.pvz.client.model.entity.zombie.other.TrickZombieModel;
 import com.hungteen.pvz.client.model.entity.zombie.pool.LavaZombieModel;
-import com.hungteen.pvz.common.impl.RankTypes;
 import com.hungteen.pvz.common.entity.EntityRegister;
+import com.hungteen.pvz.common.impl.RankTypes;
 import com.hungteen.pvz.common.misc.PVZLoot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class CustomZombies extends ZombieType {

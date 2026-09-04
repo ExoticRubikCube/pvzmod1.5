@@ -1,33 +1,30 @@
 package com.hungteen.pvz.common.entity.misc.bowling;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.common.entity.AbstractOwnerEntity;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.Direction;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class AbstractBowlingEntity extends AbstractOwnerEntity {
 
@@ -258,14 +255,14 @@ this.remove(RemovalReason.KILLED);
 		return false;
 	}
 
-	public static enum BowlingFacings {
+	public enum BowlingFacings {
 		LEFT(- 45),
 		MID(0), 
 		RIGHT(45),
 		BOMB(0);
 		public final float offset;
 		
-		private BowlingFacings(float offset) {
+		BowlingFacings(float offset) {
 			this.offset = offset;
 		}
 		

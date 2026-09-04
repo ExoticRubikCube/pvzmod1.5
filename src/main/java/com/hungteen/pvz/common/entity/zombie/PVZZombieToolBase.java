@@ -1,8 +1,8 @@
 package com.hungteen.pvz.common.entity.zombie;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 public abstract class PVZZombieToolBase extends Mob{

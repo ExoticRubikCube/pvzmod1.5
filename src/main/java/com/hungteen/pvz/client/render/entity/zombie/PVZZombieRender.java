@@ -8,8 +8,8 @@ import com.hungteen.pvz.client.render.layer.fullskin.SunLayer;
 import com.hungteen.pvz.client.render.layer.fullskin.SunLightLayer;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.potion.EffectRegister;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 

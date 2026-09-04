@@ -10,20 +10,20 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 
 	public static final int PART_NUM = 2;
 	private static final int MAX_OUT_SNOW_TICK = 100;
-	private PVZZombiePartEntity[] parts = new PVZZombiePartEntity[PART_NUM];
+	private final PVZZombiePartEntity[] parts = new PVZZombiePartEntity[PART_NUM];
 	private int outSnowTick;
 	
 	public BobsleTeamEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {

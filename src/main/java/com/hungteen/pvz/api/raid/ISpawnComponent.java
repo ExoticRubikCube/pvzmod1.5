@@ -1,9 +1,8 @@
 package com.hungteen.pvz.api.raid;
 
 import com.google.gson.JsonObject;
-
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EntityType;
 
 public interface ISpawnComponent {
 

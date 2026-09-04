@@ -1,21 +1,19 @@
 package com.hungteen.pvz.client.model.entity.misc;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.misc.BobsleCarEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -46,23 +44,23 @@ public class BobsleCarModel extends EntityModel<BobsleCarEntity> {
 
 public BobsleCarModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.mid = root.getChild("mid");
-		this.left = root.getChild("left");
-		this.right = root.getChild("right");
-		this.Head = root.getChild("Head");
-		this.wheal = root.getChild("wheal");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
-		this.wheal2 = root.getChild("wheal2");
-		this.bone3 = root.getChild("bone3");
-		this.bone4 = root.getChild("bone4");
-		this.wheal3 = root.getChild("wheal3");
-		this.bone5 = root.getChild("bone5");
-		this.bone6 = root.getChild("bone6");
-		this.wheal4 = root.getChild("wheal4");
-		this.bone7 = root.getChild("bone7");
-		this.bone8 = root.getChild("bone8");
-		this.tail = root.getChild("tail");
+		this.mid = this.total.getChild("mid");
+		this.left = this.mid.getChild("left");
+		this.right = this.mid.getChild("right");
+		this.Head = this.total.getChild("Head");
+		this.wheal = this.total.getChild("wheal");
+		this.bone = this.wheal.getChild("bone");
+		this.bone2 = this.wheal.getChild("bone2");
+		this.wheal2 = this.total.getChild("wheal2");
+		this.bone3 = this.wheal2.getChild("bone3");
+		this.bone4 = this.wheal2.getChild("bone4");
+		this.wheal3 = this.total.getChild("wheal3");
+		this.bone5 = this.wheal3.getChild("bone5");
+		this.bone6 = this.wheal3.getChild("bone6");
+		this.wheal4 = this.total.getChild("wheal4");
+		this.bone7 = this.wheal4.getChild("bone7");
+		this.bone8 = this.wheal4.getChild("bone8");
+		this.tail = this.total.getChild("tail");
 	}
 
 	public static LayerDefinition createBodyLayer() {

@@ -4,9 +4,9 @@ import com.hungteen.pvz.client.gui.screen.AbstractOptionScreen;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,7 +51,7 @@ public class OptionWidget extends AbstractWidget {
 
 	public List<Component> getToolTipText(Screen screen) {
 		List<Component> list = new ArrayList<>();
-		list.add(option.getType().getText());
+		list.add(option.type().getText());
 		return list;
 	}
 

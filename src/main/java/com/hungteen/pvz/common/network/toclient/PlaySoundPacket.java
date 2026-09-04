@@ -1,18 +1,17 @@
 package com.hungteen.pvz.common.network.toclient;
 
-import java.util.function.Supplier;
-
 import com.hungteen.pvz.PVZMod;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.Supplier;
+
 public class PlaySoundPacket {
 
-	private String type;
+	private final String type;
 	
 	public PlaySoundPacket(String type) {
 		this.type = type;

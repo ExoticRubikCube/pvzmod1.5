@@ -1,11 +1,7 @@
 package com.hungteen.pvz.utils;
 
 import com.hungteen.pvz.common.potion.EffectRegister;
-
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.world.effect.MobEffectInstance;
-
-import java.io.IOException;
 
 public class WeaponUtil {
 

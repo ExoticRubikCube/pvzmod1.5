@@ -1,21 +1,16 @@
 package com.hungteen.pvz.client.model.entity.bullet;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.bullet.ThornEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -31,8 +26,8 @@ public class ThornModel extends EntityModel<ThornEntity> {
 
 public ThornModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.bone = root.getChild("bone");
-		this.bone2 = root.getChild("bone2");
+		this.bone = this.total.getChild("bone");
+		this.bone2 = this.total.getChild("bone2");
 	}
 
 	public static LayerDefinition createBodyLayer() {

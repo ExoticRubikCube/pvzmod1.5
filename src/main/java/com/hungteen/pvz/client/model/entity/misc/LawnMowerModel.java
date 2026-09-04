@@ -1,21 +1,16 @@
 package com.hungteen.pvz.client.model.entity.misc;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.misc.LawnMowerEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.EntityModel;
-
-
-import com.hungteen.pvz.PVZMod;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
+
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -49,26 +44,26 @@ public class LawnMowerModel extends EntityModel<LawnMowerEntity> {
 
 public LawnMowerModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.cube_r1 = root.getChild("cube_r1");
-		this.cube_r2 = root.getChild("cube_r2");
-		this.cube_r3 = root.getChild("cube_r3");
-		this.bone3 = root.getChild("bone3");
-		this.cube_r4 = root.getChild("cube_r4");
-		this.Thing = root.getChild("Thing");
-		this.Wheel = root.getChild("Wheel");
-		this.wheel1 = root.getChild("wheel1");
-		this.wheel2 = root.getChild("wheel2");
-		this.wheel3 = root.getChild("wheel3");
-		this.wheel4 = root.getChild("wheel4");
-		this.Handle = root.getChild("Handle");
-		this.cube_r5 = root.getChild("cube_r5");
-		this.Wire = root.getChild("Wire");
-		this.cube_r6 = root.getChild("cube_r6");
-		this.cube_r7 = root.getChild("cube_r7");
-		this.cube_r8 = root.getChild("cube_r8");
-		this.bone2 = root.getChild("bone2");
-		this.Cuter = root.getChild("Cuter");
-		this.cube_r9 = root.getChild("cube_r9");
+		this.cube_r1 = this.total.getChild("cube_r1");
+		this.cube_r2 = this.total.getChild("cube_r2");
+		this.cube_r3 = this.total.getChild("cube_r3");
+		this.bone3 = this.total.getChild("bone3");
+		this.cube_r4 = this.bone3.getChild("cube_r4");
+		this.Thing = this.total.getChild("Thing");
+		this.Wheel = this.Thing.getChild("Wheel");
+		this.wheel1 = this.Wheel.getChild("wheel1");
+		this.wheel2 = this.Wheel.getChild("wheel2");
+		this.wheel3 = this.Wheel.getChild("wheel3");
+		this.wheel4 = this.Wheel.getChild("wheel4");
+		this.Handle = this.total.getChild("Handle");
+		this.cube_r5 = this.Handle.getChild("cube_r5");
+		this.Wire = this.total.getChild("Wire");
+		this.cube_r6 = this.Wire.getChild("cube_r6");
+		this.cube_r7 = this.Wire.getChild("cube_r7");
+		this.cube_r8 = this.Wire.getChild("cube_r8");
+		this.bone2 = this.total.getChild("bone2");
+		this.Cuter = this.bone2.getChild("Cuter");
+		this.cube_r9 = this.Cuter.getChild("cube_r9");
 	}
 
 	public static LayerDefinition createBodyLayer() {

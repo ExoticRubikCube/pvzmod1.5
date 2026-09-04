@@ -13,9 +13,9 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlantUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -137,7 +137,7 @@ this.remove(RemovalReason.KILLED);
 	
 	static class EatTombStoneGoal extends Goal{
 		
-		private GraveBusterEntity buster;
+		private final GraveBusterEntity buster;
 		private LivingEntity target;
 		
 		public EatTombStoneGoal(GraveBusterEntity buster) {

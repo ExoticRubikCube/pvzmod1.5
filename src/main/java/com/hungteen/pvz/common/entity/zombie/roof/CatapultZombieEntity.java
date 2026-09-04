@@ -1,7 +1,5 @@
 package com.hungteen.pvz.common.entity.zombie.roof;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.api.interfaces.IHasWheel;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.attack.PultAttackGoal;
@@ -15,18 +13,15 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IPult;
-
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class CatapultZombieEntity extends CarZombieEntity implements IPult,IHasWheel {
 

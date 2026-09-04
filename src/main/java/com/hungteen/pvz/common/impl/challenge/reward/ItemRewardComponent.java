@@ -9,12 +9,12 @@ import com.hungteen.pvz.common.entity.misc.GiftBoxEntity;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
