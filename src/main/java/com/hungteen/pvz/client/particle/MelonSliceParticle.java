@@ -1,44 +1,42 @@
 package com.hungteen.pvz.client.particle;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.SimpleParticleType;
 
-public class MelonSliceParticle extends PVZNormalParticle{
+import org.jetbrains.annotations.Nullable;
 
-	public MelonSliceParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+public class MelonSliceParticle extends PVZNormalParticle {
+
+	public MelonSliceParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 		super(world, x, y, z, xSpeed, ySpeed, zSpeed);
 		this.quadSize = 0.25f;
 		this.lifetime = this.random.nextInt(20) + 10;
 		this.hasPhysics = true;
 		this.gravity = 0.1f;
 		this.xd = world.random.nextFloat() - 0.5;
-		this.yd = - world.random.nextFloat() ;
+		this.yd = - world.random.nextFloat();
 		this.zd = world.random.nextFloat() - 0.5;
 	}
 
-	public static class Factory implements IParticleFactory<BasicParticleType> {
+	public static class Provider implements ParticleProvider<SimpleParticleType> {
 
-		private final IAnimatedSprite sprite;
+		private final SpriteSet sprite;
 
-		public Factory(IAnimatedSprite sprite) {
+		public Provider(SpriteSet sprite) {
 			this.sprite = sprite;
 		}
-		
+
+		@Nullable
 		@Override
-		public Particle createParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z,
+		public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z,
 				double xSpeed, double ySpeed, double zSpeed) {
 			MelonSliceParticle particle = new MelonSliceParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
 			particle.pickSprite(this.sprite);
 			return particle;
 		}
-
-		@SuppressWarnings("unused")
-		private Factory() {
-			throw new UnsupportedOperationException("Use the Factory(IAnimatedSprite sprite) constructor");
-		}
 	}
-	
+
 }

@@ -8,19 +8,19 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class SmallChomperEntity extends AbstractOwnerEntity {
 
 	private final int maxLifeTick = 20;
 	private int lifeTick;
 
-	public SmallChomperEntity(EntityType<? extends Entity> entityTypeIn, World worldIn) {
+	public SmallChomperEntity(EntityType<? extends Entity> entityTypeIn, Level worldIn) {
 		super(entityTypeIn, worldIn);
 		this.setInvulnerable(true);
 		this.noPhysics = true;
@@ -32,9 +32,9 @@ public class SmallChomperEntity extends AbstractOwnerEntity {
 		if(this.lifeTick < maxLifeTick) {
 			++ this.lifeTick;
 		} else {
-			if(! this.level.isClientSide) {
+			if(! this.level.isClientSide()) {
 			    this.performAttack();
-			    this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
@@ -73,8 +73,8 @@ public class SmallChomperEntity extends AbstractOwnerEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.4f, 0.5f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.4f, 0.5f, false);
 	}
 
 }

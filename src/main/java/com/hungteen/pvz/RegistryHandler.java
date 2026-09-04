@@ -30,13 +30,13 @@ import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.common.world.structure.StructureRegister;
 import com.hungteen.pvz.utils.BiomeUtil;
-import net.minecraft.entity.EntityType;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.RegisterEvent;
 
 @EventBusSubscriber(modid = PVZMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class RegistryHandler {
@@ -54,11 +54,15 @@ public class RegistryHandler {
 		EffectRegister.EFFECTS.register(bus);
 		BiomeRegister.BIOMES.register(bus);
 		FeatureRegister.FEATURES.register(bus);
-		StructureRegister.STRUCTURE_FEATURES.register(bus);
+		FeatureRegister.STRUCTURE_SETS.register(bus);
+		FeatureRegister.STRUCTURE_TYPES.register(bus);
+		FeatureRegister.STRUCTURE_PIECE_TYPES.register(bus);
+		StructureRegister.STRUCTURES.register(bus);
 		TileEntityRegister.TILE_ENTITY_TYPES.register(bus);
 		EnchantmentRegister.ENCHANTMENTS.register(bus);
 		ContainerRegister.CONTAINER_TYPES.register(bus);
 		PotionRegister.POTIONS.register(bus);
+		RecipeRegister.RECIPE_TYPES.register(bus);
 		RecipeRegister.RECIPE_SERIALIZERS.register(bus);
 		PVZAttributes.ATTRIBUTES.register(bus);
 	}
@@ -93,7 +97,6 @@ public class RegistryHandler {
 	 * {@link PVZMod#setUp(FMLCommonSetupEvent)}
 	 */
     public static void setUp(FMLCommonSetupEvent ev){
-    	CapabilityHandler.registerCapabilities();
     	PVZPacketHandler.init();
     	BiomeRegister.registerBiomes(ev);
     	PotionRecipeHandler.registerPotionRecipes();
@@ -109,7 +112,7 @@ public class RegistryHandler {
 	 * some extra setup after Item and EntityType registration completes.
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onPostRegisterEntities(final RegistryEvent.Register<EntityType<?>> event) {
+	public static void onPostRegisterEntities(final RegisterEvent event) {
 		PVZSpawnEggItem.initUnaddedEggs();
 	}
 	

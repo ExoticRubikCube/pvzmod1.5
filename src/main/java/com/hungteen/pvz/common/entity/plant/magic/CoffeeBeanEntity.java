@@ -10,20 +10,20 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class CoffeeBeanEntity extends PlantBomberEntity{
 
-	public CoffeeBeanEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CoffeeBeanEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canCollideWithPlant = false;
 		this.isImmuneToWeak = true;
@@ -32,9 +32,9 @@ public class CoffeeBeanEntity extends PlantBomberEntity{
 
 	@Override
 	public void startBomb(boolean server) {
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			final float len = this.getWorkRange();
-			boolean hasEffect = false;
+			boolean hasMobEffect = false;
 			int awakeCnt = 0;
 			for(PVZPlantEntity plant : level.getEntitiesOfClass(PVZPlantEntity.class, EntityUtil.getEntityAABB(this, len, len))) {
 				if(! EntityUtil.canTargetEntity(this, plant)) {
@@ -42,14 +42,14 @@ public class CoffeeBeanEntity extends PlantBomberEntity{
 						++ awakeCnt;
 					}
 					plant.sleepTime = - this.getAwakeTime();
-					hasEffect = true;
+					hasMobEffect = true;
 				}
 			}
-			PlayerEntity player = EntityUtil.getEntityOwner(level, this);
-			if(player != null && player instanceof ServerPlayerEntity) {
-				EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayerEntity) player, this, awakeCnt);
+			Player player = EntityUtil.getEntityOwner(level, this);
+			if(player != null && player instanceof ServerPlayer) {
+				EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) player, this, awakeCnt);
 			}
-			if(hasEffect) {
+			if(hasMobEffect) {
 				EntityUtil.playSound(this, SoundRegister.WAKE_UP.get());
 			}
 		}
@@ -73,8 +73,8 @@ public class CoffeeBeanEntity extends PlantBomberEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.6f, 0.8f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.6f, 0.8f);
 	}
 	
 	@Override

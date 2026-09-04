@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.plant.ice.SnowPeaModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.ice.SnowPeaEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SnowPeaRender extends PVZPlantRender<SnowPeaEntity>{
 
-	public SnowPeaRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new SnowPeaModel(), 0.4f);
+	public SnowPeaRender(EntityRendererProvider.Context context) {
+		super(context, new SnowPeaModel(context.bakeLayer(SnowPeaModel.LAYER)), 0.4f);
 	}
 
 }

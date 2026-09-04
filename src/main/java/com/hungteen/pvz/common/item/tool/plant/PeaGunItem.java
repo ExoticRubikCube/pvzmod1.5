@@ -4,7 +4,6 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.container.PeaGunContainer;
 import com.hungteen.pvz.common.container.inventory.ItemInventory;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
-import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.event.PVZPlayerEvents;
 import com.hungteen.pvz.common.event.events.PeaGunShootEvent;
@@ -20,33 +19,34 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.*;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -77,83 +77,84 @@ public class PeaGunItem extends Item {
 
 	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT oldCapNbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt) {
 		return new InvProvider(stack);
 	}
 
-	public static Inventory getInventory(ItemStack stack) {
+	public static ItemInventory getInventory(ItemStack stack) {
 		return new ItemInventory(stack, PEA_GUN_SLOT_NUM) {
-			@Override
-			public boolean canPlaceItem(int slot, @Nonnull ItemStack stack) {
-				if (slot == 0) {
-					return isValidMode(stack);
-				} else {
-					return stack.getItem().is(PVZItemTags.PEA_GUN_BULLETS);
-				}
-			}
-		};
+            @Override
+            public boolean canPlaceItem(int slot, @Nonnull ItemStack stack) {
+                if (slot == 0) {
+                    return isValidMode(stack);
+                } else {
+                    return stack.is(PVZItemTags.PEA_GUN_BULLETS);
+                }
+            }
+        };
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		final ItemStack itemStack = playerIn.getItemInHand(handIn);
-		final Inventory inv = getInventory(itemStack);
+		final ItemInventory inv = getInventory(itemStack);
 
-		if (handIn == Hand.MAIN_HAND) {
+		if (handIn == InteractionHand.MAIN_HAND) {
 			if (itemStack.getDamageValue() == itemStack.getMaxDamage()) {
 				if (!worldIn.isClientSide) {
 					PlayerUtil.sendMsgTo(playerIn,
-							new TranslationTextComponent("help.pvz.broken").withStyle(TextFormatting.RED));
+							Component.translatable("help.pvz.broken").withStyle(ChatFormatting.RED));
 				}
 				playerIn.getCooldowns().addCooldown(this, 20);
-				return ActionResult.fail(itemStack);
+				return InteractionResultHolder.fail(itemStack);
 			}
 			if (!hasBullet(itemStack)) {// no bullet.
 				if (!worldIn.isClientSide) {
 					PlayerUtil.sendMsgTo(playerIn,
-							new TranslationTextComponent("help.pvz.no_bullet").withStyle(TextFormatting.RED));
+							Component.translatable("help.pvz.no_bullet").withStyle(ChatFormatting.RED));
 				}
 				playerIn.getCooldowns().addCooldown(this, 20);
-				return ActionResult.fail(itemStack);
+				return InteractionResultHolder.fail(itemStack);
 			}
 			if (!hasShootMode(inv.getItem(0))) {// no mode.
 				if (!worldIn.isClientSide) {
 					PlayerUtil.sendMsgTo(playerIn,
-							new TranslationTextComponent("help.pvz.no_shoot_mode").withStyle(TextFormatting.RED));
+							Component.translatable("help.pvz.no_shoot_mode").withStyle(ChatFormatting.RED));
 				}
 				playerIn.getCooldowns().addCooldown(this, 20);
-				return ActionResult.fail(itemStack);
+				return InteractionResultHolder.fail(itemStack);
 			}
 			playerIn.startUsingItem(handIn);
 		} else {
-			if (!worldIn.isClientSide && playerIn instanceof ServerPlayerEntity) {
-				NetworkHooks.openGui((ServerPlayerEntity) playerIn, new INamedContainerProvider() {
+			if (!worldIn.isClientSide && playerIn instanceof ServerPlayer) {
+				NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
 
 					@Override
-					public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_,
-							PlayerEntity p_createMenu_3_) {
+					public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
+							Player p_createMenu_3_) {
 						return new PeaGunContainer(p_createMenu_1_, p_createMenu_3_);
 					}
 
 					@Override
-					public ITextComponent getDisplayName() {
-						return new TranslationTextComponent("gui.pvz.pea_gun.show");
+					public Component getDisplayName() {
+						return Component.translatable("gui.pvz.pea_gun.show");
 					}
 				});
 			}
 		}
-		return ActionResult.success(itemStack);
+		return InteractionResultHolder.success(itemStack);
 	}
 
 	@Override
-	public void onUseTick(World world, LivingEntity living, ItemStack stack, int tick) {
+	public void onUseTick(Level world, LivingEntity living, ItemStack stack, int tick) {
 		final int cd = getShootCD(living, stack);
-		final Inventory inv = getInventory(stack);
+		final ItemInventory inv = getInventory(stack);
+
 		final IPlantType type = getShootMode(inv.getItem(0));
 		
-		if (living instanceof PlayerEntity && tick + 5 < this.getUseDuration(stack) && tick % cd == 0) {
-			if (!MinecraftForge.EVENT_BUS.post(new PeaGunShootEvent((PlayerEntity) living, stack, type))) {
-				this.performShoot(world, (PlayerEntity) living, stack, type);
+		if (living instanceof Player && tick + 5 < this.getUseDuration(stack) && tick % cd == 0) {
+			if (!MinecraftForge.EVENT_BUS.post(new PeaGunShootEvent((Player) living, stack, type))) {
+				this.performShoot(world, (Player) living, stack, type);
 			}
 		}
 	}
@@ -161,10 +162,10 @@ public class PeaGunItem extends Item {
 	/**
 	 * {@link PVZPlayerEvents#tickPlayer(net.minecraftforge.event.TickEvent.PlayerTickEvent)}
 	 */
-	public static void checkHeadShoot(PlayerEntity player) {
-		final ItemStack stack = player.getItemBySlot(EquipmentSlotType.HEAD);
-		final Inventory inv = getInventory(stack);
-		
+	public static void checkHeadShoot(Player player) {
+		final ItemStack stack = player.getItemBySlot(EquipmentSlot.HEAD);
+		final ItemInventory inv = getInventory(stack);
+
 		if(stack.getItem() instanceof PeaGunItem && ! player.getCooldowns().isOnCooldown(stack.getItem())) {
 			if(stack.getDamageValue() < stack.getMaxDamage() && hasBullet(stack) && hasShootMode(inv.getItem(0))) {
 				final IPlantType mode = getShootMode(inv.getItem(0));
@@ -179,7 +180,7 @@ public class PeaGunItem extends Item {
 	/**
 	 * @param itemStack : pea gun stack.
 	 */
-	public void performShoot(World world, PlayerEntity player, ItemStack itemStack, IPlantType mode) {
+	public void performShoot(Level world, Player player, ItemStack itemStack, IPlantType mode) {
 		final ItemStack stack = getFirstBullets(itemStack);
 
 		if (mode == PVZPlants.PEA_SHOOTER) {
@@ -220,13 +221,13 @@ public class PeaGunItem extends Item {
 		this.shrinkItemStack(player, itemStack);
 
 		if(PlayerUtil.isPlayerSurvival(player)) {
-			itemStack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(Hand.MAIN_HAND));
+			itemStack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		}
 	}
 
-	public void shootPea(World world, PlayerEntity player, IPlantType mode, ItemStack stack, double forwardOffset,
+	public void shootPea(Level world, Player player, IPlantType mode, ItemStack stack, double forwardOffset,
 			double rightOffset, float angle) {
-		final Vector3d vec = player.getLookAngle();
+		final Vec3 vec = player.getLookAngle();
 		final double deltaX = forwardOffset * vec.x - rightOffset * vec.z;
 		final double deltaZ = forwardOffset * vec.z + rightOffset * vec.x;
 		
@@ -243,8 +244,8 @@ public class PeaGunItem extends Item {
 		world.addFreshEntity(pea);
 	}
 
-	private void shrinkItemStack(PlayerEntity player, ItemStack stack) {
-		final Inventory inv = getInventory(stack);
+	private void shrinkItemStack(Player player, ItemStack stack) {
+		final ItemInventory inv = getInventory(stack);
 		final int pos = getFirstPos(stack);
 		final int lvl = PlayerUtil.getResource(player, Resources.TREE_LVL);
 		boolean flag = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
@@ -267,17 +268,17 @@ public class PeaGunItem extends Item {
 		}
 	}
 
-	private PeaEntity.Type getPeaType(PlayerEntity player) {
+	private PeaEntity.Type getPeaType(Player player) {
 		final int lvl = PlayerUtil.getResource(player, Resources.TREE_LVL);
 		final int bigChance = (lvl + 4) / 5;
 		final int hugeChance = bigChance + (lvl + 19) / 20;
-		final int tmp = random.nextInt(1000);
+		final int tmp = player.getRandom().nextInt(1000);
 		return tmp < bigChance ? PeaEntity.Type.BIG : tmp < hugeChance ? PeaEntity.Type.HUGE : PeaEntity.Type.NORMAL;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent("tooltip.pvz.pea_gun").withStyle(TextFormatting.GREEN));
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+		tooltip.add(Component.translatable("tooltip.pvz.pea_gun").withStyle(ChatFormatting.GREEN));
 	}
 
 	@Override
@@ -304,13 +305,13 @@ public class PeaGunItem extends Item {
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack p_77661_1_) {
-		return UseAction.BOW;
+	public UseAnim getUseAnimation(ItemStack p_77661_1_) {
+		return UseAnim.BOW;
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack, EquipmentSlotType armorType, Entity entity) {
-		return armorType == EquipmentSlotType.HEAD;
+	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
+		return armorType == EquipmentSlot.HEAD;
 	}
 
 	/**
@@ -347,13 +348,13 @@ public class PeaGunItem extends Item {
 	}
 
 	public static ItemStack getFirstBullets(ItemStack stack) {
-		final Inventory inv = getInventory(stack);
+		final ItemInventory inv = getInventory(stack);
 		final int pos = getFirstPos(stack);
 		return pos < 0 ? new ItemStack(Items.AIR) : inv.getItem(pos);
 	}
 
 	public static int getFirstPos(ItemStack stack) {
-		final Inventory inv = getInventory(stack);
+		final ItemInventory inv = getInventory(stack);
 		for (int i = 1; i < PEA_GUN_SLOT_NUM; ++i) {
 			if (!inv.getItem(i).isEmpty()) {
 				return i;
@@ -384,7 +385,7 @@ public class PeaGunItem extends Item {
 		@Nonnull
 		@Override
 		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(capability, opt);
+			return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
 		}
 	}
 

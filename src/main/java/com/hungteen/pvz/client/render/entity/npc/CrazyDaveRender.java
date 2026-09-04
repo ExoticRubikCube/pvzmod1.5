@@ -5,16 +5,16 @@ import com.hungteen.pvz.client.render.entity.PVZCreatureRender;
 import com.hungteen.pvz.common.entity.npc.CrazyDaveEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class CrazyDaveRender extends PVZCreatureRender<CrazyDaveEntity>{
 
-	public CrazyDaveRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new CrazyDaveModel(), 0.4f);
+	public CrazyDaveRender(EntityRendererProvider.Context context) {
+		super(context, new CrazyDaveModel(context.bakeLayer(CrazyDaveModel.LAYER)), 0.4f);
 	}
 
 	@Override

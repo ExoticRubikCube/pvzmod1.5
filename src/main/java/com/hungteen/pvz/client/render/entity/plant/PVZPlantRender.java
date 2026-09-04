@@ -8,13 +8,13 @@ import com.hungteen.pvz.client.render.layer.fullskin.HealLightLayer;
 import com.hungteen.pvz.client.render.layer.fullskin.SunLightLayer;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -23,18 +23,18 @@ public abstract class PVZPlantRender<T extends PVZPlantEntity> extends MobRender
 
 	private static final int BREATH_ANIM_CD = 40;
 	
-	public PVZPlantRender(EntityRendererManager rendererManager, EntityModel<T> entityModelIn, float shadowSizeIn) {
-		super(rendererManager, entityModelIn, shadowSizeIn);
+	public PVZPlantRender(EntityRendererProvider.Context context, EntityModel<T> entityModelIn, float shadowSizeIn) {
+		super(context, entityModelIn, shadowSizeIn);
 		this.addPlantLayers();
 	}
 
 	@Override
-	protected void scale(T plant, MatrixStack matrixStackIn, float partialTickTime) {
+	protected void scale(T plant, PoseStack matrixStackIn, float partialTickTime) {
 		int live = plant.getExistTick() % BREATH_ANIM_CD;
 		final float scaleOffset = AnimationUtil.upDown(live, BREATH_ANIM_CD, 0.01F);
 		final float sz1 = getScaleByEntity(plant);
 		final float sz = sz1 * (1 + scaleOffset);
-		final Vector3d vec = getTranslateVec(plant);
+		final Vec3 vec = getTranslateVec(plant);
 		matrixStackIn.scale(sz, sz, sz);
 		matrixStackIn.translate(vec.x, vec.y, vec.z);
 	}
@@ -52,8 +52,8 @@ public abstract class PVZPlantRender<T extends PVZPlantEntity> extends MobRender
 		return entity.getPlantType().getRenderScale();
 	}
 	
-	public Vector3d getTranslateVec(T entity) {
-		return new Vector3d(0, 0, 0);
+	public Vec3 getTranslateVec(T entity) {
+		return new Vec3(0, 0, 0);
 	}
 	
 	@Override

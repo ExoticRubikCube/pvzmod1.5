@@ -2,17 +2,17 @@ package com.hungteen.pvz.common.entity.ai.goal.target;
 
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.AABB;
 
 import java.util.EnumSet;
 
 public abstract class PVZTargetGoal extends Goal{
 
-	protected final MobEntity mob;
+	protected final Mob mob;
 	protected LivingEntity targetMob;
 	protected final boolean mustSee;
 	protected final boolean mustReach;
@@ -21,11 +21,11 @@ public abstract class PVZTargetGoal extends Goal{
 	private final float lowerHeight;
 	private final float width;
 
-	public PVZTargetGoal(MobEntity mobIn, boolean mustSee, boolean mustReach, float w, float h) {
+	public PVZTargetGoal(Mob mobIn, boolean mustSee, boolean mustReach, float w, float h) {
 		this(mobIn, mustSee, mustReach, w, h, h);
 	}
 
-	public PVZTargetGoal(MobEntity mobIn, boolean mustSee, boolean mustReach, float w, float h1, float h2) {
+	public PVZTargetGoal(Mob mobIn, boolean mustSee, boolean mustReach, float w, float h1, float h2) {
 		this.mob = mobIn;
 		this.mustSee = mustSee;
 		this.mustReach = mustReach;
@@ -73,7 +73,7 @@ public abstract class PVZTargetGoal extends Goal{
 	}
 	
 	protected boolean checkSenses(Entity entity) {
-		return this.mob.getSensing().canSee(entity);
+		return this.mob.getSensing().hasLineOfSight(entity);
 	}
 
 	protected boolean checkOther(LivingEntity entity) {
@@ -85,8 +85,8 @@ public abstract class PVZTargetGoal extends Goal{
 		return true;
 	}
 
-	protected AxisAlignedBB getAABB() {
-		return new AxisAlignedBB(this.mob.getX() + width, this.mob.getY() + this.upperHeight,
+	protected AABB getAABB() {
+		return new AABB(this.mob.getX() + width, this.mob.getY() + this.upperHeight,
 				this.mob.getZ() + width, this.mob.getX() - width,
 				this.mob.getY() - this.lowerHeight, this.mob.getZ() - width);
 	}

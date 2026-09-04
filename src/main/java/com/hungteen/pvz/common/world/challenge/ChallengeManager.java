@@ -21,12 +21,12 @@ import com.hungteen.pvz.common.impl.challenge.placement.OuterPlacement;
 import com.hungteen.pvz.common.impl.challenge.reward.AdvancementRewardComponent;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -69,18 +69,18 @@ public class ChallengeManager {
 		registerRewardComponent(UnLockRewardComponent.NAME, UnLockRewardComponent.class);
 	}
 	
-	public static void tickChallenges(World world) {
+	public static void tickChallenges(Level world) {
 		if(! world.isClientSide) {
 			final PVZChallengeData data = PVZChallengeData.getInvasionData(world);
 			data.tick();
 		}
 	}
 	
-	public static boolean hasChallengeNearby(ServerWorld world, BlockPos pos) {
+	public static boolean hasChallengeNearby(ServerLevel world, BlockPos pos) {
 		return getChallengeNearBy(world, pos).isPresent();
 	}
 
-	public static Optional<Challenge> getChallengeNearBy(ServerWorld world, BlockPos pos){
+	public static Optional<Challenge> getChallengeNearBy(ServerLevel world, BlockPos pos){
 		final List<Challenge> list = getChallenges(world);
 		for(Challenge r : list) {
 			if(Math.abs(r.getCenter().getX() - pos.getX()) <= ConfigUtil.getRaidRange()
@@ -92,7 +92,7 @@ public class ChallengeManager {
 		return Optional.empty();
 	}
 	
-	public static boolean createChallenge(ServerWorld world, ResourceLocation res, BlockPos pos) {
+	public static boolean createChallenge(ServerLevel world, ResourceLocation res, BlockPos pos) {
 		final PVZChallengeData data = PVZChallengeData.getInvasionData(world);
 		Optional<Challenge> opt = data.createChallenge(world, res, pos);
 		opt.ifPresent(r -> {
@@ -101,7 +101,7 @@ public class ChallengeManager {
 		return opt.isPresent();
 	}
 	
-	public static List<Challenge> getChallenges(ServerWorld world) {
+	public static List<Challenge> getChallenges(ServerLevel world) {
 		return PVZChallengeData.getInvasionData(world).getChallenges();
 	}
 
@@ -109,7 +109,7 @@ public class ChallengeManager {
 		return Collections.unmodifiableMap(ChallengeTypeLoader.CHALLENGE_MAP);
 	}
 	
-	public static boolean isRaider(ServerWorld world, Entity entity) {
+	public static boolean isRaider(ServerLevel world, Entity entity) {
 		final PVZChallengeData data = PVZChallengeData.getInvasionData(world);
 		for(Challenge raid : data.getChallenges()) {
 			if(raid.isRaider(entity)) {
@@ -119,7 +119,7 @@ public class ChallengeManager {
 		return false;
 	}
 
-	public static Challenge getEntityChallenge(ServerWorld world, Entity entity) {
+	public static Challenge getEntityChallenge(ServerLevel world, Entity entity) {
 		final PVZChallengeData data = PVZChallengeData.getInvasionData(world);
 		for(Challenge raid : data.getChallenges()) {
 			if(raid.isRaider(entity)) {
@@ -156,7 +156,7 @@ public class ChallengeManager {
 
 	public static void registerPlacementComponent(String name, Class<? extends IPlacementComponent> c) {
 		if(PLACEMENT_MAP.containsKey(name)) {
-			PVZMod.LOGGER.warn("Register Spawn Placement : duplicate name, overwrited.");
+			PVZMod.LOGGER.warn("Register Spawn PlacementModifier : duplicate name, overwrited.");
 		}
 		PLACEMENT_MAP.put(name, c);
 	}
@@ -221,7 +221,7 @@ public class ChallengeManager {
 				e.printStackTrace();
 			}
 		} else {
-			PVZMod.LOGGER.warn("Spawn Placement Missing : can not find {}", name);
+			PVZMod.LOGGER.warn("Spawn PlacementModifier Missing : can not find {}", name);
 		}
 		return null;
 	}
@@ -305,7 +305,7 @@ public class ChallengeManager {
 	public static IPlacementComponent readPlacement(JsonObject jsonObject, boolean flag) {
 		/* spawn placement */
 		IPlacementComponent placement = flag ? new CenterPlacement() : null;
-		JsonObject obj = JSONUtils.getAsJsonObject(jsonObject, StringUtil.SPAWN_PLACEMENT, null);
+		JsonObject obj = GsonHelper.getAsJsonObject(jsonObject, StringUtil.SPAWN_PLACEMENT, null);
 		if(obj != null && ! obj.entrySet().isEmpty()) {
 			for(Entry<String, JsonElement> entry : obj.entrySet()) {
 				final IPlacementComponent tmp = ChallengeManager.getPlacementComponent(entry.getKey());
@@ -313,7 +313,7 @@ public class ChallengeManager {
 					tmp.readJson(entry.getValue());
 					placement = tmp;
 				} else {
-					PVZMod.LOGGER.warn("Placement Component : Read Spawn Placement Wrongly");
+					PVZMod.LOGGER.warn("PlacementModifier Component : Read Spawn PlacementModifier Wrongly");
 				}
 				break;
 			}
@@ -322,7 +322,7 @@ public class ChallengeManager {
 	}
 
 	public static IAmountComponent readAmount(JsonObject json, String amountTag){
-		JsonObject obj = JSONUtils.getAsJsonObject(json, amountTag);
+		JsonObject obj = GsonHelper.getAsJsonObject(json, amountTag);
 		if(obj != null && ! obj.entrySet().isEmpty()) {
 			for(Entry<String, JsonElement> entry : obj.entrySet()) {
 				final IAmountComponent tmp = getAmountComponent(entry.getKey());

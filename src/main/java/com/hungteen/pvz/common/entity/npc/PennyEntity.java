@@ -5,43 +5,42 @@ import com.hungteen.pvz.common.container.shop.PennyShopContainer;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public class PennyEntity extends AbstractDaveEntity {
 
-	public PennyEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public PennyEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setInvulnerable(true);
 		this.transactionResource = StringUtil.prefix("penny");
 	}
 
 	@Override
-	protected boolean canOpenShop(PlayerEntity player, ItemStack heldItem) {
+	protected boolean canOpenShop(Player player, ItemStack heldItem) {
 		return heldItem.getItem().equals(ItemRegister.CAR_KEY.get());
 	}
 
 	@Override
-	protected void openContainer(ServerPlayerEntity player) {
-		NetworkHooks.openGui(player, new PVZContainerProvider() {
+	protected void openContainer(ServerPlayer player) {
+		NetworkHooks.openScreen(player, new PVZContainerProvider() {
 
 			@Override
-			public Container createMenu(int id, PlayerInventory inventory,
-										PlayerEntity playerEntity) {
+			public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory inventory,
+										Player playerEntity) {
 				return new PennyShopContainer(id, playerEntity, PennyEntity.this.getId());
 			}
 
@@ -51,8 +50,8 @@ public class PennyEntity extends AbstractDaveEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(1.8f, 2f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(1.8f, 2f);
 	}
 
 	@Override

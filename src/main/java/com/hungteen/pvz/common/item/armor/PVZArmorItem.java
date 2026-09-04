@@ -1,19 +1,14 @@
 package com.hungteen.pvz.common.item.armor;
 
 import com.hungteen.pvz.common.item.PVZItemGroups;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 
-/**
- * @program: pvzmod-1.16.5
- * @author: HungTeen
- * @create: 2022-02-05 21:14
- **/
 public abstract class PVZArmorItem extends ArmorItem {
 
-    public PVZArmorItem(IArmorMaterial armorMaterial, EquipmentSlotType slotType) {
+    public PVZArmorItem(ArmorMaterial armorMaterial, EquipmentSlot slotType) {
         super(armorMaterial, slotType, new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL));
     }
 }

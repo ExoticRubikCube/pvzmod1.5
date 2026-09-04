@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.api.types.IRankType;
@@ -12,30 +13,33 @@ import com.hungteen.pvz.common.impl.RankTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
-import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraftforge.common.data.ForgeRecipeProvider;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class RecipeGenerator extends ForgeRecipeProvider{
+import static net.minecraft.resources.ResourceLocation.fromNamespaceAndPath;
+
+public class RecipeGenerator extends RecipeProvider{
 
 	public RecipeGenerator(DataGenerator generatorIn) {
 		super(generatorIn);
 	}
 
 	@Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 		//template cards.
 		RankTypes.getRanks().forEach(type -> {
 			registerTemplateCard(consumer, type);
@@ -128,17 +132,17 @@ public class RecipeGenerator extends ForgeRecipeProvider{
 		), ItemRegister.SEA_SHROOM_CARD.get());
 	}
 
-	private void registerFusion(Consumer<IFinishedRecipe> consumer, List<IItemProvider> list, Item result) {
+	private void registerFusion(Consumer<FinishedRecipe> consumer, List<ItemLike> list, Item result) {
 		final ItemStack stack = new ItemStack(result);
 		final FusionRecipeBuilder builder = FusionRecipeBuilder.shapeless(result);
 		list.forEach(i -> builder.requires(i));
 		if(result instanceof PlantCardItem){
 			builder.requires(((PlantCardItem) result).plantType.getRank().getCardTag());
 		}
-		builder.save(consumer, StringUtil.prefix("card_fusion/" + result.getRegistryName().getPath()));
+		builder.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "card_fusion/" + ForgeRegistries.ITEMS.getKey(result).getPath()));
 	}
 
-	private void registerFragment(Consumer<IFinishedRecipe> consumer, IPlantType type) {
+	private void registerFragment(Consumer<FinishedRecipe> consumer, IPlantType type) {
 		type.getSummonCard().ifPresent(card -> {
 			if(type.getEnjoyCard().isPresent()) {
 				FragmentRecipeBuilder.shaped(card)
@@ -151,27 +155,40 @@ public class RecipeGenerator extends ForgeRecipeProvider{
 					.define('B', type.getEssence().getEssenceItem())
 					.define('C', type.getRank().getCardTag())
 					.unlockedBy("has_essence", has(type.getEssence().getEssenceItem()))
-					.save(consumer, StringUtil.prefix("fragment_splice/" + type.toString() + "_card"));
+					.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "fragment_splice/" + type.toString() + "_card"));
 			}
 			
 		});
 	}
-	
-	private void registerStoneSmelting(Consumer<IFinishedRecipe> consumer, IItemProvider input, IItemProvider item, float xp, int time, String name) {
-		CookingRecipeBuilder.smelting(Ingredient.of(input), item, xp, time).unlockedBy("has_input", has(input)).save(consumer, StringUtil.prefix("smelting/" + name + "_from_smelting"));
-		CookingRecipeBuilder.blasting(Ingredient.of(input), item, xp, time).unlockedBy("has_input", has(input)).save(consumer, StringUtil.prefix("smelting/" + name + "_from_blasting"));
+
+	private void registerStoneSmelting(Consumer<FinishedRecipe> consumer, ItemLike input, ItemLike item, float xp, int time, String name) {
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), item, xp, time)
+				.unlockedBy("has_input", has(input))
+				.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "smelting/" + name + "_from_smelting"));
+
+		SimpleCookingRecipeBuilder.blasting(Ingredient.of(input), item, xp, time)
+				.unlockedBy("has_input", has(input))
+				.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "smelting/" + name + "_from_blasting"));
 	}
-	
-	private void registerFoodSmelting(Consumer<IFinishedRecipe> consumer, IItemProvider input, IItemProvider item, float xp, int time, String name) {
-		CookingRecipeBuilder.smelting(Ingredient.of(input), item, xp, time).unlockedBy("has_input", has(input)).save(consumer, StringUtil.prefix("smelting/" + name));
-		CookingRecipeBuilder.cooking(Ingredient.of(input), item, xp, time, IRecipeSerializer.SMOKING_RECIPE).unlockedBy("has_input", has(input)).save(consumer, StringUtil.prefix("smelting/" + name + "_from_smoking"));
-		CookingRecipeBuilder.cooking(Ingredient.of(input), item, xp, time, IRecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_input", has(input)).save(consumer, StringUtil.prefix("smelting/" + name + "_from_campfire_cooking"));
+
+	private void registerFoodSmelting(Consumer<FinishedRecipe> consumer, ItemLike input, ItemLike item, float xp, int time, String name) {
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), item, xp, time)
+				.unlockedBy("has_input", has(input))
+				.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "smelting/" + name));
+
+		SimpleCookingRecipeBuilder.smoking(Ingredient.of(input), item, xp, time)
+				.unlockedBy("has_input", has(input))
+				.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "smelting/" + name + "_from_smoking"));
+
+		SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(input), item, xp, time)
+				.unlockedBy("has_input", has(input))
+				.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "smelting/" + name + "_from_campfire_cooking"));
 	}
-	
-	private void registerCommonCard(Consumer<IFinishedRecipe> consumer, PlantCardItem result, Item crop) {
+
+	private void registerCommonCard(Consumer<FinishedRecipe> consumer, PlantCardItem result, Item crop) {
 		final Item essence = result.plantType.getEssence().getEssenceItem();
-		final ITag.INamedTag<Item> rankCard = result.plantType.getRank().getCardTag();
-	    ShapedRecipeBuilder.shaped(result)
+		final TagKey<Item> rankCard = result.plantType.getRank().getCardTag();
+		ShapedRecipeBuilder.shaped(result)
 				.pattern("AAA")
 				.pattern("ABA")
 				.pattern("ACA")
@@ -179,13 +196,13 @@ public class RecipeGenerator extends ForgeRecipeProvider{
 				.define('B', crop)
 				.define('C', rankCard)
 				.unlockedBy("has_essence", has(essence))
-				.save(consumer, StringUtil.prefix("card/" + result.plantType.toString().toLowerCase() + "_card"));
+				.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "card/" + result.plantType.toString().toLowerCase() + "_card"));
 	}
-	
-	private void registerCommonCard(Consumer<IFinishedRecipe> consumer, PlantCardItem result, ITag.INamedTag<Item> crop) {
+
+	private void registerCommonCard(Consumer<FinishedRecipe> consumer, PlantCardItem result, TagKey<Item> crop) {
 		final Item essence = result.plantType.getEssence().getEssenceItem();
-		final ITag.INamedTag<Item> rankCard = result.plantType.getRank().getCardTag();
-		if(rankCard != null){
+		final TagKey<Item> rankCard = result.plantType.getRank().getCardTag();
+		if (rankCard != null) {
 			ShapedRecipeBuilder.shaped(result)
 					.pattern("AAA")
 					.pattern("ABA")
@@ -194,13 +211,13 @@ public class RecipeGenerator extends ForgeRecipeProvider{
 					.define('B', crop)
 					.define('C', rankCard)
 					.unlockedBy("has_essence", has(essence))
-					.save(consumer, StringUtil.prefix("card/" + result.plantType.toString().toLowerCase() + "_card"));
+					.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "card/" + result.plantType.toString().toLowerCase() + "_card"));
 		}
 	}
 
-	private void registerTemplateCard(Consumer<IFinishedRecipe> consumer, IRankType type) {
+	private void registerTemplateCard(Consumer<FinishedRecipe> consumer, IRankType type) {
 		final Item rankCard = type.getTemplateCard();
-		final ITag.INamedTag<Item> material = type.getMaterial();
+		final TagKey<Item> material = type.getMaterial();
 		final Item origin = ItemRegister.ORIGIN_ESSENCE.get();
 		if (material != null) {
 			ShapedRecipeBuilder.shaped(rankCard)
@@ -210,7 +227,7 @@ public class RecipeGenerator extends ForgeRecipeProvider{
 					.define('A', material)
 					.define('B', origin)
 					.unlockedBy("has_origin", has(origin))
-					.save(consumer, StringUtil.prefix("card/template/" + type.getName() + "_card"));
+					.save(consumer, fromNamespaceAndPath(PVZMod.MOD_ID, "card/template/" + type.getName() + "_card"));
 		}
 	}
 	

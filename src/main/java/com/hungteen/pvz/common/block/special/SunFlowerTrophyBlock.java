@@ -3,11 +3,13 @@ package com.hungteen.pvz.common.block.special;
 import com.hungteen.pvz.common.block.AbstractFacingBlock;
 import com.hungteen.pvz.common.tileentity.SunFlowerTrophyTileEntity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.core.BlockPos;
 
-public class SunFlowerTrophyBlock extends AbstractFacingBlock {
+public class SunFlowerTrophyBlock extends AbstractFacingBlock implements EntityBlock {
 
 	public final int lvl;
 	
@@ -17,13 +19,8 @@ public class SunFlowerTrophyBlock extends AbstractFacingBlock {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new SunFlowerTrophyTileEntity();
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new SunFlowerTrophyTileEntity(pos, state);
 	}
 	
 }

@@ -5,39 +5,39 @@ import com.hungteen.pvz.common.entity.plant.spear.CatTailEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
 import static java.lang.Math.*;
-import static net.minecraft.util.math.MathHelper.sign;
+import static net.minecraft.util.Mth.sign;
 
 public class ThornEntity extends AbstractBulletEntity {
 
-	private static final DataParameter<Integer> THORN_TYPE = EntityDataManager.defineId(ThornEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Integer> THORN_STATE = EntityDataManager.defineId(ThornEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> THORN_TYPE = SynchedEntityData.defineId(ThornEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> THORN_STATE = SynchedEntityData.defineId(ThornEntity.class,
+			EntityDataSerializers.INT);
 	private IntOpenHashSet set = new IntOpenHashSet();
 	private LivingEntity thornTarget;
 	private int extraHitCount = 0;
 
-	public ThornEntity(EntityType<?> type, World worldIn) {
+	public ThornEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public ThornEntity(World worldIn, LivingEntity shooter) {
+	public ThornEntity(Level worldIn, LivingEntity shooter) {
 		super(EntityRegister.THORN.get(), worldIn, shooter);
 	}
 
@@ -52,21 +52,21 @@ public class ThornEntity extends AbstractBulletEntity {
 	public void tick() {
 		super.tick();
 		this.noPhysics = true;
-		if (! level.isClientSide) {
+		if (! level.isClientSide()) {
 			//default code.
-			Vector3d vec = getShootVec().normalize();
+			Vec3 vec = getShootVec().normalize();
 			if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-				float f = MathHelper.sqrt(getHorizontalDistanceSqr(vec));
-				this.yRot = (float) (MathHelper.atan2(vec.x, vec.z) * (double) (180F / (float) Math.PI));
-				this.xRot = (float) (MathHelper.atan2(vec.y, (double) f) * (double) (180F / (float) Math.PI));
-				this.yRotO = this.yRot;
-				this.xRotO = this.xRot;
+				float f = Mth.sqrt(Mth.sqrt((float) vec.horizontalDistanceSqr()));
+				this.setYRot((float) (Mth.atan2(vec.x, vec.z) * (double) (180F / (float) Math.PI)));
+				this.setXRot((float) (Mth.atan2(vec.y, f) * (double) (180F / (float) Math.PI)));
+				this.yRotO = this.getYRot();
+				this.xRotO = this.getXRot();
 			}
 			//change speed.
 			if (this.getThornType() == ThornTypes.GUIDE || this.getThornType() == ThornTypes.AUTO) {
-//				if (vec != Vector3d.ZERO) {
-					Vector3d sub = vec.subtract(this.getDeltaMovement().normalize());
-					Vector3d cut = sub.scale(0.04);
+//				if (vec != Vec3.ZERO) {
+					Vec3 sub = vec.subtract(this.getDeltaMovement().normalize());
+					Vec3 cut = sub.scale(0.04);
 					this.setDeltaMovement(this.getDeltaMovement().add(cut).normalize().scale(this.getBulletSpeed()));
 //				}
 			}
@@ -82,7 +82,7 @@ public class ThornEntity extends AbstractBulletEntity {
 				}
 			}
 			if(this.getThrower() == null) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class ThornEntity extends AbstractBulletEntity {
 	/**
 	 * {@link #tick()}
 	 */
-	public Vector3d getShootVec() {
+	public Vec3 getShootVec() {
 		if (this.thornTarget == null) {
 			return this.getDeltaMovement();
 		}
@@ -137,9 +137,9 @@ public class ThornEntity extends AbstractBulletEntity {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+	protected void onImpact(HitResult result) {
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			this.onImpact(target);
 		}
 	}
@@ -160,7 +160,7 @@ public class ThornEntity extends AbstractBulletEntity {
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if ((! (this.getThornType() == ThornTypes.AUTO) && this.extraHitCount == 0)) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 
@@ -178,7 +178,7 @@ public class ThornEntity extends AbstractBulletEntity {
 	}
 
 	@Override
-	protected boolean checkLive(RayTraceResult result) {
+	protected boolean checkLive(HitResult result) {
 		return true;
 	}
 	
@@ -199,8 +199,8 @@ public class ThornEntity extends AbstractBulletEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.2f, 0.2f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.2f, 0.2f);
 	}
 
 	/**
@@ -210,18 +210,18 @@ public class ThornEntity extends AbstractBulletEntity {
 	public void lerpMotion(double x, double y, double z) {
 		this.setDeltaMovement(x, y, z);
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-			float f = MathHelper.sqrt(x * x + z * z);
-			this.xRot = (float) (MathHelper.atan2(y, (double) f) * (double) (180F / (float) Math.PI));
-			this.yRot = (float) (MathHelper.atan2(x, z) * (double) (180F / (float) Math.PI));
-			this.xRotO = this.xRot;
-			this.yRotO = this.yRot;
-			this.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot,
-					this.xRot);
+			float f = Mth.sqrt((float) (x * x + z * z));
+			this.setXRot((float) (Mth.atan2(y, f) * (double) (180F / (float) Math.PI)));
+			this.setYRot((float) (Mth.atan2(x, z) * (double) (180F / (float) Math.PI)));
+			this.xRotO = this.getXRot();
+			this.yRotO = this.getYRot();
+			this.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(),
+					this.getXRot());
 		}
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("thorn_state", this.getThornState().ordinal());
 		compound.putInt("thorn_type", this.getThornType().ordinal());
@@ -229,7 +229,7 @@ public class ThornEntity extends AbstractBulletEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (this.getThrower() != null && this.getThrower() instanceof CatTailEntity && this.isInControl()) {
 			((CatTailEntity) this.getThrower()).thorns.add(this);

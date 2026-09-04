@@ -8,36 +8,37 @@ import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack {
 
-	private static final DataParameter<Integer> BUNGEE_STATE = EntityDataManager.defineId(BungeeZombieEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> BUNGEE_TYPE = EntityDataManager.defineId(BungeeZombieEntity.class, DataSerializers.INT);
-	private static final DataParameter<BlockPos> ORIGIN_POS = EntityDataManager.defineId(BungeeZombieEntity.class, DataSerializers.BLOCK_POS);
+	private static final EntityDataAccessor<Integer> BUNGEE_STATE = SynchedEntityData.defineId(BungeeZombieEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BUNGEE_TYPE = SynchedEntityData.defineId(BungeeZombieEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<BlockPos> ORIGIN_POS = SynchedEntityData.defineId(BungeeZombieEntity.class, EntityDataSerializers.BLOCK_POS);
 	protected EntityType<?> entityType;
 	private BlockPos stealPos;
 	private LivingEntity stealTarget;
 	
-	public BungeeZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public BungeeZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canBeMini = false;
 		this.canBeStealByBungee = false;
@@ -54,7 +55,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	}
 
 	@Override
-	public void finalizeSpawn(CompoundNBT tag) {
+	public void finalizeSpawn(CompoundTag tag) {
 		super.finalizeSpawn(tag);
 		this.setOriginPos(blockPosition());
 	}
@@ -78,20 +79,20 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	@Override
 	public void normalZombieTick() {
 		super.normalZombieTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			if (tickCount > 1000 && tickCount % 80 == 0 && this.canDespawn && this.getBungeeState() == BungeeStates.WAIT){
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 			//being push back by umbrella leaf.
 			if(this.getBungeeState() == BungeeStates.PUSH_BACK) {
 				this.setAttackTime(this.getAttackTime() - 1);
-				this.setDeltaMovement(new Vector3d(0, 1.2, 0));
+				this.setDeltaMovement(new Vec3(0, 1.2, 0));
 				//remove after 3 seconds.
 				if(this.getAttackTime() <= - 60) {
 					if(this.getBungeeType() == BungeeTypes.SUMMON && EntityUtil.isEntityValid(this.getStealTarget())) {
-						this.getStealTarget().remove();
+						this.getStealTarget().remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 					}
-					this.remove();
+this.remove(RemovalReason.KILLED);
 				}
 				return ;
 			}
@@ -133,7 +134,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 				this.moveToTarget();
 			}
 		} else if(this.getBungeeState() == BungeeStates.CATCH) {// wait some time to catch
-			this.setDeltaMovement(Vector3d.ZERO);
+			this.setDeltaMovement(Vec3.ZERO);
 			if(this.getAttackTime() > 0) {
 				this.setAttackTime(this.getAttackTime() - 1);
 			}
@@ -176,7 +177,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 			this.moveBackToOrigin();
 			if(this.distanceToSqr(this.getOriginPos().getX(), this.getOriginPos().getY(), this.getOriginPos().getZ()) <= 2) {
 				this.setBungeeState(BungeeStates.WAIT);
-				this.setDeltaMovement(Vector3d.ZERO);
+				this.setDeltaMovement(Vec3.ZERO);
 			}
 		} else if(this.getBungeeState() == BungeeStates.DOWN) {
 			if(this.isNearToTarget()) {//already close to target.
@@ -189,7 +190,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 				this.moveToTarget();
 			}
 		} else if(this.getBungeeState() == BungeeStates.CATCH) {// wait some time to catch
-			this.setDeltaMovement(Vector3d.ZERO);
+			this.setDeltaMovement(Vec3.ZERO);
 			if(this.getAttackTime() > 0) {
 				this.setAttackTime(this.getAttackTime() - 1);
 			}
@@ -229,13 +230,13 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 				this.setBungeeState(BungeeStates.UP);
 			} else {
 				this.getStealTarget().startRiding(this);
-				this.setDeltaMovement(new Vector3d(0, - 0.5D, 0));
+				this.setDeltaMovement(new Vec3(0, - 0.5D, 0));
 			}
 		} else if(this.getBungeeState() == BungeeStates.UP) {
 			this.moveBackToOrigin();
 			this.setAttackTime(this.getAttackTime() - 1);
 			if(this.getAttackTime() < - 60) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 				return ;
 			}
 		}
@@ -277,9 +278,14 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	 * {@link #tickSummon()}
 	 */
 	public void summonZombie() {
-		if(this.entityType == null){
-			this.entityType = PVZEntityTypeTags.BUNGEE_SPAWNS.getRandomElement(this.getRandom());
+		if (this.entityType == null) {
+			this.entityType = this.level.registryAccess().registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
+					.getTag(PVZEntityTypeTags.BUNGEE_SPAWNS)
+					.flatMap(tag -> tag.getRandomElement(this.getRandom()))
+					.map(Holder::value)
+					.orElse(null);
 		}
+
 		Entity entity = this.entityType.create(this.level);
 		if(entity instanceof LivingEntity){
 			EntityUtil.onEntitySpawn(level, entity, blockPosition());
@@ -295,7 +301,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	
 	private void dealDamageAndRemove() {
 //		this.getStealTarget().hurt(PVZEntityDamageSource.causeDeadlyDamage(this, this), EntityUtil.getMaxHealthDamage(this.getStealTarget()));//removed by GrassCarp.
-		this.remove();
+this.remove(RemovalReason.KILLED);
 	}
 	
 	/**
@@ -317,7 +323,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 		if(! EntityUtil.isEntityValid(this.getStealTarget())) {
 			return;
 		}
-		Vector3d vec = this.getStealTarget().position().subtract(this.position()).normalize();
+		Vec3 vec = this.getStealTarget().position().subtract(this.position()).normalize();
 		final double speed = 0.55D;
 		this.setDeltaMovement(vec.multiply(speed, speed, speed));
 	}
@@ -326,7 +332,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	 * move back to origin blockpos.
 	 */
 	private void moveBackToOrigin() {
-		Vector3d vec = new Vector3d(this.getOriginPos().getX() - this.getX(), this.getOriginPos().getY() - this.getY(), this.getOriginPos().getZ() - this.getZ()).normalize();
+		Vec3 vec = new Vec3(this.getOriginPos().getX() - this.getX(), this.getOriginPos().getY() - this.getY(), this.getOriginPos().getZ() - this.getZ()).normalize();
 		final double speed = 0.4D;
 		this.setDeltaMovement(vec.multiply(speed, speed, speed));
 	}
@@ -393,8 +399,8 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(1.2F, 2F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(1.2F, 2F);
 	}
 
 	@Override
@@ -413,7 +419,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("bungee_state")) {
 			this.setBungeeState(BungeeStates.values()[compound.getInt("bungee_state")]);
@@ -425,20 +431,20 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 			this.stealTarget = (LivingEntity) level.getEntity(compound.getInt("steal_target"));
 		}
 		if(compound.contains("summon_type")){
-			this.entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(compound.getString("summon_type")));
+			this.entityType = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(compound.getString("summon_type")));
 		}
 		if(compound.contains("steal_pos")) {
-			CompoundNBT nbt = compound.getCompound("steal_pos");
+			CompoundTag nbt = compound.getCompound("steal_pos");
 			this.stealPos = new BlockPos(nbt.getInt("steal_pos_x"), nbt.getInt("steal_pos_y"), nbt.getInt("steal_pos_z"));
 		}
 		if(compound.contains("origin_pos")) {
-			CompoundNBT nbt = compound.getCompound("origin_pos");
+			CompoundTag nbt = compound.getCompound("origin_pos");
 			this.setOriginPos(new BlockPos(nbt.getInt("origin_pos_x"), nbt.getInt("origin_pos_y"), nbt.getInt("origin_pos_z")));
 		}
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("bungee_state", this.getBungeeState().ordinal());
 		compound.putInt("bungee_type", this.getBungeeType().ordinal());
@@ -446,17 +452,17 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 			compound.putInt("steal_target", this.stealTarget.getId());
 		}
 		if(this.entityType != null){
-			compound.putString("summon_type", this.entityType.getRegistryName().toString());
+			compound.putString("summon_type", ForgeRegistries.ENTITY_TYPES.getKey(this.entityType).toString());
 		}
 		if(this.stealPos != null){
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			nbt.putInt("steal_pos_x", this.stealPos.getX());
 			nbt.putInt("steal_pos_y", this.stealPos.getY());
 			nbt.putInt("steal_pos_z", this.stealPos.getZ());
 			compound.put("steal_pos", nbt);
 		}
 		{
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			nbt.putInt("origin_pos_x", this.getOriginPos().getX());
 			nbt.putInt("origin_pos_y", this.getOriginPos().getY());
 			nbt.putInt("origin_pos_z", this.getOriginPos().getZ());

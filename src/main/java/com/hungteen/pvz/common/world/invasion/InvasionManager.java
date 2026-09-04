@@ -11,16 +11,15 @@ import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.others.WeightList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
@@ -32,11 +31,11 @@ import java.util.stream.Stream;
 
 public class InvasionManager {
 
-    private static final ITextComponent START = new TranslationTextComponent("invasion.pvz.start")
-            .withStyle(TextFormatting.DARK_RED);
-    private static final ITextComponent END = new TranslationTextComponent("invasion.pvz.end")
-            .withStyle(TextFormatting.GREEN);
-    public static final ITextComponent HUGE_WAVE = new TranslationTextComponent("invasion.pvz.huge_wave").withStyle(TextFormatting.DARK_RED);
+    private static final Component START = Component.translatable("invasion.pvz.start")
+            .withStyle(ChatFormatting.DARK_RED);
+    private static final Component END = Component.translatable("invasion.pvz.end")
+            .withStyle(ChatFormatting.GREEN);
+    public static final Component HUGE_WAVE = Component.translatable("invasion.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED);
     public static final int[] SPAWN_COUNT_EACH_WAVE = new int[] {10, 12, 16, 20, 24, 30, 36, 42, 44, 46};
     public static final int PRE_START_TICK = 499;
     public static final int START_TICK = 500;
@@ -49,27 +48,27 @@ public class InvasionManager {
      * only run when world server start.
      * {@link PVZServerEvents#serverInit(net.minecraftforge.fml.event.server.FMLServerStartingEvent)}
      */
-    public static void syncStartInvasionCache(ServerWorld world) {
+    public static void syncStartInvasionCache(ServerLevel world) {
     }
 
     /**
      * only run when world server shut down.
      * {@link PVZServerEvents#serverShutDown(net.minecraftforge.fml.event.server.FMLServerStoppingEvent)}
      */
-    public static void syncEndInvasionCache(ServerWorld world) {
+    public static void syncEndInvasionCache(ServerLevel world) {
     }
 
     /**
-     * {@link com.hungteen.pvz.common.event.handler.PlayerEventHandler#onPlayerLogin(PlayerEntity)}
+     * {@link com.hungteen.pvz.common.event.handler.PlayerEventHandler#onPlayerLogin(Player)}
      */
-    public static void addPlayer(PlayerEntity player){
+    public static void addPlayer(Player player){
         INVASIONS.add(PlayerUtil.getInvasion(player));
     }
 
     /**
-     * {@link com.hungteen.pvz.common.event.handler.PlayerEventHandler#onPlayerLogout(PlayerEntity)}
+     * {@link com.hungteen.pvz.common.event.handler.PlayerEventHandler#onPlayerLogout(Player)}
      */
-    public static void removePlayer(PlayerEntity player){
+    public static void removePlayer(Player player){
         INVASIONS.remove(PlayerUtil.getInvasion(player));
     }
 
@@ -77,38 +76,38 @@ public class InvasionManager {
      * tick for overworld invasion events.
      * {@link com.hungteen.pvz.common.event.PVZWorldEvents#onWorldTick(TickEvent.WorldTickEvent)}
      */
-    public static void tick(TickEvent.WorldTickEvent ev) {
-        final long dayTime = ev.world.getDayTime() % 24000;
+    public static void tick(TickEvent.LevelTickEvent ev) {
+        final long dayTime = ev.level.getDayTime() % 24000;
         switch ((int) dayTime) {
             case PRE_START_TICK:
             case PRE_END_TICK: {
-                PVZInvasionData.getOverWorldInvasionData(ev.world).setChanged(false);
+                PVZInvasionData.getOverWorldInvasionData(ev.level).setChanged(false);
                 break;
             }
             case START_TICK: {
-                PVZInvasionData data = PVZInvasionData.getOverWorldInvasionData(ev.world);
+                PVZInvasionData data = PVZInvasionData.getOverWorldInvasionData(ev.level);
                 if (!data.hasChanged()) {
                     data.setChanged(true);
-                    deactivateInvasion(ev.world, false);// cancel all invasion happened yesterday.
-                    final long dif = getSafeDayDif(ev.world);
+                    deactivateInvasion(ev.level, false);// cancel all invasion happened yesterday.
+                    final long dif = getSafeDayDif(ev.level);
                     final boolean isSafe = (dif < 0);
                     final int count = data.getCountDownDay();
                     if (!isSafe) {// no interval and not safe then invade happen !
-                        activateInvasionEvents(ev.world, count);//todo tmp MARK
+                        activateInvasionEvents(ev.level, count);//todo tmp MARK
                     } else {
-                        PlayerUtil.sendMsgToAll(ev.world,
-                                new TranslationTextComponent("invasion.pvz.safe_day", String.format("%.1f", -dif * 1.0 / 24000))
-                                        .withStyle(TextFormatting.GREEN));
+                        PlayerUtil.sendMsgToAll(ev.level,
+                                Component.translatable("invasion.pvz.safe_day", String.format("%.1f", -dif * 1.0 / 24000))
+                                        .withStyle(ChatFormatting.GREEN));
                     }
                     data.decCountDownDay();
                 }
                 break;
             }
             case END_TICK: {
-                PVZInvasionData data = PVZInvasionData.getOverWorldInvasionData(ev.world);
+                PVZInvasionData data = PVZInvasionData.getOverWorldInvasionData(ev.level);
                 if (!data.hasChanged()) {
                     data.setChanged(true);
-                    deactivateInvasion(ev.world, true);
+                    deactivateInvasion(ev.level, true);
                 }
                 break;
             }
@@ -123,25 +122,25 @@ public class InvasionManager {
      * check and activate attack event, do not activate in peaceful mode.
      * {@link #tick(TickEvent.WorldTickEvent)}
      */
-    public static void activateInvasionEvents(World world, int count) {
+    public static void activateInvasionEvents(Level world, int count) {
         if (world.getDifficulty() != Difficulty.PEACEFUL && !MinecraftForge.EVENT_BUS.post(new InvasionEvent.InvasionStartEvent(world))) {
             PlayerUtil.getServerPlayers(world).forEach(player -> {
                 if (ConfigUtil.scatteredInvasions() ? (Math.abs((int) player.getUUID().getMostSignificantBits()) + count) % (PVZConfig.COMMON_CONFIG.InvasionSettings.InvasionIntervalLength.get() + 1) <= 0 : count <= 0){
                     enableInvasion(player);
                 }
                 else {
-                    PlayerUtil.sendMsgTo(player, new TranslationTextComponent("invasion.pvz.count_down",
+                    PlayerUtil.sendMsgTo(player, Component.translatable("invasion.pvz.count_down",
                             ConfigUtil.scatteredInvasions() ? (Math.abs((int) player.getUUID().getMostSignificantBits()) + count) % (PVZConfig.COMMON_CONFIG.InvasionSettings.InvasionIntervalLength.get() + 1) : count)
-                            .withStyle(TextFormatting.RED));
+                            .withStyle(ChatFormatting.RED));
                 }
             });
         }
     }
 
     /**
-     * {@link #activateInvasionEvents(World,int)}
+     * {@link #activateInvasionEvents(Level,int)}
      */
-    public static void enableInvasion(ServerPlayerEntity player) {
+    public static void enableInvasion(ServerPlayer player) {
             final Invasion invasion = PlayerUtil.getInvasion(player);
             if(! invasion.isRunning()){
                 PlayerUtil.sendMsgTo(player, START);
@@ -155,14 +154,14 @@ public class InvasionManager {
      * deactivate all invasion events.
      * {@link #tick(TickEvent.WorldTickEvent)}
      */
-    public static void deactivateInvasion(World world, boolean isNatural) {
+    public static void deactivateInvasion(Level world, boolean isNatural) {
         disableInvasion(PlayerUtil.getServerPlayers(world), isNatural);
     }
 
     /**
-     * {@link #deactivateInvasion(World, boolean)}
+     * {@link #deactivateInvasion(Level, boolean)}
      */
-    public static void disableInvasion(Collection<ServerPlayerEntity> players, boolean isNatural){
+    public static void disableInvasion(Collection<ServerPlayer> players, boolean isNatural){
         players.forEach(player -> {
             final Invasion invasion = PlayerUtil.getInvasion(player);
             if(isNatural && invasion.isRunning()){//send disable msg to player.
@@ -200,11 +199,11 @@ public class InvasionManager {
     /**
      * if it is still in safe day, then the dif must less than 0.
      */
-    private static long getSafeDayDif(World world) {
+    private static long getSafeDayDif(Level world) {
         return world.getGameTime() - getSafeDayLength(world) * 24000;
     }
 
-    public static int getSafeDayLength(World world) {
+    public static int getSafeDayLength(Level world) {
         final Difficulty difficulty = world.getDifficulty();
         final int multiple = difficulty == Difficulty.HARD ? 0
                 : difficulty == Difficulty.NORMAL ? 1 : difficulty == Difficulty.EASY ? 2 : 3;
@@ -252,11 +251,11 @@ public class InvasionManager {
     /**
      * get players out zen garden. TODO Plant Invasion.
      */
-    public static boolean suitableInvasionPos(World world, BlockPos pos){
-        return ! world.getBiomeManager().getBiome(pos).getRegistryName().equals(BiomeRegister.ZEN_GARDEN.get().getRegistryName());
+    public static boolean suitableInvasionPos(Level world, BlockPos pos){
+        return ! world.getBiomeManager().getBiome(pos).is(BiomeRegister.ZEN_GARDEN.getKey());
     }
 
-    public static boolean enableSkills(World world){
+    public static boolean enableSkills(Level world){
         return world.getDifficulty() == Difficulty.HARD;
     }
 

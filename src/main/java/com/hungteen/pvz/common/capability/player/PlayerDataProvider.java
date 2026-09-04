@@ -2,31 +2,31 @@ package com.hungteen.pvz.common.capability.player;
 
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class PlayerDataProvider implements ICapabilitySerializable<CompoundNBT> {
+public class PlayerDataProvider implements ICapabilitySerializable<CompoundTag> {
 	
-	private IPlayerDataCapability player_data_capability = CapabilityHandler.PLAYER_DATA_CAPABILITY.getDefaultInstance();
+	private IPlayerDataCapability player_data_capability = new PlayerDataCapability();
 
 	
-	public PlayerDataProvider(PlayerEntity player) {
+	public PlayerDataProvider(Player player) {
 		if(player!=null) {
 		    player_data_capability.init(player);
 		}
 	}
 	
 	@Override
-	public CompoundNBT serializeNBT() {
+	public CompoundTag serializeNBT() {
 		return player_data_capability.getPlayerData().saveToNBT();
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		player_data_capability.getPlayerData().loadFromNBT(nbt);
 	}
 
@@ -35,4 +35,3 @@ public class PlayerDataProvider implements ICapabilitySerializable<CompoundNBT> 
 		return CapabilityHandler.PLAYER_DATA_CAPABILITY.orEmpty(cap, LazyOptional.of(()->player_data_capability));
 	}
 }
-

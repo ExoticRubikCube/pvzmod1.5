@@ -4,11 +4,11 @@ import com.hungteen.pvz.client.gui.search.CategoryToggleWidget;
 import com.hungteen.pvz.client.gui.search.OptionSearchGui;
 import com.hungteen.pvz.client.gui.search.SearchOption;
 import com.hungteen.pvz.common.container.AbstractOptionContainer;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,7 +19,7 @@ public abstract class AbstractOptionScreen<T extends AbstractOptionContainer> ex
 
 	protected final OptionSearchGui searchGui = new OptionSearchGui();
 	
-	public AbstractOptionScreen(T screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+	public AbstractOptionScreen(T screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 	}
 
@@ -29,18 +29,18 @@ public abstract class AbstractOptionScreen<T extends AbstractOptionContainer> ex
 		this.searchGui.init(this.minecraft, this, this.menu, this.width, this.height);
 		this.leftPos = this.searchGui.updateScreenPosition(this.imageWidth, this.imageHeight);
 		this.searchGui.initSearchBar();
-		this.children.add(this.searchGui);
-		this.setInitialFocus(this.searchGui);
+		this.addRenderableWidget(this.searchGui.searchBar);
+		this.setInitialFocus(this.searchGui.searchBar);
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	protected void containerTick() {
+		super.containerTick();
 		this.searchGui.tick();
 	}
 	
 	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		this.searchGui.render(stack, mouseX, mouseY, partialTicks);
 		super.render(stack, mouseX, mouseY, partialTicks);
 		this.searchGui.getRecipeManager().render(this.minecraft, stack, this.leftPos, this.topPos, partialTicks);
@@ -54,6 +54,33 @@ public abstract class AbstractOptionScreen<T extends AbstractOptionContainer> ex
 	    return this.searchGui.hasClickedOutside(mouseX, mouseY, this.leftPos, this.topPos, mouseButton) && flag;
 	}
 	
+	@Override
+	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
+		if (this.searchGui.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_)) {
+			return true;
+		} else {
+			return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+		}
+	}
+
+	@Override
+	public boolean keyReleased(int p_keyReleased_1_, int p_keyReleased_2_, int p_keyReleased_3_) {
+		if (this.searchGui.keyReleased(p_keyReleased_1_, p_keyReleased_2_, p_keyReleased_3_)) {
+			return true;
+		} else {
+			return super.keyReleased(p_keyReleased_1_, p_keyReleased_2_, p_keyReleased_3_);
+		}
+	}
+
+	@Override
+	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+		if (this.searchGui.charTyped(p_charTyped_1_, p_charTyped_2_)) {
+			return true;
+		} else {
+			return super.charTyped(p_charTyped_1_, p_charTyped_2_);
+		}
+	}
+
 	@Override
 	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
 		if (this.searchGui.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
@@ -84,6 +111,6 @@ public abstract class AbstractOptionScreen<T extends AbstractOptionContainer> ex
 	 * all categories that displayed on left side.
 	 */
 	public abstract List<CategoryToggleWidget.SearchCategories> getSearchCategories();
-	
+
 
 }

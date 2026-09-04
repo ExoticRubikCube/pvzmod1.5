@@ -1,47 +1,50 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
+import net.minecraft.world.entity.animal.Dolphin;
+import net.minecraftforge.fluids.FluidType;
+
 import com.hungteen.pvz.common.entity.ai.goal.attack.PVZZombieAttackGoal;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.DolphinLookController;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 
 public class ZombieDolphinEntity extends PVZZombieEntity {
 
-	public ZombieDolphinEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public ZombieDolphinEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
-		this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+		this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
 		this.moveControl = new MoveHelperController(this);
-		this.lookControl = new DolphinLookController(this, 10);
+		this.lookControl = new SmoothSwimmingLookControl(this, 10);
 		this.canBeMini = false;
 	}
 	
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new BreatheAirGoal(this));
+		this.goalSelector.addGoal(0, new BreathAirGoal(this));
 		this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
-		this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-		this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 2.0F));
+		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 2.0F));
 		this.goalSelector.addGoal(5, new ZombieDolphinJumpGoal(this, 10));
 		this.goalSelector.addGoal(8, new FollowBoatGoal(this));
 		this.goalSelector.addGoal(0, new PVZZombieAttackGoal(this, true));
@@ -60,8 +63,8 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(1f, 0.7f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(1f, 0.7f);
 	}
 
 	@Override
@@ -84,7 +87,7 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 		return -0.5f;
 	}
 
-	public boolean checkSpawnObstruction(IWorldReader worldIn) {
+	public boolean checkSpawnObstruction(LevelReader worldIn) {
 		return worldIn.isUnobstructed(this);
 	}
 
@@ -94,7 +97,7 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 	}
 
 	@Override
-	public boolean canBeRiddenInWater(Entity rider) {
+	public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
 		return true;
 	}
 	
@@ -109,13 +112,13 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 	}
 
 	@Override
-	public CreatureAttribute getMobType() {
-		return CreatureAttribute.WATER;
+	public MobType getMobType() {
+		return MobType.WATER;
 	}
 
 	@Override
-	protected PathNavigator createNavigation(World worldIn) {
-		return new SwimmerPathNavigator(this, worldIn);
+	protected PathNavigation createNavigation(Level worldIn) {
+		return new WaterBoundPathNavigation(this, worldIn);
 	}
 	
 	@Override
@@ -123,7 +126,7 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 		return PoolZombies.ZOMBIE_DOLPHIN;
 	}
 
-	static class MoveHelperController extends MovementController {
+	static class MoveHelperController extends MoveControl {
 		private final ZombieDolphinEntity dolphin;
 
 		public MoveHelperController(ZombieDolphinEntity dolphinIn) {
@@ -136,7 +139,7 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 				this.dolphin.setDeltaMovement(this.dolphin.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
 			}
 
-			if (this.operation == MovementController.Action.MOVE_TO && !this.dolphin.getNavigation().isDone()) {
+			if (this.operation == MoveControl.Operation.MOVE_TO && !this.dolphin.getNavigation().isDone()) {
 				double d0 = this.wantedX - this.dolphin.getX();
 				double d1 = this.wantedY - this.dolphin.getY();
 				double d2 = this.wantedZ - this.dolphin.getZ();
@@ -144,20 +147,20 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 				if (d3 < (double) 2.5000003E-7F) {
 					this.mob.setZza(0.0F);
 				} else {
-					float f = (float) (MathHelper.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
-					this.dolphin.yRot = this.rotlerp(this.dolphin.yRot, f, 10.0F);
-					this.dolphin.yBodyRot = this.dolphin.yRot;
-					this.dolphin.yHeadRot = this.dolphin.yRot;
+					float f = (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
+					this.dolphin.setYRot(this.rotlerp(this.dolphin.getYRot(), f, 10.0F));
+					this.dolphin.yBodyRot = this.dolphin.getYRot();
+					this.dolphin.yHeadRot = this.dolphin.getYRot();
 					float f1 = (float) (this.speedModifier
 							* this.dolphin.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					if (this.dolphin.isInWater()) {
 						this.dolphin.setSpeed(f1 * 0.02F);
-						float f2 = -((float) (MathHelper.atan2(d1, (double) MathHelper.sqrt(d0 * d0 + d2 * d2))
+						float f2 = -((float) (Mth.atan2(d1, Mth.sqrt((float)(d0 * d0 + d2 * d2)))
 								* (double) (180F / (float) Math.PI)));
-						f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
-						this.dolphin.xRot = this.rotlerp(this.dolphin.xRot, f2, 5.0F);
-						float f3 = MathHelper.cos(this.dolphin.xRot * ((float) Math.PI / 180F));
-						float f4 = MathHelper.sin(this.dolphin.xRot * ((float) Math.PI / 180F));
+						f2 = Mth.clamp(Mth.wrapDegrees(f2), -85.0F, 85.0F);
+						this.dolphin.setXRot(this.rotlerp(this.dolphin.getXRot(), f2, 5.0F));
+						float f3 = Mth.cos(this.dolphin.getXRot() * ((float) Math.PI / 180F));
+						float f4 = Mth.sin(this.dolphin.getXRot() * ((float) Math.PI / 180F));
 						this.dolphin.zza = f3 * f1;
 						this.dolphin.yya = -f4 * f1;
 					} else {
@@ -225,8 +228,8 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 		 */
 		public boolean canContinueToUse() {
 			double d0 = this.dolphin.getDeltaMovement().y;
-			return (!(d0 * d0 < (double) 0.03F) || this.dolphin.xRot == 0.0F
-					|| !(Math.abs(this.dolphin.xRot) < 10.0F) || !this.dolphin.isInWater())
+			return (!(d0 * d0 < (double) 0.03F) || this.dolphin.getXRot() == 0.0F
+					|| !(Math.abs(this.dolphin.getXRot()) < 10.0F) || !this.dolphin.isInWater())
 					&& !this.dolphin.onGround;
 		}
 
@@ -249,7 +252,7 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 		 * another one
 		 */
 		public void stop() {
-			this.dolphin.xRot = 0.0F;
+			this.dolphin.setXRot(0.0F);
 		}
 
 		/**
@@ -267,13 +270,13 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 				this.dolphin.playSound(SoundEvents.DOLPHIN_JUMP, 1.0F, 1.0F);
 			}
 
-			Vector3d vec3d = this.dolphin.getDeltaMovement();
-			if (vec3d.y * vec3d.y < (double) 0.03F && this.dolphin.xRot != 0.0F) {
-				this.dolphin.xRot = MathHelper.rotlerp(this.dolphin.xRot, 0.0F, 0.2F);
+			Vec3 vec3d = this.dolphin.getDeltaMovement();
+			if (vec3d.y * vec3d.y < (double) 0.03F && this.dolphin.getXRot() != 0.0F) {
+				this.dolphin.setXRot(Mth.rotlerp(this.dolphin.getXRot(), 0.0F, 0.2F));
 			} else {
-				double d0 = Math.sqrt(Entity.getHorizontalDistanceSqr(vec3d));
+				double d0 = Math.sqrt(vec3d.horizontalDistanceSqr());
 				double d1 = Math.signum(-vec3d.y) * Math.acos(d0 / vec3d.length()) * (double) (180F / (float) Math.PI);
-				this.dolphin.xRot = (float) d1;
+				this.dolphin.setXRot((float) d1);
 			}
 
 		}

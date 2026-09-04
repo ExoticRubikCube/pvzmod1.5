@@ -4,12 +4,12 @@ import com.hungteen.pvz.client.model.entity.plant.magic.HypnoShroomModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.magic.HypnoShroomEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class HypnoShroomRender extends PVZPlantRender<HypnoShroomEntity>{
 
-	public HypnoShroomRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new HypnoShroomModel(), 0.5f);
+	public HypnoShroomRender(EntityRendererProvider.Context context) {
+		super(context, new HypnoShroomModel(context.bakeLayer(HypnoShroomModel.LAYER)), 0.5f);
 	}
 
 }

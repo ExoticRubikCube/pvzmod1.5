@@ -2,100 +2,119 @@ package com.hungteen.pvz.client.model.entity.zombie.roof;
 
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.roof.ImpEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class ImpModel extends PVZZombieModel<ImpEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer left_leg;
-	private final ModelRenderer right_leg;
-	private final ModelRenderer up;
-	private final ModelRenderer body;
-	private final ModelRenderer right_arm;
-	private final ModelRenderer left_arm;
-	private final ModelRenderer head;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "imp"), "main");
 
-	public ImpModel() {
-		texWidth = 64;
-		texHeight = 64;
+	private final ModelPart total;
+	private final ModelPart left_leg;
+	private final ModelPart right_leg;
+	private final ModelPart up;
+	private final ModelPart body;
+	private final ModelPart right_arm;
+	private final ModelPart left_arm;
+	private final ModelPart head;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		
 
-		left_leg = new ModelRenderer(this);
-		left_leg.setPos(3.0F, -13.0F, 0.0F);
-		total.addChild(left_leg);
-		left_leg.texOffs(0, 47).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 13.0F, 4.0F, 0.0F, false);
 
-		right_leg = new ModelRenderer(this);
-		right_leg.setPos(-3.0F, -12.0F, 0.0F);
-		total.addChild(right_leg);
-		right_leg.texOffs(0, 29).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 13.0F, 4.0F, 0.0F, false);
 
-		up = new ModelRenderer(this);
-		up.setPos(0.0F, -12.0F, 0.0F);
-		total.addChild(up);
-		
-
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		up.addChild(body);
-		body.texOffs(0, 9).addBox(-5.0F, -16.0F, -2.0F, 10.0F, 15.0F, 4.0F, 0.0F, false);
-
-		right_arm = new ModelRenderer(this);
-		right_arm.setPos(-7.0F, -14.0F, 0.0F);
-		up.addChild(right_arm);
-		right_arm.texOffs(47, 34).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 15.0F, 4.0F, 0.0F, false);
-
-		left_arm = new ModelRenderer(this);
-		left_arm.setPos(7.0F, -14.0F, 0.0F);
-		up.addChild(left_arm);
-		left_arm.texOffs(29, 24).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 15.0F, 4.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -16.0F, 0.0F);
-		up.addChild(head);
-		head.texOffs(16, 44).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
+public ImpModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.left_leg = root.getChild("left_leg");
+		this.right_leg = root.getChild("right_leg");
+		this.up = root.getChild("up");
+		this.body = root.getChild("body");
+		this.right_arm = root.getChild("right_arm");
+		this.left_arm = root.getChild("left_arm");
+		this.head = root.getChild("head");
 	}
 
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition left_leg_pd = total_pd.addOrReplaceChild("left_leg",
+			CubeListBuilder.create()
+				.texOffs(0, 47).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 13.0F, 4.0F),
+			PartPose.offset(3.0F, -13.0F, 0.0F));
+		PartDefinition right_leg_pd = total_pd.addOrReplaceChild("right_leg",
+			CubeListBuilder.create()
+				.texOffs(0, 29).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 13.0F, 4.0F),
+			PartPose.offset(-3.0F, -12.0F, 0.0F));
+		PartDefinition up_pd = total_pd.addOrReplaceChild("up",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -12.0F, 0.0F));
+		PartDefinition body_pd = up_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(0, 9).addBox(-5.0F, -16.0F, -2.0F, 10.0F, 15.0F, 4.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition right_arm_pd = up_pd.addOrReplaceChild("right_arm",
+			CubeListBuilder.create()
+				.texOffs(47, 34).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 15.0F, 4.0F),
+			PartPose.offset(-7.0F, -14.0F, 0.0F));
+		PartDefinition left_arm_pd = up_pd.addOrReplaceChild("left_arm",
+			CubeListBuilder.create()
+				.texOffs(29, 24).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 15.0F, 4.0F),
+			PartPose.offset(7.0F, -14.0F, 0.0F));
+		PartDefinition head_pd = up_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(16, 44).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F),
+			PartPose.offset(0.0F, -16.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+
 	@Override
-	public ModelRenderer getZombieLeftHand() {
+	public ModelPart getZombieLeftHand() {
 		return this.left_arm;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightHand() {
+	public ModelPart getZombieRightHand() {
 		return this.right_arm;
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftLeg() {
+	public ModelPart getZombieLeftLeg() {
 		return this.left_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightLeg() {
+	public ModelPart getZombieRightLeg() {
 		return this.right_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieHead() {
+	public ModelPart getZombieHead() {
 		return this.head;
 	}
 	
 	@Override
-	public ModelRenderer getZombieUpBody() {
+	public ModelPart getZombieUpBody() {
 		return this.up;
 	}
 
 	@Override
-	public ModelRenderer getZombieWholeBody() {
+	public ModelPart getZombieWholeBody() {
 		return this.total;
 	}
 	

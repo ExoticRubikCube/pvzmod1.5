@@ -15,20 +15,20 @@ import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.item.blockitem.LilyPadItem;
 import com.hungteen.pvz.common.item.blockitem.SlotMachineItem;
 import com.hungteen.pvz.common.world.feature.NutTree;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegisterEvent;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid=PVZMod.MOD_ID,bus=Mod.EventBusSubscriber.Bus.MOD)
 public class BlockRegister {
@@ -51,7 +51,7 @@ public class BlockRegister {
 	public static final RegistryObject<EssenceOreBlock> ARMA_ORE = BLOCKS.register("arma_ore", () -> new EssenceOreBlock(EssenceTypes.ARMA, 0));
 	public static final RegistryObject<EssenceOreBlock> ELECTRIC_ORE = BLOCKS.register("electric_ore", () -> new EssenceOreBlock(EssenceTypes.ELECTRIC, 12));
 	public static final RegistryObject<EssenceOreBlock> SHADOW_ORE = BLOCKS.register("shadow_ore", () -> new EssenceOreBlock(EssenceTypes.SHADOW, 0));
-	public static final RegistryObject<PVZOreBlock> AMETHYST_ORE = BLOCKS.register("amethyst_ore",() -> new PVZOreBlock(Block.Properties.copy(Blocks.DIAMOND_ORE).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops().harvestLevel(3).strength(4F, 6F)));
+	public static final RegistryObject<PVZOreBlock> AMETHYST_ORE = BLOCKS.register("amethyst_ore",() -> new PVZOreBlock(Block.Properties.copy(Blocks.DIAMOND_ORE).requiresCorrectToolForDrops().strength(4F, 6F)));
 	
 	//block
 	public static final RegistryObject<Block> AMETHYST_BLOCK = BLOCKS.register("amethyst_block", () -> new Block(Block.Properties.copy(Blocks.EMERALD_BLOCK).strength(9, 9))); 
@@ -92,30 +92,38 @@ public class BlockRegister {
 	public static final RegistryObject<CardFusionBlock> CARD_FUSION_TABLE = BLOCKS.register("card_fusion_table", CardFusionBlock::new);
 	
 	/**
-	 * register block items.
+	 * register block items via 1.19 RegisterEvent.
 	 */
 	@SubscribeEvent
-	public static void registerBlockItem(RegistryEvent.Register<Item> ev){
-		IForgeRegistry<Item> items = ev.getRegistry();
+	public static void registerBlockItem(RegisterEvent ev) {
+		if (Objects.equals(ev.getRegistryKey(), Registry.ITEM_REGISTRY)) {
 
-		Arrays.asList(
-				ORIGIN_ORE, APPEASE_ORE, LIGHT_ORE, EXPLOSION_ORE, DEFENCE_ORE, ICE_ORE, ENFORCE_ORE, TOXIC_ORE, ASSIST_ORE, MAGIC_ORE, FLAME_ORE, SPEAR_ORE, ARMA_ORE, ELECTRIC_ORE, SHADOW_ORE, AMETHYST_ORE,
-				AMETHYST_BLOCK, ORIGIN_BLOCK, BUTTER_BLOCK, FROZEN_MELON, 
-				NUT_LEAVES, NUT_LOG, NUT_SAPLING, CHOMPER,
-				LANTERN, FLOWER_POT, GOLD_TILE1, GOLD_TILE2, GOLD_TILE3, LUNAR_STONE, SILVER_SUNFLOWER_TROPHY, GOLD_SUNFLOWER_TROPHY, DIAMOND_SUNFLOWER_TROPHY
-		).forEach(block -> {
-			items.register(new BlockItem(block.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)).setRegistryName(block.get().getRegistryName()));
-		});
+			Arrays.asList(
+					ORIGIN_ORE, APPEASE_ORE, LIGHT_ORE, EXPLOSION_ORE, DEFENCE_ORE, ICE_ORE, ENFORCE_ORE, TOXIC_ORE, ASSIST_ORE, MAGIC_ORE, FLAME_ORE, SPEAR_ORE, ARMA_ORE, ELECTRIC_ORE, SHADOW_ORE, AMETHYST_ORE,
+					AMETHYST_BLOCK, ORIGIN_BLOCK, BUTTER_BLOCK, FROZEN_MELON,
+					NUT_LEAVES, NUT_LOG, NUT_SAPLING, CHOMPER,
+					LANTERN, FLOWER_POT, GOLD_TILE1, GOLD_TILE2, GOLD_TILE3, LUNAR_STONE, SILVER_SUNFLOWER_TROPHY, GOLD_SUNFLOWER_TROPHY, DIAMOND_SUNFLOWER_TROPHY
+			).forEach(block -> {
+				ev.register(Registry.ITEM_REGISTRY, helper -> {
+					helper.register(ForgeRegistries.BLOCKS.getKey(block.get()), new BlockItem(block.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+				});
+			});
 
-		Arrays.asList(
-				STEEL_LADDER, SUN_CONVERTER, FRAGMENT_SPLICE, ESSENCE_ALTAR, CARD_FUSION_TABLE
-		).forEach(block -> {
-			items.register(new BlockItem(block.get(), new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL)).setRegistryName(block.get().getRegistryName()));
-		});
+			Arrays.asList(
+					STEEL_LADDER, SUN_CONVERTER, FRAGMENT_SPLICE, ESSENCE_ALTAR, CARD_FUSION_TABLE
+			).forEach(block -> {
+				ev.register(Registry.ITEM_REGISTRY, helper -> {
+					helper.register(ForgeRegistries.BLOCKS.getKey(block.get()), new BlockItem(block.get(), new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL)));
+				});
+			});
 
-		items.register(new LilyPadItem().setRegistryName(LILY_PAD.get().getRegistryName()));
-		items.register(new SlotMachineItem().setRegistryName(SLOT_MACHINE.get().getRegistryName()));
-		
+			ev.register(Registry.ITEM_REGISTRY, helper -> {
+				helper.register(ForgeRegistries.BLOCKS.getKey(LILY_PAD.get()), new LilyPadItem());
+			});
+			ev.register(Registry.ITEM_REGISTRY, helper -> {
+				helper.register(ForgeRegistries.BLOCKS.getKey(SLOT_MACHINE.get()), new SlotMachineItem());
+			});
+		}
 	}
 	
 }

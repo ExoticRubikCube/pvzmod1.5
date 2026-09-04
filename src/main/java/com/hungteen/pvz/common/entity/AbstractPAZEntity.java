@@ -18,28 +18,28 @@ import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.others.WeightList;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -48,14 +48,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 //TODO fallen entities (such as coins)
-public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEntity, IEntityAdditionalSpawnData {
+public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEntity, IEntityAdditionalSpawnData {
 
-    private static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(AbstractPAZEntity.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Integer> STATES = EntityDataManager.defineId(AbstractPAZEntity.class, DataSerializers.INT);
-    private static final DataParameter<CompoundNBT> SKILLS = EntityDataManager.defineId(AbstractPAZEntity.class, DataSerializers.COMPOUND_TAG);
-    private static final DataParameter<Integer> EXIST_TICK = EntityDataManager.defineId(AbstractPAZEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(AbstractPAZEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Integer> STATES = SynchedEntityData.defineId(AbstractPAZEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<CompoundTag> SKILLS = SynchedEntityData.defineId(AbstractPAZEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<Integer> EXIST_TICK = SynchedEntityData.defineId(AbstractPAZEntity.class, EntityDataSerializers.INT);
     protected static final WeightList<DropType> NORMAL_DROP_LIST = new WeightList<>();
-    protected PlayerEntity ownerPlayer;
+    protected Player ownerPlayer;
     /* states */
     protected boolean canBeCold = true;
     protected boolean canBeFrozen = true;
@@ -82,7 +82,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
         NORMAL_DROP_LIST.setTotal(pp * pp);
     }
 
-    public AbstractPAZEntity(EntityType<? extends CreatureEntity> entityType, World world) {
+    public AbstractPAZEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
         this.refreshDimensions();
 //        this.setPersistenceRequired();
@@ -92,19 +92,19 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(OWNER_UUID, Optional.empty());
-        this.entityData.define(SKILLS, new CompoundNBT());
+        this.entityData.define(SKILLS, new CompoundTag());
         this.entityData.define(EXIST_TICK, 0);
         this.entityData.define(STATES, 0);
     }
 
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, ILivingEntityData spawnDataIn, CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn, CompoundTag dataTag) {
         this.finalizeSpawn(dataTag);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
-    public static AttributeModifierMap.MutableAttribute createPAZAttributes() {
-        return AttributeModifierMap.builder()
+    public static AttributeSupplier.Builder createPAZAttributes() {
+        return LivingEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH)
                 .add(Attributes.KNOCKBACK_RESISTANCE)
                 .add(Attributes.ATTACK_KNOCKBACK)
@@ -125,7 +125,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
      * used in invasion spawn.
      */
     public static void randomInitSkills(AbstractPAZEntity pazEntity, int maxLevel){
-        final CompoundNBT skillNBT = new CompoundNBT();
+        final CompoundTag skillNBT = new CompoundTag();
         final List<ISkillType> skills = pazEntity.getPAZType().getSkills();
         int point = MathUtil.getRandomMinMax(pazEntity.getRandom(), maxLevel / 2, maxLevel);
         for(int i = 0; i < 10; ++ i){
@@ -144,7 +144,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     /**
      * final runtime before entity spawn in world.
      */
-    public void finalizeSpawn(CompoundNBT tag){
+    public void finalizeSpawn(CompoundTag tag){
         if (! this.level.isClientSide()) {
             if(tag != null){
                 if(tag.contains(SkillTypes.SKILL_TAG)){
@@ -160,7 +160,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     /**
      * spawned by player for the first time.
      */
-    public void onSpawnedByPlayer(@Nullable PlayerEntity player, int sunCost) {
+    public void onSpawnedByPlayer(@Nullable Player player, int sunCost) {
         if(player != null) {
             this.setOwnerUUID(player.getUUID());
         }
@@ -186,13 +186,13 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
      * tick not consider death.
      */
     public void pazTick(){
-        if(! level.isClientSide){
+        if(! level.isClientSide()){
             this.setExistTick(this.getExistTick() + 1);
         }
     }
 
     @Override
-    public void onSyncedDataUpdated(DataParameter<?> dataParameter) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> dataParameter) {
         super.onSyncedDataUpdated(dataParameter);
         if(dataParameter.equals(STATES)){
             this.updatePAZStates();
@@ -202,9 +202,9 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     @Override
     public void onCharmedBy(@Nullable LivingEntity entity) {
         if(this.canBeCharmed()){
-            final PlayerEntity player = EntityUtil.getEntityOwner(level, entity);
-            if (player != null && player instanceof ServerPlayerEntity) {
-                CharmZombieTrigger.INSTANCE.trigger((ServerPlayerEntity) player, this);
+            final Player player = EntityUtil.getEntityOwner(level, entity);
+            if (player != null && player instanceof ServerPlayer) {
+                CharmZombieTrigger.INSTANCE.trigger((ServerPlayer) player, this);
             }
         }
     }
@@ -219,8 +219,8 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
      */
     public static void damageOuterDefence(final LivingHurtEvent ev) {
         float amount = ev.getAmount();
-        if(ev.getEntityLiving() instanceof AbstractPAZEntity && ((AbstractPAZEntity) ev.getEntityLiving()).canOuterDefend(ev.getSource())){
-            final AbstractPAZEntity pazEntity = (AbstractPAZEntity) ev.getEntityLiving();
+        if(ev.getEntity() instanceof AbstractPAZEntity && ((AbstractPAZEntity) ev.getEntity()).canOuterDefend(ev.getSource())){
+            final AbstractPAZEntity pazEntity = (AbstractPAZEntity) ev.getEntity();
             final double life = pazEntity.getOuterDefenceLife();
             if(life > 0){
                 if(life > amount){
@@ -242,8 +242,8 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
      */
     public static void damageInnerDefence(final LivingDamageEvent ev) {
         float amount = ev.getAmount();
-        if(ev.getEntityLiving() instanceof AbstractPAZEntity){
-            final AbstractPAZEntity pazEntity = (AbstractPAZEntity) ev.getEntityLiving();
+        if(ev.getEntity() instanceof AbstractPAZEntity){
+            final AbstractPAZEntity pazEntity = (AbstractPAZEntity) ev.getEntity();
             final double life = pazEntity.getInnerDefenceLife();
             if(life > 0){
                 if(life > amount){
@@ -334,7 +334,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     public void die(DamageSource source) {
         super.die(source);
         //if it was killed by bowling, it will not drop anything.
-        if (source instanceof PVZEntityDamageSource && ((PVZEntityDamageSource) source).getDirectEntity() instanceof AbstractBowlingEntity
+        if (source instanceof PVZEntityDamageSource && source.getDirectEntity() instanceof AbstractBowlingEntity
                 && ((PVZEntityDamageSource) source).getDamageCount() > 0) {
             this.canSpawnDrop = false;
         }
@@ -352,7 +352,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
                         this.getRandomZ(1.0D), d0, d1, d2);
             }
             this.onRemoveWhenDeath();
-            this.remove();
+this.remove(RemovalReason.KILLED);
         }
     }
 
@@ -372,7 +372,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
 
     /**
      * update attributes when first spawn.
-     * {@link #finalizeSpawn(CompoundNBT)}
+     * {@link #finalizeSpawn(CompoundTag)}
      */
     protected void initAttributes() {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getLife());
@@ -385,7 +385,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
 
     /**
      * update states when first spawn.
-     * {@link #finalizeSpawn(CompoundNBT)}
+     * {@link #finalizeSpawn(CompoundTag)}
      */
     protected void updatePAZStates(){
 
@@ -435,7 +435,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     }
 
     @Override
-    public boolean canBeLeashed(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
         return false;
     }
 
@@ -516,7 +516,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     /* data */
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         {// save owner uuid.
             if (this.getOwnerUUID().isPresent()) {
@@ -536,7 +536,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         {// owner uuid.
             UUID ownerUuid;
@@ -544,7 +544,7 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
                 ownerUuid = compound.getUUID("OwnerUUID");
             } else {
                 String s1 = compound.getString("OwnerUUID");
-                ownerUuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s1);
+                ownerUuid = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s1);
             }
             if (ownerUuid != null) {
                 try {
@@ -580,12 +580,12 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
     }
 
     @Override
-    public void readSpawnData(PacketBuffer additionalData) {
+    public void readSpawnData(FriendlyByteBuf additionalData) {
 
     }
 
     @Override
-    public void writeSpawnData(PacketBuffer buffer) {
+    public void writeSpawnData(FriendlyByteBuf buffer) {
 
     }
 
@@ -634,11 +634,11 @@ public abstract class AbstractPAZEntity extends CreatureEntity implements IPAZEn
         this.entityData.set(STATES, state);
     }
 
-    public void setSkills(CompoundNBT nbt) {
+    public void setSkills(CompoundTag nbt) {
         this.entityData.set(SKILLS, nbt);
     }
 
-    public CompoundNBT getSkills() {
+    public CompoundTag getSkills() {
         return this.entityData.get(SKILLS);
     }
 

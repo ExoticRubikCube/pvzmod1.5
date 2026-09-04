@@ -12,33 +12,33 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 
 public class BalloonZombieEntity extends PVZZombieEntity {
 
-	private static final DataParameter<Boolean> HAS_BALLOON = EntityDataManager.defineId(BalloonZombieEntity.class, DataSerializers.BOOLEAN);
-	private final MovementController FlyController = new FlyingMovementController(this, 360, true);
-	private final MovementController GroundController = new MovementController(this);
-	private PathNavigator FlyNavigator;
-	private PathNavigator GroundNavigator;
+	private static final EntityDataAccessor<Boolean> HAS_BALLOON = SynchedEntityData.defineId(BalloonZombieEntity.class, EntityDataSerializers.BOOLEAN);
+	private final MoveControl FlyController = new FlyingMoveControl(this, 360, true);
+	private final MoveControl GroundController = new MoveControl(this);
+	private PathNavigation FlyNavigator;
+	private PathNavigation GroundNavigator;
 	
-	public BalloonZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public BalloonZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -51,8 +51,8 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	@Override
 	protected void registerGoals() {
 		//define at here to avoid crash.
-		this.FlyNavigator = new FlyingPathNavigator(this, level);
-		this.GroundNavigator = new GroundPathNavigator(this, level);
+		this.FlyNavigator = new FlyingPathNavigation(this, level);
+		this.GroundNavigator = new GroundPathNavigation(this, level);
 		super.registerGoals();
 	}
 	
@@ -65,7 +65,7 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> data) {
+	public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
 		super.onSyncedDataUpdated(data);
 		if(data.equals(HAS_BALLOON)) {
 			this.setNoGravity(this.hasBalloon());
@@ -83,7 +83,7 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	}
 	
 	private boolean canHitBalloon(DamageSource source) {
-		if(source.getDirectEntity() instanceof ArrowEntity) {
+		if(source.getDirectEntity() instanceof AbstractArrow) {
 			return true;
 		}
 		if(source instanceof PVZEntityDamageSource) {
@@ -97,7 +97,7 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	 * {@link #hurt(DamageSource, float)}
 	 */
 	public void onBalloonExplode(){
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			EntityUtil.playSound(this, SoundRegister.BALLOON_POP.get());
 		}
 		this.setBalloon(false);
@@ -155,13 +155,13 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	public PathNavigator getNavigation() {
+	public PathNavigation getNavigation() {
 		if(this.hasBalloon()) {
-			if(! (this.navigation instanceof FlyingPathNavigator)) {
+			if(! (this.navigation instanceof FlyingPathNavigation)) {
 			    this.navigation = this.FlyNavigator;
 			}
 		} else {
-			if(! (this.navigation instanceof GroundPathNavigator)) {
+			if(! (this.navigation instanceof GroundPathNavigation)) {
 				this.navigation = this.GroundNavigator;
 			}
 		}
@@ -174,7 +174,7 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("has_balloon")) {
 			this.setBalloon(compound.getBoolean("has_balloon"));
@@ -182,7 +182,7 @@ public class BalloonZombieEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("has_balloon", this.hasBalloon());
 	}

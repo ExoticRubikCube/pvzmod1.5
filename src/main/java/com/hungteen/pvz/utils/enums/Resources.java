@@ -3,7 +3,7 @@ package com.hungteen.pvz.utils.enums;
 import com.hungteen.pvz.common.capability.player.PlayerDataManager;
 import com.hungteen.pvz.utils.ConfigUtil;
 
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
 
 public enum Resources {
 
@@ -39,7 +39,7 @@ public enum Resources {
 	;
 	
 	/**
-	 * {@link PlayerDataManager#PlayerDataManager(net.minecraft.entity.player.PlayerEntity)}
+	 * {@link PlayerDataManager#PlayerDataManager(net.minecraft.entity.player.Player)}
 	 */
 	public static int getInitialValue(Resources res) {
 		switch (res) {
@@ -60,7 +60,7 @@ public enum Resources {
 		this.max = max;
 	}
 	
-	public TranslationTextComponent getText() {
-		return new TranslationTextComponent("resource.pvz." + this.toString().toLowerCase());
+	public Component getText() {
+		return Component.translatable("resource.pvz." + this.toString().toLowerCase());
 	}
 }

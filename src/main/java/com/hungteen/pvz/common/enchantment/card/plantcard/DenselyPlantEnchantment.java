@@ -4,14 +4,14 @@ import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 
 import com.hungteen.pvz.common.enchantment.PVZEnchantmentTypes;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 public class DenselyPlantEnchantment extends PVZEnchantment {
 
 	public DenselyPlantEnchantment() {
-		super(Rarity.RARE, PVZEnchantmentTypes.NO_OUTER_PLANT_CARD, new EquipmentSlotType[] { EquipmentSlotType.OFFHAND, EquipmentSlotType.MAINHAND });
+		super(Rarity.RARE, PVZEnchantmentTypes.NO_OUTER_PLANT_CARD, new EquipmentSlot[] { EquipmentSlot.OFFHAND, EquipmentSlot.MAINHAND });
 		this.isTradeable = false;
 	}
 	

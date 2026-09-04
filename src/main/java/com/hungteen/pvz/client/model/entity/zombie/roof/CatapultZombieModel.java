@@ -4,400 +4,381 @@ import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.client.model.entity.PVZEntityModel;
 import com.hungteen.pvz.common.entity.zombie.roof.CatapultZombieEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.util.Mth;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class CatapultZombieModel extends PVZEntityModel<CatapultZombieEntity> implements IZombieModel<CatapultZombieEntity>{
-	private final ModelRenderer total;
-	private final ModelRenderer car;
-	private final ModelRenderer lunzi;
-	private final ModelRenderer tyre_leftfront;
-	private final ModelRenderer bone14;
-	private final ModelRenderer bone12;
-	private final ModelRenderer bone13;
-	private final ModelRenderer bone15;
-	private final ModelRenderer bone16;
-	private final ModelRenderer bone17;
-	private final ModelRenderer tyre_leftfront2;
-	private final ModelRenderer bone2;
-	private final ModelRenderer bone3;
-	private final ModelRenderer bone4;
-	private final ModelRenderer bone5;
-	private final ModelRenderer bone6;
-	private final ModelRenderer bone7;
-	private final ModelRenderer tyre_leftfront3;
-	private final ModelRenderer bone8;
-	private final ModelRenderer bone9;
-	private final ModelRenderer bone10;
-	private final ModelRenderer bone11;
-	private final ModelRenderer bone18;
-	private final ModelRenderer bone19;
-	private final ModelRenderer tyre_leftfront4;
-	private final ModelRenderer bone20;
-	private final ModelRenderer bone21;
-	private final ModelRenderer bone22;
-	private final ModelRenderer bone23;
-	private final ModelRenderer bone24;
-	private final ModelRenderer bone25;
-	private final ModelRenderer front;
-	private final ModelRenderer balls;
-	private final ModelRenderer ball1;
-	private final ModelRenderer ball2;
-	private final ModelRenderer ball3;
-	private final ModelRenderer ball4;
-	private final ModelRenderer bone27;
-	private final ModelRenderer bone28;
-	private final ModelRenderer pult;
-	private final ModelRenderer pult2;
-	private final ModelRenderer pult3;
-	private final ModelRenderer level;
-	private final ModelRenderer bone;
-	private final ModelRenderer zombie;
-	private final ModelRenderer head;
-	private final ModelRenderer right_hand;
-	private final ModelRenderer left_hand;
-	private final ModelRenderer body;
-	private final ModelRenderer right_leg;
-	private final ModelRenderer left_leg;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "catapult_zombie"), "main");
 
-	public CatapultZombieModel() {
-		texWidth = 512;
-		texHeight = 512;
+	private final ModelPart total;
+	private final ModelPart car;
+	private final ModelPart lunzi;
+	private final ModelPart tyre_leftfront;
+	private final ModelPart bone14;
+	private final ModelPart bone12;
+	private final ModelPart bone13;
+	private final ModelPart bone15;
+	private final ModelPart bone16;
+	private final ModelPart bone17;
+	private final ModelPart tyre_leftfront2;
+	private final ModelPart bone2;
+	private final ModelPart bone3;
+	private final ModelPart bone4;
+	private final ModelPart bone5;
+	private final ModelPart bone6;
+	private final ModelPart bone7;
+	private final ModelPart tyre_leftfront3;
+	private final ModelPart bone8;
+	private final ModelPart bone9;
+	private final ModelPart bone10;
+	private final ModelPart bone11;
+	private final ModelPart bone18;
+	private final ModelPart bone19;
+	private final ModelPart tyre_leftfront4;
+	private final ModelPart bone20;
+	private final ModelPart bone21;
+	private final ModelPart bone22;
+	private final ModelPart bone23;
+	private final ModelPart bone24;
+	private final ModelPart bone25;
+	private final ModelPart front;
+	private final ModelPart balls;
+	private final ModelPart ball1;
+	private final ModelPart ball2;
+	private final ModelPart ball3;
+	private final ModelPart ball4;
+	private final ModelPart bone27;
+	private final ModelPart bone28;
+	private final ModelPart pult;
+	private final ModelPart pult2;
+	private final ModelPart pult3;
+	private final ModelPart level;
+	private final ModelPart bone;
+	private final ModelPart zombie;
+	private final ModelPart head;
+	private final ModelPart right_hand;
+	private final ModelPart left_hand;
+	private final ModelPart body;
+	private final ModelPart right_leg;
+	private final ModelPart left_leg;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		
 
-		car = new ModelRenderer(this);
-		car.setPos(0.0F, 0.0F, 32.0F);
-		total.addChild(car);
-		
 
-		lunzi = new ModelRenderer(this);
-		lunzi.setPos(0.0F, 0.0F, 0.0F);
-		car.addChild(lunzi);
-		
 
-		tyre_leftfront = new ModelRenderer(this);
-		tyre_leftfront.setPos(22.0F, -7.0F, -45.0F);
-		lunzi.addChild(tyre_leftfront);
-		
-
-		bone14 = new ModelRenderer(this);
-		bone14.setPos(0.0F, -3.0F, -34.0F);
-		tyre_leftfront.addChild(bone14);
-		
-
-		bone12 = new ModelRenderer(this);
-		bone12.setPos(0.0F, 0.0F, 0.0F);
-		bone14.addChild(bone12);
-		bone12.texOffs(478, 459).addBox(-4.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone12.texOffs(481, 436).addBox(-4.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone13 = new ModelRenderer(this);
-		bone13.setPos(0.0F, -10.0F, -2.0F);
-		bone14.addChild(bone13);
-		setRotationAngle(bone13, -1.5708F, 0.0F, 0.0F);
-		bone13.texOffs(478, 412).addBox(-4.0F, -35.7574F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone13.texOffs(481, 390).addBox(-4.0F, -43.2426F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone15 = new ModelRenderer(this);
-		bone15.setPos(0.0F, -5.0F, -36.0F);
-		tyre_leftfront.addChild(bone15);
-		setRotationAngle(bone15, -0.7854F, 0.0F, 0.0F);
-		
-
-		bone16 = new ModelRenderer(this);
-		bone16.setPos(0.0F, 0.0F, 0.0F);
-		bone15.addChild(bone16);
-		bone16.texOffs(481, 372).addBox(-4.0F, -21.8492F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone16.texOffs(480, 345).addBox(-4.0F, -29.3345F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone17 = new ModelRenderer(this);
-		bone17.setPos(0.0F, -10.0F, -2.0F);
-		bone15.addChild(bone17);
-		setRotationAngle(bone17, -1.5708F, 0.0F, 0.0F);
-		bone17.texOffs(478, 324).addBox(-4.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone17.texOffs(480, 297).addBox(-4.0F, -38.0624F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		tyre_leftfront2 = new ModelRenderer(this);
-		tyre_leftfront2.setPos(22.0F, -7.0F, -19.0F);
-		lunzi.addChild(tyre_leftfront2);
-		
-
-		bone2 = new ModelRenderer(this);
-		bone2.setPos(0.0F, -3.0F, -34.0F);
-		tyre_leftfront2.addChild(bone2);
-		
-
-		bone3 = new ModelRenderer(this);
-		bone3.setPos(0.0F, 0.0F, 0.0F);
-		bone2.addChild(bone3);
-		bone3.texOffs(481, 270).addBox(-4.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone3.texOffs(481, 241).addBox(-4.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone4 = new ModelRenderer(this);
-		bone4.setPos(0.0F, -10.0F, -2.0F);
-		bone2.addChild(bone4);
-		setRotationAngle(bone4, -1.5708F, 0.0F, 0.0F);
-		bone4.texOffs(486, 216).addBox(-4.0F, -35.7574F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone4.texOffs(486, 192).addBox(-4.0F, -43.2426F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone5 = new ModelRenderer(this);
-		bone5.setPos(0.0F, -5.0F, -36.0F);
-		tyre_leftfront2.addChild(bone5);
-		setRotationAngle(bone5, -0.7854F, 0.0F, 0.0F);
-		
-
-		bone6 = new ModelRenderer(this);
-		bone6.setPos(0.0F, 0.0F, 0.0F);
-		bone5.addChild(bone6);
-		bone6.texOffs(488, 145).addBox(-4.0F, -21.8492F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone6.texOffs(484, 169).addBox(-4.0F, -29.3345F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone7 = new ModelRenderer(this);
-		bone7.setPos(0.0F, -10.0F, -2.0F);
-		bone5.addChild(bone7);
-		setRotationAngle(bone7, -1.5708F, 0.0F, 0.0F);
-		bone7.texOffs(486, 124).addBox(-4.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone7.texOffs(486, 100).addBox(-4.0F, -38.0624F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		tyre_leftfront3 = new ModelRenderer(this);
-		tyre_leftfront3.setPos(-21.0F, -7.0F, -45.0F);
-		lunzi.addChild(tyre_leftfront3);
-		
-
-		bone8 = new ModelRenderer(this);
-		bone8.setPos(37.0F, -3.0F, -34.0F);
-		tyre_leftfront3.addChild(bone8);
-		
-
-		bone9 = new ModelRenderer(this);
-		bone9.setPos(0.0F, 0.0F, 0.0F);
-		bone8.addChild(bone9);
-		bone9.texOffs(486, 75).addBox(-38.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone9.texOffs(484, 56).addBox(-38.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone10 = new ModelRenderer(this);
-		bone10.setPos(0.0F, -10.0F, -2.0F);
-		bone8.addChild(bone10);
-		setRotationAngle(bone10, -1.5708F, 0.0F, 0.0F);
-		bone10.texOffs(486, 36).addBox(-38.0F, -35.7574F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone10.texOffs(486, 12).addBox(-38.0F, -43.2426F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone11 = new ModelRenderer(this);
-		bone11.setPos(37.0F, -5.0F, -36.0F);
-		tyre_leftfront3.addChild(bone11);
-		setRotationAngle(bone11, -0.7854F, 0.0F, 0.0F);
-		
-
-		bone18 = new ModelRenderer(this);
-		bone18.setPos(0.0F, 0.0F, 0.0F);
-		bone11.addChild(bone18);
-		bone18.texOffs(456, 11).addBox(-38.0F, -21.8492F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone18.texOffs(452, 38).addBox(-38.0F, -29.3345F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone19 = new ModelRenderer(this);
-		bone19.setPos(0.0F, -10.0F, -2.0F);
-		bone11.addChild(bone19);
-		setRotationAngle(bone19, -1.5708F, 0.0F, 0.0F);
-		bone19.texOffs(456, 57).addBox(-38.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone19.texOffs(457, 80).addBox(-38.0F, -38.0624F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		tyre_leftfront4 = new ModelRenderer(this);
-		tyre_leftfront4.setPos(-20.0F, -7.0F, -19.0F);
-		lunzi.addChild(tyre_leftfront4);
-		
-
-		bone20 = new ModelRenderer(this);
-		bone20.setPos(36.0F, -3.0F, -34.0F);
-		tyre_leftfront4.addChild(bone20);
-		
-
-		bone21 = new ModelRenderer(this);
-		bone21.setPos(0.0F, 0.0F, 0.0F);
-		bone20.addChild(bone21);
-		bone21.texOffs(449, 100).addBox(-38.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone21.texOffs(454, 124).addBox(-38.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone22 = new ModelRenderer(this);
-		bone22.setPos(0.0F, -10.0F, -2.0F);
-		bone20.addChild(bone22);
-		setRotationAngle(bone22, -1.5708F, 0.0F, 0.0F);
-		bone22.texOffs(454, 152).addBox(-38.0F, -35.7574F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone22.texOffs(457, 176).addBox(-38.0F, -43.2426F, 9.7574F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone23 = new ModelRenderer(this);
-		bone23.setPos(36.0F, -5.0F, -36.0F);
-		tyre_leftfront4.addChild(bone23);
-		setRotationAngle(bone23, -0.7854F, 0.0F, 0.0F);
-		
-
-		bone24 = new ModelRenderer(this);
-		bone24.setPos(0.0F, 0.0F, 0.0F);
-		bone23.addChild(bone24);
-		bone24.texOffs(454, 200).addBox(-38.0F, -21.8492F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone24.texOffs(454, 220).addBox(-38.0F, -29.3345F, 25.8198F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		bone25 = new ModelRenderer(this);
-		bone25.setPos(0.0F, -10.0F, -2.0F);
-		bone23.addChild(bone25);
-		setRotationAngle(bone25, -1.5708F, 0.0F, 0.0F);
-		bone25.texOffs(452, 246).addBox(-38.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-		bone25.texOffs(452, 268).addBox(-38.0F, -38.0624F, -15.0919F, 4.0F, 7.0F, 6.0F, 0.0F, false);
-
-		front = new ModelRenderer(this);
-		front.setPos(0.0F, -10.0F, -3.0F);
-		car.addChild(front);
-		front.texOffs(5, 458).addBox(-18.0F, -4.0F, -50.0F, 36.0F, 7.0F, 42.0F, 0.0F, false);
-		front.texOffs(174, 481).addBox(-18.0F, -16.0F, -21.0F, 20.0F, 12.0F, 12.0F, 0.0F, false);
-		front.texOffs(12, 421).addBox(17.0F, -11.0F, -24.0F, 1.0F, 7.0F, 14.0F, 0.0F, false);
-		front.texOffs(53, 421).addBox(2.0F, -11.0F, -24.0F, 1.0F, 7.0F, 14.0F, 0.0F, false);
-		front.texOffs(205, 344).addBox(2.0F, -11.0F, -25.0F, 16.0F, 7.0F, 1.0F, 0.0F, false);
-		front.texOffs(265, 342).addBox(2.0F, -11.0F, -10.0F, 16.0F, 7.0F, 1.0F, 0.0F, false);
-		front.texOffs(328, 338).addBox(-18.0F, -10.0F, -52.0F, 36.0F, 16.0F, 2.0F, 0.0F, false);
-		front.texOffs(330, 313).addBox(-18.0F, -16.0F, -50.0F, 36.0F, 12.0F, 4.0F, 0.0F, false);
-		front.texOffs(377, 460).addBox(2.0F, -6.0F, -39.0F, 16.0F, 2.0F, 8.0F, 0.0F, false);
-		front.texOffs(434, 488).addBox(7.0F, -24.0F, -38.0F, 6.0F, 1.0F, 6.0F, 0.0F, false);
-		front.texOffs(396, 482).addBox(9.0F, -23.0F, -45.0F, 2.0F, 19.0F, 2.0F, 0.0F, false);
-		front.texOffs(66, 334).addBox(-10.0F, -36.0F, -37.0F, 4.0F, 32.0F, 4.0F, 0.0F, false);
-
-		balls = new ModelRenderer(this);
-		balls.setPos(0.0F, 0.0F, 0.0F);
-		front.addChild(balls);
-		
-
-		ball1 = new ModelRenderer(this);
-		ball1.setPos(0.0F, 0.0F, 0.0F);
-		balls.addChild(ball1);
-		ball1.texOffs(148, 345).addBox(11.0F, -12.0F, -24.0F, 6.0F, 7.0F, 6.0F, 0.0F, false);
-
-		ball2 = new ModelRenderer(this);
-		ball2.setPos(0.0F, 0.0F, 0.0F);
-		balls.addChild(ball2);
-		ball2.texOffs(125, 369).addBox(3.0F, -13.0F, -24.0F, 7.0F, 8.0F, 6.0F, 0.0F, false);
-
-		ball3 = new ModelRenderer(this);
-		ball3.setPos(0.0F, 0.0F, 0.0F);
-		balls.addChild(ball3);
-		ball3.texOffs(120, 392).addBox(11.0F, -13.0F, -17.0F, 6.0F, 8.0F, 7.0F, 0.0F, false);
-
-		ball4 = new ModelRenderer(this);
-		ball4.setPos(0.0F, 0.0F, 0.0F);
-		balls.addChild(ball4);
-		ball4.texOffs(105, 424).addBox(3.0F, -14.0F, -18.0F, 8.0F, 9.0F, 8.0F, 0.0F, false);
-
-		bone27 = new ModelRenderer(this);
-		bone27.setPos(6.0F, -6.0F, -35.0F);
-		front.addChild(bone27);
-		setRotationAngle(bone27, 0.0F, 0.0F, -0.1745F);
-		bone27.texOffs(424, 357).addBox(-4.0F, -24.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		bone28 = new ModelRenderer(this);
-		bone28.setPos(14.0F, -6.0F, -35.0F);
-		front.addChild(bone28);
-		setRotationAngle(bone28, 0.0F, 0.0F, 0.1745F);
-		bone28.texOffs(426, 302).addBox(-4.0F, -24.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		pult = new ModelRenderer(this);
-		pult.setPos(10.0F, -22.0F, -44.0F);
-		front.addChild(pult);
-		setRotationAngle(pult, 0.3491F, 0.0F, 0.0F);
-		pult.texOffs(330, 254).addBox(-1.0F, -2.0F, -5.0F, 2.0F, 2.0F, 41.0F, 0.0F, false);
-
-		pult2 = new ModelRenderer(this);
-		pult2.setPos(0.0F, -1.0F, 36.0F);
-		pult.addChild(pult2);
-		setRotationAngle(pult2, -1.0472F, 0.0F, 0.0F);
-		pult2.texOffs(278, 305).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 13.0F, 0.0F, false);
-
-		pult3 = new ModelRenderer(this);
-		pult3.setPos(0.0F, 0.0F, 12.0F);
-		pult2.addChild(pult3);
-		setRotationAngle(pult3, -1.0472F, 0.0F, 0.0F);
-		pult3.texOffs(241, 318).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 4.0F, 0.0F, false);
-		pult3.texOffs(198, 318).addBox(-4.0F, -3.0F, -1.0F, 8.0F, 2.0F, 2.0F, 0.0F, false);
-		pult3.texOffs(165, 326).addBox(-4.0F, -13.0F, -1.0F, 8.0F, 2.0F, 2.0F, 0.0F, false);
-		pult3.texOffs(137, 329).addBox(-6.0F, -11.0F, -1.0F, 2.0F, 8.0F, 2.0F, 0.0F, false);
-		pult3.texOffs(105, 344).addBox(4.0F, -11.0F, -1.0F, 2.0F, 8.0F, 2.0F, 0.0F, false);
-		pult3.texOffs(92, 373).addBox(-4.0F, -11.0F, 1.0F, 8.0F, 8.0F, 1.0F, 0.0F, false);
-		pult3.texOffs(77, 394).addBox(-4.0F, -11.0F, -6.0F, 8.0F, 8.0F, 7.0F, 0.0F, false);
-		pult3.texOffs(33, 384).addBox(-1.0F, -5.0F, 3.0F, 2.0F, 10.0F, 11.0F, 0.0F, false);
-
-		level = new ModelRenderer(this);
-		level.setPos(-10.0F, -32.0F, -35.0F);
-		front.addChild(level);
-		setRotationAngle(level, -1.5708F, 0.0F, 0.0F);
-		level.texOffs(38, 346).addBox(-5.0F, -1.0F, -1.0F, 5.0F, 2.0F, 2.0F, 0.0F, false);
-		level.texOffs(40, 362).addBox(-7.0F, -1.0F, -1.0F, 2.0F, 2.0F, 5.0F, 0.0F, false);
-		level.texOffs(13, 326).addBox(-12.0F, -1.0F, 4.0F, 7.0F, 2.0F, 2.0F, 0.0F, false);
-
-		bone = new ModelRenderer(this);
-		bone.setPos(10.0F, -4.0F, -27.0F);
-		front.addChild(bone);
-		setRotationAngle(bone, -0.5236F, 0.0F, 0.0F);
-		bone.texOffs(12, 365).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 7.0F, 4.0F, 0.0F, false);
-
-		zombie = new ModelRenderer(this);
-		zombie.setPos(-8.0F, -33.0F, 14.0F);
-		total.addChild(zombie);
-		
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -25.0F, 0.0F);
-		zombie.addChild(head);
-		head.texOffs(261, 474).addBox(-7.0F, -6.0F, -7.0F, 14.0F, 14.0F, 14.0F, 0.0F, false);
-
-		right_hand = new ModelRenderer(this);
-		right_hand.setPos(-7.0F, -14.0F, 0.0F);
-		zombie.addChild(right_hand);
-		setRotationAngle(right_hand, -1.0472F, 0.0F, 0.0F);
-		right_hand.texOffs(157, 445).addBox(-7.0F, -3.0F, -3.0F, 6.0F, 24.0F, 6.0F, 0.0F, false);
-
-		left_hand = new ModelRenderer(this);
-		left_hand.setPos(8.0F, -14.0F, 0.0F);
-		zombie.addChild(left_hand);
-		setRotationAngle(left_hand, -0.6981F, 0.0F, 0.0F);
-		left_hand.texOffs(198, 442).addBox(0.0F, -3.0F, -3.0F, 6.0F, 24.0F, 6.0F, 0.0F, false);
-
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, -1.0F, 0.0F);
-		zombie.addChild(body);
-		body.texOffs(242, 429).addBox(-8.0F, -16.0F, -5.0F, 16.0F, 18.0F, 11.0F, 0.0F, false);
-		body.texOffs(333, 486).addBox(-2.0F, 2.0F, -4.0F, 4.0F, 6.0F, 10.0F, 0.0F, false);
-
-		right_leg = new ModelRenderer(this);
-		right_leg.setPos(-6.0F, 0.0F, 0.0F);
-		zombie.addChild(right_leg);
-		right_leg.texOffs(322, 438).addBox(-2.0F, 1.0F, -13.0F, 6.0F, 6.0F, 19.0F, 0.0F, false);
-		right_leg.texOffs(434, 448).addBox(-3.0F, 18.0F, -15.0F, 8.0F, 4.0F, 9.0F, 0.0F, false);
-		right_leg.texOffs(174, 413).addBox(-2.0F, 7.0F, -13.0F, 6.0F, 11.0F, 6.0F, 0.0F, false);
-
-		left_leg = new ModelRenderer(this);
-		left_leg.setPos(4.0F, 0.0F, 0.0F);
-		zombie.addChild(left_leg);
-		left_leg.texOffs(208, 393).addBox(-2.0F, 1.0F, -13.0F, 6.0F, 6.0F, 19.0F, 0.0F, false);
-		left_leg.texOffs(301, 413).addBox(-3.0F, 18.0F, -15.0F, 8.0F, 4.0F, 9.0F, 0.0F, false);
-		left_leg.texOffs(357, 404).addBox(-2.0F, 7.0F, -13.0F, 6.0F, 11.0F, 6.0F, 0.0F, false);
+public CatapultZombieModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.car = root.getChild("car");
+		this.lunzi = root.getChild("lunzi");
+		this.tyre_leftfront = root.getChild("tyre_leftfront");
+		this.bone14 = root.getChild("bone14");
+		this.bone12 = root.getChild("bone12");
+		this.bone13 = root.getChild("bone13");
+		this.bone15 = root.getChild("bone15");
+		this.bone16 = root.getChild("bone16");
+		this.bone17 = root.getChild("bone17");
+		this.tyre_leftfront2 = root.getChild("tyre_leftfront2");
+		this.bone2 = root.getChild("bone2");
+		this.bone3 = root.getChild("bone3");
+		this.bone4 = root.getChild("bone4");
+		this.bone5 = root.getChild("bone5");
+		this.bone6 = root.getChild("bone6");
+		this.bone7 = root.getChild("bone7");
+		this.tyre_leftfront3 = root.getChild("tyre_leftfront3");
+		this.bone8 = root.getChild("bone8");
+		this.bone9 = root.getChild("bone9");
+		this.bone10 = root.getChild("bone10");
+		this.bone11 = root.getChild("bone11");
+		this.bone18 = root.getChild("bone18");
+		this.bone19 = root.getChild("bone19");
+		this.tyre_leftfront4 = root.getChild("tyre_leftfront4");
+		this.bone20 = root.getChild("bone20");
+		this.bone21 = root.getChild("bone21");
+		this.bone22 = root.getChild("bone22");
+		this.bone23 = root.getChild("bone23");
+		this.bone24 = root.getChild("bone24");
+		this.bone25 = root.getChild("bone25");
+		this.front = root.getChild("front");
+		this.balls = root.getChild("balls");
+		this.ball1 = root.getChild("ball1");
+		this.ball2 = root.getChild("ball2");
+		this.ball3 = root.getChild("ball3");
+		this.ball4 = root.getChild("ball4");
+		this.bone27 = root.getChild("bone27");
+		this.bone28 = root.getChild("bone28");
+		this.pult = root.getChild("pult");
+		this.pult2 = root.getChild("pult2");
+		this.pult3 = root.getChild("pult3");
+		this.level = root.getChild("level");
+		this.bone = root.getChild("bone");
+		this.zombie = root.getChild("zombie");
+		this.head = root.getChild("head");
+		this.right_hand = root.getChild("right_hand");
+		this.left_hand = root.getChild("left_hand");
+		this.body = root.getChild("body");
+		this.right_leg = root.getChild("right_leg");
+		this.left_leg = root.getChild("left_leg");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition car_pd = total_pd.addOrReplaceChild("car",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 32.0F));
+		PartDefinition lunzi_pd = car_pd.addOrReplaceChild("lunzi",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition tyre_leftfront_pd = lunzi_pd.addOrReplaceChild("tyre_leftfront",
+			CubeListBuilder.create(),
+			PartPose.offset(22.0F, -7.0F, -45.0F));
+		PartDefinition bone14_pd = tyre_leftfront_pd.addOrReplaceChild("bone14",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -3.0F, -34.0F));
+		PartDefinition bone12_pd = bone14_pd.addOrReplaceChild("bone12",
+			CubeListBuilder.create()
+				.texOffs(478, 459).addBox(-4.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F)
+				.texOffs(481, 436).addBox(-4.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone13_pd = bone14_pd.addOrReplaceChild("bone13",
+			CubeListBuilder.create()
+				.texOffs(478, 412).addBox(-4.0F, -35.757401F, 9.7574F, 4.0F, 7.0F, 6.0F)
+				.texOffs(481, 390).addBox(-4.0F, -43.242599F, 9.7574F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition bone15_pd = tyre_leftfront_pd.addOrReplaceChild("bone15",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -5.0F, -36.0F, -0.7854F, 0.0F, 0.0F));
+		PartDefinition bone16_pd = bone15_pd.addOrReplaceChild("bone16",
+			CubeListBuilder.create()
+				.texOffs(481, 372).addBox(-4.0F, -21.849199F, 25.819799F, 4.0F, 7.0F, 6.0F)
+				.texOffs(480, 345).addBox(-4.0F, -29.334499F, 25.819799F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone17_pd = bone15_pd.addOrReplaceChild("bone17",
+			CubeListBuilder.create()
+				.texOffs(478, 324).addBox(-4.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F)
+				.texOffs(480, 297).addBox(-4.0F, -38.062401F, -15.0919F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition tyre_leftfront2_pd = lunzi_pd.addOrReplaceChild("tyre_leftfront2",
+			CubeListBuilder.create(),
+			PartPose.offset(22.0F, -7.0F, -19.0F));
+		PartDefinition bone2_pd = tyre_leftfront2_pd.addOrReplaceChild("bone2",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -3.0F, -34.0F));
+		PartDefinition bone3_pd = bone2_pd.addOrReplaceChild("bone3",
+			CubeListBuilder.create()
+				.texOffs(481, 270).addBox(-4.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F)
+				.texOffs(481, 241).addBox(-4.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone4_pd = bone2_pd.addOrReplaceChild("bone4",
+			CubeListBuilder.create()
+				.texOffs(486, 216).addBox(-4.0F, -35.757401F, 9.7574F, 4.0F, 7.0F, 6.0F)
+				.texOffs(486, 192).addBox(-4.0F, -43.242599F, 9.7574F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition bone5_pd = tyre_leftfront2_pd.addOrReplaceChild("bone5",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -5.0F, -36.0F, -0.7854F, 0.0F, 0.0F));
+		PartDefinition bone6_pd = bone5_pd.addOrReplaceChild("bone6",
+			CubeListBuilder.create()
+				.texOffs(488, 145).addBox(-4.0F, -21.849199F, 25.819799F, 4.0F, 7.0F, 6.0F)
+				.texOffs(484, 169).addBox(-4.0F, -29.334499F, 25.819799F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone7_pd = bone5_pd.addOrReplaceChild("bone7",
+			CubeListBuilder.create()
+				.texOffs(486, 124).addBox(-4.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F)
+				.texOffs(486, 100).addBox(-4.0F, -38.062401F, -15.0919F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition tyre_leftfront3_pd = lunzi_pd.addOrReplaceChild("tyre_leftfront3",
+			CubeListBuilder.create(),
+			PartPose.offset(-21.0F, -7.0F, -45.0F));
+		PartDefinition bone8_pd = tyre_leftfront3_pd.addOrReplaceChild("bone8",
+			CubeListBuilder.create(),
+			PartPose.offset(37.0F, -3.0F, -34.0F));
+		PartDefinition bone9_pd = bone8_pd.addOrReplaceChild("bone9",
+			CubeListBuilder.create()
+				.texOffs(486, 75).addBox(-38.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F)
+				.texOffs(484, 56).addBox(-38.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone10_pd = bone8_pd.addOrReplaceChild("bone10",
+			CubeListBuilder.create()
+				.texOffs(486, 36).addBox(-38.0F, -35.757401F, 9.7574F, 4.0F, 7.0F, 6.0F)
+				.texOffs(486, 12).addBox(-38.0F, -43.242599F, 9.7574F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition bone11_pd = tyre_leftfront3_pd.addOrReplaceChild("bone11",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(37.0F, -5.0F, -36.0F, -0.7854F, 0.0F, 0.0F));
+		PartDefinition bone18_pd = bone11_pd.addOrReplaceChild("bone18",
+			CubeListBuilder.create()
+				.texOffs(456, 11).addBox(-38.0F, -21.849199F, 25.819799F, 4.0F, 7.0F, 6.0F)
+				.texOffs(452, 38).addBox(-38.0F, -29.334499F, 25.819799F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone19_pd = bone11_pd.addOrReplaceChild("bone19",
+			CubeListBuilder.create()
+				.texOffs(456, 57).addBox(-38.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F)
+				.texOffs(457, 80).addBox(-38.0F, -38.062401F, -15.0919F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition tyre_leftfront4_pd = lunzi_pd.addOrReplaceChild("tyre_leftfront4",
+			CubeListBuilder.create(),
+			PartPose.offset(-20.0F, -7.0F, -19.0F));
+		PartDefinition bone20_pd = tyre_leftfront4_pd.addOrReplaceChild("bone20",
+			CubeListBuilder.create(),
+			PartPose.offset(36.0F, -3.0F, -34.0F));
+		PartDefinition bone21_pd = bone20_pd.addOrReplaceChild("bone21",
+			CubeListBuilder.create()
+				.texOffs(449, 100).addBox(-38.0F, 3.0F, 31.0F, 4.0F, 7.0F, 6.0F)
+				.texOffs(454, 124).addBox(-38.0F, -4.4853F, 31.0F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone22_pd = bone20_pd.addOrReplaceChild("bone22",
+			CubeListBuilder.create()
+				.texOffs(454, 152).addBox(-38.0F, -35.757401F, 9.7574F, 4.0F, 7.0F, 6.0F)
+				.texOffs(457, 176).addBox(-38.0F, -43.242599F, 9.7574F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition bone23_pd = tyre_leftfront4_pd.addOrReplaceChild("bone23",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(36.0F, -5.0F, -36.0F, -0.7854F, 0.0F, 0.0F));
+		PartDefinition bone24_pd = bone23_pd.addOrReplaceChild("bone24",
+			CubeListBuilder.create()
+				.texOffs(454, 200).addBox(-38.0F, -21.849199F, 25.819799F, 4.0F, 7.0F, 6.0F)
+				.texOffs(454, 220).addBox(-38.0F, -29.334499F, 25.819799F, 4.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone25_pd = bone23_pd.addOrReplaceChild("bone25",
+			CubeListBuilder.create()
+				.texOffs(452, 246).addBox(-38.0F, -30.5772F, -15.0919F, 4.0F, 7.0F, 6.0F)
+				.texOffs(452, 268).addBox(-38.0F, -38.062401F, -15.0919F, 4.0F, 7.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -10.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition front_pd = car_pd.addOrReplaceChild("front",
+			CubeListBuilder.create()
+				.texOffs(5, 458).addBox(-18.0F, -4.0F, -50.0F, 36.0F, 7.0F, 42.0F)
+				.texOffs(174, 481).addBox(-18.0F, -16.0F, -21.0F, 20.0F, 12.0F, 12.0F)
+				.texOffs(12, 421).addBox(17.0F, -11.0F, -24.0F, 1.0F, 7.0F, 14.0F)
+				.texOffs(53, 421).addBox(2.0F, -11.0F, -24.0F, 1.0F, 7.0F, 14.0F)
+				.texOffs(205, 344).addBox(2.0F, -11.0F, -25.0F, 16.0F, 7.0F, 1.0F)
+				.texOffs(265, 342).addBox(2.0F, -11.0F, -10.0F, 16.0F, 7.0F, 1.0F)
+				.texOffs(328, 338).addBox(-18.0F, -10.0F, -52.0F, 36.0F, 16.0F, 2.0F)
+				.texOffs(330, 313).addBox(-18.0F, -16.0F, -50.0F, 36.0F, 12.0F, 4.0F)
+				.texOffs(377, 460).addBox(2.0F, -6.0F, -39.0F, 16.0F, 2.0F, 8.0F)
+				.texOffs(434, 488).addBox(7.0F, -24.0F, -38.0F, 6.0F, 1.0F, 6.0F)
+				.texOffs(396, 482).addBox(9.0F, -23.0F, -45.0F, 2.0F, 19.0F, 2.0F)
+				.texOffs(66, 334).addBox(-10.0F, -36.0F, -37.0F, 4.0F, 32.0F, 4.0F),
+			PartPose.offset(0.0F, -10.0F, -3.0F));
+		PartDefinition balls_pd = front_pd.addOrReplaceChild("balls",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition ball1_pd = balls_pd.addOrReplaceChild("ball1",
+			CubeListBuilder.create()
+				.texOffs(148, 345).addBox(11.0F, -12.0F, -24.0F, 6.0F, 7.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition ball2_pd = balls_pd.addOrReplaceChild("ball2",
+			CubeListBuilder.create()
+				.texOffs(125, 369).addBox(3.0F, -13.0F, -24.0F, 7.0F, 8.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition ball3_pd = balls_pd.addOrReplaceChild("ball3",
+			CubeListBuilder.create()
+				.texOffs(120, 392).addBox(11.0F, -13.0F, -17.0F, 6.0F, 8.0F, 7.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition ball4_pd = balls_pd.addOrReplaceChild("ball4",
+			CubeListBuilder.create()
+				.texOffs(105, 424).addBox(3.0F, -14.0F, -18.0F, 8.0F, 9.0F, 8.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone27_pd = front_pd.addOrReplaceChild("bone27",
+			CubeListBuilder.create()
+				.texOffs(424, 357).addBox(-4.0F, -24.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offsetAndRotation(6.0F, -6.0F, -35.0F, 0.0F, 0.0F, -0.1745F));
+		PartDefinition bone28_pd = front_pd.addOrReplaceChild("bone28",
+			CubeListBuilder.create()
+				.texOffs(426, 302).addBox(-4.0F, -24.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offsetAndRotation(14.0F, -6.0F, -35.0F, 0.0F, 0.0F, 0.1745F));
+		PartDefinition pult_pd = front_pd.addOrReplaceChild("pult",
+			CubeListBuilder.create()
+				.texOffs(330, 254).addBox(-1.0F, -2.0F, -5.0F, 2.0F, 2.0F, 41.0F),
+			PartPose.offsetAndRotation(10.0F, -22.0F, -44.0F, 0.3491F, 0.0F, 0.0F));
+		PartDefinition pult2_pd = pult_pd.addOrReplaceChild("pult2",
+			CubeListBuilder.create()
+				.texOffs(278, 305).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 13.0F),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 36.0F, -1.0472F, 0.0F, 0.0F));
+		PartDefinition pult3_pd = pult2_pd.addOrReplaceChild("pult3",
+			CubeListBuilder.create()
+				.texOffs(241, 318).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 4.0F)
+				.texOffs(198, 318).addBox(-4.0F, -3.0F, -1.0F, 8.0F, 2.0F, 2.0F)
+				.texOffs(165, 326).addBox(-4.0F, -13.0F, -1.0F, 8.0F, 2.0F, 2.0F)
+				.texOffs(137, 329).addBox(-6.0F, -11.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+				.texOffs(105, 344).addBox(4.0F, -11.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+				.texOffs(92, 373).addBox(-4.0F, -11.0F, 1.0F, 8.0F, 8.0F, 1.0F)
+				.texOffs(77, 394).addBox(-4.0F, -11.0F, -6.0F, 8.0F, 8.0F, 7.0F)
+				.texOffs(33, 384).addBox(-1.0F, -5.0F, 3.0F, 2.0F, 10.0F, 11.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 12.0F, -1.0472F, 0.0F, 0.0F));
+		PartDefinition level_pd = front_pd.addOrReplaceChild("level",
+			CubeListBuilder.create()
+				.texOffs(38, 346).addBox(-5.0F, -1.0F, -1.0F, 5.0F, 2.0F, 2.0F)
+				.texOffs(40, 362).addBox(-7.0F, -1.0F, -1.0F, 2.0F, 2.0F, 5.0F)
+				.texOffs(13, 326).addBox(-12.0F, -1.0F, 4.0F, 7.0F, 2.0F, 2.0F),
+			PartPose.offsetAndRotation(-10.0F, -32.0F, -35.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition bone_pd = front_pd.addOrReplaceChild("bone",
+			CubeListBuilder.create()
+				.texOffs(12, 365).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 7.0F, 4.0F),
+			PartPose.offsetAndRotation(10.0F, -4.0F, -27.0F, -0.5236F, 0.0F, 0.0F));
+		PartDefinition zombie_pd = total_pd.addOrReplaceChild("zombie",
+			CubeListBuilder.create(),
+			PartPose.offset(-8.0F, -33.0F, 14.0F));
+		PartDefinition head_pd = zombie_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(261, 474).addBox(-7.0F, -6.0F, -7.0F, 14.0F, 14.0F, 14.0F),
+			PartPose.offset(0.0F, -25.0F, 0.0F));
+		PartDefinition right_hand_pd = zombie_pd.addOrReplaceChild("right_hand",
+			CubeListBuilder.create()
+				.texOffs(157, 445).addBox(-7.0F, -3.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+			PartPose.offsetAndRotation(-7.0F, -14.0F, 0.0F, -1.0472F, 0.0F, 0.0F));
+		PartDefinition left_hand_pd = zombie_pd.addOrReplaceChild("left_hand",
+			CubeListBuilder.create()
+				.texOffs(198, 442).addBox(0.0F, -3.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+			PartPose.offsetAndRotation(8.0F, -14.0F, 0.0F, -0.6981F, 0.0F, 0.0F));
+		PartDefinition body_pd = zombie_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(242, 429).addBox(-8.0F, -16.0F, -5.0F, 16.0F, 18.0F, 11.0F)
+				.texOffs(333, 486).addBox(-2.0F, 2.0F, -4.0F, 4.0F, 6.0F, 10.0F),
+			PartPose.offset(0.0F, -1.0F, 0.0F));
+		PartDefinition right_leg_pd = zombie_pd.addOrReplaceChild("right_leg",
+			CubeListBuilder.create()
+				.texOffs(322, 438).addBox(-2.0F, 1.0F, -13.0F, 6.0F, 6.0F, 19.0F)
+				.texOffs(434, 448).addBox(-3.0F, 18.0F, -15.0F, 8.0F, 4.0F, 9.0F)
+				.texOffs(174, 413).addBox(-2.0F, 7.0F, -13.0F, 6.0F, 11.0F, 6.0F),
+			PartPose.offset(-6.0F, 0.0F, 0.0F));
+		PartDefinition left_leg_pd = zombie_pd.addOrReplaceChild("left_leg",
+			CubeListBuilder.create()
+				.texOffs(208, 393).addBox(-2.0F, 1.0F, -13.0F, 6.0F, 6.0F, 19.0F)
+				.texOffs(301, 413).addBox(-3.0F, 18.0F, -15.0F, 8.0F, 4.0F, 9.0F)
+				.texOffs(357, 404).addBox(-2.0F, 7.0F, -13.0F, 6.0F, 11.0F, 6.0F),
+			PartPose.offset(4.0F, 0.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 512, 512);
+	}
+
 
 	@Override
 	public void setupAnim(CatapultZombieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		if(entity.getAttackTime() > 0) {
 			float percent = 1 - entity.getAttackTime() * 1.0F / entity.getPultAnimTime();
-			this.pult.xRot = 0.3491F + (1F - MathHelper.abs(MathHelper.cos(percent * 3.14159F))) * 1.5F;
-			this.right_hand.xRot = - 1.0472F + MathHelper.cos(percent * 3.14159F) / 4;
+			this.pult.xRot = 0.3491F + (1F - Mth.abs(Mth.cos(percent * 3.14159F))) * 1.5F;
+			this.right_hand.xRot = - 1.0472F + Mth.cos(percent * 3.14159F) / 4;
 		} else {
-			this.pult.xRot = 0.3491F + MathHelper.sin(ageInTicks / 10) / 8;
+			this.pult.xRot = 0.3491F + Mth.sin(ageInTicks / 10) / 8;
 			this.right_hand.xRot = - 1.0472F;
 		}
 		this.tyre_leftfront.xRot = ageInTicks % 360;
@@ -411,7 +392,7 @@ public class CatapultZombieModel extends PVZEntityModel<CatapultZombieEntity> im
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		total.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
@@ -422,7 +403,7 @@ public class CatapultZombieModel extends PVZEntityModel<CatapultZombieEntity> im
 	}
 
 	@Override
-	public void renderBody(IBodyEntity entity, MatrixStack stack, IVertexBuilder buffer, int packedLight,
+	public void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight,
 			int packedOverlay) {
 		this.zombie.visible = false;
 		this.total.render(stack, buffer, packedLight, packedOverlay);

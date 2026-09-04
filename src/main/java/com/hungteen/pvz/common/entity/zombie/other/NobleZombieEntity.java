@@ -12,30 +12,30 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 public class NobleZombieEntity extends AbstractBossZombieEntity {
 
-	private static final DataParameter<Integer> TP_TICK = EntityDataManager.defineId(NobleZombieEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TP_TICK = SynchedEntityData.defineId(NobleZombieEntity.class,
+			EntityDataSerializers.INT);
 	private int summonTick;
 	private final int minSummonTick = 300;
 	private final int maxSummonTick = 600;
@@ -44,7 +44,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	private final int minSleepAttackCD = 360;
 	private final int maxSleepAttackCD = 1000;
 	
-	public NobleZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public NobleZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setAttackTime(this.maxSleepAttackCD / 5);
 		this.summonTick = this.maxSummonTick / 3;
@@ -68,9 +68,9 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	}
 
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason,
-			ILivingEntityData spawnDataIn, CompoundNBT dataTag) {
-		if (! level.isClientSide) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason,
+			SpawnGroupData spawnDataIn, CompoundTag dataTag) {
+		if (! level.isClientSide()) {
 			//TODO MournerZombie level deleted
 			EntityUtil.playSound(this, SoundRegister.DIRT_RISE.get());
 			ZombieHandEntity.spawnRangeZombieHands(level, this, 6);
@@ -85,7 +85,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	@Override
 	public void zombieTick() {
 		super.zombieTick();
-		if(!this.level.isClientSide && ! this.canNormalUpdate()) {
+		if(!this.level.isClientSide() && ! this.canNormalUpdate()) {
 			this.setTpTick(- this.maxTpCD);
 		}
 	}
@@ -93,7 +93,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	@Override
 	public void normalZombieTick() {
 		super.normalZombieTick();
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			// summon MournerZombie
 			if (this.summonTick > 0) {
 				-- this.summonTick;
@@ -113,7 +113,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 				this.level.addParticle(ParticleTypes.NOTE, getX(), getY() + 2f, getZ(), 0, 0, 0);
 			}
 		}
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			if (this.getTpTick() < 0) {
 			    this.setTpTick(this.getTpTick() + 1);
 		    } else if (this.getTpTick() == 0) {
@@ -211,7 +211,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	}
 	
 	public void teleportToPos(double x, double y, double z) {
-		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
+		BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(x, y, z);
 		while (blockpos$mutable.getY() > 0
 				&& !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
 			blockpos$mutable.move(Direction.DOWN);
@@ -221,7 +221,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 		if (flag) {
 			boolean flag2 = this.randomTeleport(x, y, z, true);
 			if (flag2) {
-				this.level.playSound((PlayerEntity) null, this.xo, this.yo, this.zo,
+				this.level.playSound(null, this.xo, this.yo, this.zo,
 						SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
 				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
@@ -249,12 +249,12 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8f, 1.9f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8f, 1.9f);
 	}
 
 	protected int getTpCD() {
-		final float percent = this.bossInfo.getPercent();
+		final float percent = this.bossInfo.getProgress();
 		if (percent < 1f / 3) {
 			return 60;
 		} else if (percent < 2f / 3) {
@@ -264,13 +264,13 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	}
 
 	protected int getHandSummonNum() {
-		final float percent = this.bossInfo.getPercent();
+		final float percent = this.bossInfo.getProgress();
 		return percent < 1f / 3 ? this.nearbyPlantCount / 5 + 3 : 
 			percent < 2f / 3 ? this.nearbyPlantCount / 8 + 2 : this.nearbyPlantCount / 10 + 1;
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("summon_zombie_tick")) {
 			this.summonTick = compound.getInt("summon_zombie_tick");
@@ -284,7 +284,7 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("summon_zombie_tick", this.summonTick);
 		compound.putInt("zombie_tp_tick", this.getTpTick());

@@ -4,12 +4,12 @@ import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.*;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.Level;
 
 public class GigaGargantuarEntity extends GargantuarEntity {
 
-	public GigaGargantuarEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public GigaGargantuarEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.isSad = true;
 	}
@@ -58,9 +58,9 @@ public class GigaGargantuarEntity extends GargantuarEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
+	public EntityDimensions getDimensions(Pose poseIn) {
 		if(this.isMiniZombie()) {
-			return EntitySize.scalable(0.7F, 2F);
+			return EntityDimensions.scalable(0.7F, 2F);
 		}
 		return super.getDimensions(poseIn);
 	}

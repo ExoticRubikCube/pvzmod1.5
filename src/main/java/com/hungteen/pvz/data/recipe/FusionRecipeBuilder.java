@@ -6,17 +6,17 @@ import com.google.gson.JsonObject;
 import com.hungteen.pvz.common.recipe.RecipeRegister;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,28 +33,28 @@ public class FusionRecipeBuilder {
     private final Advancement.Builder advancement = Advancement.Builder.advancement();
     private String group;
 
-    public FusionRecipeBuilder(IItemProvider itemProvider, int count) {
+    public FusionRecipeBuilder(ItemLike itemProvider, int count) {
         this.result = itemProvider.asItem();
         this.count = count;
     }
 
-    public static FusionRecipeBuilder shapeless(IItemProvider itemProvider) {
+    public static FusionRecipeBuilder shapeless(ItemLike itemProvider) {
         return new FusionRecipeBuilder(itemProvider, 1);
     }
 
-    public static FusionRecipeBuilder shapeless(IItemProvider itemProvider, int count) {
+    public static FusionRecipeBuilder shapeless(ItemLike itemProvider, int count) {
         return new FusionRecipeBuilder(itemProvider, count);
     }
 
-    public FusionRecipeBuilder requires(ITag<Item> itemITag) {
-        return this.requires(Ingredient.of(itemITag));
+    public FusionRecipeBuilder requires(TagKey<Item> itemTag) {
+        return this.requires(Ingredient.of(itemTag));
     }
 
-    public FusionRecipeBuilder requires(IItemProvider itemProvider) {
+    public FusionRecipeBuilder requires(ItemLike itemProvider) {
         return this.requires(itemProvider, 1);
     }
 
-    public FusionRecipeBuilder requires(IItemProvider itemProvider, int count) {
+    public FusionRecipeBuilder requires(ItemLike itemProvider, int count) {
         for(int i = 0; i < count; ++i) {
             this.requires(Ingredient.of(itemProvider));
         }
@@ -62,75 +62,70 @@ public class FusionRecipeBuilder {
         return this;
     }
 
-    public FusionRecipeBuilder requires(Ingredient p_200489_1_) {
-        return this.requires(p_200489_1_, 1);
+    public FusionRecipeBuilder requires(Ingredient ingredient) {
+        return this.requires(ingredient, 1);
     }
 
-    public FusionRecipeBuilder requires(Ingredient p_200492_1_, int p_200492_2_) {
-        for(int i = 0; i < p_200492_2_; ++i) {
-            this.ingredients.add(p_200492_1_);
+    public FusionRecipeBuilder requires(Ingredient ingredient, int ingredientCount) {
+        for(int i = 0; i < ingredientCount; ++i) {
+            this.ingredients.add(ingredient);
         }
 
         return this;
     }
 
-    public FusionRecipeBuilder unlockedBy(String p_200483_1_, ICriterionInstance p_200483_2_) {
-        this.advancement.addCriterion(p_200483_1_, p_200483_2_);
+    public FusionRecipeBuilder unlockedBy(String name, CriterionTriggerInstance trigger) {
+        this.advancement.addCriterion(name, trigger);
         return this;
     }
 
-    public FusionRecipeBuilder group(String p_200490_1_) {
-        this.group = p_200490_1_;
+    public FusionRecipeBuilder group(String groupName) {
+        this.group = groupName;
         return this;
     }
 
-    public void save(Consumer<IFinishedRecipe> p_200482_1_) {
-        this.save(p_200482_1_, Registry.ITEM.getKey(this.result));
+    public void save(Consumer<FinishedRecipe> consumer) {
+        this.save(consumer, Registry.ITEM.getKey(this.result));
     }
 
-    public void save(Consumer<IFinishedRecipe> p_200484_1_, String p_200484_2_) {
+    public void save(Consumer<FinishedRecipe> consumer, String name) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
-        if ((new ResourceLocation(p_200484_2_)).equals(resourcelocation)) {
-            throw new IllegalStateException("Shapeless Recipe " + p_200484_2_ + " should remove its 'save' argument");
+        if ((ResourceLocation.parse(name)).equals(resourcelocation)) {
+            throw new IllegalStateException("Shapeless Recipe " + name + " should remove its 'save' argument");
         } else {
-            this.save(p_200484_1_, new ResourceLocation(p_200484_2_));
+            this.save(consumer, ResourceLocation.parse(name));
         }
     }
 
-    public void save(Consumer<IFinishedRecipe> p_200485_1_, ResourceLocation p_200485_2_) {
-        this.ensureValid(p_200485_2_);
-        this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(p_200485_2_)).rewards(AdvancementRewards.Builder.recipe(p_200485_2_)).requirements(IRequirementsStrategy.OR);
-        p_200485_1_.accept(new FusionRecipeBuilder.Result(p_200485_2_, this.result, this.count, this.group == null ? "" : this.group, this.ingredients, this.advancement, new ResourceLocation(p_200485_2_.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + p_200485_2_.getPath())));
+    public void save(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
+        this.ensureValid(recipeId);
+        this.advancement.parent(ResourceLocation.parse("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
+        consumer.accept(new FusionRecipeBuilder.Result(recipeId, this.result, this.count, this.group == null ? "" : this.group, this.ingredients, ResourceLocation.fromNamespaceAndPath(recipeId.getNamespace(), "recipes/" + recipeId.getPath())));
     }
 
-    private void ensureValid(ResourceLocation p_200481_1_) {
-//        if (this.advancement.getCriteria().isEmpty()) {
-//            throw new IllegalStateException("No way of obtaining recipe " + p_200481_1_);
-//        }
+    private void ensureValid(ResourceLocation recipeId) {
     }
 
-    public static class Result implements IFinishedRecipe {
+    public static class Result implements FinishedRecipe {
         private final ResourceLocation id;
         private final Item result;
         private final int count;
         private final String group;
         private final List<Ingredient> ingredients;
-        private final Advancement.Builder advancement;
         private final ResourceLocation advancementId;
 
-        public Result(ResourceLocation p_i48268_1_, Item p_i48268_2_, int p_i48268_3_, String p_i48268_4_, List<Ingredient> p_i48268_5_, Advancement.Builder p_i48268_6_, ResourceLocation p_i48268_7_) {
-            this.id = p_i48268_1_;
-            this.result = p_i48268_2_;
-            this.count = p_i48268_3_;
-            this.group = p_i48268_4_;
-            this.ingredients = p_i48268_5_;
-            this.advancement = p_i48268_6_;
-            this.advancementId = p_i48268_7_;
+        public Result(ResourceLocation id, Item result, int count, String group, List<Ingredient> ingredients, ResourceLocation advancementId) {
+            this.id = id;
+            this.result = result;
+            this.count = count;
+            this.group = group;
+            this.ingredients = ingredients;
+            this.advancementId = advancementId;
         }
 
-        public void serializeRecipeData(JsonObject p_218610_1_) {
+        public void serializeRecipeData(JsonObject json) {
             if (!this.group.isEmpty()) {
-                p_218610_1_.addProperty("group", this.group);
+                json.addProperty("group", this.group);
             }
 
             JsonArray jsonarray = new JsonArray();
@@ -139,18 +134,23 @@ public class FusionRecipeBuilder {
                 jsonarray.add(ingredient.toJson());
             }
 
-            p_218610_1_.add("ingredients", jsonarray);
-            JsonObject jsonobject = new JsonObject();
-            jsonobject.addProperty("item", Registry.ITEM.getKey(this.result).toString());
+            json.add("ingredients", jsonarray);
+            JsonObject resultObj = new JsonObject();
+            resultObj.addProperty("item", Registry.ITEM.getKey(this.result).toString());
             if (this.count > 1) {
-                jsonobject.addProperty("count", this.count);
+                resultObj.addProperty("count", this.count);
             }
 
-            p_218610_1_.add("result", jsonobject);
+            json.add("result", resultObj);
         }
 
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return RecipeRegister.FUSION_SERIALIZER.get();
+        }
+
+        @Override
+        public @org.jetbrains.annotations.Nullable JsonObject serializeAdvancement() {
+            return null;
         }
 
         public ResourceLocation getId() {
@@ -158,11 +158,11 @@ public class FusionRecipeBuilder {
         }
 
         @Nullable
-        public JsonObject serializeAdvancement() {
-            return this.advancement.serializeToJson();
+        public FinishedRecipe getAdvancement() {
+            return null;
         }
 
-        @Nullable
+        @Override
         public ResourceLocation getAdvancementId() {
             return this.advancementId;
         }

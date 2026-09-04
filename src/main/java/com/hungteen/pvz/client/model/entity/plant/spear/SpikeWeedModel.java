@@ -2,43 +2,64 @@ package com.hungteen.pvz.client.model.entity.plant.spear;
 
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.spear.SpikeWeedEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class SpikeWeedModel extends PVZPlantModel<SpikeWeedEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer bone;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "spike_weed"), "main");
 
-	public SpikeWeedModel() {
-		texWidth = 64;
-		texHeight = 64;
+	private final ModelPart total;
+	private final ModelPart bone;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		total.texOffs(0, 19).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F, 0.0F, false);
-		total.texOffs(0, 0).addBox(-8.0F, -3.2F, -8.0F, 16.0F, 3.0F, 16.0F, 0.3F, false);
 
-		bone = new ModelRenderer(this);
-		bone.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(bone);
-		bone.texOffs(32, 38).addBox(-8.0F, -6.0F, -4.0F, 16.0F, 4.0F, 0.0F, 0.0F, false);
-		bone.texOffs(32, 42).addBox(-8.0F, -6.0F, 4.0F, 16.0F, 4.0F, 0.0F, 0.0F, false);
-		bone.texOffs(0, 22).addBox(-4.0F, -6.0F, -8.0F, 0.0F, 4.0F, 16.0F, 0.0F, false);
-		bone.texOffs(0, 26).addBox(4.0F, -6.0F, -8.0F, 0.0F, 4.0F, 16.0F, 0.0F, false);
+
+
+public SpikeWeedModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.bone = root.getChild("bone");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create()
+				.texOffs(0, 19).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F)
+				.texOffs(0, 0).addBox(-8.0F, -3.2F, -8.0F, 16.0F, 3.0F, 16.0F, new CubeDeformation(0.3F)),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition bone_pd = total_pd.addOrReplaceChild("bone",
+			CubeListBuilder.create()
+				.texOffs(32, 38).addBox(-8.0F, -6.0F, -4.0F, 16.0F, 4.0F, 0.0F)
+				.texOffs(32, 42).addBox(-8.0F, -6.0F, 4.0F, 16.0F, 4.0F, 0.0F)
+				.texOffs(0, 22).addBox(-4.0F, -6.0F, -8.0F, 0.0F, 4.0F, 16.0F)
+				.texOffs(0, 26).addBox(4.0F, -6.0F, -8.0F, 0.0F, 4.0F, 16.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
 
 	@Override
 	public void setupAnim(SpikeWeedEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 

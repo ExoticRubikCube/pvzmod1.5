@@ -1,5 +1,7 @@
 package com.hungteen.pvz.common.entity.plant.enforce;
 
+import net.minecraftforge.fluids.FluidType;
+
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.base.PlantCloserEntity;
@@ -13,20 +15,20 @@ import com.hungteen.pvz.utils.PlantUtil;
 
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class TangleKelpEntity extends PlantCloserEntity{
 
-	public TangleKelpEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public TangleKelpEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -43,13 +45,13 @@ public class TangleKelpEntity extends PlantCloserEntity{
 	@Override
 	public void performAttack(LivingEntity target) {
 		target.hurt(PVZEntityDamageSource.normal(this), this.getAttackDamage());
-		this.remove();
+this.remove(RemovalReason.KILLED);
 	}
 
 	@Override
 	public void startSuperMode(boolean first) {
 		super.startSuperMode(first);
-		if(!level.isClientSide) {
+		if(!level.isClientSide()) {
 			int cnt = this.getSuperCount();
 			for(LivingEntity target : EntityUtil.getTargetableLivings(this, EntityUtil.getEntityAABB(this, 25, 3))) {
 				TangleKelpEntity entity = EntityRegister.TANGLE_KELP.get().create(level);
@@ -74,9 +76,9 @@ public class TangleKelpEntity extends PlantCloserEntity{
 	@Override
 	public void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list) {
 		super.addAlmanacEntries(list);
-		list.addAll(Arrays.asList(
-				Pair.of(PAZAlmanacs.ATTACK_DAMAGE, this.getAttackDamage())
-		));
+		list.addAll(List.of(
+                Pair.of(PAZAlmanacs.ATTACK_DAMAGE, this.getAttackDamage())
+        ));
 	}
 
 	public float getAttackDamage(){
@@ -88,8 +90,8 @@ public class TangleKelpEntity extends PlantCloserEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.6f, 1f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.6f, 1f, false);
 	}
 	
 	@Override
@@ -103,7 +105,7 @@ public class TangleKelpEntity extends PlantCloserEntity{
 	}
 	
 	@Override
-	public boolean canBeRiddenInWater(Entity rider) {
+	public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
 		return true;
 	}
 	

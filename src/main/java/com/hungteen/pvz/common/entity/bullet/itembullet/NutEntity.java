@@ -5,20 +5,20 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 public class NutEntity extends PVZItemBulletEntity {
 
-	public NutEntity(EntityType<?> type, World worldIn) {
+	public NutEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-//	public NutEntity(World worldIn, LivingEntity thrower) {
+//	public NutEntity(Level worldIn, LivingEntity thrower) {
 //		super(EntityRegister.NUT.get(), worldIn, thrower);
 //	}
 //	
@@ -32,17 +32,17 @@ public class NutEntity extends PVZItemBulletEntity {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if(result.getType() == RayTraceResult.Type.BLOCK) {
+		if(result.getType() == HitResult.Type.BLOCK) {
 			if(this.getThrower() != null && level.isEmptyBlock(this.blockPosition().above()) && this.random.nextInt(12) == 0) {
 				WallNutEntity nut = EntityRegister.WALL_NUT.get().create(level);
 				nut.setOwnerUUID(this.getThrower().getUUID());
 				EntityUtil.onEntitySpawn(level, nut, this.blockPosition().above());
 				flag = true;
 			}
-		} else if(result.getType() ==  RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		} else if(result.getType() ==  HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				this.dealNutDamage(target); // attack 
@@ -51,7 +51,7 @@ public class NutEntity extends PVZItemBulletEntity {
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	

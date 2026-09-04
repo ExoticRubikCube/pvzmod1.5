@@ -9,12 +9,11 @@ import com.hungteen.pvz.common.tileentity.CardFusionTileEntity;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 
@@ -23,21 +22,21 @@ public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 	private static final ResourceLocation TEXTURE = StringUtil.prefix("textures/gui/container/card_fusion.png");
 	protected Button craftButton;
 	
-	public CardFusionScreen(CardFusionContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+	public CardFusionScreen(CardFusionContainer screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 		this.imageWidth = 178;
 		this.imageHeight = 255;
 		this.tips.add(new DisplayField.TipField(3, 3, Arrays.asList(
-			    new TranslationTextComponent("gui.pvz.card_fusion_table.tip1"),
-				new TranslationTextComponent("gui.pvz.card_fusion_table.tip2"),
-				new TranslationTextComponent("gui.pvz.card_fusion_table.tip3")
+			    Component.translatable("gui.pvz.card_fusion_table.tip1"),
+				Component.translatable("gui.pvz.card_fusion_table.tip2"),
+				Component.translatable("gui.pvz.card_fusion_table.tip3")
 		)));
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		this.craftButton = this.addButton(new Button(this.leftPos + 76, this.topPos + 119, 26, 18, new TranslationTextComponent("gui.pvz.fragment_splice"), (button) -> {
+		this.craftButton = this.addRenderableWidget(new Button(this.leftPos + 76, this.topPos + 119, 26, 18, Component.translatable("gui.pvz.fragment_splice"), (button) -> {
 			if(this.craftButton.visible) {
 			    PVZPacketHandler.CHANNEL.sendToServer(new ClickButtonPacket(GuiHandler.CARD_FUSION, 0, 0));
 			}
@@ -46,11 +45,11 @@ public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 	}
 	
 	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		this.craftButton.visible = this.canCraftNow();
 		super.render(stack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(stack, mouseX, mouseY);
-		StringUtil.drawCenteredScaledString(stack, font, new TranslationTextComponent("block.pvz.card_fusion_table").getString(), this.leftPos + this.imageWidth / 2, this.topPos + 8, Colors.BLACK, 1F);
+		StringUtil.drawCenteredScaledString(stack, font, Component.translatable("block.pvz.card_fusion_table").getString(), this.leftPos + this.imageWidth / 2, this.topPos + 8, Colors.BLACK, 1F);
 		final float percent1 = this.menu.te.array.get(0) * 100.0F / CardFusionTileEntity.CRAFT_SUN_COST;
 		final float percent2 = this.menu.te.array.get(1) * 100.0F / CardFusionTileEntity.CRAFT_ESSENCE_COST;
 		StringUtil.drawCenteredScaledString(stack, font, "" + String.format("%.0f%%", percent1), this.leftPos + 19, this.topPos + 53, Colors.BLACK, 0.8F);
@@ -60,9 +59,9 @@ public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 	}
 	
 	@Override
-	protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-		this.minecraft.getTextureManager().bind(TEXTURE);
+		this.minecraft.getTextureManager().bindForSetup(TEXTURE);
 		blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
 		final int maxLen = 52;

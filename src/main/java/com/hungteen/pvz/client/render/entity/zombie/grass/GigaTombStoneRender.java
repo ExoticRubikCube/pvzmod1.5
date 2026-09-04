@@ -4,12 +4,12 @@ import com.hungteen.pvz.client.model.entity.zombie.grass.TombStoneModel;
 import com.hungteen.pvz.client.render.entity.zombie.PVZZombieRender;
 import com.hungteen.pvz.common.entity.zombie.custom.GigaTombStoneEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class GigaTombStoneRender extends PVZZombieRender<GigaTombStoneEntity>{
 
-	public GigaTombStoneRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new TombStoneModel<>(), 0.5f);
+	public GigaTombStoneRender(EntityRendererProvider.Context context) {
+		super(context, new TombStoneModel<>(context.bakeLayer(TombStoneModel.LAYER)), 0.5f);
 	}
 
 	@Override

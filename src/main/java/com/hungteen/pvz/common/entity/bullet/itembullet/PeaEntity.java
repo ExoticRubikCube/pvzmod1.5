@@ -10,37 +10,34 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EffectUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
-@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
-public class PeaEntity extends AbstractShootBulletEntity implements IRendersAsItem {
+public class PeaEntity extends AbstractShootBulletEntity implements ItemSupplier {
 
-	private static final DataParameter<Integer> PEA_STATE = EntityDataManager.defineId(PeaEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> PEA_TYPE = EntityDataManager.defineId(PeaEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> PEA_STATE = SynchedEntityData.defineId(PeaEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> PEA_TYPE = SynchedEntityData.defineId(PeaEntity.class, EntityDataSerializers.INT);
 	public TorchWoodEntity torchWood = null;
 	private int power = 0;
 
-	public PeaEntity(EntityType<?> type, World worldIn) {
+	public PeaEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public PeaEntity(World worldIn, LivingEntity shooter, Type peaType, State peaState) {
+	public PeaEntity(Level worldIn, LivingEntity shooter, Type peaType, State peaState) {
 		super(EntityRegister.PEA.get(), worldIn, shooter);
 		this.setPeaState(peaState);
 		this.setPeaType(peaType);
@@ -53,10 +50,10 @@ public class PeaEntity extends AbstractShootBulletEntity implements IRendersAsIt
 	}
 	
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				this.dealPeaDamage(target); // attack 
@@ -65,7 +62,7 @@ public class PeaEntity extends AbstractShootBulletEntity implements IRendersAsIt
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || !this.checkLive(result)) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
@@ -101,7 +98,7 @@ public class PeaEntity extends AbstractShootBulletEntity implements IRendersAsIt
 			if (owner instanceof IIceEffect) {
 				((IIceEffect) owner).getColdEffect().ifPresent(e -> source.addEffect(e));
 				((IIceEffect) owner).getFrozenEffect().ifPresent(e -> source.addEffect(e));
-			} else if(owner instanceof PlayerEntity) {
+			} else if(owner instanceof Player) {
 				source.addEffect(EffectUtil.effect(EffectRegister.COLD_EFFECT.get(), 100, 5));
 			}
 			target.hurt(source, damage);
@@ -135,28 +132,28 @@ public class PeaEntity extends AbstractShootBulletEntity implements IRendersAsIt
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
+	public EntityDimensions getDimensions(Pose poseIn) {
 		if (this.getPeaType() == Type.NORMAL) {
-			return new EntitySize(0.2f, 0.2f, false);
+			return new EntityDimensions(0.2f, 0.2f, false);
 		}
 		if (this.getPeaType() == Type.BIG) {
-			return new EntitySize(0.4f, 0.4f, false);
+			return new EntityDimensions(0.4f, 0.4f, false);
 		}
 		if (this.getPeaType() == Type.HUGE) {
-			return new EntitySize(0.6f, 0.6f, false);
+			return new EntityDimensions(0.6f, 0.6f, false);
 		}
-		return new EntitySize(0.2f, 0.2f, false);
+		return new EntityDimensions(0.2f, 0.2f, false);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("peaState", this.getPeaState().ordinal());
 		compound.putInt("peaType", this.getPeaType().ordinal());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("peaState")) {
 			this.setPeaState(State.values()[compound.getInt("peaState")]);

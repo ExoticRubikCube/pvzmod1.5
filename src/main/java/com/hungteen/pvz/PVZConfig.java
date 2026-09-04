@@ -72,7 +72,7 @@ public class PVZConfig {
             }
             builder.pop();
 
-            //World Settings.
+            //Level Settings.
             builder.comment("Settings about global rules.").push("Rule Settings");
             {
                 RuleSettings.CanSpawnDefaultMonster = builder
@@ -127,8 +127,8 @@ public class PVZConfig {
             }
             builder.pop();
 
-            //World Settings
-            builder.comment("Settings about world.").push("World Settings");
+            //Level Settings
+            builder.comment("Settings about world.").push("Level Settings");
             {
 
                 builder.comment("Settings about the biome gen.").push("Biome Settings");

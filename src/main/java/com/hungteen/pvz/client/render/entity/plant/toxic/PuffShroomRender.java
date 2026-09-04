@@ -6,15 +6,15 @@ import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
 import com.hungteen.pvz.common.entity.plant.toxic.PuffShroomEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PuffShroomRender extends PVZPlantRender<PuffShroomEntity>{
 
-	public PuffShroomRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new PuffShroomModel(), 0.3f);
+	public PuffShroomRender(EntityRendererProvider.Context context) {
+		super(context, new PuffShroomModel(context.bakeLayer(PuffShroomModel.LAYER)), 0.3f);
 	}
 
 	@Override

@@ -1,19 +1,19 @@
 package com.hungteen.pvz.common.event.events;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 
 public class InvasionEvent extends Event{
 
-	private final World world;
+	private final Level level;
 	
-	public InvasionEvent(World world) {
-		this.world = world;
+	public InvasionEvent(Level level) {
+		this.level = level;
 	}
 
-	public World getWorld() {
-		return this.world;
+	public Level getLevel() {
+		return this.level;
 	}
 	
 	/**
@@ -24,8 +24,8 @@ public class InvasionEvent extends Event{
 	public static class InvasionStartEvent extends InvasionEvent {
 		
 		
-		public InvasionStartEvent(World world) {
-			super(world);
+		public InvasionStartEvent(Level level) {
+			super(level);
 		}
 
 	}

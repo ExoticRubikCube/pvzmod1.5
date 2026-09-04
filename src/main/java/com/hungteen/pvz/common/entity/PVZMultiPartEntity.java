@@ -3,35 +3,35 @@ package com.hungteen.pvz.common.entity;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public abstract class PVZMultiPartEntity extends Entity {
 
-	private static final DataParameter<Integer> OWNER_ID = EntityDataManager.defineId(PVZMultiPartEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Float> WIDTH = EntityDataManager.defineId(PVZMultiPartEntity.class,
-			DataSerializers.FLOAT);
-	private static final DataParameter<Float> HEIGHT = EntityDataManager.defineId(PVZMultiPartEntity.class,
-			DataSerializers.FLOAT);
+	private static final EntityDataAccessor<Integer> OWNER_ID = SynchedEntityData.defineId(PVZMultiPartEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Float> WIDTH = SynchedEntityData.defineId(PVZMultiPartEntity.class,
+			EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Float> HEIGHT = SynchedEntityData.defineId(PVZMultiPartEntity.class,
+			EntityDataSerializers.FLOAT);
 	private IHasMultiPart parent;
 	protected final float MaxHeight;
 	protected final float MaxWidth;
 
-	public PVZMultiPartEntity(EntityType<?> entityTypeIn, World worldIn) {
+	public PVZMultiPartEntity(EntityType<?> entityTypeIn, Level worldIn) {
 		super(entityTypeIn, worldIn);
 		this.MaxHeight = 0.5F;
 		this.MaxWidth = 0.5F;
@@ -53,7 +53,7 @@ public abstract class PVZMultiPartEntity extends Entity {
 
 	@Override
 	protected void defineSynchedData() {
-		this.entityData.define(OWNER_ID, Integer.valueOf(0));
+		this.entityData.define(OWNER_ID, 0);
 		this.entityData.define(WIDTH, 0.5F);
 		this.entityData.define(HEIGHT, 0.5F);
 	}
@@ -63,12 +63,12 @@ public abstract class PVZMultiPartEntity extends Entity {
 		if(this.tickCount <= 5) {
 			refreshDimensions();
 		}
-		if (! level.isClientSide) {
+		if (! level.isClientSide()) {
 			if (this.canExist()) {//has owner.
 				this.markHurt();
 				this.collideWithNearbyEntities();
 			} else {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 		super.tick();
@@ -116,8 +116,8 @@ public abstract class PVZMultiPartEntity extends Entity {
 	}
 
 	@Override
-	public ActionResultType interactAt(PlayerEntity player, Vector3d vec3d, Hand hand) {
-		return ActionResultType.FAIL;
+	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
+		return InteractionResult.FAIL;
 	}
 
 	@Override
@@ -126,16 +126,16 @@ public abstract class PVZMultiPartEntity extends Entity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(this.getPartWidth(), this.getPartHeight());
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(this.getPartWidth(), this.getPartHeight());
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 	}
 	
 	private int getOwnerId() {
@@ -163,7 +163,7 @@ public abstract class PVZMultiPartEntity extends Entity {
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

@@ -2,15 +2,15 @@ package com.hungteen.pvz.common.entity.ai.goal;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.tags.FluidTags;
 
 public class PVZSwimGoal extends Goal {
 
-	protected final MobEntity mob;
+	protected final Mob mob;
 
-	public PVZSwimGoal(MobEntity entity) {
+	public PVZSwimGoal(Mob entity) {
 		this.mob = entity;
 		this.setFlags(EnumSet.of(Goal.Flag.JUMP));
 		this.mob.getNavigation().setCanFloat(true);

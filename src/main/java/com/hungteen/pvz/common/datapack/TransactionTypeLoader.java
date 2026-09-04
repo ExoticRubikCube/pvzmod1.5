@@ -6,15 +6,15 @@ import com.hungteen.pvz.api.raid.IAmountComponent;
 import com.hungteen.pvz.common.entity.npc.AbstractDaveEntity;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @author: HungTeen
  * @create: 2022-02-07 11:19
  **/
-public class TransactionTypeLoader extends JsonReloadListener {
+public class TransactionTypeLoader extends SimpleJsonResourceReloadListener {
 
     public static final Map<ResourceLocation, AbstractDaveEntity.TransactionType> TRANSACTIONS = new HashMap<>();
     public static final Map<ResourceLocation, JsonElement> JSONS = new HashMap<>();
@@ -38,7 +38,7 @@ public class TransactionTypeLoader extends JsonReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> map, IResourceManager manager, IProfiler profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
         TRANSACTIONS.clear();
 
         map.forEach((res, jsonElement) -> {
@@ -53,13 +53,13 @@ public class TransactionTypeLoader extends JsonReloadListener {
 
     public static void updateResource(ResourceLocation res, JsonElement jsonElement) {
         try {
-            JsonObject jsonObject = JSONUtils.convertToJsonObject(jsonElement, NAME);
+            JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, NAME);
 
             final AbstractDaveEntity.TransactionType transactionType = new AbstractDaveEntity.TransactionType(res);
 
             /* amount */
             {
-                JsonObject obj = JSONUtils.getAsJsonObject(jsonObject, "good_count");
+                JsonObject obj = GsonHelper.getAsJsonObject(jsonObject, "good_count");
                 if (obj != null && !obj.entrySet().isEmpty()) {
                     for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
                         final IAmountComponent tmp = ChallengeManager.getAmountComponent(entry.getKey());
@@ -74,29 +74,29 @@ public class TransactionTypeLoader extends JsonReloadListener {
                 }
             }
 
-            transactionType.setEnvelope(JSONUtils.getAsBoolean(jsonObject, "has_envelope", false));
-            transactionType.setSlotMachine(JSONUtils.getAsBoolean(jsonObject, "has_slot_machine", false));
-            transactionType.setEnjoyCard(JSONUtils.getAsBoolean(jsonObject, "has_enjoy_card", false));
+            transactionType.setEnvelope(GsonHelper.getAsBoolean(jsonObject, "has_envelope", false));
+            transactionType.setSlotMachine(GsonHelper.getAsBoolean(jsonObject, "has_slot_machine", false));
+            transactionType.setEnjoyCard(GsonHelper.getAsBoolean(jsonObject, "has_enjoy_card", false));
 
 
-            JsonArray array = JSONUtils.getAsJsonArray(jsonObject, "goods", new JsonArray());
+            JsonArray array = GsonHelper.getAsJsonArray(jsonObject, "goods", new JsonArray());
             array.forEach(e -> {
                 if(e.isJsonObject()) {
                     final JsonObject obj  = e.getAsJsonObject();
 
-                    final String string = JSONUtils.getAsString(obj, "type", "item");
+                    final String string = GsonHelper.getAsString(obj, "type", "item");
                     final AbstractDaveEntity.GoodTypes type = AbstractDaveEntity.GoodTypes.valueOf(string.toUpperCase());
 
                     ItemStack stack = ItemStack.EMPTY;
                     if(type == AbstractDaveEntity.GoodTypes.ITEM){
-                        Item item = JSONUtils.getAsItem(obj, "item");
+                        Item item = GsonHelper.getAsItem(obj, "item");
                         if(obj.has("data")) {
                             throw new JsonParseException("Disallowed data tag found");
                         } else {
                             stack = new ItemStack(item);
                             if(obj.has("nbt")) {
                                 try {
-                                    CompoundNBT compoundnbt = JsonToNBT.parseTag(JSONUtils.convertToString(obj.get("nbt"), "nbt"));
+                                    CompoundTag compoundnbt = TagParser.parseTag(GsonHelper.convertToString(obj.get("nbt"), "nbt"));
                                     stack.setTag(compoundnbt);
                                 } catch (CommandSyntaxException commandsyntaxexception) {
                                     throw new JsonSyntaxException("Invalid nbt tag: " + commandsyntaxexception.getMessage());
@@ -105,13 +105,13 @@ public class TransactionTypeLoader extends JsonReloadListener {
                         }
                     }
 
-                    final int price = JSONUtils.getAsInt(obj, "price", 1000);
+                    final int price = GsonHelper.getAsInt(obj, "price", 1000);
 
-                    final int weight = JSONUtils.getAsInt(obj, "weight", 100);
+                    final int weight = GsonHelper.getAsInt(obj, "weight", 100);
 
-                    final int limit = JSONUtils.getAsInt(obj, "limit", 10);
+                    final int limit = GsonHelper.getAsInt(obj, "limit", 10);
 
-                    final boolean must = JSONUtils.getAsBoolean(obj, "must", false);
+                    final boolean must = GsonHelper.getAsBoolean(obj, "must", false);
 
                     AbstractDaveEntity.GoodType goodType = new AbstractDaveEntity.GoodType(type, stack, price, weight, limit, must);
 

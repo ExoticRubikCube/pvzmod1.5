@@ -5,13 +5,13 @@ import com.hungteen.pvz.client.render.entity.zombie.PVZZombieToolRender;
 import com.hungteen.pvz.common.entity.misc.DuckyTubeEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
 public class DuckyTubeRender extends PVZZombieToolRender<DuckyTubeEntity>{
 
-	public DuckyTubeRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new DuckyTubeModel(), 0);
+	public DuckyTubeRender(EntityRendererProvider.Context context) {
+		super(context, new DuckyTubeModel(context.bakeLayer(DuckyTubeModel.LAYER)), 0);
 	}
 
 	@Override

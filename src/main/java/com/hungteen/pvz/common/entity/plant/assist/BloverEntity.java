@@ -12,10 +12,10 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,32 +23,32 @@ import java.util.Optional;
 
 public class BloverEntity extends PVZPlantEntity {
 
-	public BloverEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public BloverEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			if(this.getExistTick() == 5) {
 			    this.blow();
 			} else if(this.getExistTick() > 60) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
 	
 	public void blow() {
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			final float len = this.getBlowRange();
 			//deal damage.
 			EntityUtil.getWholeTargetableEntities(this, EntityUtil.getEntityAABB(this, len, len)).forEach(target -> {
 				if(EntityUtil.isEntityInSky(target)) {
 					target.hurt(PVZEntityDamageSource.normal(this).setMustHurt(), this.getAttackDamage());
-					final Vector3d speed = target.getDeltaMovement();
+					final Vec3 speed = target.getDeltaMovement();
 					final double lvl = this.getForceLevel() * 2.5F;
-					final Vector3d delta = MathUtil.getHorizontalNormalizedVec(this.position(), target.position()).scale(lvl);
+					final Vec3 delta = MathUtil.getHorizontalNormalizedVec(this.position(), target.position()).scale(lvl);
 					target.setDeltaMovement(speed.x + delta.x, speed.y, speed.z + delta.z);
 				}
 			});
@@ -94,8 +94,8 @@ public class BloverEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.5F, 1.5F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.5F, 1.5F);
 	}
 
 	@Override

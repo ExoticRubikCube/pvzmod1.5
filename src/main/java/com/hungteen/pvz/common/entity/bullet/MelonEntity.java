@@ -8,28 +8,28 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.Level;
 
 public class MelonEntity extends PultBulletEntity {
 
-	private static final DataParameter<Integer> MELON_STATE = EntityDataManager.defineId(MelonEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> MELON_STATE = SynchedEntityData.defineId(MelonEntity.class, EntityDataSerializers.INT);
 	private Entity attackEntity = null;
 	
-	public MelonEntity(EntityType<?> type, World worldIn) {
+	public MelonEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public MelonEntity(World worldIn, LivingEntity shooter) {
+	public MelonEntity(Level worldIn, LivingEntity shooter) {
 		super(EntityRegister.MELON.get(), worldIn, shooter);
 	}
 	
@@ -81,7 +81,7 @@ public class MelonEntity extends PultBulletEntity {
 		EntityUtil.playSound(this, SoundRegister.MELON_HIT.get());
 	}
 	
-	protected Optional<EffectInstance> getColdEffect(){
+	protected Optional<MobEffectInstance> getColdEffect(){
 		if(this.getThrower() instanceof WinterMelonEntity) {
 			return ((WinterMelonEntity) this.getThrower()).getColdEffect();
 		}
@@ -89,12 +89,12 @@ public class MelonEntity extends PultBulletEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.6F, 0.6F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.6F, 0.6F);
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("melon_state")) {
 			this.setMelonState(MelonStates.values()[compound.getInt("melon_state")]);
@@ -102,7 +102,7 @@ public class MelonEntity extends PultBulletEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("melon_state", this.getMelonState().ordinal());
 	}

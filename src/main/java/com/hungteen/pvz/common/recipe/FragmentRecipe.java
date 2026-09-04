@@ -5,16 +5,19 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 
 import java.util.Map;
@@ -23,7 +26,7 @@ import java.util.Set;
 /**
  * copy from minecraft.
  */
-public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingInventory> {
+public class FragmentRecipe implements CraftingRecipe, IShapedRecipe<CraftingContainer> {
 
     public static final ResourceLocation UID = StringUtil.prefix("fragment_splice");
     private static final int MAX_WIDTH = 5;
@@ -49,11 +52,11 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
     }
 
     @Override
-    public IRecipeType<?> getType() {
-        return RecipeRegister.FRAGMENT_RECIPE_TYPE;
+    public RecipeType<?> getType() {
+        return RecipeRegister.FRAGMENT_RECIPE_TYPE.get();
     }
 
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return RecipeRegister.FRAGMENT_SERIALIZER.get();
     }
 
@@ -61,7 +64,14 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
         return this.group;
     }
 
-    public ItemStack getResultItem() {
+    /*
+    @Override
+    public CraftingBookCategory category() {
+        return CraftingBookCategory.MISC;
+    }
+    */
+
+    public ItemStack getResultItem(RegistryAccess p_267052_) {
         return this.result;
     }
 
@@ -73,7 +83,12 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
         return p_194133_1_ >= this.width && p_194133_2_ >= this.height;
     }
 
-    public boolean matches(CraftingInventory p_77569_1_, World p_77569_2_) {
+    @Override
+    public ItemStack getResultItem() {
+        return null;
+    }
+
+    public boolean matches(CraftingContainer p_77569_1_, Level p_77569_2_) {
         for(int i = 0; i <= p_77569_1_.getWidth() - this.width; ++i) {
             for(int j = 0; j <= p_77569_1_.getHeight() - this.height; ++j) {
                 if (this.matches(p_77569_1_, i, j, true)) {
@@ -89,7 +104,13 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
         return false;
     }
 
-    private boolean matches(CraftingInventory p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
+    @Override
+    public ItemStack assemble(CraftingContainer pContainer) {
+        return this.result.copy();
+    }
+
+
+    private boolean matches(CraftingContainer p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
         for(int i = 0; i < p_77573_1_.getWidth(); ++i) {
             for(int j = 0; j < p_77573_1_.getHeight(); ++j) {
                 int k = i - p_77573_2_;
@@ -112,8 +133,8 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
         return true;
     }
 
-    public ItemStack assemble(CraftingInventory p_77572_1_) {
-        return this.getResultItem().copy();
+    public ItemStack assemble(CraftingContainer p_77572_1_, RegistryAccess p_267165_) {
+        return this.getResultItem(p_267165_).copy();
     }
 
     public int getWidth() {
@@ -219,7 +240,7 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
             for(int i = 0; i < astring.length; ++i) {
-                String s = JSONUtils.convertToString(p_192407_0_.get(i), "pattern[" + i + "]");
+                String s = GsonHelper.convertToString(p_192407_0_.get(i), "pattern[" + i + "]");
                 if (s.length() > MAX_WIDTH) {
                     throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
                 }
@@ -240,7 +261,7 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
 
         for(Map.Entry<String, JsonElement> entry : p_192408_0_.entrySet()) {
             if (entry.getKey().length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: '" + (String)entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+                throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
             }
 
             if (" ".equals(entry.getKey())) {
@@ -255,46 +276,44 @@ public class FragmentRecipe implements ICraftingRecipe, IShapedRecipe<CraftingIn
     }
 
     public static ItemStack itemFromJson(JsonObject p_199798_0_) {
-        String s = JSONUtils.getAsString(p_199798_0_, "item");
-        Item item = Registry.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
+        String s = GsonHelper.getAsString(p_199798_0_, "item");
+        Item item = Registry.ITEM.getOptional(ResourceLocation.parse(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Unknown item '" + s + "'");
         });
         if (p_199798_0_.has("data")) {
             throw new JsonParseException("Disallowed data tag found");
         } else {
-            int i = JSONUtils.getAsInt(p_199798_0_, "count", 1);
+            int i = GsonHelper.getAsInt(p_199798_0_, "count", 1);
             return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(p_199798_0_, true);
         }
     }
 
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<FragmentRecipe> {
+    public static class Serializer implements RecipeSerializer<FragmentRecipe> {
 
         public FragmentRecipe fromJson(ResourceLocation p_199425_1_, JsonObject p_199425_2_) {
-            String s = JSONUtils.getAsString(p_199425_2_, "group", "");
-            Map<String, Ingredient> map = FragmentRecipe.keyFromJson(JSONUtils.getAsJsonObject(p_199425_2_, "key"));
-            String[] astring = FragmentRecipe.shrink(FragmentRecipe.patternFromJson(JSONUtils.getAsJsonArray(p_199425_2_, "pattern")));
+            String s = GsonHelper.getAsString(p_199425_2_, "group", "");
+            Map<String, Ingredient> map = FragmentRecipe.keyFromJson(GsonHelper.getAsJsonObject(p_199425_2_, "key"));
+            String[] astring = FragmentRecipe.shrink(FragmentRecipe.patternFromJson(GsonHelper.getAsJsonArray(p_199425_2_, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = FragmentRecipe.dissolvePattern(astring, map, i, j);
-            ItemStack itemstack = FragmentRecipe.itemFromJson(JSONUtils.getAsJsonObject(p_199425_2_, "result"));
+            ItemStack itemstack = FragmentRecipe.itemFromJson(GsonHelper.getAsJsonObject(p_199425_2_, "result"));
             return new FragmentRecipe(p_199425_1_, s, i, j, nonnulllist, itemstack);
         }
 
-        public FragmentRecipe fromNetwork(ResourceLocation p_199426_1_, PacketBuffer p_199426_2_) {
+        public FragmentRecipe fromNetwork(ResourceLocation p_199426_1_, FriendlyByteBuf p_199426_2_) {
             int i = p_199426_2_.readVarInt();
             int j = p_199426_2_.readVarInt();
             String s = p_199426_2_.readUtf(32767);
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i * j, Ingredient.EMPTY);
 
-            for (int k = 0; k < nonnulllist.size(); ++k) {
-                nonnulllist.set(k, Ingredient.fromNetwork(p_199426_2_));
-            }
+            nonnulllist.replaceAll(ignored -> Ingredient.fromNetwork(p_199426_2_));
 
             ItemStack itemstack = p_199426_2_.readItem();
             return new FragmentRecipe(p_199426_1_, s, i, j, nonnulllist, itemstack);
         }
 
-        public void toNetwork(PacketBuffer p_199427_1_, FragmentRecipe p_199427_2_) {
+        public void toNetwork(FriendlyByteBuf p_199427_1_, FragmentRecipe p_199427_2_) {
             p_199427_1_.writeVarInt(p_199427_2_.width);
             p_199427_1_.writeVarInt(p_199427_2_.height);
             p_199427_1_.writeUtf(p_199427_2_.group);

@@ -7,16 +7,16 @@ import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 public class SquashZombieEntity extends AbstractZombotanyEntity {
 
-	public SquashZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public SquashZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canLostHead = false;
 	}
@@ -30,14 +30,14 @@ public class SquashZombieEntity extends AbstractZombotanyEntity {
 	@Override
 	public void normalZombieTick() {
 		super.normalZombieTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			LivingEntity target = this.getTarget();
 			if(target != null && this.distanceToSqr(target) <= 10) {
 				SquashEntity squash = EntityRegister.SQUASH.get().create(level);
 				squash.setCharmed(! this.isCharmed());
 				squash.setTarget(target);
 				EntityUtil.onEntitySpawn(level, squash, blockPosition().above(2));
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}

@@ -6,12 +6,12 @@ import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.util.Mth;
 
 public abstract class PVZZombieModel<T extends PVZZombieEntity> extends EntityModel<T> implements IZombieModel<T>{
 
@@ -85,10 +85,10 @@ public abstract class PVZZombieModel<T extends PVZZombieEntity> extends EntityMo
 	protected void doWalkAnimation(float limbSwing, float limbSwingAmount, float netHeadYaw, float headPitch) {
 		this.getZombieHead().yRot = netHeadYaw / (180F / (float)Math.PI);
         this.getZombieHead().xRot = headPitch / (180F / (float)Math.PI);
-        this.getZombieLeftLeg().xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-        this.getZombieRightLeg().xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-        if(this.isRightHandFree) this.getZombieRightHand().xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-        if(this.isLeftHandFree) this.getZombieLeftHand().xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+        this.getZombieLeftLeg().xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        this.getZombieRightLeg().xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+        if(this.isRightHandFree) this.getZombieRightHand().xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        if(this.isLeftHandFree) this.getZombieLeftHand().xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public abstract class PVZZombieModel<T extends PVZZombieEntity> extends EntityMo
 	}
 	
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		this.getZombieWholeBody().render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 	
@@ -146,7 +146,7 @@ public abstract class PVZZombieModel<T extends PVZZombieEntity> extends EntityMo
 	 * render drop body part.
 	 */
 	@Override
-	public void renderBody(IBodyEntity entity, MatrixStack stack, IVertexBuilder buffer, int packedLight, int packedOverlay) {
+	public void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay) {
 		switch(entity.getBodyType()) {
 		case HAND:{
 			this.getZombieLeftHand().visible = true;
@@ -177,7 +177,7 @@ public abstract class PVZZombieModel<T extends PVZZombieEntity> extends EntityMo
 		}
 	}
 	
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;
@@ -191,30 +191,30 @@ public abstract class PVZZombieModel<T extends PVZZombieEntity> extends EntityMo
 	/**
 	 * get helmet to disable helmet render when drop hand.
 	 */
-	public Optional<ModelRenderer> getHelmet() {
+	public Optional<ModelPart> getHelmet() {
 		return Optional.empty();
 	}
 	
 	/**
 	 * get hand defence to disable its render when drop body.
 	 */
-	public Optional<ModelRenderer> getHandDefence() {
+	public Optional<ModelPart> getHandDefence() {
 		return Optional.empty();
 	}
 	
-	public abstract ModelRenderer getZombieLeftHand();
+	public abstract ModelPart getZombieLeftHand();
 	
-	public abstract ModelRenderer getZombieRightHand();
+	public abstract ModelPart getZombieRightHand();
 	
-	public abstract ModelRenderer getZombieLeftLeg();
+	public abstract ModelPart getZombieLeftLeg();
 	
-	public abstract ModelRenderer getZombieRightLeg();
+	public abstract ModelPart getZombieRightLeg();
 	
-	public abstract ModelRenderer getZombieHead();
+	public abstract ModelPart getZombieHead();
 	
-	public abstract ModelRenderer getZombieUpBody();
+	public abstract ModelPart getZombieUpBody();
 	
-	public abstract ModelRenderer getZombieWholeBody();
+	public abstract ModelPart getZombieWholeBody();
 	
 
 }

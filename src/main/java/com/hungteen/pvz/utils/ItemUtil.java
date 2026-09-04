@@ -1,6 +1,6 @@
 package com.hungteen.pvz.utils;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemUtil {
 
@@ -18,8 +18,7 @@ public class ItemUtil {
 	
 	public static boolean canItemStackAddTo(ItemStack stack1, ItemStack stack2) {
 		if(! stack1.sameItem(stack2)) return false;
-		if(! ItemStack.tagMatches(stack1, stack2)) return false;
-		return true;
-	}
+        return ItemStack.tagMatches(stack1, stack2);
+    }
 	
 }

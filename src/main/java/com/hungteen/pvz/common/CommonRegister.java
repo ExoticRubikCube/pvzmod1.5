@@ -2,8 +2,8 @@ package com.hungteen.pvz.common;
 
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
-import net.minecraft.block.ComposterBlock;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.ItemLike;
 
 public class CommonRegister {
 
@@ -19,7 +19,7 @@ public class CommonRegister {
 		registerCompostable(0.5F, ItemRegister.CORN.get());
 	}
 
-	private static void registerCompostable(float chance, IItemProvider itemIn) {
+	private static void registerCompostable(float chance, ItemLike itemIn) {
 		ComposterBlock.COMPOSTABLES.put(itemIn.asItem(), chance);
 	}
 	

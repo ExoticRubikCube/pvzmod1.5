@@ -5,8 +5,8 @@ import com.hungteen.pvz.client.render.entity.PVZCreatureRender;
 import com.hungteen.pvz.common.entity.npc.PennyEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,8 +15,8 @@ public class PennyRender extends PVZCreatureRender<PennyEntity>{
 
 	public static final ResourceLocation PENNY_TEX = StringUtil.prefix("textures/entity/npc/panney.png");
 	
-	public PennyRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new PennyModel(), 1f);
+	public PennyRender(EntityRendererProvider.Context context) {
+		super(context, new PennyModel(context.bakeLayer(PennyModel.LAYER)), 1f);
 	}
 
 	@Override

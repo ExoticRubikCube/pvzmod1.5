@@ -6,14 +6,14 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.interfaces.IPult;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public class PultAttackGoal extends Goal {
 
 	private final IPult pult;
-	protected final MobEntity attacker;
+	protected final Mob attacker;
 	protected LivingEntity target;
 	protected final boolean checkSight;
 	protected int attackTime;
@@ -25,8 +25,8 @@ public class PultAttackGoal extends Goal {
 	public PultAttackGoal(IPult pult, boolean checkSight) {
 		this.pult = pult;
 		this.checkSight = checkSight;
-		this.attacker = (MobEntity) pult;
-		if(! (pult instanceof MobEntity)) {
+		this.attacker = (Mob) pult;
+		if(! (pult instanceof Mob)) {
 			PVZMod.LOGGER.fatal("Error : Wrong pult attacker !");
 			return ;
 		}
@@ -72,7 +72,7 @@ public class PultAttackGoal extends Goal {
 	
 	protected boolean checkTarget(LivingEntity target) {
 		if(EntityUtil.checkCanEntityBeAttack(this.attacker, target)) {
-			return ! this.checkSight || this.attacker.getSensing().canSee(target);
+			return ! this.checkSight || this.attacker.getSensing().hasLineOfSight(target);
 		}
 		return false;
 	}

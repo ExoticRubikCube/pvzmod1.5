@@ -2,142 +2,149 @@ package com.hungteen.pvz.client.model.entity.zombie.other;
 
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.other.RaZombieEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class RaZombieModel extends PVZZombieModel<RaZombieEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer right_leg;
-	private final ModelRenderer left_leg;
-	private final ModelRenderer up;
-	private final ModelRenderer body;
-	private final ModelRenderer left_hand;
-	private final ModelRenderer right_hand;
-	private final ModelRenderer collector;
-	private final ModelRenderer cube_r1;
-	private final ModelRenderer group2;
-	private final ModelRenderer cube_r2;
-	private final ModelRenderer cube_r3;
-	private final ModelRenderer group3;
-	private final ModelRenderer cube_r4;
-	private final ModelRenderer head;
-	private final ModelRenderer bone;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "ra_zombie"), "main");
 
-	public RaZombieModel() {
-		texWidth = 128;
-		texHeight = 128;
+	private final ModelPart total;
+	private final ModelPart right_leg;
+	private final ModelPart left_leg;
+	private final ModelPart up;
+	private final ModelPart body;
+	private final ModelPart left_hand;
+	private final ModelPart right_hand;
+	private final ModelPart collector;
+	private final ModelPart cube_r1;
+	private final ModelPart group2;
+	private final ModelPart cube_r2;
+	private final ModelPart cube_r3;
+	private final ModelPart group3;
+	private final ModelPart cube_r4;
+	private final ModelPart head;
+	private final ModelPart bone;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		
 
-		right_leg = new ModelRenderer(this);
-		right_leg.setPos(-4.0F, -24.0F, 0.0F);
-		total.addChild(right_leg);
-		right_leg.texOffs(0, 96).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		left_leg = new ModelRenderer(this);
-		left_leg.setPos(4.0F, -24.0F, 0.0F);
-		total.addChild(left_leg);
-		left_leg.texOffs(32, 96).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		up = new ModelRenderer(this);
-		up.setPos(0.0F, -24.0F, 0.0F);
-		total.addChild(up);
-		
-
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		up.addChild(body);
-		body.texOffs(80, 96).addBox(-8.0F, -24.0F, -4.0F, 16.0F, 24.0F, 8.0F, 0.0F, false);
-
-		left_hand = new ModelRenderer(this);
-		left_hand.setPos(12.0F, -20.0F, 0.0F);
-		up.addChild(left_hand);
-		left_hand.texOffs(96, 64).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		right_hand = new ModelRenderer(this);
-		right_hand.setPos(-12.0F, -20.0F, 0.0F);
-		up.addChild(right_hand);
-		setRotationAngle(right_hand, -0.5236F, 0.0F, 0.0F);
-		right_hand.texOffs(64, 64).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		collector = new ModelRenderer(this);
-		collector.setPos(1.0F, -1.5F, -24.0F);
-		right_hand.addChild(collector);
-		setRotationAngle(collector, -1.5708F, -1.5708F, 0.0F);
-		collector.texOffs(88, 54).addBox(-5.0F, -0.49F, -5.0F, 10.0F, 0.0F, 10.0F, 0.0F, false);
-
-		cube_r1 = new ModelRenderer(this);
-		cube_r1.setPos(0.0F, 0.5F, 0.0F);
-		collector.addChild(cube_r1);
-		setRotationAngle(cube_r1, 0.0F, 0.7854F, 0.0F);
-		cube_r1.texOffs(0, 26).addBox(-1.5F, -2.02F, -2.0F, 3.0F, 1.0F, 37.0F, 0.0F, true);
-
-		group2 = new ModelRenderer(this);
-		group2.setPos(0.0F, -7.5F, 0.0F);
-		collector.addChild(group2);
-		setRotationAngle(group2, 0.0F, -0.1745F, 0.0F);
-		
-
-		cube_r2 = new ModelRenderer(this);
-		cube_r2.setPos(0.0F, 8.0F, 0.0F);
-		group2.addChild(cube_r2);
-		setRotationAngle(cube_r2, 0.0F, -0.3927F, 0.0F);
-		cube_r2.texOffs(56, 98).addBox(-1.5F, -1.01F, -10.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-		cube_r2.texOffs(64, 104).addBox(5.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		cube_r2.texOffs(64, 108).addBox(-1.5F, -1.01F, 5.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-		cube_r2.texOffs(64, 114).addBox(-10.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-
-		cube_r3 = new ModelRenderer(this);
-		cube_r3.setPos(0.0F, 8.0F, 0.0F);
-		group2.addChild(cube_r3);
-		setRotationAngle(cube_r3, 0.0F, 0.3927F, 0.0F);
-		cube_r3.texOffs(64, 118).addBox(5.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		cube_r3.texOffs(64, 122).addBox(-1.5F, -1.01F, 5.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-		cube_r3.texOffs(72, 96).addBox(-10.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		cube_r3.texOffs(81, 58).addBox(-1.5F, -1.01F, -10.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-
-		group3 = new ModelRenderer(this);
-		group3.setPos(0.0F, -7.5F, 0.0F);
-		collector.addChild(group3);
-		setRotationAngle(group3, 0.0F, -0.1745F, 0.0F);
-		group3.texOffs(0, 76).addBox(-10.0F, 6.98F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		group3.texOffs(0, 70).addBox(-1.5F, 6.98F, 5.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-		group3.texOffs(0, 66).addBox(5.0F, 6.98F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		group3.texOffs(48, 69).addBox(-1.5F, 6.98F, -10.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-
-		cube_r4 = new ModelRenderer(this);
-		cube_r4.setPos(0.0F, 8.0F, 0.0F);
-		group3.addChild(cube_r4);
-		setRotationAngle(cube_r4, 0.0F, 0.7854F, 0.0F);
-		cube_r4.texOffs(54, 59).addBox(5.0F, -1.02F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		cube_r4.texOffs(88, 66).addBox(-1.5F, -1.02F, 5.0F, 3.0F, 1.0F, 5.0F, 0.0F, true);
-		cube_r4.texOffs(48, 75).addBox(-10.0F, -1.02F, -1.5F, 5.0F, 1.0F, 3.0F, 0.0F, false);
-		cube_r4.texOffs(24, 97).addBox(-1.5F, -1.02F, -10.0F, 3.0F, 1.0F, 5.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -24.0F, 0.0F);
-		up.addChild(head);
-		head.texOffs(0, 64).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
-		head.texOffs(74, 1).addBox(-9.0F, -20.0F, -9.0F, 18.0F, 7.0F, 9.0F, 0.0F, false);
-		head.texOffs(0, 43).addBox(8.0F, -19.0F, -8.0F, 4.0F, 14.0F, 5.0F, 0.0F, false);
-		head.texOffs(0, 23).addBox(-12.0F, -19.0F, -8.0F, 4.0F, 14.0F, 5.0F, 0.0F, false);
-		head.texOffs(45, 49).addBox(-9.0F, -19.0F, 0.0F, 18.0F, 5.0F, 3.0F, 0.0F, false);
-		head.texOffs(87, 48).addBox(-9.0F, -18.0F, 3.0F, 18.0F, 4.0F, 2.0F, 0.0F, false);
-		head.texOffs(43, 43).addBox(-9.0F, -17.0F, 5.0F, 18.0F, 3.0F, 4.0F, 0.0F, false);
-
-		bone = new ModelRenderer(this);
-		bone.setPos(0.0F, -14.0F, -9.0F);
-		head.addChild(bone);
-		setRotationAngle(bone, 0.0F, -0.7854F, 0.0F);
-		bone.texOffs(20, 57).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, -0.05F, false);
+public RaZombieModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.right_leg = root.getChild("right_leg");
+		this.left_leg = root.getChild("left_leg");
+		this.up = root.getChild("up");
+		this.body = root.getChild("body");
+		this.left_hand = root.getChild("left_hand");
+		this.right_hand = root.getChild("right_hand");
+		this.collector = root.getChild("collector");
+		this.cube_r1 = root.getChild("cube_r1");
+		this.group2 = root.getChild("group2");
+		this.cube_r2 = root.getChild("cube_r2");
+		this.cube_r3 = root.getChild("cube_r3");
+		this.group3 = root.getChild("group3");
+		this.cube_r4 = root.getChild("cube_r4");
+		this.head = root.getChild("head");
+		this.bone = root.getChild("bone");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition right_leg_pd = total_pd.addOrReplaceChild("right_leg",
+			CubeListBuilder.create()
+				.texOffs(0, 96).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(-4.0F, -24.0F, 0.0F));
+		PartDefinition left_leg_pd = total_pd.addOrReplaceChild("left_leg",
+			CubeListBuilder.create()
+				.texOffs(32, 96).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(4.0F, -24.0F, 0.0F));
+		PartDefinition up_pd = total_pd.addOrReplaceChild("up",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition body_pd = up_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(80, 96).addBox(-8.0F, -24.0F, -4.0F, 16.0F, 24.0F, 8.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition left_hand_pd = up_pd.addOrReplaceChild("left_hand",
+			CubeListBuilder.create()
+				.texOffs(96, 64).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(12.0F, -20.0F, 0.0F));
+		PartDefinition right_hand_pd = up_pd.addOrReplaceChild("right_hand",
+			CubeListBuilder.create()
+				.texOffs(64, 64).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offsetAndRotation(-12.0F, -20.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
+		PartDefinition collector_pd = right_hand_pd.addOrReplaceChild("collector",
+			CubeListBuilder.create()
+				.texOffs(88, 54).addBox(-5.0F, -0.49F, -5.0F, 10.0F, 0.0F, 10.0F),
+			PartPose.offsetAndRotation(1.0F, -1.5F, -24.0F, -1.5708F, -1.5708F, 0.0F));
+		PartDefinition cube_r1_pd = collector_pd.addOrReplaceChild("cube_r1",
+			CubeListBuilder.create()
+				.texOffs(0, 26).mirror().addBox(-1.5F, -2.02F, -2.0F, 3.0F, 1.0F, 37.0F),
+			PartPose.offsetAndRotation(0.0F, 0.5F, 0.0F, 0.0F, 0.7854F, 0.0F));
+		PartDefinition group2_pd = collector_pd.addOrReplaceChild("group2",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -7.5F, 0.0F, 0.0F, -0.1745F, 0.0F));
+		PartDefinition cube_r2_pd = group2_pd.addOrReplaceChild("cube_r2",
+			CubeListBuilder.create()
+				.texOffs(56, 98).addBox(-1.5F, -1.01F, -10.0F, 3.0F, 1.0F, 5.0F)
+				.texOffs(64, 104).addBox(5.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(64, 108).addBox(-1.5F, -1.01F, 5.0F, 3.0F, 1.0F, 5.0F)
+				.texOffs(64, 114).addBox(-10.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F),
+			PartPose.offsetAndRotation(0.0F, 8.0F, 0.0F, 0.0F, -0.3927F, 0.0F));
+		PartDefinition cube_r3_pd = group2_pd.addOrReplaceChild("cube_r3",
+			CubeListBuilder.create()
+				.texOffs(64, 118).addBox(5.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(64, 122).addBox(-1.5F, -1.01F, 5.0F, 3.0F, 1.0F, 5.0F)
+				.texOffs(72, 96).addBox(-10.0F, -1.01F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(81, 58).addBox(-1.5F, -1.01F, -10.0F, 3.0F, 1.0F, 5.0F),
+			PartPose.offsetAndRotation(0.0F, 8.0F, 0.0F, 0.0F, 0.3927F, 0.0F));
+		PartDefinition group3_pd = collector_pd.addOrReplaceChild("group3",
+			CubeListBuilder.create()
+				.texOffs(0, 76).addBox(-10.0F, 6.98F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(0, 70).addBox(-1.5F, 6.98F, 5.0F, 3.0F, 1.0F, 5.0F)
+				.texOffs(0, 66).addBox(5.0F, 6.98F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(48, 69).addBox(-1.5F, 6.98F, -10.0F, 3.0F, 1.0F, 5.0F),
+			PartPose.offsetAndRotation(0.0F, -7.5F, 0.0F, 0.0F, -0.1745F, 0.0F));
+		PartDefinition cube_r4_pd = group3_pd.addOrReplaceChild("cube_r4",
+			CubeListBuilder.create()
+				.texOffs(54, 59).addBox(5.0F, -1.02F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(88, 66).mirror().addBox(-1.5F, -1.02F, 5.0F, 3.0F, 1.0F, 5.0F)
+				.texOffs(48, 75).addBox(-10.0F, -1.02F, -1.5F, 5.0F, 1.0F, 3.0F)
+				.texOffs(24, 97).addBox(-1.5F, -1.02F, -10.0F, 3.0F, 1.0F, 5.0F),
+			PartPose.offsetAndRotation(0.0F, 8.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
+		PartDefinition head_pd = up_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(0, 64).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F)
+				.texOffs(74, 1).addBox(-9.0F, -20.0F, -9.0F, 18.0F, 7.0F, 9.0F)
+				.texOffs(0, 43).addBox(8.0F, -19.0F, -8.0F, 4.0F, 14.0F, 5.0F)
+				.texOffs(0, 23).addBox(-12.0F, -19.0F, -8.0F, 4.0F, 14.0F, 5.0F)
+				.texOffs(45, 49).addBox(-9.0F, -19.0F, 0.0F, 18.0F, 5.0F, 3.0F)
+				.texOffs(87, 48).addBox(-9.0F, -18.0F, 3.0F, 18.0F, 4.0F, 2.0F)
+				.texOffs(43, 43).addBox(-9.0F, -17.0F, 5.0F, 18.0F, 3.0F, 4.0F),
+			PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition bone_pd = head_pd.addOrReplaceChild("bone",
+			CubeListBuilder.create()
+				.texOffs(20, 57).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(-0.05F)),
+			PartPose.offsetAndRotation(0.0F, -14.0F, -9.0F, 0.0F, -0.7854F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 128, 128);
+	}
+
 
 
 	@Override
@@ -155,37 +162,37 @@ public class RaZombieModel extends PVZZombieModel<RaZombieEntity> {
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftHand() {
+	public ModelPart getZombieLeftHand() {
 		return this.left_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightHand() {
+	public ModelPart getZombieRightHand() {
 		return this.right_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftLeg() {
+	public ModelPart getZombieLeftLeg() {
 		return this.left_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightLeg() {
+	public ModelPart getZombieRightLeg() {
 		return this.right_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieHead() {
+	public ModelPart getZombieHead() {
 		return this.head;
 	}
 	
 	@Override
-	public ModelRenderer getZombieUpBody() {
+	public ModelPart getZombieUpBody() {
 		return this.up;
 	}
 
 	@Override
-	public ModelRenderer getZombieWholeBody() {
+	public ModelPart getZombieWholeBody() {
 		return this.total;
 	}
 }

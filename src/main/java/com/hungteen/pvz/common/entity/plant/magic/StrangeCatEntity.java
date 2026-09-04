@@ -15,13 +15,13 @@ import com.hungteen.pvz.utils.PlantUtil;
 
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class StrangeCatEntity extends PVZPlantEntity {
 	public static final int ANIM_CD = 10;
 	private int restTick = REST_CD;
 	
-	public StrangeCatEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public StrangeCatEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.isImmuneToWeak = true;
 	}
@@ -47,7 +47,7 @@ public class StrangeCatEntity extends PVZPlantEntity {
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if (! level.isClientSide) {
+		if (! level.isClientSide()) {
 			if(EntityUtil.isEntityValid(this.getTarget())) {
 				this.lookControl.setLookAt(this.getTarget(), 30f, 30f);
 			}
@@ -79,11 +79,11 @@ public class StrangeCatEntity extends PVZPlantEntity {
 	 * {@link PVZLivingEvents#onLivingDeath(LivingDeathEvent)}
 	 */
 	public static void handleCopyCat(final LivingDeathEvent ev) {
-		if(! ev.getEntity().level.isClientSide && ev.getSource().getEntity() instanceof StrangeCatEntity) {
+		if(! ev.getEntity().level.isClientSide() && ev.getSource().getEntity() instanceof StrangeCatEntity) {
 			final float range = 10F;
 			final int count = ev.getEntity().level.getEntitiesOfClass(StrangeCatEntity.class, EntityUtil.getEntityAABB(ev.getEntity(), range, range)).size();
 			if(count < PVZConfig.COMMON_CONFIG.EntitySettings.PlantSetting.StrangeCatCount.get()) {
-				((StrangeCatEntity) ev.getSource().getEntity()).onSelfCopy(ev.getEntityLiving());
+				((StrangeCatEntity) ev.getSource().getEntity()).onSelfCopy(ev.getEntity());
 			}
 		}
 	}
@@ -134,18 +134,18 @@ public class StrangeCatEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.8f, 1f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.8f, 1f, false);
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("rest_tick", this.restTick);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("rest_tick")) {
 			this.restTick = compound.getInt("rest_tick");

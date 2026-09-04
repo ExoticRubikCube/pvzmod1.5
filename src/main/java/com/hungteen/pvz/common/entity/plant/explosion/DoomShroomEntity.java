@@ -14,26 +14,26 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +42,14 @@ public class DoomShroomEntity extends PlantBomberEntity {
 
 	public static final float MAX_EXPLOSION_LEVEL = 500;
 	
-	public DoomShroomEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public DoomShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			if(this.getAttackTime() == this.getReadyTime() - 2) {
 				DoomFixerEntity fixer = EntityRegister.DOOM_FIXER.get().create(level);
 				EntityUtil.onEntitySpawn(level, fixer, this.blockPosition());
@@ -62,10 +62,10 @@ public class DoomShroomEntity extends PlantBomberEntity {
 		if(server) {
 			//deal damage to targets.
 			final float range = this.getExplodeRange();
-			final AxisAlignedBB aabb = EntityUtil.getEntityAABB(this, range, range);
+			final AABB aabb = EntityUtil.getEntityAABB(this, range, range);
 			EntityUtil.getWholeTargetableEntities(this, aabb).forEach(target -> {
-				if(target instanceof EnderDragonEntity) {//make ender_dragon can be damaged by doom shroom. 
-					((EnderDragonEntity) target).hurt(((EntityDamageSource)DamageSource.mobAttack(this)).setThorns().setExplosion(), this.getExplodeDamage() * 2);
+				if(target instanceof EnderDragon) {//make ender_dragon can be damaged by doom shroom.
+					target.hurt(((EntityDamageSource)DamageSource.mobAttack(this)).setThorns().setExplosion(), this.getExplodeDamage() * 2);
 				} else {
 					target.hurt(PVZEntityDamageSource.explode(this), this.getExplodeDamage());
 				}
@@ -101,7 +101,7 @@ public class DoomShroomEntity extends PlantBomberEntity {
 		for(int h = 0; h <= range + 8; ++ h) {
 		    for(int i = - range; i <= range; ++ i) {
 			    for(int j = - range; j <= range; ++ j) {
-			    	if(new Vector3d(i, h - 5, j).lengthSqr() <= range * range) {
+			    	if(new Vec3(i, h - 5, j).lengthSqr() <= range * range) {
 			    		posList.add(this.blockPosition().offset(i, h, j));
 			    	}
 			    }
@@ -109,12 +109,12 @@ public class DoomShroomEntity extends PlantBomberEntity {
 		}
 		posList.forEach(pos -> {
 			BlockState state = level.getBlockState(pos);
-			if (state.isAir(this.level, pos) || state.getBlock().getExplosionResistance() > MAX_EXPLOSION_LEVEL) {
+			if (state.isAir() || state.getBlock().getExplosionResistance() > MAX_EXPLOSION_LEVEL) {
 				return ;
 			}
-			TileEntity tileentity = state.hasTileEntity() ? this.level.getBlockEntity(pos) : null;
-			LootContext.Builder loot = (new LootContext.Builder((ServerWorld)this.level)).withRandom(this.level.random).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(pos)).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withOptionalParameter(LootParameters.BLOCK_ENTITY, tileentity).withOptionalParameter(LootParameters.THIS_ENTITY, this);
-			loot.withParameter(LootParameters.EXPLOSION_RADIUS, (float)len);
+			BlockEntity tileentity = state.hasBlockEntity() ? this.level.getBlockEntity(pos) : null;
+			LootContext.Builder loot = (new LootContext.Builder((ServerLevel)this.level)).withRandom(this.level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this);
+			loot.withParameter(LootContextParams.EXPLOSION_RADIUS, (float)len);
 			state.getDrops(loot).forEach((stack)->{
 				for(int l = 0; l < list.size(); ++l) {
                     Pair<ItemStack, BlockPos> pair = list.get(l);
@@ -147,8 +147,8 @@ public class DoomShroomEntity extends PlantBomberEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8f, 1.5f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8f, 1.5f);
 	}
 	
 	@Override

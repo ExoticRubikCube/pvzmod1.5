@@ -1,101 +1,113 @@
 package com.hungteen.pvz.client.model.entity.zombie.grass;
 
-import java.util.Optional;
-
-import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.api.enums.BodyType;
+import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.grass.PoleZombieEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Optional;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class PoleZombieModel extends PVZZombieModel<PoleZombieEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer right_leg;
-	private final ModelRenderer left_leg;
-	private final ModelRenderer up;
-	private final ModelRenderer body;
-	private final ModelRenderer left_hand;
-	private final ModelRenderer left_hand2;
-	private final ModelRenderer right_hand;
-	private final ModelRenderer right_hand2;
-	private final ModelRenderer pole;
-	private final ModelRenderer head;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "pole_zombie"), "main");
 
-	public PoleZombieModel() {
-		texWidth = 256;
-		texHeight = 256;
+	private final ModelPart total;
+	private final ModelPart right_leg;
+	private final ModelPart left_leg;
+	private final ModelPart up;
+	private final ModelPart body;
+	private final ModelPart left_hand;
+	private final ModelPart left_hand2;
+	private final ModelPart right_hand;
+	private final ModelPart right_hand2;
+	private final ModelPart pole;
+	private final ModelPart head;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		
 
-		right_leg = new ModelRenderer(this);
-		right_leg.setPos(-4.0F, -26.0F, 0.0F);
-		total.addChild(right_leg);
-		right_leg.texOffs(161, 220).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 24.0F, 4.0F, 0.0F, false);
-		right_leg.texOffs(124, 239).addBox(-3.0F, 24.0F, -7.0F, 6.0F, 2.0F, 10.0F, 0.0F, false);
-		right_leg.texOffs(158, 202).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 4.0F, 6.0F, 0.0F, false);
 
-		left_leg = new ModelRenderer(this);
-		left_leg.setPos(4.0F, -26.0F, 0.0F);
-		total.addChild(left_leg);
-		left_leg.texOffs(228, 219).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 24.0F, 4.0F, 0.0F, false);
-		left_leg.texOffs(190, 238).addBox(-3.0F, 24.0F, -7.0F, 6.0F, 2.0F, 10.0F, 0.0F, false);
-		left_leg.texOffs(190, 198).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 4.0F, 6.0F, 0.0F, false);
 
-		up = new ModelRenderer(this);
-		up.setPos(0.0F, -26.0F, 0.0F);
-		total.addChild(up);
-		
-
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		up.addChild(body);
-		body.texOffs(2, 222).addBox(-8.0F, -26.0F, -3.0F, 16.0F, 26.0F, 6.0F, 0.0F, false);
-
-		left_hand = new ModelRenderer(this);
-		left_hand.setPos(11.0F, -23.0F, 0.0F);
-		up.addChild(left_hand);
-		left_hand.texOffs(49, 221).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 26.0F, 6.0F, -0.05F, false);
-
-		left_hand2 = new ModelRenderer(this);
-		left_hand2.setPos(-2.0F, 12.0F, 0.0F);
-		left_hand.addChild(left_hand2);
-		left_hand2.texOffs(228, 195).addBox(-1.0F, 3.0F, -3.0F, 6.0F, 10.0F, 6.0F, 0.05F, false);
-
-		right_hand = new ModelRenderer(this);
-		right_hand.setPos(-11.0F, -23.0F, 0.0F);
-		up.addChild(right_hand);
-		setRotationAngle(right_hand, -1.5708F, 0.0F, 0.0F);
-		right_hand.texOffs(49, 221).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 18.0F, 6.0F, -0.05F, false);
-
-		right_hand2 = new ModelRenderer(this);
-		right_hand2.setPos(-2.0F, 12.0F, 0.0F);
-		right_hand.addChild(right_hand2);
-		setRotationAngle(right_hand2, -1.5708F, 0.0F, 0.0F);
-		right_hand2.texOffs(228, 195).addBox(-1.0F, 3.0F, -3.0F, 6.0F, 10.0F, 6.0F, 0.05F, false);
-
-		pole = new ModelRenderer(this);
-		pole.setPos(0.0F, 9.0F, 1.0F);
-		right_hand2.addChild(pole);
-		pole.texOffs(76, 4).addBox(1.0F, 2.1472F, -45.3617F, 2.0F, 2.0F, 85.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -26.0F, 0.0F);
-		up.addChild(head);
-		head.texOffs(196, 104).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 14.0F, 14.0F, 0.0F, false);
-		
-		this.rightHandOriginAngel = - 90;
+public PoleZombieModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.right_leg = root.getChild("right_leg");
+		this.left_leg = root.getChild("left_leg");
+		this.up = root.getChild("up");
+		this.body = root.getChild("body");
+		this.left_hand = root.getChild("left_hand");
+		this.left_hand2 = root.getChild("left_hand2");
+		this.right_hand = root.getChild("right_hand");
+		this.right_hand2 = root.getChild("right_hand2");
+		this.pole = root.getChild("pole");
+		this.head = root.getChild("head");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition right_leg_pd = total_pd.addOrReplaceChild("right_leg",
+			CubeListBuilder.create()
+				.texOffs(161, 220).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 24.0F, 4.0F)
+				.texOffs(124, 239).addBox(-3.0F, 24.0F, -7.0F, 6.0F, 2.0F, 10.0F)
+				.texOffs(158, 202).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 4.0F, 6.0F),
+			PartPose.offset(-4.0F, -26.0F, 0.0F));
+		PartDefinition left_leg_pd = total_pd.addOrReplaceChild("left_leg",
+			CubeListBuilder.create()
+				.texOffs(228, 219).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 24.0F, 4.0F)
+				.texOffs(190, 238).addBox(-3.0F, 24.0F, -7.0F, 6.0F, 2.0F, 10.0F)
+				.texOffs(190, 198).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 4.0F, 6.0F),
+			PartPose.offset(4.0F, -26.0F, 0.0F));
+		PartDefinition up_pd = total_pd.addOrReplaceChild("up",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -26.0F, 0.0F));
+		PartDefinition body_pd = up_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(2, 222).addBox(-8.0F, -26.0F, -3.0F, 16.0F, 26.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition left_hand_pd = up_pd.addOrReplaceChild("left_hand",
+			CubeListBuilder.create()
+				.texOffs(49, 221).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 26.0F, 6.0F, new CubeDeformation(-0.05F)),
+			PartPose.offset(11.0F, -23.0F, 0.0F));
+		PartDefinition left_hand2_pd = left_hand_pd.addOrReplaceChild("left_hand2",
+			CubeListBuilder.create()
+				.texOffs(228, 195).addBox(-1.0F, 3.0F, -3.0F, 6.0F, 10.0F, 6.0F, new CubeDeformation(0.05F)),
+			PartPose.offset(-2.0F, 12.0F, 0.0F));
+		PartDefinition right_hand_pd = up_pd.addOrReplaceChild("right_hand",
+			CubeListBuilder.create()
+				.texOffs(49, 221).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 18.0F, 6.0F, new CubeDeformation(-0.05F)),
+			PartPose.offsetAndRotation(-11.0F, -23.0F, 0.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition right_hand2_pd = right_hand_pd.addOrReplaceChild("right_hand2",
+			CubeListBuilder.create()
+				.texOffs(228, 195).addBox(-1.0F, 3.0F, -3.0F, 6.0F, 10.0F, 6.0F, new CubeDeformation(0.05F)),
+			PartPose.offsetAndRotation(-2.0F, 12.0F, 0.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition pole_pd = right_hand2_pd.addOrReplaceChild("pole",
+			CubeListBuilder.create()
+				.texOffs(76, 4).addBox(1.0F, 2.1472F, -45.361698F, 2.0F, 2.0F, 85.0F),
+			PartPose.offset(0.0F, 9.0F, 1.0F));
+		PartDefinition head_pd = up_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(196, 104).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 14.0F, 14.0F),
+			PartPose.offset(0.0F, -26.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 256, 256);
+	}
+
 
 	@Override
 	public void setupAnim(PoleZombieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
@@ -121,7 +133,7 @@ public class PoleZombieModel extends PVZZombieModel<PoleZombieEntity> {
 	}
 	
 	@Override
-	public void renderBody(IBodyEntity entity, MatrixStack stack, IVertexBuilder buffer, int packedLight,
+	public void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight,
 			int packedOverlay) {
 		super.renderBody(entity, stack, buffer, packedLight, packedOverlay);
 		if(entity.getBodyType() == BodyType.BODY) {
@@ -145,42 +157,42 @@ public class PoleZombieModel extends PVZZombieModel<PoleZombieEntity> {
 	}
 
 	@Override
-	public Optional<ModelRenderer> getHandDefence() {
+	public Optional<ModelPart> getHandDefence() {
 		return Optional.ofNullable(this.pole);
 	}
 	
 	@Override
-	public ModelRenderer getZombieLeftHand() {
+	public ModelPart getZombieLeftHand() {
 		return this.left_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightHand() {
+	public ModelPart getZombieRightHand() {
 		return this.right_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftLeg() {
+	public ModelPart getZombieLeftLeg() {
 		return this.left_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightLeg() {
+	public ModelPart getZombieRightLeg() {
 		return this.right_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieHead() {
+	public ModelPart getZombieHead() {
 		return this.head;
 	}
 	
 	@Override
-	public ModelRenderer getZombieUpBody() {
+	public ModelPart getZombieUpBody() {
 		return this.up;
 	}
 
 	@Override
-	public ModelRenderer getZombieWholeBody() {
+	public ModelPart getZombieWholeBody() {
 		return this.total;
 	}
 }

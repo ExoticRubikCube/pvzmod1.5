@@ -7,16 +7,20 @@ import com.hungteen.pvz.common.entity.AbstractOwnerEntity;
 import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
 import com.hungteen.pvz.utils.EntityUtil;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraft.block.Block;
-import net.minecraft.block.BushBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,12 +33,12 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	protected float attackDamage = 0F;
 	public boolean bulletmerge = PVZConfig.COMMON_CONFIG.EntitySettings.PlantSetting.PlantBulletMerge.get();
 	
-	public AbstractBulletEntity(EntityType<?> type, World worldIn) {
+	public AbstractBulletEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(true);
 	}
 
-	public AbstractBulletEntity(EntityType<?> type, World worldIn, LivingEntity livingEntityIn) {
+	public AbstractBulletEntity(EntityType<?> type, Level worldIn, LivingEntity livingEntityIn) {
 		super(type, worldIn, livingEntityIn);
 		this.summonByOwner(livingEntityIn);
 		this.setNoGravity(true);
@@ -43,50 +47,56 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void tick() {
 		super.tick();
-		if (! level.isClientSide && this.tickCount >= this.getMaxLiveTick()) {
-			this.remove();
+		if (!this.level.isClientSide && this.tickCount >= this.getMaxLiveTick()) {
+			this.discard();
+			return;
 		}
-		//on hit
-		if(! level.isClientSide) {
-			Vector3d start = this.position();
-		    Vector3d end = start.add(this.getDeltaMovement());
-		    RayTraceResult result = this.level.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-		    if(result.getType() != RayTraceResult.Type.MISS) {// hit something
-		    	end = result.getLocation();
-		    }
-		    EntityRayTraceResult entityRay = this.rayTraceEntities(start, end);
-		    if(entityRay != null) {
-			    result = entityRay;
-		    }
-		    if(result.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, result)) {//on hit
-			    this.onImpact(result);
-				if (result.getType() == RayTraceResult.Type.ENTITY && bulletmerge) {//bullet merging
-					Entity entity = ((EntityRayTraceResult)result).getEntity();
-					if (entity.getClass().getName().equals(this.getClass().getName())) {
-						((AbstractBulletEntity) entity).setAttackDamage(this.getAttackDamage()+((AbstractBulletEntity)entity).getAttackDamage());
-						this.remove();
+
+		if (!this.level.isClientSide) {
+			Vec3 start = this.position();
+			Vec3 end = start.add(this.getDeltaMovement());
+
+			HitResult result = this.level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+			if (result.getType() != HitResult.Type.MISS) {
+				end = result.getLocation();
+			}
+
+			EntityHitResult entityRay = this.rayTraceEntities(start, end);
+			if (entityRay != null) {
+				result = entityRay;
+			}
+
+			if (result.getType() != HitResult.Type.MISS) {
+				this.onImpact(result);
+				if (result instanceof EntityHitResult entityHitResult && this.bulletmerge) {
+					Entity entity = entityHitResult.getEntity();
+					if (entity.getClass() == this.getClass() && entity instanceof AbstractBulletEntity otherBullet) {
+						otherBullet.setAttackDamage(this.getAttackDamage() + otherBullet.getAttackDamage());
+						this.discard();
 					}
 				}
-		    }
+			}
 		}
+
 		this.tickMove();
 	}
 	
 	/**
-	 * Gets the EntityRayTraceResult representing the entity hit.
+	 * Gets the EntityHitResult representing the entity hit.
 	 * {@link #tick()}
 	 */
 	@Nullable
-	protected EntityRayTraceResult rayTraceEntities(Vector3d startVec, Vector3d endVec) {
+	protected EntityHitResult rayTraceEntities(Vec3 startVec, Vec3 endVec) {
 		return EntityUtil.rayTraceEntities(level, this, startVec, endVec, entity -> 
 		    (entity.isPickable() && shouldHit(entity) && (this.hitEntities == null || !this.hitEntities.contains(entity.getId())) || entity.getClass().getName().equals(this.getClass().getName()))
 		);
 	}
 	
 	/**
-	 * {@link #rayTraceEntities(Vector3d, Vector3d)}
+	 * {@link #rayTraceEntities(Vec3, Vec3)}
 	 */
 	protected boolean shouldHit(Entity target) {
 		return EntityUtil.canTargetEntity(this.getOwnerOrSelf(), target);
@@ -98,28 +108,28 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	
 	@Override
 	protected void tickMove() {
-		Vector3d vec3d = this.getDeltaMovement();
+		Vec3 vec3d = this.getDeltaMovement();
 		double d0 = this.getX() + vec3d.x;
 		double d1 = this.getY() + vec3d.y;
 		double d2 = this.getZ() + vec3d.z;
-		float f = MathHelper.sqrt(getHorizontalDistanceSqr(vec3d));
-		this.yRot = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-		for (this.xRot = (float) (MathHelper.atan2(vec3d.y, (double) f)
-				* (double) (180F / (float) Math.PI)); this.xRot
+		float f = Mth.sqrt((float) vec3d.horizontalDistanceSqr());
+		this.setYRot((float) (Mth.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI)));
+		for (this.setXRot((float) (Mth.atan2(vec3d.y, f)
+				* (double) (180F / (float) Math.PI))); this.getXRot()
 						- this.xRotO < -180.0F; this.xRotO -= 360.0F) {
 			;
 		}
-		while (this.xRot - this.xRotO >= 180.0F) {
+		while (this.getXRot() - this.xRotO >= 180.0F) {
 			this.xRotO += 360.0F;
 		}
-		while (this.yRot - this.yRotO < -180.0F) {
+		while (this.getYRot() - this.yRotO < -180.0F) {
 			this.yRotO -= 360.0F;
 		}
-		while (this.yRot - this.yRotO >= 180.0F) {
+		while (this.getYRot() - this.yRotO >= 180.0F) {
 			this.yRotO += 360.0F;
 		}
-		this.xRot = MathHelper.lerp(0.2F, this.xRotO, this.xRot);
-		this.yRot = MathHelper.lerp(0.2F, this.yRotO, this.yRot);
+		this.setXRot(Mth.lerp(0.2F, this.xRotO, this.getXRot()));
+		this.setYRot(Mth.lerp(0.2F, this.yRotO, this.getYRot()));
 		float f1;
 		if (this.isInWater()) {
 			for (int i = 0; i < 4; ++i) {
@@ -130,9 +140,9 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 		} else {
 			f1 = this.airSlowDown;
 		}
-		this.setDeltaMovement(vec3d.scale((double) f1));
+		this.setDeltaMovement(vec3d.scale(f1));
 		if (!this.isNoGravity()) {
-			Vector3d vec3d1 = this.getDeltaMovement();
+			Vec3 vec3d1 = this.getDeltaMovement();
 			this.setDeltaMovement(vec3d1.x, vec3d1.y - (double) this.getGravityVelocity(), vec3d1.z);
 		}
 		this.setPos(d0, d1, d2);
@@ -141,7 +151,7 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	/**
 	 * shoot bullet such as pea or spore
 	 */
-	public void shootPea(Vector3d vec, double speed, double angleOffset) {
+	public void shootPea(Vec3 vec, double speed, double angleOffset) {
 		this.shootPea(vec.x, vec.y, vec.z, speed, angleOffset);
 	}
 	
@@ -152,14 +162,14 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 		final double down = this.getShootPeaAngle();
 		final double dxz = Math.sqrt(dx * dx + dz * dz);
 		if(down != 0){
-			dy = MathHelper.clamp(dy, - dxz / down, dxz / down);//fix dy by angle
+			dy = Mth.clamp(dy, - dxz / down, dxz / down);//fix dy by angle
 		}
 //		System.out.println(dy + "," + dxz);
-		final double degree = MathHelper.atan2(dz, dx) + Math.toRadians(angleOffset);
+		final double degree = Mth.atan2(dz, dx) + Math.toRadians(angleOffset);
 		dx = Math.cos(degree) * dxz;
 		dz = Math.sin(degree) * dxz;
 		final double totSpeed = Math.sqrt(dxz * dxz + dy * dy);
-		this.setDeltaMovement(new Vector3d(dx / totSpeed, dy / totSpeed, dz / totSpeed).scale(speed));
+		this.setDeltaMovement(new Vec3(dx / totSpeed, dy / totSpeed, dz / totSpeed).scale(speed));
 	}
 	
 	public void shootToTarget(LivingEntity target, double speed) {
@@ -170,18 +180,18 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	 * Called when this EntityThrowable hits a block or entity.<br>
 	 * only in server side.
 	 */
-	protected abstract void onImpact(RayTraceResult result);
+	protected abstract void onImpact(HitResult result);
 
 	protected abstract int getMaxLiveTick(); 
 	
-	protected boolean checkLive(RayTraceResult result) {
-		if (result.getType() == RayTraceResult.Type.ENTITY) {// attack entity
-			if (EntityUtil.canTargetEntity(getThrower(), ((EntityRayTraceResult) result).getEntity())) {
+	protected boolean checkLive(HitResult result) {
+		if (result.getType() == HitResult.Type.ENTITY) {// attack entity
+			if (EntityUtil.canTargetEntity(getThrower(), ((EntityHitResult) result).getEntity())) {
 				return false;
 			}
 			return true;
-		} else if (result.getType() == RayTraceResult.Type.BLOCK) {
-			final Block block = level.getBlockState(((BlockRayTraceResult) result).getBlockPos()).getBlock();
+		} else if (result.getType() == HitResult.Type.BLOCK) {
+			final Block block = level.getBlockState(((BlockHitResult) result).getBlockPos()).getBlock();
 			if (block instanceof BushBlock) {
 				return true;
 			}
@@ -240,18 +250,18 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	public void lerpMotion(double x, double y, double z) {
 		this.setDeltaMovement(x, y, z);
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-			float f = MathHelper.sqrt(x * x + z * z);
-			this.yRot = (float) (MathHelper.atan2(x, z) * (double) (180F / (float) Math.PI));
-			this.xRot = (float) (MathHelper.atan2(y, (double) f) * (double) (180F / (float) Math.PI));
-			this.yRotO = this.yRot;
-			this.xRotO = this.xRot;
-			this.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot,
-					this.xRot);
+			float f = Mth.sqrt((float) (x * x + z * z));
+			this.setYRot((float) (Mth.atan2(x, z) * (double) (180F / (float) Math.PI)));
+			this.setXRot((float) (Mth.atan2(y, f) * (double) (180F / (float) Math.PI)));
+			this.yRotO = this.getYRot();
+			this.xRotO = this.getXRot();
+			this.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(),
+					this.getXRot());
 		}
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("bullet_attack_damage")) {
 			this.attackDamage = compound.getFloat("bullet_attack_damage");
@@ -259,7 +269,7 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putFloat("bullet_attack_damage", this.attackDamage);
 	}

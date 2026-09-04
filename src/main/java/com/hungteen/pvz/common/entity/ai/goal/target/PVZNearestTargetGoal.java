@@ -7,18 +7,18 @@ import java.util.stream.Collectors;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
 public class PVZNearestTargetGoal extends PVZTargetGoal {
 
 	protected final AlgorithmUtil.EntitySorter sorter;
 
-	public PVZNearestTargetGoal(MobEntity mobIn, boolean mustSee, boolean mustReach, float w, float h) {
+	public PVZNearestTargetGoal(Mob mobIn, boolean mustSee, boolean mustReach, float w, float h) {
 		this(mobIn, mustSee, mustReach, w, h, h);
 	}
 
-	public PVZNearestTargetGoal(MobEntity mobIn, boolean mustSee, boolean mustReach, float w, float h1, float h2) {
+	public PVZNearestTargetGoal(Mob mobIn, boolean mustSee, boolean mustReach, float w, float h1, float h2) {
 		super(mobIn, mustSee, mustReach, w, h1, h2);
 		this.sorter = new AlgorithmUtil.EntitySorter(mob);
 	}

@@ -5,19 +5,19 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.Level;
 
 public class ExplosionBowlingEntity extends AbstractBowlingEntity {
 
-	public ExplosionBowlingEntity(EntityType<?> type, World worldIn) {
+	public ExplosionBowlingEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public ExplosionBowlingEntity(EntityType<?> type, World worldIn, PlayerEntity entity) {
+	public ExplosionBowlingEntity(EntityType<?> type, Level worldIn, Player entity) {
 		super(type, worldIn, entity);
 	}
 	
@@ -25,14 +25,14 @@ public class ExplosionBowlingEntity extends AbstractBowlingEntity {
 	protected void tickCollision() {
 		if(this.getBowlingFacing() == BowlingFacings.BOMB) {
 			this.bomb();
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		} else {
 			super.tickCollision();
 		}
 	}
 	
 	private void bomb() {
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 		} else {
 			this.level.addParticle(ParticleRegister.RED_BOMB.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		}
@@ -41,7 +41,7 @@ public class ExplosionBowlingEntity extends AbstractBowlingEntity {
 	@Override
 	protected void changeDiretion() {
 		float len = 2.5F;
-		AxisAlignedBB aabb = EntityUtil.getEntityAABB(this, len, len);
+		AABB aabb = EntityUtil.getEntityAABB(this, len, len);
 		EntityUtil.getTargetableEntities(this.getOwnerOrSelf(), aabb).forEach((target) -> {
 			target.hurt(PVZEntityDamageSource.explode(this), 180);
 		});

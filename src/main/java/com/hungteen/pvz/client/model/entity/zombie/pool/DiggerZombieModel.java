@@ -2,98 +2,115 @@ package com.hungteen.pvz.client.model.entity.zombie.pool;
 
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.pool.DiggerZombieEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.util.Mth;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class DiggerZombieModel extends PVZZombieModel<DiggerZombieEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer right_leg;
-	private final ModelRenderer left_leg;
-	private final ModelRenderer up;
-	private final ModelRenderer body;
-	private final ModelRenderer left_hand;
-	private final ModelRenderer right_hand;
-	private final ModelRenderer pickaxe;
-	private final ModelRenderer bone;
-	private final ModelRenderer head;
-	private final ModelRenderer hat;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "digger_zombie"), "main");
 
-	public DiggerZombieModel() {
-		texWidth = 256;
-		texHeight = 256;
+	private final ModelPart total;
+	private final ModelPart right_leg;
+	private final ModelPart left_leg;
+	private final ModelPart up;
+	private final ModelPart body;
+	private final ModelPart left_hand;
+	private final ModelPart right_hand;
+	private final ModelPart pickaxe;
+	private final ModelPart bone;
+	private final ModelPart head;
+	private final ModelPart hat;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		
 
-		right_leg = new ModelRenderer(this);
-		right_leg.setPos(-4.0F, -24.0F, 0.0F);
-		total.addChild(right_leg);
-		right_leg.texOffs(221, 221).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
 
-		left_leg = new ModelRenderer(this);
-		left_leg.setPos(4.0F, -24.0F, 0.0F);
-		total.addChild(left_leg);
-		left_leg.texOffs(182, 220).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
 
-		up = new ModelRenderer(this);
-		up.setPos(0.0F, -24.0F, 0.0F);
-		total.addChild(up);
-		
-
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, -7.0F, 0.0F);
-		up.addChild(body);
-		body.texOffs(122, 217).addBox(-8.0F, -17.0F, -5.0F, 16.0F, 24.0F, 11.0F, 0.0F, false);
-
-		left_hand = new ModelRenderer(this);
-		left_hand.setPos(12.0F, -20.0F, 0.0F);
-		up.addChild(left_hand);
-		left_hand.texOffs(83, 220).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		right_hand = new ModelRenderer(this);
-		right_hand.setPos(-12.0F, -20.0F, 0.0F);
-		up.addChild(right_hand);
-		right_hand.texOffs(43, 219).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F, 0.0F, false);
-
-		pickaxe = new ModelRenderer(this);
-		pickaxe.setPos(0.0F, 18.5858F, -6.2426F);
-		right_hand.addChild(pickaxe);
-		setRotationAngle(pickaxe, -0.1745F, 0.0F, 0.0F);
-		pickaxe.texOffs(8, 231).addBox(-1.0F, -11.0434F, -18.7538F, 2.0F, 16.0F, 2.0F, 0.1F, false);
-		pickaxe.texOffs(193, 177).addBox(-1.0F, -1.0F, -19.0F, 2.0F, 2.0F, 28.0F, -0.1F, false);
-
-		bone = new ModelRenderer(this);
-		bone.setPos(0.0F, 6.0F, -18.0F);
-		pickaxe.addChild(bone);
-		setRotationAngle(bone, 0.5236F, 0.0F, 0.0F);
-		bone.texOffs(27, 243).addBox(-1.0F, -1.1439F, -0.1677F, 2.0F, 7.0F, 2.0F, 0.1F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -24.0F, 0.0F);
-		up.addChild(head);
-		head.texOffs(118, 177).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
-
-		hat = new ModelRenderer(this);
-		hat.setPos(0.0F, -16.0F, 0.0F);
-		head.addChild(hat);
-		hat.texOffs(44, 192).addBox(-9.0F, -1.0F, -8.0F, 18.0F, 1.0F, 17.0F, 0.0F, false);
-		hat.texOffs(52, 173).addBox(-8.0F, -3.0F, -6.0F, 16.0F, 2.0F, 12.0F, 0.0F, false);
-		hat.texOffs(57, 159).addBox(-8.0F, -5.0F, -3.0F, 16.0F, 2.0F, 7.0F, 0.0F, false);
-		hat.texOffs(120, 168).addBox(-8.0F, -6.0F, 0.0F, 16.0F, 1.0F, 3.0F, 0.0F, false);
-		hat.texOffs(170, 161).addBox(-1.0F, -4.0F, -9.0F, 2.0F, 2.0F, 6.0F, 0.0F, false);
-		hat.texOffs(200, 161).addBox(-2.0F, -5.0F, -11.0F, 4.0F, 4.0F, 2.0F, 0.0F, false);
-		hat.texOffs(213, 143).addBox(-9.0F, 0.0F, 8.0F, 18.0F, 2.0F, 1.0F, 0.0F, false);
-		hat.texOffs(166, 143).addBox(-9.0F, 0.0F, -9.0F, 18.0F, 1.0F, 1.0F, 0.0F, false);
-		hat.texOffs(123, 131).addBox(8.0F, 0.0F, -8.0F, 1.0F, 1.0F, 16.0F, 0.0F, false);
-		hat.texOffs(79, 132).addBox(-9.0F, 0.0F, -8.0F, 1.0F, 1.0F, 16.0F, 0.0F, false);
+public DiggerZombieModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.right_leg = root.getChild("right_leg");
+		this.left_leg = root.getChild("left_leg");
+		this.up = root.getChild("up");
+		this.body = root.getChild("body");
+		this.left_hand = root.getChild("left_hand");
+		this.right_hand = root.getChild("right_hand");
+		this.pickaxe = root.getChild("pickaxe");
+		this.bone = root.getChild("bone");
+		this.head = root.getChild("head");
+		this.hat = root.getChild("hat");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition right_leg_pd = total_pd.addOrReplaceChild("right_leg",
+			CubeListBuilder.create()
+				.texOffs(221, 221).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(-4.0F, -24.0F, 0.0F));
+		PartDefinition left_leg_pd = total_pd.addOrReplaceChild("left_leg",
+			CubeListBuilder.create()
+				.texOffs(182, 220).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(4.0F, -24.0F, 0.0F));
+		PartDefinition up_pd = total_pd.addOrReplaceChild("up",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition body_pd = up_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(122, 217).addBox(-8.0F, -17.0F, -5.0F, 16.0F, 24.0F, 11.0F),
+			PartPose.offset(0.0F, -7.0F, 0.0F));
+		PartDefinition left_hand_pd = up_pd.addOrReplaceChild("left_hand",
+			CubeListBuilder.create()
+				.texOffs(83, 220).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(12.0F, -20.0F, 0.0F));
+		PartDefinition right_hand_pd = up_pd.addOrReplaceChild("right_hand",
+			CubeListBuilder.create()
+				.texOffs(43, 219).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 24.0F, 8.0F),
+			PartPose.offset(-12.0F, -20.0F, 0.0F));
+		PartDefinition pickaxe_pd = right_hand_pd.addOrReplaceChild("pickaxe",
+			CubeListBuilder.create()
+				.texOffs(8, 231).addBox(-1.0F, -11.0434F, -18.753799F, 2.0F, 16.0F, 2.0F, new CubeDeformation(0.1F))
+				.texOffs(193, 177).addBox(-1.0F, -1.0F, -19.0F, 2.0F, 2.0F, 28.0F, new CubeDeformation(-0.1F)),
+			PartPose.offsetAndRotation(0.0F, 18.5858F, -6.2426F, -0.1745F, 0.0F, 0.0F));
+		PartDefinition bone_pd = pickaxe_pd.addOrReplaceChild("bone",
+			CubeListBuilder.create()
+				.texOffs(27, 243).addBox(-1.0F, -1.1439F, -0.1677F, 2.0F, 7.0F, 2.0F, new CubeDeformation(0.1F)),
+			PartPose.offsetAndRotation(0.0F, 6.0F, -18.0F, 0.5236F, 0.0F, 0.0F));
+		PartDefinition head_pd = up_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(118, 177).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 16.0F, 16.0F),
+			PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition hat_pd = head_pd.addOrReplaceChild("hat",
+			CubeListBuilder.create()
+				.texOffs(44, 192).addBox(-9.0F, -1.0F, -8.0F, 18.0F, 1.0F, 17.0F)
+				.texOffs(52, 173).addBox(-8.0F, -3.0F, -6.0F, 16.0F, 2.0F, 12.0F)
+				.texOffs(57, 159).addBox(-8.0F, -5.0F, -3.0F, 16.0F, 2.0F, 7.0F)
+				.texOffs(120, 168).addBox(-8.0F, -6.0F, 0.0F, 16.0F, 1.0F, 3.0F)
+				.texOffs(170, 161).addBox(-1.0F, -4.0F, -9.0F, 2.0F, 2.0F, 6.0F)
+				.texOffs(200, 161).addBox(-2.0F, -5.0F, -11.0F, 4.0F, 4.0F, 2.0F)
+				.texOffs(213, 143).addBox(-9.0F, 0.0F, 8.0F, 18.0F, 2.0F, 1.0F)
+				.texOffs(166, 143).addBox(-9.0F, 0.0F, -9.0F, 18.0F, 1.0F, 1.0F)
+				.texOffs(123, 131).addBox(8.0F, 0.0F, -8.0F, 1.0F, 1.0F, 16.0F)
+				.texOffs(79, 132).addBox(-9.0F, 0.0F, -8.0F, 1.0F, 1.0F, 16.0F),
+			PartPose.offset(0.0F, -16.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 256, 256);
+	}
+
 
 	@Override
 	public void setupAnim(DiggerZombieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
@@ -103,9 +120,9 @@ public class DiggerZombieModel extends PVZZombieModel<DiggerZombieEntity> {
 			total.yRot = 0;
 		}
 		if(entity.hasPickaxe()) {
-	        this.right_hand.xRot = - 1.57F + MathHelper.sin(ageInTicks) * 0.5F;
+	        this.right_hand.xRot = - 1.57F + Mth.sin(ageInTicks) * 0.5F;
 		} else {
-			this.right_hand.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+			this.right_hand.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 		}
 		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         this.pickaxe.visible = entity.hasMetal();
@@ -120,37 +137,37 @@ public class DiggerZombieModel extends PVZZombieModel<DiggerZombieEntity> {
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftHand() {
+	public ModelPart getZombieLeftHand() {
 		return this.left_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightHand() {
+	public ModelPart getZombieRightHand() {
 		return this.right_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftLeg() {
+	public ModelPart getZombieLeftLeg() {
 		return this.left_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightLeg() {
+	public ModelPart getZombieRightLeg() {
 		return this.right_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieHead() {
+	public ModelPart getZombieHead() {
 		return this.head;
 	}
 	
 	@Override
-	public ModelRenderer getZombieUpBody() {
+	public ModelPart getZombieUpBody() {
 		return this.up;
 	}
 
 	@Override
-	public ModelRenderer getZombieWholeBody() {
+	public ModelPart getZombieWholeBody() {
 		return this.total;
 	}
 	

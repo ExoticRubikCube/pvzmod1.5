@@ -3,14 +3,14 @@ package com.hungteen.pvz.common.entity.ai.goal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 
-public class PVZLookRandomlyGoal extends LookRandomlyGoal{
+public class PVZLookRandomlyGoal extends RandomLookAroundGoal{
 
-	private MobEntity plant;
+	private Mob plant;
 	
-	public PVZLookRandomlyGoal(MobEntity entitylivingIn) {
+	public PVZLookRandomlyGoal(Mob entitylivingIn) {
 		super(entitylivingIn);
 		this.plant = entitylivingIn;
 	}

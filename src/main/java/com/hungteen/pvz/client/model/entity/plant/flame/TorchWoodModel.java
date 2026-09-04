@@ -1,31 +1,52 @@
 package com.hungteen.pvz.client.model.entity.plant.flame;
 
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
-import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity;
 import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity.FlameTypes;
+import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class TorchWoodModel extends PVZPlantModel<TorchWoodEntity> {
-	private final ModelRenderer total;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "torch_wood"), "main");
 
-	public TorchWoodModel() {
-		texWidth = 128;
-		texHeight = 128;
+	private final ModelPart total;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		total.texOffs(48, 11).addBox(-7.0F, -9.0F, -7.0F, 14.0F, 2.0F, 14.0F, 0.0F, false);
-		total.texOffs(0, 25).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F, 0.0F, false);
-		total.texOffs(0, 0).addBox(-7.5F, -10.0F, -7.5F, 15.0F, 10.0F, 15.0F, 0.0F, false);
-		total.texOffs(0, 44).addBox(-7.0F, -12.0F, -7.0F, 14.0F, 12.0F, 14.0F, 0.0F, false);
+
+
+
+public TorchWoodModel(ModelPart root) {
+		this.total = root.getChild("total");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create()
+				.texOffs(48, 11).addBox(-7.0F, -9.0F, -7.0F, 14.0F, 2.0F, 14.0F)
+				.texOffs(0, 25).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F)
+				.texOffs(0, 0).addBox(-7.5F, -10.0F, -7.5F, 15.0F, 10.0F, 15.0F)
+				.texOffs(0, 44).addBox(-7.0F, -12.0F, -7.0F, 14.0F, 12.0F, 14.0F),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 128, 128);
+	}
+
 
 
 	@Override
@@ -36,7 +57,7 @@ public class TorchWoodModel extends PVZPlantModel<TorchWoodEntity> {
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 

@@ -1,11 +1,11 @@
 package com.hungteen.pvz.common.container;
 
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 
 public abstract class AbstractOptionContainer extends PVZContainer {
 
-	public AbstractOptionContainer(ContainerType<?> type, int id) {
+	public AbstractOptionContainer(MenuType<?> type, int id) {
 		super(type, id);
 	}
 

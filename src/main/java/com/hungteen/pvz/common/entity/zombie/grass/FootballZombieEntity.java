@@ -6,24 +6,24 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class FootballZombieEntity extends PVZZombieEntity implements IHasMetal {
 
-	public FootballZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public FootballZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canLostHand = false;
 		this.increaseMetal();
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		if(this.isMiniZombie()) return EntitySize.scalable(0.5f, 0.75f);
-		return EntitySize.scalable(0.8f, 2.4f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		if(this.isMiniZombie()) return EntityDimensions.scalable(0.5f, 0.75f);
+		return EntityDimensions.scalable(0.8f, 2.4f);
 	}
 
 	@Override

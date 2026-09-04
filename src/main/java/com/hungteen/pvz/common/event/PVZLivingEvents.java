@@ -8,8 +8,8 @@ import com.hungteen.pvz.common.event.handler.PlayerEventHandler;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -23,20 +23,20 @@ public class PVZLivingEvents {
 	public static void onLivingDeath(LivingDeathEvent ev) {
 		/* handle player or its creature kill entity */
 		if(! ev.getEntity().level.isClientSide) {
-			PlayerEntity player = EntityUtil.getEntityOwner(ev.getEntityLiving().level, ev.getSource().getEntity());
+			Player player = EntityUtil.getEntityOwner(ev.getEntity().level, ev.getSource().getEntity());
 			if(player == null) { //true source has no owner
-				if(ev.getSource().getEntity() instanceof PlayerEntity) {
-					PlayerEventHandler.onPlayerKillEntity((PlayerEntity) ev.getSource().getEntity(), ev.getSource(), ev.getEntityLiving());
+				if(ev.getSource().getEntity() instanceof Player) {
+					PlayerEventHandler.onPlayerKillEntity((Player) ev.getSource().getEntity(), ev.getSource(), ev.getEntity());
 				}
 			} else {
-				PlayerEventHandler.onPlayerKillEntity(player, ev.getSource(), ev.getEntityLiving());
-				CriteriaTriggers.PLAYER_KILLED_ENTITY.trigger((ServerPlayerEntity) player, ev.getEntityLiving(), ev.getSource());
+				PlayerEventHandler.onPlayerKillEntity(player, ev.getSource(), ev.getEntity());
+				CriteriaTriggers.PLAYER_KILLED_ENTITY.trigger((ServerPlayer) player, ev.getEntity(), ev.getSource());
 			}
 		}
 		
 		/* handle player death */
-		if(ev.getEntity() instanceof PlayerEntity) {
-		    PlayerEventHandler.handlePlayerDeath(ev, (PlayerEntity) ev.getEntity());
+		if(ev.getEntity() instanceof Player) {
+		    PlayerEventHandler.handlePlayerDeath(ev, (Player) ev.getEntity());
 		}
 		
 		/* strange cat copy */
@@ -45,12 +45,12 @@ public class PVZLivingEvents {
 	
 	@SubscribeEvent
 	public static void onLivingHurt(LivingHurtEvent ev) {
-		if(! ev.getEntityLiving().level.isClientSide) {
+		if(! ev.getEntity().level.isClientSide) {
 			AbstractPAZEntity.damageOuterDefence(ev);
 			if(ev.getSource() instanceof PVZEntityDamageSource) {
-				ev.getEntityLiving().invulnerableTime = 0;
-				LivingEventHandler.handleHurtEffects(ev.getEntityLiving(), (PVZEntityDamageSource) ev.getSource());
-				LivingEventHandler.handleHurtSounds(ev.getEntityLiving(), (PVZEntityDamageSource) ev.getSource());
+				ev.getEntity().invulnerableTime = 0;
+				LivingEventHandler.handleHurtEffects(ev.getEntity(), (PVZEntityDamageSource) ev.getSource());
+				LivingEventHandler.handleHurtSounds(ev.getEntity(), (PVZEntityDamageSource) ev.getSource());
 			}
 			LivingEventHandler.handleHurtDamage(ev);
 		}

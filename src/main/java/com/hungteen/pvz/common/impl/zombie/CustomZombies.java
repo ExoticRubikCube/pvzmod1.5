@@ -25,17 +25,17 @@ public final class CustomZombies extends ZombieType {
 	public static final ZombieType LAVA_ZOMBIE = new CustomZombies("lava_zombie", new ZombieFeatures()
 		    .rank(RankTypes.PURPLE).xp(36)
 			.entityType(() -> EntityRegister.LAVA_ZOMBIE.get())
-			.zombieModel(() -> LavaZombieModel::new).scale(0.5F)
+			.zombieModel(() -> () -> new LavaZombieModel(LavaZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.LAVA_ZOMBIE)
-			.eatCommonSkill(Arrays.asList())
+			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType MOURNER_ZOMBIE = new CustomZombies("mourner_zombie", new ZombieFeatures()
 		    .rank(RankTypes.GREEN).xp(10)
 			.entityType(() -> EntityRegister.MOURNER_ZOMBIE.get())
-			.zombieModel(() -> MournerZombieModel::new).scale(0.5F)
+			.zombieModel(() -> () -> new MournerZombieModel(MournerZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.LAVA_ZOMBIE)
-			.commonSkill(Arrays.asList())
+			.commonSkill(List.of())
 	);
 	
 	public static final ZombieType COFFIN = new CustomZombies("coffin", new ZombieFeatures()
@@ -43,23 +43,23 @@ public final class CustomZombies extends ZombieType {
 			.entityType(() -> EntityRegister.COFFIN.get())
 			.scale(0.5F)
 			.loot(PVZLoot.COFFIN)
-			.commonSkill(Arrays.asList())
+			.commonSkill(List.of())
 	);
 	
 	public static final ZombieType NOBLE_ZOMBIE = new CustomZombies("noble_zombie", new ZombieFeatures()
 		    .rank(RankTypes.MEGA).xp(250)
 			.entityType(() -> EntityRegister.NOBLE_ZOMBIE.get())
-			.zombieModel(() -> NobleZombieModel::new).scale(0.5F)
+			.zombieModel(() -> () -> new NobleZombieModel(NobleZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.NOBLE_ZOMBIE)
-			.commonSkill(Arrays.asList())
+			.commonSkill(List.of())
 	);
 	
 	public static final ZombieType TRICK_ZOMBIE = new CustomZombies("trick_zombie", new ZombieFeatures()
 		    .rank(RankTypes.GRAY).xp(3)
 			.entityType(() -> EntityRegister.TRICK_ZOMBIE.get())
-			.zombieModel(() -> TrickZombieModel::new).scale(0.5F)
+			.zombieModel(() -> () -> new TrickZombieModel(TrickZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.TRICK_ZOMBIE)
-			.commonSkill(Arrays.asList())
+			.commonSkill(List.of())
 	);
 	
 	public static final ZombieType GIGA_TOMBSTONE = new CustomZombies("giga_tomb_stone", new ZombieFeatures()

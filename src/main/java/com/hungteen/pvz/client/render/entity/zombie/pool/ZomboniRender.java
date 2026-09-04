@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.zombie.pool.ZomboniModel;
 import com.hungteen.pvz.client.render.entity.zombie.PVZZombieRender;
 import com.hungteen.pvz.common.entity.zombie.pool.ZomboniEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ZomboniRender extends PVZZombieRender<ZomboniEntity>{
 
-	public ZomboniRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new ZomboniModel(), 0.5f);
+	public ZomboniRender(EntityRendererProvider.Context context) {
+		super(context, new ZomboniModel(context.bakeLayer(ZomboniModel.LAYER)), 0.5f);
 	}
 	
 	@Override

@@ -2,10 +2,10 @@ package com.hungteen.pvz.common.entity.ai.goal.attack;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec3;
 
 public class PVZZombieAttackGoal extends PVZMeleeAttackGoal {
 
@@ -34,7 +34,7 @@ public class PVZZombieAttackGoal extends PVZMeleeAttackGoal {
 		if (range >= dis) {
 			if(this.attackTick <= 0) {
 			    this.attackTick = this.zombie.getAttackCD();
-			    this.attacker.swing(Hand.MAIN_HAND);
+			    this.attacker.swing(InteractionHand.MAIN_HAND);
 			    this.attacker.doHurtTarget(target);
 			}
 		} else {
@@ -55,7 +55,7 @@ public class PVZZombieAttackGoal extends PVZMeleeAttackGoal {
 				//ground jump or change target.
 				final float random = this.zombie.getRandom().nextFloat();
 				if(random < 0.55) {
-					Vector3d speed = target.position().subtract(this.attacker.position()).normalize();
+					Vec3 speed = target.position().subtract(this.attacker.position()).normalize();
 					this.attacker.setDeltaMovement(speed.scale(this.attacker.getRandom().nextDouble() * 0.4 + 0.4).scale(this.attacker.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 				} else if(this.zombie.getLastHurtByMob() != null) {
 					if(random < 0.85) {
@@ -68,7 +68,7 @@ public class PVZZombieAttackGoal extends PVZMeleeAttackGoal {
 				}
 				this.leapTick = 0;
 			} else if(this.attacker.isInWater()) {
-				Vector3d speed = target.position().subtract(this.attacker.position()).normalize();
+				Vec3 speed = target.position().subtract(this.attacker.position()).normalize();
 				this.attacker.setDeltaMovement(speed.scale(this.attacker.getRandom().nextDouble() * 0.3 + 0.2).scale(this.attacker.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 				this.leapTick = 0;
 			}

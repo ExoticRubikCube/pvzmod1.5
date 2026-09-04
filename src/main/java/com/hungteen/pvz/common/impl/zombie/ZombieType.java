@@ -7,11 +7,11 @@ import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.impl.*;
 import com.hungteen.pvz.common.world.spawn.SpawnChecker;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -38,7 +38,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	/* get type by name */
 	private static final Map<String, IZombieType> BY_NAME = new HashMap<>();
 	/* zombie entity type -> type */
-	private static final Map<EntityType<? extends CreatureEntity>, IZombieType> BY_ENTITY_TYPE = new HashMap<>();
+	private static final Map<EntityType<? extends Mob>, IZombieType> BY_ENTITY_TYPE = new HashMap<>();
 	/* other data */
 	protected Optional<IZombieModel<? extends IZombieEntity>> zombieModel1;
 	protected Optional<IZombieModel<? extends IZombieEntity>> zombieModel2;
@@ -84,7 +84,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	 * the resource to save entity render picture.
 	 */
 	protected ResourceLocation getEntityResource() {
-		return new ResourceLocation(this.getModID(), "textures/entity/zombie/" + this.getCategoryName() + "/" + this.toString() + ".png");
+		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/zombie/" + this.getCategoryName() + "/" + this.toString() + ".png");
 	}
 	
 	@Override
@@ -148,8 +148,8 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	/**
 	 * get zombie translation text.
 	 */
-	public TranslationTextComponent getTranslateText() {
-		return new TranslationTextComponent("entity." + this.getModID() + "." + this.toString());
+	public Component getTranslateText() {
+		return Component.translatable("entity." + this.getModID() + "." + this.toString());
 	}
 	
 	/**
@@ -167,7 +167,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 		protected IRankType rankType = RankTypes.WHITE;
 		protected ResourceLocation entityRenderResource;
 		protected ResourceLocation lootTable;
-		protected Supplier<EntityType<? extends CreatureEntity>> entitySup;
+		protected Supplier<EntityType<? extends Mob>> entitySup;
 		protected Supplier<? extends Item> summonCardSup;
 		protected Supplier<? extends Item> enjoyCardSup;
 		protected List<ISkillType> skillTypes = new ArrayList<>();
@@ -216,7 +216,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 			return this;
 		}
 		
-		public ZombieFeatures entityType(Supplier<EntityType<? extends CreatureEntity>> sup) {
+		public ZombieFeatures entityType(Supplier<EntityType<? extends Mob>> sup) {
 			this.entitySup = sup;
 			return this;
 		}
@@ -237,7 +237,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 		}
 
 		public ZombieFeatures eatCommonSkill(Collection<ISkillType> skills){
-			this.skillTypes.addAll(Arrays.asList(SkillTypes.HIGH_EAT_DAMAGE));
+			this.skillTypes.addAll(List.of(SkillTypes.HIGH_EAT_DAMAGE));
 			return this.commonSkill(skills);
 		}
 		

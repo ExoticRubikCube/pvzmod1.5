@@ -15,31 +15,31 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.Optional;
 
 public class PoleZombieEntity extends PVZZombieEntity{
 
-	private static final DataParameter<Boolean> HAS_POLE = EntityDataManager.defineId(DiggerZombieEntity.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HAS_POLE = SynchedEntityData.defineId(DiggerZombieEntity.class, EntityDataSerializers.BOOLEAN);
 	protected final float HorizontalJumpSpeed = 1.5F;
 	protected final float VerticalJumpSpeed = 0.7F;
-	protected Vector3d jumpDstPoint = Vector3d.ZERO;
+	protected Vec3 jumpDstPoint = Vec3.ZERO;
 	protected int pole_jump_cnt;
 	
-	public PoleZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public PoleZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -61,10 +61,10 @@ public class PoleZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> data) {
+	public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
 		super.onSyncedDataUpdated(data);
 		if(data.equals(HAS_POLE)) {
-			this.addEffect(EffectUtil.effect(Effects.MOVEMENT_SLOWDOWN, 1000000, 0));
+			this.addEffect(EffectUtil.effect(MobEffects.MOVEMENT_SLOWDOWN, 1000000, 0));
 		}
 	}
 	
@@ -109,7 +109,7 @@ public class PoleZombieEntity extends PVZZombieEntity{
 	 */
 	public void perfromJump() {
 		Optional.ofNullable(this.getTarget()).ifPresent(target -> {
-			Vector3d vec = MathUtil.getHorizontalNormalizedVec(this.position(), this.jumpDstPoint);
+			Vec3 vec = MathUtil.getHorizontalNormalizedVec(this.position(), this.jumpDstPoint);
 			final double speedXZ = this.HorizontalJumpSpeed + (this.random.nextDouble() - 0.3D) / 2;
 			final double speedY = this.VerticalJumpSpeed + (this.random.nextDouble() - 0.3D) / 2;
 			this.setDeltaMovement(vec.x * speedXZ , speedY, vec.z * speedXZ);
@@ -150,14 +150,14 @@ public class PoleZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("zombie_has_pole")) {
 			this.setPole(compound.getBoolean("zombie_has_pole"));
 		}
 		if(compound.contains("jump_dst_point")) {
-			CompoundNBT nbt = compound.getCompound("jump_dst_point");
-			this.jumpDstPoint = new Vector3d(nbt.getDouble("XXX"), nbt.getDouble("YYY"), nbt.getDouble("ZZZ"));
+			CompoundTag nbt = compound.getCompound("jump_dst_point");
+			this.jumpDstPoint = new Vec3(nbt.getDouble("XXX"), nbt.getDouble("YYY"), nbt.getDouble("ZZZ"));
 		}
 		if(compound.contains("pole_jump_count")) {
 			this.pole_jump_cnt = compound.getInt("pole_jump_count");
@@ -165,10 +165,10 @@ public class PoleZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("zombie_has_pole", this.hasPole());
-		final CompoundNBT nbt = new CompoundNBT();
+		final CompoundTag nbt = new CompoundTag();
 		nbt.putDouble("XXX", this.jumpDstPoint.x);
 		nbt.putDouble("YYY", this.jumpDstPoint.y);
 		nbt.putDouble("ZZZ", this.jumpDstPoint.z);
@@ -226,7 +226,7 @@ public class PoleZombieEntity extends PVZZombieEntity{
 			if(dis < 64 || dis > Math.max(100, 100 * left_jump_chance * left_jump_chance)) {
 				return false;
 			}
-			Vector3d vec = MathUtil.getHorizontalNormalizedVec(zombie.position(), target.position())
+			Vec3 vec = MathUtil.getHorizontalNormalizedVec(zombie.position(), target.position())
 					.scale(this.zombie.HorizontalJumpSpeed)
 					.add(0, this.zombie.VerticalJumpSpeed * 2, 0);
 			if(! EntityUtil.canEntityPass(zombie, vec, 10)) {

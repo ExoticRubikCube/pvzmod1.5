@@ -6,22 +6,22 @@ import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.others.WeightList;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 
 	protected static final WeightList<DropType> TOMBSTONE_DROP_LIST = new WeightList<>();
 	protected int lifeRange = 2000;
 
-	public AbstractTombStoneEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public AbstractTombStoneEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setImmuneAllEffects();
 		this.setIsWholeBody();
@@ -37,28 +37,28 @@ public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 	}
 
 	@Override
-	protected VariantType getSpawnType() {
+	public VariantType getRandomVariant() {
 		return VariantType.NORMAL;
 	}
 
 	public void tick() {
-		if(! this.level.isClientSide && this.onGround && this.getVehicle() == null) {
-			this.setDeltaMovement(new Vector3d(0,this.getDeltaMovement().y,0));
+		if(! this.level.isClientSide() && this.onGround && this.getVehicle() == null) {
+			this.setDeltaMovement(new Vec3(0,this.getDeltaMovement().y,0));
 			//*0.6.4 prevent tombstones from getting knocked back.
 		}
 		super.tick();
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			BlockPos pos = this.blockPosition();
 			this.setPos(pos.getX() + 0.5, this.getY(), pos.getZ() + 0.5);
 			if (-- lifeRange < 0 && (level.getDayTime() % 24000 < 12000 ? random.nextInt(100) == 0 : false) && level.getNearestPlayer(this, 20) == null){
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}//*0.6.4 to avoid tombstones from accumulating.
 		}
 	}
 	
 	@Override
-	public ActionResultType interactAt(PlayerEntity player, Vector3d vec3d, Hand hand) {
-		if (! level.isClientSide) {
+	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
+		if (! level.isClientSide()) {
 			ItemStack stack = player.getItemInHand(hand);
 			if (stack.getItem() instanceof PlantCardItem) {// plant card right click plant entity
 				PlantCardItem item = (PlantCardItem) stack.getItem();
@@ -71,7 +71,7 @@ public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 				})) {
 					
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.interactAt(player, vec3d, hand);
@@ -107,8 +107,8 @@ public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8f, 1.6f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8f, 1.6f);
 	}
 	
 	@Override

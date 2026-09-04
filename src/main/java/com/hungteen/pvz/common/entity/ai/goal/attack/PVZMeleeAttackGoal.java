@@ -1,17 +1,18 @@
 package com.hungteen.pvz.common.entity.ai.goal.attack;
 
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.core.BlockPos;
 
 import java.util.EnumSet;
 
 public abstract class PVZMeleeAttackGoal extends Goal {
 
-	protected final CreatureEntity attacker;
+	protected final PathfinderMob attacker;
 	protected int attackTick;
 	protected final double speedTowardsTarget;
 	protected final boolean longMemory;
@@ -26,7 +27,7 @@ public abstract class PVZMeleeAttackGoal extends Goal {
 	private int failedPathFindingPenalty = 0;
 	protected boolean canPenalize = false;
 
-	public PVZMeleeAttackGoal(CreatureEntity creature, double speedIn, boolean useLongMemory) {
+	public PVZMeleeAttackGoal(PathfinderMob creature, double speedIn, boolean useLongMemory) {
 	    this.attacker = creature;
 	    this.speedTowardsTarget = speedIn;
 	    this.longMemory = useLongMemory;
@@ -98,7 +99,7 @@ public abstract class PVZMeleeAttackGoal extends Goal {
 			if (this.canPenalize) {
 				this.delayCounter += failedPathFindingPenalty;
 				if (this.attacker.getNavigation().getPath() != null) {
-					net.minecraft.pathfinding.PathPoint finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
+					Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
 					if (finalPathPoint != null && target.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1) {
 						failedPathFindingPenalty = 0;
 					} else {

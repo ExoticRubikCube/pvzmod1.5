@@ -9,16 +9,15 @@ import com.hungteen.pvz.api.raid.*;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.World;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.BossEvent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -32,12 +31,12 @@ public class ChallengeComponent implements IChallengeComponent {
 	private Set<String> tags = new HashSet<>();
 	private Set<String> dimensions = new HashSet<>();
 	private List<String> authors = new ArrayList<>();
-	private final List<Pair<IFormattableTextComponent, Integer>> messages = new ArrayList<>();
+	private final List<Pair<MutableComponent, Integer>> messages = new ArrayList<>();
 	private IPlacementComponent placement;
-	private ITextComponent title = new TranslationTextComponent("challenge.pvz.title");
-	private ITextComponent winTitle = new TranslationTextComponent("challenge.pvz.win_title");
-	private ITextComponent lossTitle = new TranslationTextComponent("challenge.pvz.loss_title");
-	private Color barColor = Color.WHITE;
+	private Component title = Component.translatable("challenge.pvz.title");
+	private Component winTitle = Component.translatable("challenge.pvz.win_title");
+	private Component lossTitle = Component.translatable("challenge.pvz.loss_title");
+	private BossEvent.BossBarColor barColor = BossEvent.BossBarColor.WHITE;
 	private SoundEvent preSound = SoundRegister.READY.get();
 	private SoundEvent waveSound = SoundRegister.HUGE_WAVE.get();
 	private SoundEvent winSound = SoundRegister.WIN_MUSIC.get();
@@ -57,26 +56,26 @@ public class ChallengeComponent implements IChallengeComponent {
 	public boolean readJson(JsonObject json) {
 		/* titles */
 		{
-			final ITextComponent text = ITextComponent.Serializer.fromJson(json.get("title"));
+			final Component text = Component.Serializer.fromJson(json.get("title"));
 		    if(text != null) {
 			    this.title = text;
 		    }
 		}
 		{
-			final ITextComponent text = ITextComponent.Serializer.fromJson(json.get("win_title"));
+			final Component text = Component.Serializer.fromJson(json.get("win_title"));
 		    if(text != null) {
 			    this.winTitle = text;
 		    }
 		}
 		{
-			final ITextComponent text = ITextComponent.Serializer.fromJson(json.get("loss_title"));
+			final Component text = Component.Serializer.fromJson(json.get("loss_title"));
 		    if(text != null) {
 			    this.lossTitle = text;
 		    }
 		}
 		/* authors */
 		{
-			final JsonArray array = JSONUtils.getAsJsonArray(json, "authors", new JsonArray());
+			final JsonArray array = GsonHelper.getAsJsonArray(json, "authors", new JsonArray());
 			if(array != null) {
 				for(int i = 0; i < array.size(); ++ i) {
 					final JsonElement e = array.get(i);
@@ -88,7 +87,7 @@ public class ChallengeComponent implements IChallengeComponent {
 		}
 		/* tags */
 		{
-			final JsonArray array = JSONUtils.getAsJsonArray(json, "tags", new JsonArray());
+			final JsonArray array = GsonHelper.getAsJsonArray(json, "tags", new JsonArray());
 			if(array != null) {
 				for(int i = 0; i < array.size(); ++ i) {
 					final JsonElement e = array.get(i);
@@ -100,7 +99,7 @@ public class ChallengeComponent implements IChallengeComponent {
 		}
 		/* dimensions */
 		{
-			final JsonArray array = JSONUtils.getAsJsonArray(json, "dimensions", new JsonArray());
+			final JsonArray array = GsonHelper.getAsJsonArray(json, "dimensions", new JsonArray());
 			if(array != null) {
 				for(int i = 0; i < array.size(); ++ i) {
 					final JsonElement e = array.get(i);
@@ -112,47 +111,47 @@ public class ChallengeComponent implements IChallengeComponent {
 		}
 		/* raid cd */
 		{
-		    this.winTick = JSONUtils.getAsInt(json, "win_tick", 400);
-		    this.lossTick = JSONUtils.getAsInt(json, "loss_tick", 200);
+		    this.winTick = GsonHelper.getAsInt(json, "win_tick", 400);
+		    this.lossTick = GsonHelper.getAsInt(json, "loss_tick", 200);
 		}
 		/* bar color */
 		{
-			this.barColor = Color.byName(JSONUtils.getAsString(json, "bar_color", "red"));
+			this.barColor = BossEvent.BossBarColor.byName(GsonHelper.getAsString(json, "bar_color", "red"));
 		}
 		{/* trade */
-			this.canTrade = JSONUtils.getAsBoolean(json, "can_trade", true);
-			this.tradePrice = JSONUtils.getAsInt(json, "trade_price", 100);
-			this.tradeWeight = JSONUtils.getAsInt(json, "trade_weight", 100);
+			this.canTrade = GsonHelper.getAsBoolean(json, "can_trade", true);
+			this.tradePrice = GsonHelper.getAsInt(json, "trade_price", 100);
+			this.tradeWeight = GsonHelper.getAsInt(json, "trade_weight", 100);
 		}
 		{/* misc */
-			this.showRound = JSONUtils.getAsBoolean(json, "show_round", true);
-			this.recommendLevel = JSONUtils.getAsInt(json, "recommend_level", 1);
-			this.shouldCloseToCenter = JSONUtils.getAsBoolean(json, "close_to_center", true);
+			this.showRound = GsonHelper.getAsBoolean(json, "show_round", true);
+			this.recommendLevel = GsonHelper.getAsInt(json, "recommend_level", 1);
+			this.shouldCloseToCenter = GsonHelper.getAsBoolean(json, "close_to_center", true);
 		}
 		/* sounds */
 		{
-			JsonObject obj = JSONUtils.getAsJsonObject(json, "sounds", null);
+			JsonObject obj = GsonHelper.getAsJsonObject(json, "sounds", null);
 			if(obj != null) {
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(obj, "pre_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "pre_sound", "")));
 					if(sound != null){
 						this.preSound = sound;
 					}
 				}
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(obj, "wave_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "wave_sound", "")));
 					if(sound != null){
 						this.waveSound = sound;
 					}
 				}
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(obj, "win_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "win_sound", "")));
 					if(sound != null){
 						this.winSound = sound;
 					}
 				}
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(JSONUtils.getAsString(obj, "loss_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "loss_sound", "")));
 					if(sound != null){
 						this.lossSound = sound;
 					}
@@ -164,12 +163,12 @@ public class ChallengeComponent implements IChallengeComponent {
 			this.placement = ChallengeManager.readPlacement(json, true);
 		}
 		/* waves */
-		JsonArray jsonWaves = JSONUtils.getAsJsonArray(json, "waves", new JsonArray());
+		JsonArray jsonWaves = GsonHelper.getAsJsonArray(json, "waves", new JsonArray());
 		if(jsonWaves != null) {
 			for(int i = 0; i < jsonWaves.size(); ++ i) {
 			    JsonObject obj = jsonWaves.get(i).getAsJsonObject();
 			    if(obj != null) {
-			    	String type = JSONUtils.getAsString(obj, "type", "");
+			    	String type = GsonHelper.getAsString(obj, "type", "");
 		            IWaveComponent wave = ChallengeManager.getWaveComponent(type);
 		            if(! wave.readJson(obj)) {
 		            	return false;
@@ -186,7 +185,7 @@ public class ChallengeComponent implements IChallengeComponent {
 	    
 	    /* rewards */
 	    {
-	    	JsonObject obj = JSONUtils.getAsJsonObject(json, "rewards", null);
+	    	JsonObject obj = GsonHelper.getAsJsonObject(json, "rewards", null);
 		    if(obj != null && ! obj.entrySet().isEmpty()) {
 		       for(Entry<String, JsonElement> entry : obj.entrySet()) {
 		  		    final IRewardComponent tmp = ChallengeManager.getRewardComponent(entry.getKey());
@@ -194,7 +193,7 @@ public class ChallengeComponent implements IChallengeComponent {
 		    		    tmp.readJson(entry.getValue());
 		    		    this.rewards.add(tmp);
 		    	    } else {
-		    		    PVZMod.LOGGER.warn("Placement Component : Read Spawn Placement Wrongly");
+		    		    PVZMod.LOGGER.warn("PlacementModifier Component : Read Spawn PlacementModifier Wrongly");
 		    	    }
 		   	    }
 		    }
@@ -228,8 +227,8 @@ public class ChallengeComponent implements IChallengeComponent {
 	}
 
 	@Override
-	public boolean isSuitableDimension(RegistryKey<World> type) {
-		return this.dimensions.isEmpty() || this.dimensions.contains(type.getRegistryName().toString());
+	public boolean isSuitableDimension(ResourceKey<Level> type) {
+		return this.dimensions.isEmpty() || this.dimensions.contains(type.location().toString());
 	}
 
 	@Override
@@ -289,43 +288,43 @@ public class ChallengeComponent implements IChallengeComponent {
 	}
 	
 	@Override
-	public ITextComponent getTitle() {
+	public Component getTitle() {
 		return this.title;
 	}
 	
 	@Override
-	public ITextComponent getWinTitle() {
+	public Component getWinTitle() {
 		return this.winTitle;
 	}
 	
 	@Override
-	public ITextComponent getLossTitle() {
+	public Component getLossTitle() {
 		return this.lossTitle;
 	}
 	
 	@Override
-	public Color getBarColor() {
+	public BossEvent.BossBarColor getBarColor() {
 		return this.barColor;
 	}
 	
 	private int wavePos(int pos) {
-		return MathHelper.clamp(pos, 0, this.waves.size() - 1);
+		return Mth.clamp(pos, 0, this.waves.size() - 1);
 	}
 
 	@Override
-	public IFormattableTextComponent getChallengeName(){
+	public MutableComponent getChallengeName(){
 		final ResourceLocation resourceLocation = ChallengeManager.getResourceByChallenge(this);
-		return new TranslationTextComponent("challenge." + resourceLocation.getNamespace() + "." + resourceLocation.getPath() + ".name");
+		return Component.translatable("challenge." + resourceLocation.getNamespace() + "." + resourceLocation.getPath() + ".name");
 	}
 
 	@Override
-	public void setMessages(List<Pair<IFormattableTextComponent, Integer>> list) {
+	public void setMessages(List<Pair<MutableComponent, Integer>> list) {
 		this.messages.clear();
 		list.forEach(p -> this.messages.add(p));
 	}
 
 	@Override
-	public List<Pair<IFormattableTextComponent, Integer>> getMessages(){
+	public List<Pair<MutableComponent, Integer>> getMessages(){
 		return Collections.unmodifiableList(this.messages);
 	}
 
@@ -370,4 +369,3 @@ public class ChallengeComponent implements IChallengeComponent {
 	}
 	
 }
-	

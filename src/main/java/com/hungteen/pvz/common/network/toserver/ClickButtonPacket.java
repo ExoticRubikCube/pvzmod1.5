@@ -11,11 +11,11 @@ import com.hungteen.pvz.common.container.shop.AbstractDaveShopContainer;
 
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.network.NetworkEvent;
 
 public class ClickButtonPacket {
 
@@ -29,13 +29,13 @@ public class ClickButtonPacket {
 		this.num = num;
 	}
 
-	public ClickButtonPacket(PacketBuffer buffer) {
+	public ClickButtonPacket(FriendlyByteBuf buffer) {
 		this.type = buffer.readInt();
 		this.op = buffer.readInt();
 		this.num = buffer.readInt();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type);
 		buffer.writeInt(this.op);
 		buffer.writeInt(this.num);
@@ -43,7 +43,7 @@ public class ClickButtonPacket {
 
 	public static class Handler {
 		public static void onMessage(ClickButtonPacket message, Supplier<NetworkEvent.Context> ctx) {
-			final ServerPlayerEntity player = ctx.get().getSender();
+			final ServerPlayer player = ctx.get().getSender();
 			ctx.get().enqueueWork(() -> {
 				if (message.type == GuiHandler.PLAYER_INVENTORY) { 
 //					if(player.containerMenu instanceof PlayerInventoryContainer) {
@@ -72,7 +72,7 @@ public class ClickButtonPacket {
 								container.te.fastStart(player);
 							}
 						} else {
-							PlayerUtil.sendMsgTo(player, new TranslationTextComponent("help.pvz.out_of_lottery_chance").withStyle(TextFormatting.RED));
+							PlayerUtil.sendMsgTo(player, Component.translatable("help.pvz.out_of_lottery_chance").withStyle(ChatFormatting.RED));
 						}
 					}
 				} else if(message.type == GuiHandler.ESSENCE_ALTAR) {

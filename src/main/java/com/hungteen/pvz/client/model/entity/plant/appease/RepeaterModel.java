@@ -1,132 +1,140 @@
 package com.hungteen.pvz.client.model.entity.plant.appease;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.appease.RepeaterEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Optional;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class RepeaterModel extends PlantShooterModel<RepeaterEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer body;
-	private final ModelRenderer head;
-	private final ModelRenderer eyebrow;
-	private final ModelRenderer hair;
-	private final ModelRenderer cube_r1;
-	private final ModelRenderer cube_r2;
-	private final ModelRenderer cube_r3;
-	private final ModelRenderer cube_r4;
-	private final ModelRenderer down;
-	private final ModelRenderer n_r1;
-	private final ModelRenderer w_r1;
-	private final ModelRenderer e_r1;
-	private final ModelRenderer s_r1;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "repeater"), "main");
 
-	public RepeaterModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
+	private final ModelPart total;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart eyebrow;
+	private final ModelPart hair;
+	private final ModelPart cube_r1;
+	private final ModelPart cube_r2;
+	private final ModelPart cube_r3;
+	private final ModelPart cube_r4;
+	private final ModelPart down;
+	private final ModelPart n_r1;
+	private final ModelPart w_r1;
+	private final ModelPart e_r1;
+	private final ModelPart s_r1;
 
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(body);
-		setRotationAngle(body, -0.0873F, 0.0F, 0.0F);
-		body.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -12.0F, 0.0F);
-		body.addChild(head);
-		setRotationAngle(head, 0.0873F, 0.0F, 0.0F);
-		head.texOffs(30, 0).addBox(-2.0F, -5.0F, -8.0F, 4.0F, 4.0F, 3.0F, 0.0F, false);
-		head.texOffs(44, 0).addBox(-3.0F, -6.0F, -9.0F, 6.0F, 6.0F, 2.0F, 0.0F, false);
-		head.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
-		head.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, 0.0F, false);
-
-		eyebrow = new ModelRenderer(this);
-		eyebrow.setPos(0.0F, 12.0F, -1.0F);
-		head.addChild(eyebrow);
-		eyebrow.texOffs(39, 30).addBox(-5.0F, -22.25F, -4.2F, 10.0F, 10.0F, 1.0F, 0.0F, false);
-
-		hair = new ModelRenderer(this);
-		hair.setPos(0.0F, -4.5F, 5.0F);
-		head.addChild(hair);
-		hair.texOffs(44, 45).addBox(-2.0F, -2.0F, 0.2F, 4.0F, 4.0F, 5.0F, 0.0F, false);
-
-		cube_r1 = new ModelRenderer(this);
-		cube_r1.setPos(0.0F, 0.0F, 0.0F);
-		hair.addChild(cube_r1);
-		setRotationAngle(cube_r1, 0.0F, 0.5236F, 0.0F);
-		cube_r1.texOffs(26, 47).addBox(-6.0F, -3.0F, -2.0F, 4.0F, 6.0F, 1.0F, 0.0F, false);
-
-		cube_r2 = new ModelRenderer(this);
-		cube_r2.setPos(0.0F, 0.0F, 0.0F);
-		hair.addChild(cube_r2);
-		setRotationAngle(cube_r2, 0.0F, -0.5236F, 0.0F);
-		cube_r2.texOffs(10, 47).addBox(2.0F, -3.0F, -2.0F, 4.0F, 6.0F, 1.0F, 0.0F, false);
-
-		cube_r3 = new ModelRenderer(this);
-		cube_r3.setPos(0.0F, 0.0F, 0.0F);
-		hair.addChild(cube_r3);
-		setRotationAngle(cube_r3, -0.5236F, 0.0F, 0.0F);
-		cube_r3.texOffs(24, 39).addBox(-3.0F, -6.0F, -2.0F, 6.0F, 4.0F, 1.0F, 0.0F, false);
-
-		cube_r4 = new ModelRenderer(this);
-		cube_r4.setPos(0.0F, 0.0F, 0.0F);
-		hair.addChild(cube_r4);
-		setRotationAngle(cube_r4, 0.5236F, 0.0F, 0.0F);
-		cube_r4.texOffs(8, 39).addBox(-3.0F, 2.0F, -2.0F, 6.0F, 4.0F, 1.0F, 0.0F, false);
-
-		down = new ModelRenderer(this);
-		down.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(down);
 
 
-		n_r1 = new ModelRenderer(this);
-		n_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(n_r1);
-		setRotationAngle(n_r1, -0.1745F, -0.7854F, 0.0F);
-		n_r1.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F, 0.0F, false);
-
-		w_r1 = new ModelRenderer(this);
-		w_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(w_r1);
-		setRotationAngle(w_r1, 0.1745F, -0.7854F, -0.1745F);
-		w_r1.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F, 0.0F, false);
-
-		e_r1 = new ModelRenderer(this);
-		e_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(e_r1);
-		setRotationAngle(e_r1, -0.1745F, -0.7854F, 0.1745F);
-		e_r1.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F, 0.0F, false);
-
-		s_r1 = new ModelRenderer(this);
-		s_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(s_r1);
-		setRotationAngle(s_r1, 0.1745F, -0.7854F, 0.0F);
-		s_r1.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F, 0.0F, false);
+public RepeaterModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.body = root.getChild("body");
+		this.head = root.getChild("head");
+		this.eyebrow = root.getChild("eyebrow");
+		this.hair = root.getChild("hair");
+		this.cube_r1 = root.getChild("cube_r1");
+		this.cube_r2 = root.getChild("cube_r2");
+		this.cube_r3 = root.getChild("cube_r3");
+		this.cube_r4 = root.getChild("cube_r4");
+		this.down = root.getChild("down");
+		this.n_r1 = root.getChild("n_r1");
+		this.w_r1 = root.getChild("w_r1");
+		this.e_r1 = root.getChild("e_r1");
+		this.s_r1 = root.getChild("s_r1");
 	}
 
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(30, 0).addBox(-2.0F, -5.0F, -8.0F, 4.0F, 4.0F, 3.0F)
+				.texOffs(44, 0).addBox(-3.0F, -6.0F, -9.0F, 6.0F, 6.0F, 2.0F)
+				.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F)
+				.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+		PartDefinition eyebrow_pd = head_pd.addOrReplaceChild("eyebrow",
+			CubeListBuilder.create()
+				.texOffs(39, 30).addBox(-5.0F, -22.25F, -4.2F, 10.0F, 10.0F, 1.0F),
+			PartPose.offset(0.0F, 12.0F, -1.0F));
+		PartDefinition hair_pd = head_pd.addOrReplaceChild("hair",
+			CubeListBuilder.create()
+				.texOffs(44, 45).addBox(-2.0F, -2.0F, 0.2F, 4.0F, 4.0F, 5.0F),
+			PartPose.offset(0.0F, -4.5F, 5.0F));
+		PartDefinition cube_r1_pd = hair_pd.addOrReplaceChild("cube_r1",
+			CubeListBuilder.create()
+				.texOffs(26, 47).addBox(-6.0F, -3.0F, -2.0F, 4.0F, 6.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.5236F, 0.0F));
+		PartDefinition cube_r2_pd = hair_pd.addOrReplaceChild("cube_r2",
+			CubeListBuilder.create()
+				.texOffs(10, 47).addBox(2.0F, -3.0F, -2.0F, 4.0F, 6.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition cube_r3_pd = hair_pd.addOrReplaceChild("cube_r3",
+			CubeListBuilder.create()
+				.texOffs(24, 39).addBox(-3.0F, -6.0F, -2.0F, 6.0F, 4.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
+		PartDefinition cube_r4_pd = hair_pd.addOrReplaceChild("cube_r4",
+			CubeListBuilder.create()
+				.texOffs(8, 39).addBox(-3.0F, 2.0F, -2.0F, 6.0F, 4.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.5236F, 0.0F, 0.0F));
+		PartDefinition down_pd = total_pd.addOrReplaceChild("down",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition n_r1_pd = down_pd.addOrReplaceChild("n_r1",
+			CubeListBuilder.create()
+				.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.0F));
+		PartDefinition w_r1_pd = down_pd.addOrReplaceChild("w_r1",
+			CubeListBuilder.create()
+				.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, -0.1745F));
+		PartDefinition e_r1_pd = down_pd.addOrReplaceChild("e_r1",
+			CubeListBuilder.create()
+				.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.1745F));
+		PartDefinition s_r1_pd = down_pd.addOrReplaceChild("s_r1",
+			CubeListBuilder.create()
+				.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+
 	@Override
-	public Optional<ModelRenderer> getHeadModel() {
+	public Optional<ModelPart> getHeadModel() {
 		return Optional.ofNullable(this.head);
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getBodyModel() {
+	public Optional<ModelPart> getBodyModel() {
 		return Optional.ofNullable(this.body);
 	}
 	
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 	

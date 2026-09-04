@@ -8,12 +8,12 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.command.arguments.EntityAnchorArgument.Type;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class StarFruitEntity extends PlantShooterEntity {
 
@@ -21,13 +21,13 @@ public class StarFruitEntity extends PlantShooterEntity {
 	private static final float SHOOT_HEIGHT = 0.2F;
 	public int lightTick = 0;
 	
-	public StarFruitEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public StarFruitEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
 	@Override
 	public void normalPlantTick() {
-		if(level.isClientSide) {
+		if(level.isClientSide()) {
 			if(this.lightTick > 0) {
 				-- this.lightTick;
 			}
@@ -50,7 +50,7 @@ public class StarFruitEntity extends PlantShooterEntity {
 
 	@Override
 	public void shootBullet() {
-		float now = this.yRot + 180F;
+		float now = this.getYRot() + 180F;
 		for(int i = 0; i < 5; ++ i) {
 			this.shootByAngle(now, SHOOT_HEIGHT);
 			now += PER_ANGLE;
@@ -70,8 +70,8 @@ public class StarFruitEntity extends PlantShooterEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.9F, 0.5F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.9F, 0.5F);
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public class StarFruitEntity extends PlantShooterEntity {
 		double dx = Math.sin(now);
 		double dz = Math.cos(now);
 		double dy = 0;
-		this.lookAt(Type.FEET, this.position().add(dx, dy, dz));
+		this.lookAt(Anchor.FEET, this.position().add(dx, dy, dz));
 	}
 	
 	@Override

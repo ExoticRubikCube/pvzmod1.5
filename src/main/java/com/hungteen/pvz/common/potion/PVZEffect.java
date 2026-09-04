@@ -1,11 +1,11 @@
 package com.hungteen.pvz.common.potion;
 
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
-public class PVZEffect extends Effect{
+public class PVZEffect extends MobEffect{
 
-	public PVZEffect(EffectType typeIn, int liquidColorIn) {
+	public PVZEffect(MobEffectCategory typeIn, int liquidColorIn) {
 		super(typeIn, liquidColorIn);
 	}
 

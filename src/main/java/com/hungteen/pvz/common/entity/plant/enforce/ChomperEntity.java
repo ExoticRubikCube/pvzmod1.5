@@ -13,22 +13,22 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ChomperEntity extends PVZPlantEntity {
 
-	private static final DataParameter<Integer> REST_TICK = EntityDataManager.defineId(ChomperEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> REST_TICK = SynchedEntityData.defineId(ChomperEntity.class, EntityDataSerializers.INT);
     public static final int ATTACK_ANIM_CD = 30;
 	
-	public ChomperEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public ChomperEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -47,10 +47,10 @@ public class ChomperEntity extends PVZPlantEntity {
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if (!level.isClientSide && this.getTarget() != null) {
+		if (!level.isClientSide() && this.getTarget() != null) {
 			this.lookControl.setLookAt(this.getTarget(), 30f, 30f);
 		}
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			if (this.getAttackTime() < ATTACK_ANIM_CD / 2) {//pre attack stage.
 				if (this.getRestTick() > 0) {// rest time cannot attack.
 					this.setAttackTime(0);
@@ -148,8 +148,8 @@ public class ChomperEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.9f, 1.9f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.9f, 1.9f, false);
 	}
 
 	@Override
@@ -158,13 +158,13 @@ public class ChomperEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("rest_tick", this.getRestTick());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("rest_tick")) {
 			this.setRestTick(compound.getInt("rest_tick"));

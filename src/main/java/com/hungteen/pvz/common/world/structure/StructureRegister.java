@@ -1,163 +1,124 @@
 package com.hungteen.pvz.common.world.structure;
 
-import com.google.common.collect.ImmutableMap;
-import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.PVZMod;
-import com.hungteen.pvz.common.world.biome.BiomeRegister;
+import com.hungteen.pvz.common.world.FeatureRegister;
 import com.hungteen.pvz.common.world.structure.shop.DaveVillaComponents;
 import com.hungteen.pvz.common.world.structure.shop.DaveVillaStructure;
 import com.hungteen.pvz.common.world.structure.shop.SunTempleComponents;
 import com.hungteen.pvz.common.world.structure.shop.SunTempleStructure;
 import com.hungteen.pvz.common.world.structure.zombie.*;
 import com.hungteen.pvz.utils.BiomeUtil;
-import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.gen.FlatGenerationSettings;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.settings.DimensionStructuresSettings;
-import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.Structure.StructureSettings;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.hungteen.pvz.PVZConfig;
+
 public class StructureRegister {
-	
-	public static final DeferredRegister<Structure<?>> STRUCTURE_FEATURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, PVZMod.MOD_ID);
-	
-	public static final RegistryObject<Structure<NoFeatureConfig>> BUCKET_HOUSE = STRUCTURE_FEATURES.register("bucket_house", () -> new BucketHouseStructure(NoFeatureConfig.CODEC));
-	public static StructureFeature<?, ?> CONFIGURED_BUCKET_HOUSE;
-	public static final RegistryObject<Structure<NoFeatureConfig>> DOLPHIN_HOUSE = STRUCTURE_FEATURES.register("dolphin_house", () -> new DolphinHouseStructure(NoFeatureConfig.CODEC));
-	public static StructureFeature<?, ?> CONFIGURED_DOLPHIN_HOUSE;
-	public static final RegistryObject<Structure<NoFeatureConfig>> GRAVE_HOUSE = STRUCTURE_FEATURES.register("grave_house", () -> new GraveHouseStructure(NoFeatureConfig.CODEC));
-	public static StructureFeature<?, ?> CONFIGURED_GRAVE_HOUSE;
-	public static final RegistryObject<Structure<NoFeatureConfig>> YETI_HOUSE = STRUCTURE_FEATURES.register("yeti_house", () -> new YetiHouseStructure(NoFeatureConfig.CODEC));
-	public static StructureFeature<?, ?> CONFIGURED_YETI_HOUSE;
-	public static final RegistryObject<Structure<NoFeatureConfig>> DAVE_VILLA = STRUCTURE_FEATURES.register("dave_villa", () -> new DaveVillaStructure(NoFeatureConfig.CODEC));
-	public static StructureFeature<?, ?> CONFIGURED_DAVE_VILLA;
-	public static final RegistryObject<Structure<NoFeatureConfig>> SUN_TEMPLE = STRUCTURE_FEATURES.register("sun_temple", () -> new SunTempleStructure(NoFeatureConfig.CODEC));
-	public static StructureFeature<?, ?> CONFIGURED_SUN_TEMPLE;
-	
-	public static IStructurePieceType DAVE_VILLA_PIECE;
-	public static IStructurePieceType BUCKET_HOUSE_PIECE;
-	public static IStructurePieceType DOLPHIN_HOUSE_PIECE;
-	public static IStructurePieceType GRAVE_HOUSE_PIECE;
-	public static IStructurePieceType SUN_TEMPLE_PIECE;
-	public static IStructurePieceType YETI_HOUSE_PIECE;
-	
-	/**
-	 * {@link BiomeRegister#biomeModification(BiomeLoadingEvent)}
-	 */
-	public static void addStructureToBiome(BiomeLoadingEvent event, RegistryKey<Biome> biomeKey) {
-		if(BiomeUtil.isOverworld(biomeKey)) {
-			if(BiomeUtil.isLand(biomeKey)) {
-				event.getGeneration().addStructureStart(StructureRegister.CONFIGURED_BUCKET_HOUSE);
-				if(BiomeUtil.isSnowy(biomeKey)) {
-					event.getGeneration().addStructureStart(StructureRegister.CONFIGURED_YETI_HOUSE);
-				}
-			}
-			if(BiomeUtil.isDesert(biomeKey)) {
-				event.getGeneration().addStructureStart(StructureRegister.CONFIGURED_SUN_TEMPLE);
-			}
-			if(BiomeUtil.isOcean(biomeKey)) {
-				event.getGeneration().addStructureStart(StructureRegister.CONFIGURED_DOLPHIN_HOUSE);
-			}
-			if(BiomeUtil.isPlain(biomeKey)) {
-				if(biomeKey.equals(Biomes.PLAINS)) {
-					event.getGeneration().addStructureStart(StructureRegister.CONFIGURED_DAVE_VILLA);
-				}
-			}
-			if(BiomeUtil.isConiferous(biomeKey)) {
-				event.getGeneration().addStructureStart(StructureRegister.CONFIGURED_GRAVE_HOUSE);
-			}
-		}
+	public static final DeferredRegister<Structure> STRUCTURES = DeferredRegister.create(Registry.STRUCTURE_REGISTRY, PVZMod.MOD_ID);
+
+	public static final RegistryObject<BucketHouseStructure> BUCKET_HOUSE = STRUCTURES.register("bucket_house",
+			() -> new BucketHouseStructure(defaultSurfaceSettings()));
+	public static final RegistryObject<DolphinHouseStructure> DOLPHIN_HOUSE = STRUCTURES.register("dolphin_house",
+			() -> new DolphinHouseStructure(defaultSurfaceSettings()));
+	public static final RegistryObject<GraveHouseStructure> GRAVE_HOUSE = STRUCTURES.register("grave_house",
+			() -> new GraveHouseStructure(defaultSurfaceSettings()));
+	public static final RegistryObject<YetiHouseStructure> YETI_HOUSE = STRUCTURES.register("yeti_house",
+			() -> new YetiHouseStructure(defaultSurfaceSettings()));
+	public static final RegistryObject<DaveVillaStructure> DAVE_VILLA = STRUCTURES.register("dave_villa",
+			() -> new DaveVillaStructure(defaultSurfaceSettings()));
+	public static final RegistryObject<SunTempleStructure> SUN_TEMPLE = STRUCTURES.register("sun_temple",
+			() -> new SunTempleStructure(defaultSurfaceSettings()));
+
+	public static final RegistryObject<StructureType<BucketHouseStructure>> BUCKET_HOUSE_TYPE = FeatureRegister.STRUCTURE_TYPES.register("bucket_house",
+			() -> () -> BucketHouseStructure.CODEC);
+	public static final RegistryObject<StructureType<DolphinHouseStructure>> DOLPHIN_HOUSE_TYPE = FeatureRegister.STRUCTURE_TYPES.register("dolphin_house",
+			() -> () -> DolphinHouseStructure.CODEC);
+	public static final RegistryObject<StructureType<GraveHouseStructure>> GRAVE_HOUSE_TYPE = FeatureRegister.STRUCTURE_TYPES.register("grave_house",
+			() -> () -> GraveHouseStructure.CODEC);
+	public static final RegistryObject<StructureType<YetiHouseStructure>> YETI_HOUSE_TYPE = FeatureRegister.STRUCTURE_TYPES.register("yeti_house",
+			() -> () -> YetiHouseStructure.CODEC);
+	public static final RegistryObject<StructureType<DaveVillaStructure>> DAVE_VILLA_TYPE = FeatureRegister.STRUCTURE_TYPES.register("dave_villa",
+			() -> () -> DaveVillaStructure.CODEC);
+	public static final RegistryObject<StructureType<SunTempleStructure>> SUN_TEMPLE_TYPE = FeatureRegister.STRUCTURE_TYPES.register("sun_temple",
+			() -> () -> SunTempleStructure.CODEC);
+
+	public static final RegistryObject<StructurePieceType> BUCKET_HOUSE_PIECE = FeatureRegister.STRUCTURE_PIECE_TYPES.register("bucket_house",
+			() -> (StructurePieceType.StructureTemplateType) (mgr, tag) -> new BucketHouseComponents.BucketHouseComponent(mgr, tag));
+	public static final RegistryObject<StructurePieceType> DOLPHIN_HOUSE_PIECE = FeatureRegister.STRUCTURE_PIECE_TYPES.register("dolphin_house",
+			() -> (StructurePieceType.StructureTemplateType) (mgr, tag) -> new DolphinHouseComponents.DolphinHouseComponent(mgr, tag));
+	public static final RegistryObject<StructurePieceType> GRAVE_HOUSE_PIECE = FeatureRegister.STRUCTURE_PIECE_TYPES.register("grave_house",
+			() -> (StructurePieceType.StructureTemplateType) (mgr, tag) -> new GraveHouseComponents.GraveHouseComponent(mgr, tag));
+	public static final RegistryObject<StructurePieceType> YETI_HOUSE_PIECE = FeatureRegister.STRUCTURE_PIECE_TYPES.register("yeti_house",
+			() -> (StructurePieceType.StructureTemplateType) (mgr, tag) -> new YetiHouseComponents.YetiHouseComponent(mgr, tag));
+	public static final RegistryObject<StructurePieceType> DAVE_VILLA_PIECE = FeatureRegister.STRUCTURE_PIECE_TYPES.register("dave_villa",
+			() -> (StructurePieceType.StructureTemplateType) (mgr, tag) -> new DaveVillaComponents.DaveVillaComponent(mgr, tag));
+	public static final RegistryObject<StructurePieceType> SUN_TEMPLE_PIECE = FeatureRegister.STRUCTURE_PIECE_TYPES.register("sun_temple",
+			() -> (StructurePieceType.StructureTemplateType) (mgr, tag) -> new SunTempleComponents.SunTempleComponent(mgr, tag));
+
+	public static final RegistryObject<StructureSet> BUCKET_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("bucket_house",
+			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(BUCKET_HOUSE), 1)),
+					new RandomSpreadStructurePlacement(dis(0), sep(0), RandomSpreadType.LINEAR, 998244353)));
+	public static final RegistryObject<StructureSet> DOLPHIN_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("dolphin_house",
+			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(DOLPHIN_HOUSE), 1)),
+					new RandomSpreadStructurePlacement(dis(1), sep(1), RandomSpreadType.LINEAR, 165745799)));
+	public static final RegistryObject<StructureSet> GRAVE_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("grave_house",
+			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(GRAVE_HOUSE), 1)),
+					new RandomSpreadStructurePlacement(dis(2), sep(2), RandomSpreadType.LINEAR, 165745797)));
+	public static final RegistryObject<StructureSet> YETI_HOUSE_SET = FeatureRegister.STRUCTURE_SETS.register("yeti_house",
+			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(YETI_HOUSE), 1)),
+					new RandomSpreadStructurePlacement(dis(3), sep(3), RandomSpreadType.LINEAR, 165745795)));
+	public static final RegistryObject<StructureSet> DAVE_VILLA_SET = FeatureRegister.STRUCTURE_SETS.register("dave_villa",
+			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(DAVE_VILLA), 1)),
+					new RandomSpreadStructurePlacement(dis(4), sep(4), RandomSpreadType.LINEAR, 165745793)));
+	public static final RegistryObject<StructureSet> SUN_TEMPLE_SET = FeatureRegister.STRUCTURE_SETS.register("sun_temple",
+			() -> new StructureSet(List.of(new StructureSet.StructureSelectionEntry(holder(SUN_TEMPLE), 1)),
+					new RandomSpreadStructurePlacement(dis(5), sep(5), RandomSpreadType.LINEAR, 165745791)));
+
+	private static StructureSettings defaultSurfaceSettings() {
+		return new StructureSettings(HolderSet.direct(List.of()), Map.of(),
+				GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE);
 	}
-	
-	/**
-	 * I hate my trash codes.
-	 */
+
+	@SuppressWarnings("unchecked")
+	private static Holder<Structure> holder(RegistryObject<? extends Structure> ro) {
+		return Holder.direct(ro.get());
+	}
+
+	private static int dis(int idx) {
+		List<Integer> ls = List.of(
+				PVZConfig.COMMON_CONFIG.WorldSettings.BucketHouseDistance.get(),
+				PVZConfig.COMMON_CONFIG.WorldSettings.DolphinHouseDistance.get(),
+				PVZConfig.COMMON_CONFIG.WorldSettings.GraveHouseDistance.get(),
+				PVZConfig.COMMON_CONFIG.WorldSettings.YetiHouseDistance.get(),
+				PVZConfig.COMMON_CONFIG.WorldSettings.DaveVillaDistance.get(),
+				PVZConfig.COMMON_CONFIG.WorldSettings.SunTempleDistance.get());
+		return ls.get(idx);
+	}
+
+	private static int sep(int idx) {
+		return Math.max(1, dis(idx) / 2);
+	}
+
 	public static void setupStructures() {
-		{
-			int dis = PVZConfig.COMMON_CONFIG.WorldSettings.BucketHouseDistance.get();
-			addStructure(BUCKET_HOUSE.get(), new StructureSeparationSettings(dis, dis / 2, 998244353));
-		    BUCKET_HOUSE_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "bucket_house", BucketHouseComponents.BucketHouseComponent::new);
-		    CONFIGURED_BUCKET_HOUSE = BUCKET_HOUSE.get().configured(IFeatureConfig.NONE);
-		    Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, StringUtil.prefix("configured_bucket_house"), CONFIGURED_BUCKET_HOUSE);
-	    	FlatGenerationSettings.STRUCTURE_FEATURES.put(BUCKET_HOUSE.get(), CONFIGURED_BUCKET_HOUSE);
-		}
-		{
-			int dis = PVZConfig.COMMON_CONFIG.WorldSettings.DolphinHouseDistance.get();
-			addStructure(DOLPHIN_HOUSE.get(), new StructureSeparationSettings(dis, dis / 2, 165745799));
-		    DOLPHIN_HOUSE_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "dolphin_house", DolphinHouseComponents.DolphinHouseComponent::new);
-		    CONFIGURED_DOLPHIN_HOUSE = DOLPHIN_HOUSE.get().configured(IFeatureConfig.NONE);
-		    Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, StringUtil.prefix("configured_dolphin_house"), CONFIGURED_DOLPHIN_HOUSE);
-	    	FlatGenerationSettings.STRUCTURE_FEATURES.put(DOLPHIN_HOUSE.get(), CONFIGURED_DOLPHIN_HOUSE);
-		}
-		{
-			int dis = PVZConfig.COMMON_CONFIG.WorldSettings.GraveHouseDistance.get();
-			addStructure(GRAVE_HOUSE.get(), new StructureSeparationSettings(dis, dis / 2, 165745797));
-		    GRAVE_HOUSE_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "grave_house", GraveHouseComponents.GraveHouseComponent::new);
-		    CONFIGURED_GRAVE_HOUSE = GRAVE_HOUSE.get().configured(IFeatureConfig.NONE);
-		    Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, StringUtil.prefix("configured_grave_house"), CONFIGURED_GRAVE_HOUSE);
-	    	FlatGenerationSettings.STRUCTURE_FEATURES.put(GRAVE_HOUSE.get(), CONFIGURED_GRAVE_HOUSE);
-		}
-		{
-			int dis = PVZConfig.COMMON_CONFIG.WorldSettings.YetiHouseDistance.get();
-			addStructure(YETI_HOUSE.get(), new StructureSeparationSettings(dis, dis / 2, 165745797));
-		    YETI_HOUSE_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "yeti_house", YetiHouseComponents.YetiHouseComponent::new);
-		    CONFIGURED_YETI_HOUSE = YETI_HOUSE.get().configured(IFeatureConfig.NONE);
-		    Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, StringUtil.prefix("configured_yeti_house"), CONFIGURED_YETI_HOUSE);
-	    	FlatGenerationSettings.STRUCTURE_FEATURES.put(YETI_HOUSE.get(), CONFIGURED_YETI_HOUSE);
-		}
-		{
-			int dis = PVZConfig.COMMON_CONFIG.WorldSettings.DaveVillaDistance.get();
-			addStructure(DAVE_VILLA.get(), new StructureSeparationSettings(dis, dis / 2, 165745797));
-		    DAVE_VILLA_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "dave_villa", DaveVillaComponents.DaveVillaComponent::new);
-		    CONFIGURED_DAVE_VILLA = DAVE_VILLA.get().configured(IFeatureConfig.NONE);
-		    Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, StringUtil.prefix("configured_dave_villa"), CONFIGURED_DAVE_VILLA);
-	    	FlatGenerationSettings.STRUCTURE_FEATURES.put(DAVE_VILLA.get(), CONFIGURED_DAVE_VILLA);
-		}
-		{
-			int dis = PVZConfig.COMMON_CONFIG.WorldSettings.SunTempleDistance.get();
-			addStructure(SUN_TEMPLE.get(), new StructureSeparationSettings(dis, dis / 2, 165745797));
-			SUN_TEMPLE_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "sun_temple", SunTempleComponents.SunTempleComponent::new);
-		    CONFIGURED_SUN_TEMPLE = SUN_TEMPLE.get().configured(IFeatureConfig.NONE);
-		    Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, StringUtil.prefix("configured_sun_temple"), CONFIGURED_SUN_TEMPLE);
-	    	FlatGenerationSettings.STRUCTURE_FEATURES.put(SUN_TEMPLE.get(), CONFIGURED_SUN_TEMPLE);
-		}
 	}
-	
-	/**
-	 * used in genStructure
-	 */
-	public static void addStructuresToMap(ServerWorld server, Map<Structure<?>, StructureSeparationSettings> tempMap) {
-		Arrays.asList(
-				StructureRegister.BUCKET_HOUSE, StructureRegister.DOLPHIN_HOUSE, StructureRegister.GRAVE_HOUSE, StructureRegister.YETI_HOUSE,
-				StructureRegister.DAVE_VILLA, StructureRegister.SUN_TEMPLE
-				).forEach(l -> {
-					tempMap.putIfAbsent(l.get(), DimensionStructuresSettings.DEFAULTS.get(l.get()));
-				});
-	}
-	
-	public static <F extends Structure<NoFeatureConfig>> void addStructure(F structure, StructureSeparationSettings settings) {
-		Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
-		DimensionStructuresSettings.DEFAULTS =
-                ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
-                        .putAll(DimensionStructuresSettings.DEFAULTS)
-                        .put(structure, settings)
-                        .build();
-	}
-	
+
 }

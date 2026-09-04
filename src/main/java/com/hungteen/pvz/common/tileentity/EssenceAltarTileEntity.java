@@ -1,15 +1,14 @@
 package com.hungteen.pvz.common.tileentity;
 
 import com.hungteen.pvz.common.container.EssenceAltarContainer;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
@@ -17,23 +16,22 @@ import net.minecraftforge.items.ItemStackHandler;
  * @author: HungTeen
  * @create: 2022-01-20 16:06
  **/
-public class EssenceAltarTileEntity extends PVZTileEntity implements INamedContainerProvider, ITickableTileEntity {
+public class EssenceAltarTileEntity extends PVZTileEntity implements MenuProvider {
 
     public final ItemStackHandler handler = new ItemStackHandler(4);
     public int tick = 0;
 
-    public EssenceAltarTileEntity() {
-        super(TileEntityRegister.ESSENCE_ALTAR.get());
+    public EssenceAltarTileEntity(BlockPos pos, BlockState state) {
+        super(TileEntityRegister.ESSENCE_ALTAR.get(), pos, state);
     }
     
-    @Override
    	public void tick() {
     	++ tick;
    	}
 
     @Override
-    public void load(BlockState state, CompoundNBT compound) {
-        super.load(state, compound);
+    public void load(CompoundTag compound) {
+        super.load(compound);
         if (compound.contains("essence_altar_slots")) {
             this.handler.deserializeNBT(compound.getCompound("essence_altar_slots"));
         }
@@ -43,19 +41,18 @@ public class EssenceAltarTileEntity extends PVZTileEntity implements INamedConta
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    protected void saveAdditional(CompoundTag compound) {
         compound.put("essence_altar_slots", this.handler.serializeNBT());
         compound.putInt("tick", this.tick);
-        return super.save(compound);
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("block.pvz.essence_altar");
+    public Component getDisplayName() {
+        return Component.translatable("block.pvz.essence_altar");
     }
 
     @Override
-    public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
+    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
         return new EssenceAltarContainer(id, player, this.worldPosition);
     }
 

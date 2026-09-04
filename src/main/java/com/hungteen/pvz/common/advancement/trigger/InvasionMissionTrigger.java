@@ -4,14 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.common.advancement.predicate.AmountPredicate;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate.AndPredicate;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
-public class InvasionMissionTrigger extends AbstractCriterionTrigger<InvasionMissionTrigger.Instance> {
+public class InvasionMissionTrigger extends SimpleCriterionTrigger<InvasionMissionTrigger.Instance> {
 
     private static final ResourceLocation ID = StringUtil.prefix("invasion_mission");
     public static final InvasionMissionTrigger INSTANCE = new InvasionMissionTrigger();
@@ -24,26 +24,26 @@ public class InvasionMissionTrigger extends AbstractCriterionTrigger<InvasionMis
      * Deserialize a ICriterionInstance of this trigger from the data in the JSON.
      */
     @Override
-    protected Instance createInstance(JsonObject json, AndPredicate player, ConditionArrayParser p_230241_3_) {
+    protected Instance createInstance(JsonObject json, EntityPredicate.Composite player, DeserializationContext p_230241_3_) {
         AmountPredicate amount = AmountPredicate.deserialize(json.get("amount"));
         return new Instance(player, amount);
     }
 
-    public void trigger(ServerPlayerEntity player, int amount) {
+    public void trigger(ServerPlayer player, int amount) {
         this.trigger(player, (instance) -> {
             return instance.test(player, amount);
         });
     }
 
-    public static class Instance extends CriterionInstance {
+    public static class Instance extends AbstractCriterionTriggerInstance {
         private final AmountPredicate amount;
 
-        public Instance(AndPredicate player, AmountPredicate amount) {
+        public Instance(EntityPredicate.Composite player, AmountPredicate amount) {
             super(ID, player);
             this.amount = amount;
         }
 
-        public boolean test(ServerPlayerEntity player, int amount) {
+        public boolean test(ServerPlayer player, int amount) {
             return this.amount.test(player, amount);
         }
 

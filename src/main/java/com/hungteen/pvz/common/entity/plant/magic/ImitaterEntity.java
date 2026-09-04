@@ -10,27 +10,27 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlantUtil;
 import com.hungteen.pvz.utils.WorldUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
 public class ImitaterEntity extends PlantBomberEntity {
 
-	private static final DataParameter<ItemStack> IMITATE_CARD = EntityDataManager.defineId(ImitaterEntity.class, DataSerializers.ITEM_STACK);
+	private static final EntityDataAccessor<ItemStack> IMITATE_CARD = SynchedEntityData.defineId(ImitaterEntity.class, EntityDataSerializers.ITEM_STACK);
 	private Entity targetEntity;
 	private Direction placeDirection = Direction.NORTH;
 	private ImitateType imitateType = ImitateType.SUMMON;
 	private Consumer<PVZPlantEntity> consumer = (e) -> {};
 	
-	public ImitaterEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public ImitaterEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canCollideWithPlant = false;
 		this.isImmuneToWeak = true;
@@ -142,8 +142,8 @@ public class ImitaterEntity extends PlantBomberEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.7F, 1.25F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.7F, 1.25F);
 	}
 
 	public void setImitateCard(ItemStack stack) {

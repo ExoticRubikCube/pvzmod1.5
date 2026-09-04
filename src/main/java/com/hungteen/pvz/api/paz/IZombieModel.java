@@ -1,11 +1,11 @@
 package com.hungteen.pvz.api.paz;
 
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,7 +22,7 @@ public interface IZombieModel<T extends LivingEntity & IZombieEntity> {
 	 * render drop body part.
 	 * {link @ZombieBodyRender}
 	 */
-	void renderBody(IBodyEntity entity, MatrixStack stack, IVertexBuilder buffer, int packedLight, int packedOverlay);
+	void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay);
 
 	@OnlyIn(Dist.CLIENT)
 	EntityModel<T> getZombieModel();

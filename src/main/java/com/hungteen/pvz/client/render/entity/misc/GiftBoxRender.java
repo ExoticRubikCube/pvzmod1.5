@@ -4,8 +4,8 @@ import com.hungteen.pvz.client.model.entity.misc.GiftBoxModel;
 import com.hungteen.pvz.client.render.entity.PVZEntityRender;
 import com.hungteen.pvz.common.entity.misc.GiftBoxEntity;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,8 +14,8 @@ public class GiftBoxRender extends PVZEntityRender<GiftBoxEntity> {
 
 	private static final ResourceLocation RES = StringUtil.prefix("textures/entity/misc/gift_box.png");
 
-	public GiftBoxRender(EntityRendererManager renderManager) {
-		super(renderManager, new GiftBoxModel());
+	public GiftBoxRender(EntityRendererProvider.Context context) {
+		super(context, new GiftBoxModel(context.bakeLayer(GiftBoxModel.LAYER)));
 	}
 
 	@Override

@@ -2,12 +2,12 @@ package com.hungteen.pvz.client.render.entity.bullet;
 
 import com.hungteen.pvz.common.entity.bullet.itembullet.MetalItemEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class MetalItemRender extends BulletRender<MetalItemEntity> {
 
-	public MetalItemRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn);
+	public MetalItemRender(EntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Override

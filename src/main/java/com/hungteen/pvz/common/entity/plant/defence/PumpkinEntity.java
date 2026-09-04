@@ -5,14 +5,14 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.PlantInfo;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 public class PumpkinEntity extends PVZPlantEntity{
 
-	public PumpkinEntity(EntityType<? extends CreatureEntity> p_i48575_1_, World p_i48575_2_) {
+	public PumpkinEntity(EntityType<? extends PathfinderMob> p_i48575_1_, Level p_i48575_2_) {
 		super(p_i48575_1_, p_i48575_2_);
 	}
 	
@@ -48,7 +48,7 @@ public class PumpkinEntity extends PVZPlantEntity{
 		@Override
 		public void onHeal(IPlantEntity plantEntity, float percent) {
 			final float max = plantEntity.getOuterDefenceLife() > NORMAL_PUMPKIN_LIFE ? SUPER_PUMPKIN_LIFE : NORMAL_PUMPKIN_LIFE;
-			plantEntity.setOuterDefenceLife(MathHelper.clamp(plantEntity.getOuterDefenceLife() * (1 + percent), 0, max));
+			plantEntity.setOuterDefenceLife(Mth.clamp(plantEntity.getOuterDefenceLife() * (1 + percent), 0, max));
 		}
 	}
 	

@@ -3,171 +3,175 @@ package com.hungteen.pvz.client.model.entity.plant.magic;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.magic.StrangeCatEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.util.Mth;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class StrangeCatModel extends PVZPlantModel<StrangeCatEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer body;
-	private final ModelRenderer bone4;
-	private final ModelRenderer bone5;
-	private final ModelRenderer bone6;
-	private final ModelRenderer legs;
-	private final ModelRenderer left_ear;
-	private final ModelRenderer bone3;
-	private final ModelRenderer bone2;
-	private final ModelRenderer right_ear;
-	private final ModelRenderer bone7;
-	private final ModelRenderer bone8;
-	private final ModelRenderer tail;
-	private final ModelRenderer tail1;
-	private final ModelRenderer tail2;
-	private final ModelRenderer tail3;
-	private final ModelRenderer tail4;
-	private final ModelRenderer tail5;
-	private final ModelRenderer bone10;
-	private final ModelRenderer bone11;
-	private final ModelRenderer tail6;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "strange_cat"), "main");
 
-	public StrangeCatModel() {
-		texWidth = 512;
-		texHeight = 512;
+	private final ModelPart total;
+	private final ModelPart body;
+	private final ModelPart bone4;
+	private final ModelPart bone5;
+	private final ModelPart bone6;
+	private final ModelPart legs;
+	private final ModelPart left_ear;
+	private final ModelPart bone3;
+	private final ModelPart bone2;
+	private final ModelPart right_ear;
+	private final ModelPart bone7;
+	private final ModelPart bone8;
+	private final ModelPart tail;
+	private final ModelPart tail1;
+	private final ModelPart tail2;
+	private final ModelPart tail3;
+	private final ModelPart tail4;
+	private final ModelPart tail5;
+	private final ModelPart bone10;
+	private final ModelPart bone11;
+	private final ModelPart tail6;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(body);
-		body.texOffs(256, 384).addBox(-33.3301F, -68.0F, -32.0F, 64.0F, 64.0F, 64.0F, 0.0F, false);
 
-		bone4 = new ModelRenderer(this);
-		bone4.setPos(0.0F, 4.0F, 0.0F);
-		body.addChild(bone4);
-		
 
-		bone5 = new ModelRenderer(this);
-		bone5.setPos(35.0F, -68.0F, -32.0F);
-		bone4.addChild(bone5);
-		setRotationAngle(bone5, -0.2618F, 0.0F, 0.0F);
-		bone5.texOffs(367, 0).addBox(-71.3301F, 0.0F, 0.0F, 3.0F, 10.0F, 70.0F, 0.0F, false);
-		bone5.texOffs(214, 0).addBox(-4.3301F, 0.0F, 0.0F, 3.0F, 10.0F, 70.0F, 0.0F, false);
-
-		bone6 = new ModelRenderer(this);
-		bone6.setPos(0.0F, 0.0F, 0.0F);
-		bone4.addChild(bone6);
-		bone6.texOffs(288, 11).addBox(-36.3301F, -49.8827F, 31.6148F, 70.0F, 10.0F, 4.0F, 0.0F, false);
-		bone6.texOffs(294, 40).addBox(-36.3301F, -68.0F, -35.0F, 70.0F, 10.0F, 3.0F, 0.0F, false);
-
-		legs = new ModelRenderer(this);
-		legs.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(legs);
-		legs.texOffs(368, 338).addBox(-43.3301F, -4.0F, 6.0F, 36.0F, 4.0F, 36.0F, 0.0F, false);
-		legs.texOffs(368, 298).addBox(4.6699F, -4.0F, 6.0F, 36.0F, 4.0F, 36.0F, 0.0F, false);
-		legs.texOffs(368, 258).addBox(-43.3301F, -4.0F, -42.0F, 36.0F, 4.0F, 36.0F, 0.0F, false);
-		legs.texOffs(367, 217).addBox(4.6699F, -4.0F, -42.0F, 36.0F, 4.0F, 36.0F, 0.0F, false);
-
-		left_ear = new ModelRenderer(this);
-		left_ear.setPos(32.0F, -66.0F, -6.0F);
-		total.addChild(left_ear);
-		setRotationAngle(left_ear, 0.0F, 0.0F, 0.8727F);
-		
-
-		bone3 = new ModelRenderer(this);
-		bone3.setPos(0.0F, 0.0F, 0.0F);
-		left_ear.addChild(bone3);
-		bone3.texOffs(479, 302).addBox(-15.0486F, -5.4591F, -3.999F, 9.0F, 20.0F, 8.0F, 0.0F, false);
-
-		bone2 = new ModelRenderer(this);
-		bone2.setPos(0.0F, 0.0F, 0.0F);
-		left_ear.addChild(bone2);
-		setRotationAngle(bone2, 0.0F, 0.0F, 0.8727F);
-		bone2.texOffs(459, 0).addBox(-13.855F, 1.0189F, -4.0F, 19.0F, 7.0F, 8.0F, 0.0F, false);
-
-		right_ear = new ModelRenderer(this);
-		right_ear.setPos(-35.0F, -66.0F, -6.0F);
-		total.addChild(right_ear);
-		setRotationAngle(right_ear, 0.0F, 0.0F, -0.8727F);
-		
-
-		bone7 = new ModelRenderer(this);
-		bone7.setPos(0.0F, 0.0F, 0.0F);
-		right_ear.addChild(bone7);
-		bone7.texOffs(479, 262).addBox(6.0486F, -5.4591F, -3.99F, 9.0F, 20.0F, 8.0F, 0.0F, true);
-
-		bone8 = new ModelRenderer(this);
-		bone8.setPos(0.0F, 0.0F, 0.0F);
-		right_ear.addChild(bone8);
-		setRotationAngle(bone8, 0.0F, 0.0F, -0.8727F);
-		bone8.texOffs(459, 32).addBox(-5.145F, 1.0189F, -4.0F, 19.0F, 7.0F, 8.0F, 0.0F, true);
-
-		tail = new ModelRenderer(this);
-		tail.setPos(0.0F, -24.8669F, 35.9447F);
-		total.addChild(tail);
-		
-
-		tail1 = new ModelRenderer(this);
-		tail1.setPos(0.0F, 9.8669F, -7.9447F);
-		tail.addChild(tail1);
-		tail1.texOffs(6, 448).addBox(-5.3301F, -5.0F, -5.0F, 8.0F, 8.0F, 37.0F, 0.0F, false);
-
-		tail2 = new ModelRenderer(this);
-		tail2.setPos(0.0F, 6.7538F, 22.5237F);
-		tail.addChild(tail2);
-		setRotationAngle(tail2, -0.8727F, 0.0F, 0.0F);
-		tail2.texOffs(304, 323).addBox(-5.32F, -29.2438F, -2.3326F, 8.0F, 32.0F, 8.0F, 0.0F, false);
-
-		tail3 = new ModelRenderer(this);
-		tail3.setPos(0.0F, -23.3801F, 21.2917F);
-		tail.addChild(tail3);
-		setRotationAngle(tail3, -1.6581F, 0.0F, 0.0F);
-		tail3.texOffs(222, 331).addBox(-5.3301F, -28.5396F, -11.7591F, 8.0F, 8.0F, 25.0F, 0.0F, false);
-
-		tail4 = new ModelRenderer(this);
-		tail4.setPos(0.0F, -21.0F, 1.0F);
-		tail.addChild(tail4);
-		setRotationAngle(tail4, 0.2618F, 0.0F, 0.0F);
-		tail4.texOffs(168, 372).addBox(-5.3301F, -2.336F, 43.0566F, 8.0F, 4.0F, 8.0F, 0.0F, false);
-
-		tail5 = new ModelRenderer(this);
-		tail5.setPos(2.6699F, -19.5361F, -3.1281F);
-		tail.addChild(tail5);
-		setRotationAngle(tail5, 0.2618F, 0.0F, 0.0F);
-		
-
-		bone10 = new ModelRenderer(this);
-		bone10.setPos(0.0F, 0.0F, 0.0F);
-		tail5.addChild(bone10);
-		bone10.texOffs(0, 0).addBox(-7.2426F, -28.9745F, 43.9555F, 6.0F, 27.0F, 7.0F, 0.0F, false);
-		bone10.texOffs(0, 0).addBox(-7.2426F, -28.9745F, 51.4408F, 6.0F, 27.0F, 7.0F, 0.0F, false);
-		bone10.texOffs(0, 0).addBox(-11.4853F, -28.9745F, 48.1982F, 7.0F, 27.0F, 6.0F, 0.0F, false);
-		bone10.texOffs(0, 0).addBox(-4.0F, -28.9745F, 48.1982F, 7.0F, 27.0F, 6.0F, 0.0F, false);
-
-		bone11 = new ModelRenderer(this);
-		bone11.setPos(0.0F, 0.0F, 0.0F);
-		tail5.addChild(bone11);
-		setRotationAngle(bone11, 0.0F, 0.7854F, 0.0F);
-		bone11.texOffs(0, 0).addBox(-42.2026F, -28.9745F, 25.9599F, 6.0F, 27.0F, 7.0F, 0.0F, false);
-		bone11.texOffs(0, 0).addBox(-42.2026F, -28.9745F, 33.4452F, 6.0F, 27.0F, 7.0F, 0.0F, false);
-		bone11.texOffs(0, 0).addBox(-46.4452F, -28.9745F, 30.2026F, 7.0F, 27.0F, 6.0F, 0.0F, false);
-		bone11.texOffs(0, 0).addBox(-38.9599F, -28.9745F, 30.2026F, 7.0F, 27.0F, 6.0F, 0.0F, false);
-
-		tail6 = new ModelRenderer(this);
-		tail6.setPos(-2.0F, -61.0F, 39.0F);
-		tail.addChild(tail6);
-		setRotationAngle(tail6, -0.2618F, -0.1745F, -0.6981F);
-		tail6.texOffs(377, 272).addBox(4.6394F, -8.0881F, -8.206F, 4.0F, 4.0F, 4.0F, 0.0F, false);
-		tail6.texOffs(368, 225).addBox(7.6394F, -10.0881F, -10.206F, 3.0F, 3.0F, 3.0F, 0.0F, false);
-		tail6.texOffs(475, 226).addBox(-1.3606F, -6.0881F, -6.206F, 8.0F, 8.0F, 8.0F, 0.0F, false);
+public StrangeCatModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.body = root.getChild("body");
+		this.bone4 = root.getChild("bone4");
+		this.bone5 = root.getChild("bone5");
+		this.bone6 = root.getChild("bone6");
+		this.legs = root.getChild("legs");
+		this.left_ear = root.getChild("left_ear");
+		this.bone3 = root.getChild("bone3");
+		this.bone2 = root.getChild("bone2");
+		this.right_ear = root.getChild("right_ear");
+		this.bone7 = root.getChild("bone7");
+		this.bone8 = root.getChild("bone8");
+		this.tail = root.getChild("tail");
+		this.tail1 = root.getChild("tail1");
+		this.tail2 = root.getChild("tail2");
+		this.tail3 = root.getChild("tail3");
+		this.tail4 = root.getChild("tail4");
+		this.tail5 = root.getChild("tail5");
+		this.bone10 = root.getChild("bone10");
+		this.bone11 = root.getChild("bone11");
+		this.tail6 = root.getChild("tail6");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(256, 384).addBox(-33.330101F, -68.0F, -32.0F, 64.0F, 64.0F, 64.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone4_pd = body_pd.addOrReplaceChild("bone4",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 4.0F, 0.0F));
+		PartDefinition bone5_pd = bone4_pd.addOrReplaceChild("bone5",
+			CubeListBuilder.create()
+				.texOffs(367, 0).addBox(-71.330101F, 0.0F, 0.0F, 3.0F, 10.0F, 70.0F)
+				.texOffs(214, 0).addBox(-4.3301F, 0.0F, 0.0F, 3.0F, 10.0F, 70.0F),
+			PartPose.offsetAndRotation(35.0F, -68.0F, -32.0F, -0.2618F, 0.0F, 0.0F));
+		PartDefinition bone6_pd = bone4_pd.addOrReplaceChild("bone6",
+			CubeListBuilder.create()
+				.texOffs(288, 11).addBox(-36.330101F, -49.882702F, 31.614799F, 70.0F, 10.0F, 4.0F)
+				.texOffs(294, 40).addBox(-36.330101F, -68.0F, -35.0F, 70.0F, 10.0F, 3.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition legs_pd = total_pd.addOrReplaceChild("legs",
+			CubeListBuilder.create()
+				.texOffs(368, 338).addBox(-43.330101F, -4.0F, 6.0F, 36.0F, 4.0F, 36.0F)
+				.texOffs(368, 298).addBox(4.6699F, -4.0F, 6.0F, 36.0F, 4.0F, 36.0F)
+				.texOffs(368, 258).addBox(-43.330101F, -4.0F, -42.0F, 36.0F, 4.0F, 36.0F)
+				.texOffs(367, 217).addBox(4.6699F, -4.0F, -42.0F, 36.0F, 4.0F, 36.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition left_ear_pd = total_pd.addOrReplaceChild("left_ear",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(32.0F, -66.0F, -6.0F, 0.0F, 0.0F, 0.8727F));
+		PartDefinition bone3_pd = left_ear_pd.addOrReplaceChild("bone3",
+			CubeListBuilder.create()
+				.texOffs(479, 302).addBox(-15.0486F, -5.4591F, -3.999F, 9.0F, 20.0F, 8.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone2_pd = left_ear_pd.addOrReplaceChild("bone2",
+			CubeListBuilder.create()
+				.texOffs(459, 0).addBox(-13.855F, 1.0189F, -4.0F, 19.0F, 7.0F, 8.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.8727F));
+		PartDefinition right_ear_pd = total_pd.addOrReplaceChild("right_ear",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(-35.0F, -66.0F, -6.0F, 0.0F, 0.0F, -0.8727F));
+		PartDefinition bone7_pd = right_ear_pd.addOrReplaceChild("bone7",
+			CubeListBuilder.create()
+				.texOffs(479, 262).mirror().addBox(6.0486F, -5.4591F, -3.99F, 9.0F, 20.0F, 8.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone8_pd = right_ear_pd.addOrReplaceChild("bone8",
+			CubeListBuilder.create()
+				.texOffs(459, 32).mirror().addBox(-5.145F, 1.0189F, -4.0F, 19.0F, 7.0F, 8.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.8727F));
+		PartDefinition tail_pd = total_pd.addOrReplaceChild("tail",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -24.8669F, 35.9447F));
+		PartDefinition tail1_pd = tail_pd.addOrReplaceChild("tail1",
+			CubeListBuilder.create()
+				.texOffs(6, 448).addBox(-5.3301F, -5.0F, -5.0F, 8.0F, 8.0F, 37.0F),
+			PartPose.offset(0.0F, 9.8669F, -7.9447F));
+		PartDefinition tail2_pd = tail_pd.addOrReplaceChild("tail2",
+			CubeListBuilder.create()
+				.texOffs(304, 323).addBox(-5.32F, -29.243799F, -2.3326F, 8.0F, 32.0F, 8.0F),
+			PartPose.offsetAndRotation(0.0F, 6.7538F, 22.5237F, -0.8727F, 0.0F, 0.0F));
+		PartDefinition tail3_pd = tail_pd.addOrReplaceChild("tail3",
+			CubeListBuilder.create()
+				.texOffs(222, 331).addBox(-5.3301F, -28.5396F, -11.7591F, 8.0F, 8.0F, 25.0F),
+			PartPose.offsetAndRotation(0.0F, -23.3801F, 21.2917F, -1.6581F, 0.0F, 0.0F));
+		PartDefinition tail4_pd = tail_pd.addOrReplaceChild("tail4",
+			CubeListBuilder.create()
+				.texOffs(168, 372).addBox(-5.3301F, -2.336F, 43.056599F, 8.0F, 4.0F, 8.0F),
+			PartPose.offsetAndRotation(0.0F, -21.0F, 1.0F, 0.2618F, 0.0F, 0.0F));
+		PartDefinition tail5_pd = tail_pd.addOrReplaceChild("tail5",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(2.6699F, -19.5361F, -3.1281F, 0.2618F, 0.0F, 0.0F));
+		PartDefinition bone10_pd = tail5_pd.addOrReplaceChild("bone10",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-7.2426F, -28.974501F, 43.955502F, 6.0F, 27.0F, 7.0F)
+				.texOffs(0, 0).addBox(-7.2426F, -28.974501F, 51.4408F, 6.0F, 27.0F, 7.0F)
+				.texOffs(0, 0).addBox(-11.4853F, -28.974501F, 48.1982F, 7.0F, 27.0F, 6.0F)
+				.texOffs(0, 0).addBox(-4.0F, -28.974501F, 48.1982F, 7.0F, 27.0F, 6.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bone11_pd = tail5_pd.addOrReplaceChild("bone11",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-42.202599F, -28.974501F, 25.9599F, 6.0F, 27.0F, 7.0F)
+				.texOffs(0, 0).addBox(-42.202599F, -28.974501F, 33.445202F, 6.0F, 27.0F, 7.0F)
+				.texOffs(0, 0).addBox(-46.445202F, -28.974501F, 30.2026F, 7.0F, 27.0F, 6.0F)
+				.texOffs(0, 0).addBox(-38.9599F, -28.974501F, 30.2026F, 7.0F, 27.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
+		PartDefinition tail6_pd = tail_pd.addOrReplaceChild("tail6",
+			CubeListBuilder.create()
+				.texOffs(377, 272).addBox(4.6394F, -8.0881F, -8.206F, 4.0F, 4.0F, 4.0F)
+				.texOffs(368, 225).addBox(7.6394F, -10.0881F, -10.206F, 3.0F, 3.0F, 3.0F)
+				.texOffs(475, 226).addBox(-1.3606F, -6.0881F, -6.206F, 8.0F, 8.0F, 8.0F),
+			PartPose.offsetAndRotation(-2.0F, -61.0F, 39.0F, -0.2618F, -0.1745F, -0.6981F));
+		return LayerDefinition.create(meshdefinition, 512, 512);
+	}
+
 
 	@Override
 	public void setupAnim(StrangeCatEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
@@ -181,12 +185,12 @@ public class StrangeCatModel extends PVZPlantModel<StrangeCatEntity> {
 		} else {
 			final int tick = StrangeCatEntity.ANIM_CD - time;
 		    final float v = 3.14159F / StrangeCatEntity.ANIM_CD / 2;
-		    this.tail.xRot = 0.8F - 0.8F * Math.abs(MathHelper.cos(v * tick));
+		    this.tail.xRot = 0.8F - 0.8F * Math.abs(Mth.cos(v * tick));
 		}
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 

@@ -7,17 +7,17 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 public abstract class CarZombieEntity extends PVZZombieEntity {
 
-	public CarZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CarZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setIsWholeBody();
 		this.canBeFrozen = false;
@@ -27,7 +27,7 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 	@Override
 	public void zombieTick() {
 		super.zombieTick();
-		if(level.isClientSide && this.isCarShaking()) {
+		if(level.isClientSide() && this.isCarShaking()) {
 			for(int i = 1; i <= 3; i ++) {
 			    this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), (this.getRandom().nextFloat() - 0.5) / 10, 0.05, (this.getRandom().nextFloat() - 0.5) / 10);
 			}
@@ -36,7 +36,7 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 	
 	@Override
 	protected void onRemoveWhenDeath() {
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			EntityUtil.playSound(this, SoundRegister.CAR_EXPLOSION.get());
 		}
 		else {

@@ -5,17 +5,17 @@ import com.hungteen.pvz.client.render.entity.PVZEntityRender;
 import com.hungteen.pvz.common.entity.misc.SmallChomperEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SmallChomperRender extends PVZEntityRender<SmallChomperEntity>{
 
-	public SmallChomperRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new SmallChomperModel());
+	public SmallChomperRender(EntityRendererProvider.Context context) {
+		super(context, new SmallChomperModel(context.bakeLayer(SmallChomperModel.LAYER)));
 	}
 
 	@Override
@@ -24,9 +24,9 @@ public class SmallChomperRender extends PVZEntityRender<SmallChomperEntity>{
 	}
 	
 	@Override
-	public Vector3d getTranslateVec(SmallChomperEntity entity) {
+	public Vec3 getTranslateVec(SmallChomperEntity entity) {
 		int tick = entity.getTick();//1 - 20
-		return new Vector3d(0, 1f - 0.05f * tick, 0);
+		return new Vec3(0, 1f - 0.05f * tick, 0);
 	}
 	
 	@Override

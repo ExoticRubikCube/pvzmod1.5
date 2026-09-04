@@ -5,15 +5,15 @@ import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.toxic.GloomShroomEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GloomShroomRender extends PVZPlantRender<GloomShroomEntity> {
 
-	public GloomShroomRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new GloomShroomModel(), 0.4F);
+	public GloomShroomRender(EntityRendererProvider.Context context) {
+		super(context, new GloomShroomModel(context.bakeLayer(GloomShroomModel.LAYER)), 0.4F);
 	}
 	
 	@Override

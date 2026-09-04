@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class WeightList<T> {
 	
@@ -72,7 +72,7 @@ public class WeightList<T> {
 	/**
 	 * get the weight item randomly.
 	 */
-	public Optional<T> getRandomItem(Random rand) {
+	public Optional<T> getRandomItem(RandomSource rand) {
 		final int pos = rand.nextInt(this.total);
 		int now = 0;
 		for(int i = 0;i < this.itemList.size(); ++ i) {

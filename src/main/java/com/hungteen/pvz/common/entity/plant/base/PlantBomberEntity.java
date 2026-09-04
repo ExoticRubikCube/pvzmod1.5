@@ -4,10 +4,10 @@ import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ public abstract class PlantBomberEntity extends PVZPlantEntity {
 
 	protected boolean hasBombAlamancs = true;
 	
-	public PlantBomberEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public PlantBomberEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -28,14 +28,14 @@ public abstract class PlantBomberEntity extends PVZPlantEntity {
 	protected void normalPlantTick() {
 		super.normalPlantTick();
 		final int time = this.getAttackTime();
-		if(this.level.isClientSide) {
+		if(this.level.isClientSide()) {
 			if(time == this.getReadyTime() - 1) {
 		    	this.startBomb(false);
 			}
 		} else {
 		    if(time > this.getReadyTime()) {
 			    this.startBomb(true);
-			    this.remove();
+this.remove(RemovalReason.KILLED);
 		    } 
 		    this.setAttackTime(time + 1);
 		}

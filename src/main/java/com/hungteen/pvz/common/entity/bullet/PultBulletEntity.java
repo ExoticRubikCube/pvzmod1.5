@@ -4,16 +4,16 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.interfaces.ICanPushBack;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
@@ -25,13 +25,13 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 	protected float height = 12;
 	protected boolean isPushBack = false;
 	
-	public PultBulletEntity(EntityType<?> type, World worldIn) {
+	public PultBulletEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(false);
 		this.airSlowDown = 1F;
 	}
 	
-	public PultBulletEntity(EntityType<?> type, World worldIn, LivingEntity shooter) {
+	public PultBulletEntity(EntityType<?> type, Level worldIn, LivingEntity shooter) {
 		super(type, worldIn, shooter);
 		this.setNoGravity(false);
 		this.airSlowDown = 1F;
@@ -40,10 +40,10 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 	@Override
 	public void tick() {
 		super.tick();
-		if(! this.level.isClientSide && ! this.isPushBack && this.tickCount % this.targetChance == 0) {
+		if(! this.level.isClientSide() && ! this.isPushBack && this.tickCount % this.targetChance == 0) {
 			if(this.lockTarget.isPresent() && EntityUtil.isEntityValid(lockTarget.get())) {
 				final LivingEntity target = this.lockTarget.get();
-				final Vector3d speed = this.getDeltaMovement();
+				final Vec3 speed = this.getDeltaMovement();
 			    final double g = this.getGravityVelocity();
 			    final double t1 = speed.y / g;
 			    final double height = speed.y * speed.y / 2 / g;
@@ -54,7 +54,7 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 			    final double t2 = Math.sqrt(2 * downHeight / g);
 			    final double dx = target.getX() + target.getDeltaMovement().x() * (t1 + t2) - this.getX();
 			    final double dz = target.getZ() + target.getDeltaMovement().z() * (t1 + t2) - this.getZ();
-			    final double dxz = MathHelper.sqrt(dx * dx + dz * dz);
+			    final double dxz = Mth.sqrt((float) (dx * dx + dz * dz));
 			    final double vxz = dxz / (t1 + t2);
 	    	    if(dxz == 0) {
 	    	    	this.setDeltaMovement(0, speed.y, 0);
@@ -66,10 +66,10 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				this.dealDamage(target); // attack 
@@ -78,10 +78,10 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		} else if(! this.checkLive(result)) {
 			this.onHitBlock();
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
@@ -111,14 +111,14 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
     	}
     	this.lockTarget = Optional.ofNullable(target);
     	final double g = this.getGravityVelocity();
-    	final double t1 = MathHelper.sqrt(2 * height / g);//go up time
+    	final double t1 = Mth.sqrt((float) (2 * height / g));//go up time
     	double t2 = 0;
     	if(this.getY() + height - target.getY() - target.getBbHeight() >= 0) {//random pult
-    		t2 = MathHelper.sqrt(2 * (this.getY() + height - target.getY() - target.getBbHeight()) / g);//go down time
+    		t2 = Mth.sqrt((float) (2 * (this.getY() + height - target.getY() - target.getBbHeight()) / g));//go down time
     	}
     	final double dx = target.getX() + target.getDeltaMovement().x() * (t1 + t2) - this.getX();
     	final double dz = target.getZ() + target.getDeltaMovement().z() * (t1 + t2) - this.getZ();
-    	final double dxz = MathHelper.sqrt(dx * dx + dz * dz);
+    	final double dxz = Mth.sqrt((float) (dx * dx + dz * dz));
     	final double vxz = dxz / (t1 + t2);
     	final double vy = g * t1;
     	if(dxz == 0) {
@@ -138,14 +138,14 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
     	}
     	this.lockPos = Optional.ofNullable(pos);
     	final double g = this.getGravityVelocity();
-    	final double t1 = MathHelper.sqrt(2 * height / g);//go up time
+    	final double t1 = Mth.sqrt((float) (2 * height / g));//go up time
     	double t2 = 0;
     	if(this.getY() + height - pos.getY() - 1 >= 0) {//random pult
-    		t2 = MathHelper.sqrt(2 * (this.getY() + height - pos.getY() - 1) / g);//go down time
+    		t2 = Mth.sqrt((float) (2 * (this.getY() + height - pos.getY() - 1) / g));//go down time
     	}
     	final double dx = pos.getX() - this.getX();
     	final double dz = pos.getZ() - this.getZ();
-    	final double dxz = MathHelper.sqrt(dx * dx + dz * dz);
+    	final double dxz = Mth.sqrt((float) (dx * dx + dz * dz));
     	final double vxz = dxz / (t1 + t2);
     	final double vy = g * t1;
     	if(dxz == 0) {
@@ -161,7 +161,7 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("target_entity_id")) {
 			this.lockTarget = Optional.ofNullable((LivingEntity) level.getEntity(compound.getInt("target_entity_id")));
@@ -172,7 +172,7 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		if(this.lockTarget.isPresent()) {
 			compound.putInt("target_entity_id", this.lockTarget.get().getId());

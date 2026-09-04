@@ -7,12 +7,12 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 /**
  * Closer Plants will be attack after several ticks focusing on its target.
@@ -23,7 +23,7 @@ public abstract class PlantCloserEntity extends PVZPlantEntity{
 	protected float closeWidth = 1.5F;
 	protected float closeHeight = 1.5F;
 	
-	public PlantCloserEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public PlantCloserEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -36,7 +36,7 @@ public abstract class PlantCloserEntity extends PVZPlantEntity{
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! this.level.isClientSide && this.canCheckDistance()) {
+		if(! this.level.isClientSide() && this.canCheckDistance()) {
 			if(EntityUtil.isEntityValid(this.getTarget())) {//target is close enough
 				this.focusOnTarget(this.getTarget());
 				final int time = this.getAttackTime();

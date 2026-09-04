@@ -5,17 +5,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hungteen.pvz.utils.StringUtil;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 
-public class FusionRecipe implements ICraftingRecipe {
+public class FusionRecipe implements CraftingRecipe {
 
     public static final ResourceLocation UID = StringUtil.prefix("card_fusion");
     private final ResourceLocation id;
@@ -36,20 +37,25 @@ public class FusionRecipe implements ICraftingRecipe {
         return this.id;
     }
 
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return RecipeRegister.FUSION_SERIALIZER.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
-        return RecipeRegister.FUSION_RECIPE_TYPE;
+    public RecipeType<?> getType() {
+        return RecipeRegister.FUSION_RECIPE_TYPE.get();
     }
 
     public String getGroup() {
         return this.group;
     }
 
+    @Override
     public ItemStack getResultItem() {
+        return this.result;
+    }
+
+    public ItemStack getResultItem(RegistryAccess p_267052_) {
         return this.result;
     }
 
@@ -57,8 +63,8 @@ public class FusionRecipe implements ICraftingRecipe {
         return this.ingredients;
     }
 
-    public boolean matches(CraftingInventory craftingInventory, World world) {
-        RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
+    public boolean matches(CraftingContainer craftingInventory, Level world) {
+        StackedContents recipeitemhelper = new StackedContents();
         java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
         int i = 0;
 
@@ -72,10 +78,15 @@ public class FusionRecipe implements ICraftingRecipe {
             }
         }
 
-        return i == this.ingredients.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList)null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.ingredients) != null);
+        return i == this.ingredients.size() && (isSimple ? recipeitemhelper.canCraft(this, null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.ingredients) != null);
     }
 
-    public ItemStack assemble(CraftingInventory p_77572_1_) {
+    @Override
+    public ItemStack assemble(CraftingContainer craftingInventory) {
+        return this.result.copy();
+    }
+
+    public ItemStack assemble(CraftingContainer p_77572_1_, RegistryAccess p_267165_) {
         return this.result.copy();
     }
 
@@ -83,17 +94,17 @@ public class FusionRecipe implements ICraftingRecipe {
         return p_194133_1_ * p_194133_2_ >= this.ingredients.size();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FusionRecipe> {
+    public static class Serializer implements RecipeSerializer<FusionRecipe> {
 
          public FusionRecipe fromJson(ResourceLocation p_199425_1_, JsonObject p_199425_2_) {
-            String s = JSONUtils.getAsString(p_199425_2_, "group", "");
-            NonNullList<Ingredient> nonnulllist = itemsFromJson(JSONUtils.getAsJsonArray(p_199425_2_, "ingredients"));
+            String s = GsonHelper.getAsString(p_199425_2_, "group", "");
+            NonNullList<Ingredient> nonnulllist = itemsFromJson(GsonHelper.getAsJsonArray(p_199425_2_, "ingredients"));
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
             } else if (nonnulllist.size() > 9) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + (9));
             } else {
-                ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(p_199425_2_, "result"));
+                ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(p_199425_2_, "result"));
                 return new FusionRecipe(p_199425_1_, s, itemstack, nonnulllist);
             }
         }
@@ -111,7 +122,7 @@ public class FusionRecipe implements ICraftingRecipe {
             return nonnulllist;
         }
 
-        public FusionRecipe fromNetwork(ResourceLocation p_199426_1_, PacketBuffer p_199426_2_) {
+        public FusionRecipe fromNetwork(ResourceLocation p_199426_1_, FriendlyByteBuf p_199426_2_) {
             String s = p_199426_2_.readUtf(32767);
             int i = p_199426_2_.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
@@ -124,7 +135,7 @@ public class FusionRecipe implements ICraftingRecipe {
             return new FusionRecipe(p_199426_1_, s, itemstack, nonnulllist);
         }
 
-        public void toNetwork(PacketBuffer p_199427_1_, FusionRecipe p_199427_2_) {
+        public void toNetwork(FriendlyByteBuf p_199427_1_, FusionRecipe p_199427_2_) {
             p_199427_1_.writeUtf(p_199427_2_.group);
             p_199427_1_.writeVarInt(p_199427_2_.ingredients.size());
 

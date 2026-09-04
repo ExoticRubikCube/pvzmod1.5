@@ -8,8 +8,8 @@ import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.IPAZType;
 import com.hungteen.pvz.utils.PlayerUtil;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PAZStatsPacket {
 
@@ -46,7 +46,7 @@ public class PAZStatsPacket {
         this.is = is;
     }
 
-    public PAZStatsPacket(PacketBuffer buffer) {
+    public PAZStatsPacket(FriendlyByteBuf buffer) {
         this.type = PAZPacketTypes.values()[buffer.readInt()];
         this.id = buffer.readUtf();
         this.val1 = buffer.readInt();
@@ -54,7 +54,7 @@ public class PAZStatsPacket {
         this.is = buffer.readBoolean();
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeInt(this.type.ordinal());
         buffer.writeUtf(this.id);
         buffer.writeInt(this.val1);

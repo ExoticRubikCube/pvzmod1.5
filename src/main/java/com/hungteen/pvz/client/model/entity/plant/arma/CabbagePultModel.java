@@ -2,80 +2,97 @@ package com.hungteen.pvz.client.model.entity.plant.arma;
 
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.arma.CabbagePultEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.util.Mth;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class CabbagePultModel extends PVZPlantModel<CabbagePultEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer cabbage;
-	private final ModelRenderer dicoration;
-	private final ModelRenderer pult;
-	private final ModelRenderer out;
-	private final ModelRenderer bullet;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "cabbage_pult"), "main");
 
-	public CabbagePultModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
+	private final ModelPart total;
+	private final ModelPart cabbage;
+	private final ModelPart dicoration;
+	private final ModelPart pult;
+	private final ModelPart out;
+	private final ModelPart bullet;
 
 
-		cabbage = new ModelRenderer(this);
-		cabbage.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(cabbage);
-		cabbage.texOffs(0, 0).addBox(-7.0F, -1.0F, -7.0F, 14.0F, 1.0F, 14.0F, 0.0F, false);
-		cabbage.texOffs(4, 47).addBox(-6.0F, -0.1F, -6.0F, 12.0F, 1.0F, 12.0F, 0.0F, false);
-		cabbage.texOffs(0, 28).addBox(-4.5F, -8.0F, -4.5F, 9.0F, 8.0F, 9.0F, 0.0F, false);
-		cabbage.texOffs(32, 20).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 1.0F, 8.0F, 0.0F, false);
 
-		dicoration = new ModelRenderer(this);
-		dicoration.setPos(0.0F, 0.0F, 0.0F);
-		cabbage.addChild(dicoration);
-		dicoration.texOffs(0, 15).addBox(-5.0F, -7.0F, -5.0F, 10.0F, 3.0F, 10.0F, 0.0F, false);
 
-		pult = new ModelRenderer(this);
-		pult.setPos(0.0F, -9.0F, 0.0F);
-		total.addChild(pult);
-		setRotationAngle(pult, -0.4363F, 0.0F, 0.0F);
-		pult.texOffs(8, 0).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 7.0F, 1.0F, 0.0F, false);
-
-		out = new ModelRenderer(this);
-		out.setPos(0.0F, -6.0F, -1.0F);
-		pult.addChild(out);
-		setRotationAngle(out, -1.309F, 0.0F, 0.0F);
-		out.texOffs(0, 0).addBox(-1.0F, -6.0F, 0.0F, 2.0F, 6.0F, 2.0F, 0.0F, false);
-		out.texOffs(42, 0).addBox(-3.0F, -12.0F, 0.0F, 6.0F, 6.0F, 4.0F, 0.0F, false);
-
-		bullet = new ModelRenderer(this);
-		bullet.setPos(0.0F, -9.0F, 1.0F);
-		out.addChild(bullet);
-		setRotationAngle(bullet, 1.5708F, 0.0F, 0.0F);
-		bullet.texOffs(0, 45).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, 0.0F, false);
-		bullet.texOffs(0, 53).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, 0.5F, false);
+public CabbagePultModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.cabbage = root.getChild("cabbage");
+		this.dicoration = root.getChild("dicoration");
+		this.pult = root.getChild("pult");
+		this.out = root.getChild("out");
+		this.bullet = root.getChild("bullet");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition cabbage_pd = total_pd.addOrReplaceChild("cabbage",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-7.0F, -1.0F, -7.0F, 14.0F, 1.0F, 14.0F)
+				.texOffs(4, 47).addBox(-6.0F, -0.1F, -6.0F, 12.0F, 1.0F, 12.0F)
+				.texOffs(0, 28).addBox(-4.5F, -8.0F, -4.5F, 9.0F, 8.0F, 9.0F)
+				.texOffs(32, 20).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 1.0F, 8.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition dicoration_pd = cabbage_pd.addOrReplaceChild("dicoration",
+			CubeListBuilder.create()
+				.texOffs(0, 15).addBox(-5.0F, -7.0F, -5.0F, 10.0F, 3.0F, 10.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition pult_pd = total_pd.addOrReplaceChild("pult",
+			CubeListBuilder.create()
+				.texOffs(8, 0).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 7.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, -9.0F, 0.0F, -0.4363F, 0.0F, 0.0F));
+		PartDefinition out_pd = pult_pd.addOrReplaceChild("out",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-1.0F, -6.0F, 0.0F, 2.0F, 6.0F, 2.0F)
+				.texOffs(42, 0).addBox(-3.0F, -12.0F, 0.0F, 6.0F, 6.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -6.0F, -1.0F, -1.309F, 0.0F, 0.0F));
+		PartDefinition bullet_pd = out_pd.addOrReplaceChild("bullet",
+			CubeListBuilder.create()
+				.texOffs(0, 45).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F)
+				.texOffs(0, 53).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.5F)),
+			PartPose.offsetAndRotation(0.0F, -9.0F, 1.0F, 1.5708F, 0.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
 
 	@Override
 	public void setupAnim(CabbagePultEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		if(entity.getAttackTime() > 0) {
 			float percent = 1 - entity.getAttackTime() * 1.0F / entity.getPultAnimTime();
-			pult.xRot = (1F - MathHelper.abs(MathHelper.cos(percent * 3.14159F))) * 1.5F;
+			pult.xRot = (1F - Mth.abs(Mth.cos(percent * 3.14159F))) * 1.5F;
 			this.bullet.visible = (percent < 0.5);
 		} else {
-			pult.xRot = MathHelper.sin(ageInTicks / 10) / 8;
+			pult.xRot = Mth.sin(ageInTicks / 10) / 8;
 			this.bullet.visible = true;
 		}
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 

@@ -3,104 +3,115 @@ package com.hungteen.pvz.client.model.entity.zombie.pool;
 import com.hungteen.pvz.api.interfaces.IBodyEntity;
 import com.hungteen.pvz.client.model.entity.zombie.PVZZombieModel;
 import com.hungteen.pvz.common.entity.zombie.pool.PogoZombieEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class PogoZombieModel extends PVZZombieModel<PogoZombieEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer zombie;
-	private final ModelRenderer up;
-	private final ModelRenderer body;
-	private final ModelRenderer left_hand;
-	private final ModelRenderer right_hand;
-	private final ModelRenderer head;
-	private final ModelRenderer bone3;
-	private final ModelRenderer left_leg;
-	private final ModelRenderer right_leg;
-	private final ModelRenderer pogo;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "pogo_zombie"), "main");
 
-	public PogoZombieModel() {
-		texWidth = 128;
-		texHeight = 128;
+	private final ModelPart total;
+	private final ModelPart zombie;
+	private final ModelPart up;
+	private final ModelPart body;
+	private final ModelPart left_hand;
+	private final ModelPart right_hand;
+	private final ModelPart head;
+	private final ModelPart bone3;
+	private final ModelPart left_leg;
+	private final ModelPart right_leg;
+	private final ModelPart pogo;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 2.0F);
-		setRotationAngle(total, 0.0873F, 0.0F, 0.0F);
-		
 
-		zombie = new ModelRenderer(this);
-		zombie.setPos(0.0F, -6.0F, 5.0F);
-		total.addChild(zombie);
-		
 
-		up = new ModelRenderer(this);
-		up.setPos(0.0F, -24.0F, 0.0F);
-		zombie.addChild(up);
-		
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, -7.0F, 0.0F);
-		up.addChild(body);
-		body.texOffs(80, 96).addBox(-8.0F, -17.0F, -4.0F, 16.0F, 24.0F, 8.0F, 0.0F, false);
-
-		left_hand = new ModelRenderer(this);
-		left_hand.setPos(12.0F, -20.0F, 0.0F);
-		up.addChild(left_hand);
-		setRotationAngle(left_hand, -0.4363F, 0.0873F, 0.0F);
-		left_hand.texOffs(104, 62).addBox(-4.0F, -4.0F, -3.0F, 6.0F, 24.0F, 6.0F, 0.0F, false);
-
-		right_hand = new ModelRenderer(this);
-		right_hand.setPos(-12.0F, -20.0F, 0.0F);
-		up.addChild(right_hand);
-		setRotationAngle(right_hand, -0.4363F, -0.0873F, 0.0F);
-		right_hand.texOffs(103, 26).addBox(-2.0F, -4.0F, -3.0F, 6.0F, 24.0F, 6.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -24.0F, 0.0F);
-		up.addChild(head);
-		head.texOffs(20, 100).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 14.0F, 14.0F, 0.0F, false);
-
-		bone3 = new ModelRenderer(this);
-		bone3.setPos(0.0F, -3.091F, -8.0834F);
-		head.addChild(bone3);
-		bone3.texOffs(76, 12).addBox(-8.0F, -5.2921F, -0.2749F, 1.0F, 1.0F, 10.0F, 0.0F, false);
-		bone3.texOffs(105, 12).addBox(7.0F, -5.2921F, -0.2749F, 1.0F, 1.0F, 10.0F, 0.0F, false);
-		bone3.texOffs(56, 18).addBox(-7.0F, -5.2921F, -0.2749F, 2.0F, 1.0F, 1.0F, 0.0F, false);
-		bone3.texOffs(36, 14).addBox(5.0F, -5.2921F, -0.2749F, 2.0F, 1.0F, 1.0F, 0.0F, false);
-		bone3.texOffs(16, 21).addBox(-1.0F, -5.2921F, -0.2749F, 2.0F, 1.0F, 1.0F, 0.0F, false);
-		bone3.texOffs(20, 4).addBox(-5.0F, -6.2921F, -0.2749F, 4.0F, 3.0F, 1.0F, 0.0F, false);
-		bone3.texOffs(2, 10).addBox(1.0F, -6.2921F, -0.2749F, 4.0F, 3.0F, 1.0F, 0.0F, false);
-
-		left_leg = new ModelRenderer(this);
-		left_leg.setPos(4.0F, -24.0F, 0.0F);
-		zombie.addChild(left_leg);
-		setRotationAngle(left_leg, -0.4363F, -0.2618F, 0.0F);
-		left_leg.texOffs(58, 62).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 24.0F, 6.0F, 0.0F, false);
-
-		right_leg = new ModelRenderer(this);
-		right_leg.setPos(-4.0F, -24.0F, 0.0F);
-		zombie.addChild(right_leg);
-		setRotationAngle(right_leg, -0.4363F, 0.2618F, 0.0F);
-		right_leg.texOffs(67, 27).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 24.0F, 6.0F, 0.0F, false);
-
-		pogo = new ModelRenderer(this);
-		pogo.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(pogo);
-		pogo.texOffs(24, 85).addBox(-1.0F, -10.0F, -6.0F, 2.0F, 10.0F, 2.0F, 0.0F, false);
-		pogo.texOffs(36, 66).addBox(-2.0F, -22.0F, -7.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
-		pogo.texOffs(32, 32).addBox(-3.0F, -38.0F, -8.0F, 6.0F, 16.0F, 6.0F, 0.0F, false);
-		pogo.texOffs(0, 87).addBox(3.0F, -34.0F, -6.0F, 9.0F, 2.0F, 2.0F, 0.0F, false);
-		pogo.texOffs(6, 51).addBox(-8.0F, -8.0F, -6.0F, 7.0F, 2.0F, 2.0F, 0.0F, false);
-		pogo.texOffs(2, 67).addBox(1.0F, -8.0F, -6.0F, 7.0F, 2.0F, 2.0F, 0.0F, false);
-		pogo.texOffs(4, 37).addBox(-12.0F, -34.0F, -6.0F, 9.0F, 2.0F, 2.0F, 0.0F, false);
+public PogoZombieModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.zombie = root.getChild("zombie");
+		this.up = root.getChild("up");
+		this.body = root.getChild("body");
+		this.left_hand = root.getChild("left_hand");
+		this.right_hand = root.getChild("right_hand");
+		this.head = root.getChild("head");
+		this.bone3 = root.getChild("bone3");
+		this.left_leg = root.getChild("left_leg");
+		this.right_leg = root.getChild("right_leg");
+		this.pogo = root.getChild("pogo");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, 24.0F, 2.0F, 0.0873F, 0.0F, 0.0F));
+		PartDefinition zombie_pd = total_pd.addOrReplaceChild("zombie",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -6.0F, 5.0F));
+		PartDefinition up_pd = zombie_pd.addOrReplaceChild("up",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition body_pd = up_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(80, 96).addBox(-8.0F, -17.0F, -4.0F, 16.0F, 24.0F, 8.0F),
+			PartPose.offset(0.0F, -7.0F, 0.0F));
+		PartDefinition left_hand_pd = up_pd.addOrReplaceChild("left_hand",
+			CubeListBuilder.create()
+				.texOffs(104, 62).addBox(-4.0F, -4.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+			PartPose.offsetAndRotation(12.0F, -20.0F, 0.0F, -0.4363F, 0.0873F, 0.0F));
+		PartDefinition right_hand_pd = up_pd.addOrReplaceChild("right_hand",
+			CubeListBuilder.create()
+				.texOffs(103, 26).addBox(-2.0F, -4.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+			PartPose.offsetAndRotation(-12.0F, -20.0F, 0.0F, -0.4363F, -0.0873F, 0.0F));
+		PartDefinition head_pd = up_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(20, 100).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 14.0F, 14.0F),
+			PartPose.offset(0.0F, -24.0F, 0.0F));
+		PartDefinition bone3_pd = head_pd.addOrReplaceChild("bone3",
+			CubeListBuilder.create()
+				.texOffs(76, 12).addBox(-8.0F, -5.2921F, -0.2749F, 1.0F, 1.0F, 10.0F)
+				.texOffs(105, 12).addBox(7.0F, -5.2921F, -0.2749F, 1.0F, 1.0F, 10.0F)
+				.texOffs(56, 18).addBox(-7.0F, -5.2921F, -0.2749F, 2.0F, 1.0F, 1.0F)
+				.texOffs(36, 14).addBox(5.0F, -5.2921F, -0.2749F, 2.0F, 1.0F, 1.0F)
+				.texOffs(16, 21).addBox(-1.0F, -5.2921F, -0.2749F, 2.0F, 1.0F, 1.0F)
+				.texOffs(20, 4).addBox(-5.0F, -6.2921F, -0.2749F, 4.0F, 3.0F, 1.0F)
+				.texOffs(2, 10).addBox(1.0F, -6.2921F, -0.2749F, 4.0F, 3.0F, 1.0F),
+			PartPose.offset(0.0F, -3.091F, -8.0834F));
+		PartDefinition left_leg_pd = zombie_pd.addOrReplaceChild("left_leg",
+			CubeListBuilder.create()
+				.texOffs(58, 62).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+			PartPose.offsetAndRotation(4.0F, -24.0F, 0.0F, -0.4363F, -0.2618F, 0.0F));
+		PartDefinition right_leg_pd = zombie_pd.addOrReplaceChild("right_leg",
+			CubeListBuilder.create()
+				.texOffs(67, 27).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 24.0F, 6.0F),
+			PartPose.offsetAndRotation(-4.0F, -24.0F, 0.0F, -0.4363F, 0.2618F, 0.0F));
+		PartDefinition pogo_pd = total_pd.addOrReplaceChild("pogo",
+			CubeListBuilder.create()
+				.texOffs(24, 85).addBox(-1.0F, -10.0F, -6.0F, 2.0F, 10.0F, 2.0F)
+				.texOffs(36, 66).addBox(-2.0F, -22.0F, -7.0F, 4.0F, 12.0F, 4.0F)
+				.texOffs(32, 32).addBox(-3.0F, -38.0F, -8.0F, 6.0F, 16.0F, 6.0F)
+				.texOffs(0, 87).addBox(3.0F, -34.0F, -6.0F, 9.0F, 2.0F, 2.0F)
+				.texOffs(6, 51).addBox(-8.0F, -8.0F, -6.0F, 7.0F, 2.0F, 2.0F)
+				.texOffs(2, 67).addBox(1.0F, -8.0F, -6.0F, 7.0F, 2.0F, 2.0F)
+				.texOffs(4, 37).addBox(-12.0F, -34.0F, -6.0F, 9.0F, 2.0F, 2.0F),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 128, 128);
+	}
+
 
 	@Override
 	public void setupAnim(PogoZombieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
@@ -142,44 +153,44 @@ public class PogoZombieModel extends PVZZombieModel<PogoZombieEntity> {
 	}
 	
 	@Override
-	public void renderBody(IBodyEntity entity, MatrixStack stack, IVertexBuilder buffer, int packedLight,
+	public void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight,
 			int packedOverlay) {
 		this.pogo.visible = false;
 		super.renderBody(entity, stack, buffer, packedLight, packedOverlay);
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftHand() {
+	public ModelPart getZombieLeftHand() {
 		return this.left_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightHand() {
+	public ModelPart getZombieRightHand() {
 		return this.right_hand;
 	}
 
 	@Override
-	public ModelRenderer getZombieLeftLeg() {
+	public ModelPart getZombieLeftLeg() {
 		return this.left_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieRightLeg() {
+	public ModelPart getZombieRightLeg() {
 		return this.right_leg;
 	}
 
 	@Override
-	public ModelRenderer getZombieHead() {
+	public ModelPart getZombieHead() {
 		return this.head;
 	}
 	
 	@Override
-	public ModelRenderer getZombieUpBody() {
+	public ModelPart getZombieUpBody() {
 		return this.up;
 	}
 
 	@Override
-	public ModelRenderer getZombieWholeBody() {
+	public ModelPart getZombieWholeBody() {
 		return this.total;
 	}
 	

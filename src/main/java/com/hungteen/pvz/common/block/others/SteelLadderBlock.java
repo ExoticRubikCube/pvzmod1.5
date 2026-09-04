@@ -1,15 +1,13 @@
 package com.hungteen.pvz.common.block.others;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LadderBlock;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -20,13 +18,13 @@ public class SteelLadderBlock extends LadderBlock {
 	public static final float UP_SPEED = 0.01F;
 	
 	public SteelLadderBlock() {
-		super(Block.Properties.copy(Blocks.LADDER).strength(6F).harvestTool(ToolType.PICKAXE));
+		super(Block.Properties.copy(Blocks.LADDER).strength(6F));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemStack, @Nullable IBlockReader blockReader, List<ITextComponent> textComponents, ITooltipFlag tooltipFlag) {
+	public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter blockReader, List<Component> textComponents, TooltipFlag tooltipFlag) {
 		super.appendHoverText(itemStack, blockReader, textComponents, tooltipFlag);
-		textComponents.add(new TranslationTextComponent("tooltip.pvz.steel_ladder").withStyle(TextFormatting.ITALIC));
+		textComponents.add(Component.translatable("tooltip.pvz.steel_ladder").withStyle(ChatFormatting.ITALIC));
 	}
 
 }

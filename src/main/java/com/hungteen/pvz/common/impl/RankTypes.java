@@ -4,8 +4,8 @@ import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.types.IRankType;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.TagKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +48,13 @@ public class RankTypes {
 		private static final List<IRankType> RANKS = new ArrayList<>();
 		private final String name;
 		private final Supplier<Item> cardSuppiler;
-		private final Supplier<ITag.INamedTag<Item>> cardTagSuppiler;
-		private final Supplier<ITag.INamedTag<Item>> materialSuppiler;
+		private final Supplier<TagKey<Item>> cardTagSuppiler;
+		private final Supplier<TagKey<Item>> materialSuppiler;
 		private final int enchantPoint;
 		private final int weight;
 		private final int value;
 
-		public RankType(String name, int enchantPoint, int weight, int value, Supplier<Item> sup, Supplier<ITag.INamedTag<Item>> sup1, Supplier<ITag.INamedTag<Item>> sup2) {
+		public RankType(String name, int enchantPoint, int weight, int value, Supplier<Item> sup, Supplier<TagKey<Item>> sup1, Supplier<TagKey<Item>> sup2) {
 			this.name = name;
 			this.enchantPoint = enchantPoint;
 			this.weight = weight;
@@ -75,12 +75,12 @@ public class RankTypes {
 		}
 
 		@Override
-		public ITag.INamedTag<Item> getCardTag() {
+		public TagKey<Item> getCardTag() {
 			return this.cardTagSuppiler.get();
 		}
 
 		@Override
-		public ITag.INamedTag<Item> getMaterial() {
+		public TagKey<Item> getMaterial() {
 			return this.materialSuppiler.get();
 		}
 

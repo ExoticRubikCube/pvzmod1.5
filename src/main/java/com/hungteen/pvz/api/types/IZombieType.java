@@ -15,7 +15,7 @@ public interface IZombieType extends IPAZType {
 	/**
 	 * get (zombie type, zombie entity interface) pair.
 	 */
-//	Optional<Pair<MobEntity, IZombieEntity>> getZombieEntityType();
+//	Optional<Pair<Mob, IZombieEntity>> getZombieEntityType();
 
 	/**
 	 * get the entity model of plant (Client Side). 

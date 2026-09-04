@@ -10,15 +10,15 @@ import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.impl.*;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.block.Block;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -45,7 +45,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	/* get type by name */
 	private static final Map<String, IPlantType> BY_NAME = new HashMap<>();
 	/* entity type -> plant type */
-	private static final Map<EntityType<? extends CreatureEntity>, IPlantType> BY_ENTITY_TYPE = new HashMap<>();
+	private static final Map<EntityType<? extends Mob>, IPlantType> BY_ENTITY_TYPE = new HashMap<>();
 	/* other data */
 	protected IEssenceType plantEssence = EssenceTypes.APPEASE;
 	protected Supplier<IPlantModel<? extends IPlantEntity>> plantModelSupplier;
@@ -141,7 +141,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	 */
 	protected ResourceLocation genEntityResource() {
 		final String sep = this.getEssence().toString();
-		return new ResourceLocation(this.getModID(), "textures/entity/plant/" + sep + "/" + this.toString() + ".png");
+		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/plant/" + sep + "/" + this.toString() + ".png");
 	}
 	
 	@Override
@@ -216,7 +216,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		protected IRankType rankType = RankTypes.WHITE;
 		protected ResourceLocation entityRenderResource;
 		protected ResourceLocation lootTable;
-		protected Supplier<EntityType<? extends CreatureEntity>> entitySup;
+		protected Supplier<EntityType<? extends Mob>> entitySup;
 		protected Supplier<? extends Item> summonCardSup;
 		protected Supplier<? extends Item> enjoyCardSup;
 		protected List<ISkillType> skillTypes = new ArrayList<>();
@@ -261,7 +261,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 			return this;
 		}
 
-		public PlantFeatures entityType(Supplier<EntityType<? extends CreatureEntity>> sup) {
+		public PlantFeatures entityType(Supplier<EntityType<? extends Mob>> sup) {
 			this.entitySup = sup;
 			return this;
 		}
@@ -282,7 +282,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		}
 
 		public PlantFeatures cdSkill(Collection<ISkillType> skills){
-			this.skillTypes.addAll(Arrays.asList(SkillTypes.FAST_CD));
+			this.skillTypes.addAll(List.of(SkillTypes.FAST_CD));
 			return this.skill(skills);
 		}
 
@@ -292,7 +292,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		}
 
 		public PlantFeatures commonSunSkill(Collection<ISkillType> skills){
-			this.skillTypes.addAll(Arrays.asList(SkillTypes.LESS_SUN));
+			this.skillTypes.addAll(List.of(SkillTypes.LESS_SUN));
 			return this.commonSkill(skills);
 		}
 
@@ -351,7 +351,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 
 	}
 
-	public static class PlantTypeLoader extends JsonReloadListener {
+	public static class PlantTypeLoader extends SimpleJsonResourceReloadListener {
 
 		public static final String NAME = "plant";
 		private static final Gson GSON = (new GsonBuilder()).create();
@@ -361,10 +361,10 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		}
 
 		@Override
-		protected void apply(Map<ResourceLocation, JsonElement> map, IResourceManager manager, IProfiler profiler) {
+		protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
 			map.forEach((res, jsonElement) -> {
 				try {
-					JsonObject jsonObject = JSONUtils.convertToJsonObject(jsonElement, NAME);
+					JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, NAME);
 					jsonObject.entrySet().forEach(entry -> {
 						//find modId.
 						final String modId = entry.getKey();
@@ -380,18 +380,18 @@ public abstract class PlantType extends PAZType implements IPlantType {
 									final JsonObject obj = element1.getAsJsonObject();
 									final PlantType type = (PlantType) opt.get();
 									//sun amount.
-									final int sunCost = JSONUtils.getAsInt(obj, StringUtil.JSON_SUN_COST, -1);
+									final int sunCost = GsonHelper.getAsInt(obj, StringUtil.JSON_SUN_COST, -1);
 									if(sunCost >= 0){
 										type.sunCost(sunCost);
 									}
 									//cool down.
-									final String coolDown = JSONUtils.getAsString(obj, StringUtil.JSON_COOL_DOWN, "");
+									final String coolDown = GsonHelper.getAsString(obj, StringUtil.JSON_COOL_DOWN, "");
 									final ICoolDown cd = CoolDowns.getCDByName(coolDown);
 									if(cd != null){
 										type.cd(cd);
 									}
 									//required level.
-									final int requiredLevel = JSONUtils.getAsInt(obj, StringUtil.JSON_REQUIRE_LEVEL, 0);
+									final int requiredLevel = GsonHelper.getAsInt(obj, StringUtil.JSON_REQUIRE_LEVEL, 0);
 									if(requiredLevel > 0){
 										type.requiredLevel(requiredLevel);
 									}

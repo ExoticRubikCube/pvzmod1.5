@@ -10,24 +10,24 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 public class KernelPultEntity extends PlantPultEntity {
 
-	private static final DataParameter<Integer> CURRENT_BULLET = EntityDataManager.defineId(KernelPultEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> CURRENT_BULLET = SynchedEntityData.defineId(KernelPultEntity.class, EntityDataSerializers.INT);
 	private static final int BUTTER_CHANCE = 10;
 	private KernelPultEntity upgradeEntity;
 	
-	public KernelPultEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public KernelPultEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -41,17 +41,17 @@ public class KernelPultEntity extends PlantPultEntity {
 	public void onPlantUpgrade(PVZPlantEntity plantEntity) {
 		super.onPlantUpgrade(plantEntity);
 		if(this.upgradeEntity != null) {
-			this.upgradeEntity.remove();
+			this.upgradeEntity.remove(RemovalReason.DISCARDED);
 		}
 	}
 	
 	@Override
-	public boolean canBeUpgrade(PlayerEntity player) {
+	public boolean canBeUpgrade(Player player) {
 		this.upgradeEntity = this.getNearByPult(player);
 		return super.canBeUpgrade(player) && EntityUtil.isEntityValid(this.upgradeEntity);
 	}
 	
-	private KernelPultEntity getNearByPult(PlayerEntity player){
+	private KernelPultEntity getNearByPult(Player player){
 		final float range = 1.5F;
 		List<KernelPultEntity> list = level.getEntitiesOfClass(KernelPultEntity.class, EntityUtil.getEntityAABB(this, range, range), pult -> {
 			return ! pult.is(this) && pult.getPlantType() == PVZPlants.KERNEL_PULT && ! EntityUtil.canAttackEntity(pult, player);
@@ -100,8 +100,8 @@ public class KernelPultEntity extends PlantPultEntity {
 		return this.getSkillValue(SkillTypes.MORE_KERNEL_DAMAGE);
 	}
 
-	public EffectInstance getButterEffect() {
-		return new EffectInstance(EffectRegister.BUTTER_EFFECT.get(), this.getButterDuration(), 1, false, false);
+	public MobEffectInstance getButterEffect() {
+		return new MobEffectInstance(EffectRegister.BUTTER_EFFECT.get(), this.getButterDuration(), 1, false, false);
 	}
 	
 	public int getButterDuration() {
@@ -109,12 +109,12 @@ public class KernelPultEntity extends PlantPultEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8F, 1F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8F, 1F);
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("current_bullet_type")) {
 			this.setCurrentBullet(CornTypes.values()[compound.getInt("current_bullet_type")]);
@@ -122,7 +122,7 @@ public class KernelPultEntity extends PlantPultEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("current_bullet_type", this.getCurrentBullet().ordinal());
 	}

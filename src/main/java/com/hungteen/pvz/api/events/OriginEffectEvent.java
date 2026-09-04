@@ -1,7 +1,7 @@
 package com.hungteen.pvz.api.events;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 
@@ -11,10 +11,10 @@ import net.minecraftforge.eventbus.api.Event;
 @Cancelable
 public class OriginEffectEvent extends Event {
 
-    private final World world;
+    private final Level world;
     private final BlockPos pos;
 
-    public OriginEffectEvent(World world, BlockPos pos){
+    public OriginEffectEvent(Level world, BlockPos pos){
         this.world = world;
         this.pos = pos;
     }
@@ -23,7 +23,7 @@ public class OriginEffectEvent extends Event {
         return pos;
     }
 
-    public World getWorld() {
+    public Level getWorld() {
         return world;
     }
 

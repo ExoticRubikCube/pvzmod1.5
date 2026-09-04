@@ -6,16 +6,16 @@ import com.hungteen.pvz.client.render.layer.fullskin.SunLightLayer;
 import com.hungteen.pvz.common.entity.creature.FoodieZombieEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class FoodieZombieRender extends PVZCreatureRender<FoodieZombieEntity>{
 
-	public FoodieZombieRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new FoodieZombieModel(), 0f);
+	public FoodieZombieRender(EntityRendererProvider.Context context) {
+		super(context, new FoodieZombieModel(context.bakeLayer(FoodieZombieModel.LAYER)), 0f);
 		this.addLayer(new SunLightLayer<>(this));
 	}
 	

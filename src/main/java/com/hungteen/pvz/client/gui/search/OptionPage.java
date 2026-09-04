@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import com.hungteen.pvz.client.gui.screen.AbstractOptionScreen;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.ToggleWidget;
+import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,8 +24,8 @@ public class OptionPage {
 	 private OptionWidget hoveredButton;
 	private List<SearchOption> optionList;
 	private Minecraft mc;
-	private ToggleWidget forwardButton;
-	private ToggleWidget backButton;
+	private StateSwitchingButton forwardButton;
+	private StateSwitchingButton backButton;
 	private int totalPages;
 	private int currentPage;
 	private SearchOption lastClickedButton;
@@ -41,21 +41,23 @@ public class OptionPage {
 		for (int i = 0; i < this.buttons.size(); ++i) {
 			int xx = 2 + x + this.xOffset + this.size * (i % NUM_PER_ROW);
 			int yy = 2 + y + this.yOffset + this.size * (i / NUM_PER_ROW);
-			this.buttons.get(i).setPosition(xx, yy);
+			OptionWidget button = this.buttons.get(i);
+			button.x = xx;
+			button.y = yy;
 		}
 		int width = 150;
 		int height = 170;
 		int dis = 90;  
 		int side = (width - dis) / 2;
-		this.forwardButton = new ToggleWidget(x + width /2 + side, y + height, 12, 17, false);
+		this.forwardButton = new StateSwitchingButton(x + width /2 + side, y + height, 12, 17, false);
 		this.forwardButton.initTextureValues(1, 208, 13, 18, OptionSearchGui.TEXTURE);
-		this.backButton = new ToggleWidget(x + width / 2 - side - 13, y + height, 12, 17, true);
+		this.backButton = new StateSwitchingButton(x + width / 2 - side - 13, y + height, 12, 17, true);
 		this.backButton.initTextureValues(1, 208, 13, 18, OptionSearchGui.TEXTURE);
 		this.forwardButton.visible = true;
 		this.backButton.visible = true;
 	}
 
-	public void render(MatrixStack stack, int x, int y, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int x, int y, int mouseX, int mouseY, float partialTicks) {
 		if (this.totalPages > 1) {
 			String s = (this.currentPage + 1) + "/" + this.totalPages;
 			StringUtil.drawCenteredScaledString(stack, this.mc.font, s, x + 75, y + 175, Colors.WHITE, 1.5f);
@@ -63,7 +65,7 @@ public class OptionPage {
 		this.hoveredButton = null;
 		for (OptionWidget card : this.buttons) {
 			card.render(stack, mouseX, mouseY, partialTicks);
-			if (card.visible && card.isHovered()) {
+			if (card.visible && card.isHoveredOrFocused()) {
 	            this.hoveredButton = card;
 	         }
 		}
@@ -91,7 +93,7 @@ public class OptionPage {
 		}
 	}
 
-	public void renderTooltip(MatrixStack stack, int mouseX, int mouseY) {
+	public void renderTooltip(PoseStack stack, int mouseX, int mouseY) {
 		if (this.mc.screen != null && this.hoveredButton != null) {
 			this.mc.screen.renderComponentTooltip(stack, this.hoveredButton.getToolTipText(this.mc.screen),
 					mouseX, mouseY);

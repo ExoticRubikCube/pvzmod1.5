@@ -3,48 +3,57 @@ package com.hungteen.pvz.data.loot;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
-import net.minecraft.advancements.criterion.EnchantmentPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.loot.ConstantRange;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTable.Builder;
-import net.minecraft.loot.conditions.BlockStateProperty;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.MatchTool;
-import net.minecraft.loot.conditions.TableBonus;
+
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class PVZBlockLootTables extends BlockLootTables {
+public class PVZBlockLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
 
 	private final Set<Block> knownBlocks = new HashSet<>();
-	private ILootCondition.IBuilder tmpBuilder;
-	private static final ILootCondition.IBuilder HAS_SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item()
-			.hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
-//	private static final ILootCondition.IBuilder HAS_NO_SILK_TOUCH = HAS_SILK_TOUCH.invert();
-	private static final ILootCondition.IBuilder HAS_SHEARS = MatchTool
+	private final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
+	private LootItemCondition.Builder tmpBuilder;
+	private static final LootItemCondition.Builder HAS_SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item()
+			.hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
+	private static final LootItemCondition.Builder HAS_SHEARS = MatchTool
 			.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS));
-	private static final ILootCondition.IBuilder HAS_SHEARS_OR_SILK_TOUCH = HAS_SHEARS.or(HAS_SILK_TOUCH);
-	private static final ILootCondition.IBuilder HAS_NO_SHEARS_OR_SILK_TOUCH = HAS_SHEARS_OR_SILK_TOUCH.invert();
+	private static final LootItemCondition.Builder HAS_SHEARS_OR_SILK_TOUCH = HAS_SHEARS.or(HAS_SILK_TOUCH);
+	private static final LootItemCondition.Builder HAS_NO_SHEARS_OR_SILK_TOUCH = HAS_SHEARS_OR_SILK_TOUCH.invert();
 	private static final float[] NORMAL_LEAVES_SAPLING_CHANCES = new float[] { 0.05F, 0.0625F, 0.083333336F, 0.1F };
-//	private static final float[] JUNGLE_LEAVES_SAPLING_CHANGES = new float[]{0.025F, 0.027777778F, 0.03125F, 0.041666668F, 0.1F};
 
 	@Override
-	protected void addTables() {
+	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		final Set<Block> noLootBlocks = new HashSet<>(Arrays.asList(
 				BlockRegister.LILY_PAD.get(), BlockRegister.FLOWER_POT.get(),
 				BlockRegister.SLOT_MACHINE.get()
@@ -67,8 +76,8 @@ public class PVZBlockLootTables extends BlockLootTables {
 				createCropDrops(BlockRegister.CORN.get(), ItemRegister.CORN.get(), this.tmpBuilder));
 
 		// leaves
-		this.add(BlockRegister.NUT_LEAVES.get(), (p_218506_0_) -> {
-			return createLeavesDrops(p_218506_0_, BlockRegister.NUT_SAPLING.get(), ItemRegister.NUT.get(), NORMAL_LEAVES_SAPLING_CHANCES);
+		this.add(BlockRegister.NUT_LEAVES.get(), (block) -> {
+			return createLeavesDrops(block, BlockRegister.NUT_SAPLING.get(), ItemRegister.NUT.get(), NORMAL_LEAVES_SAPLING_CHANCES);
 		});
 
 		// misc
@@ -76,41 +85,86 @@ public class PVZBlockLootTables extends BlockLootTables {
 		this.dropOther(BlockRegister.GOLD_TILE2.get(), Blocks.GOLD_BLOCK);
 		this.dropOther(BlockRegister.GOLD_TILE3.get(), Blocks.GOLD_BLOCK);
 
+		// no-loot blocks get empty loot table
+		for (Block block : noLootBlocks) {
+			this.lootTables.put(block.getLootTable(), LootTable.lootTable());
+		}
+
 		// other blocks are drop itself
 		ForgeRegistries.BLOCKS.forEach(block -> {
-			if (block.getRegistryName().getNamespace().equals(PVZMod.MOD_ID) && !noLootBlocks.contains(block) && !this.knownBlocks.contains(block)) {
+			ResourceLocation name = ForgeRegistries.BLOCKS.getKey(block);
+			if (name != null && PVZMod.MOD_ID.equals(name.getNamespace())
+					&& !noLootBlocks.contains(block) && !this.knownBlocks.contains(block)) {
 				this.dropSelf(block);
 			}
 		});
+
+		this.lootTables.forEach(consumer);
 	}
 
-	@Override
-	protected Iterable<Block> getKnownBlocks() {
-		return this.knownBlocks;
+	protected void add(Block block, LootTable.Builder builder) {
+		this.lootTables.put(block.getLootTable(), builder);
+		this.knownBlocks.add(block);
 	}
 
-	@Override
-	protected void add(Block p_218507_1_, Builder p_218507_2_) {
-		super.add(p_218507_1_, p_218507_2_);
-		this.knownBlocks.add(p_218507_1_);
+	protected void add(Block block, Function<Block, LootTable.Builder> factory) {
+		this.add(block, factory.apply(block));
 	}
 
-	private static Builder createCropDrops(Block block, Item crops, ILootCondition.IBuilder bb) {
+	protected void dropSelf(Block block) {
+		this.dropOther(block, block);
+	}
+
+	protected void dropOther(Block block, ItemLike like) {
+		this.add(block, LootTable.lootTable().withPool(LootPool.lootPool()
+				.setRolls(ConstantValue.exactly(1.0F))
+				.add(LootItem.lootTableItem(like).when(ExplosionCondition.survivesExplosion()))));
+	}
+
+	protected LootTable.Builder createOreDrop(Block block, Item dropItem) {
+		return LootTable.lootTable()
+				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+						.add(LootItem.lootTableItem(block).when(HAS_SILK_TOUCH)
+								.otherwise(LootItem.lootTableItem(dropItem)
+										.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
+										.apply(ApplyExplosionDecay.explosionDecay()))));
+	}
+
+	private LootTable.Builder createCropDrops(Block block, Item crops, LootItemCondition.Builder bb) {
 		return createCropDrops(block, crops, block.asItem(), bb);
 	}
 
-	private ILootCondition.IBuilder getAgeBuilder(Block block, int age) {
-		return BlockStateProperty.hasBlockStateProperties(block)
-				.setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CropsBlock.AGE, age));
+	private static LootTable.Builder createCropDrops(Block block, Item crops, Item seeds,
+			LootItemCondition.Builder matureCondition) {
+		return LootTable.lootTable()
+				.withPool(LootPool.lootPool()
+						.add(LootItem.lootTableItem(crops).when(matureCondition)
+								.otherwise(LootItem.lootTableItem(seeds)))
+						.apply(ApplyExplosionDecay.explosionDecay()))
+				.withPool(LootPool.lootPool().when(matureCondition)
+						.add(LootItem.lootTableItem(seeds).apply(
+								ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))));
 	}
 
-	protected static LootTable.Builder createLeavesDrops(Block p_218526_0_, Block p_218526_1_,
-			Item drop, float... p_218526_2_) {
-		return createLeavesDrops(p_218526_0_, p_218526_1_, p_218526_2_)
-				.withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).when(HAS_NO_SHEARS_OR_SILK_TOUCH)
-						.add(applyExplosionCondition(p_218526_0_, ItemLootEntry.lootTableItem(drop))
-								.when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.01F, 0.015F,
-										0.02F, 0.025F, 0.03F))));
+	private LootItemCondition.Builder getAgeBuilder(Block block, int age) {
+		return LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+				.setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CropBlock.AGE, age));
+	}
+
+	protected static LootTable.Builder createLeavesDrops(Block leavesBlock, Block saplingBlock,
+			Item drop, float... saplingChances) {
+		return LootTable.lootTable()
+				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+						.add(LootItem.lootTableItem(leavesBlock).when(HAS_SHEARS_OR_SILK_TOUCH)
+								.otherwise(LootItem.lootTableItem(saplingBlock)
+										.when(BonusLevelTableCondition.bonusLevelFlatChance(
+												Enchantments.BLOCK_FORTUNE, saplingChances))
+										.when(ExplosionCondition.survivesExplosion()))))
+				.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_NO_SHEARS_OR_SILK_TOUCH)
+						.add(LootItem.lootTableItem(drop)
+								.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+										0.01F, 0.015F, 0.02F, 0.025F, 0.03F))
+								.when(ExplosionCondition.survivesExplosion())));
 	}
 
 }

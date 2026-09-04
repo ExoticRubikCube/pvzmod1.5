@@ -4,7 +4,7 @@ import com.hungteen.pvz.api.types.ICardPlacement;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.misc.tag.PVZBlockTags;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.tags.BlockTags;
 
 public class Placements {
@@ -14,31 +14,31 @@ public class Placements {
 	public static final ICardPlacement ANY = block -> true;
 	
 	public static final ICardPlacement COMMON = (block) -> {
-		return block.is(PVZBlockTags.PLANT_SUIT_BLOCKS);
+		return block.defaultBlockState().is(PVZBlockTags.PLANT_SUIT_BLOCKS);
 	};
 	
 	public static final ICardPlacement STABLE = (block) -> {
-		return block.is(PVZBlockTags.PLANT_SUIT_BLOCKS) && ! block.is(BlockRegister.LILY_PAD.get());
+		return block.defaultBlockState().is(PVZBlockTags.PLANT_SUIT_BLOCKS) && ! block.defaultBlockState().is(BlockRegister.LILY_PAD.get());
 	};
 	
 	public static final ICardPlacement GOLD = (block) -> {
-		return block.is(PVZBlockTags.GOLD_TILES) || block.is(Blocks.GOLD_BLOCK);
+		return block.defaultBlockState().is(PVZBlockTags.GOLD_TILES) || block.defaultBlockState().is(Blocks.GOLD_BLOCK);
 	};
 	
 	public static final ICardPlacement SAND = (block) -> {
-		return block.is(PVZBlockTags.PLANT_SUIT_BLOCKS) || block.is(BlockTags.SAND);
+		return block.defaultBlockState().is(PVZBlockTags.PLANT_SUIT_BLOCKS) || block.defaultBlockState().is(BlockTags.SAND);
 	};
 	
 	public static final ICardPlacement SHROOM = (block) -> {
-		return block.is(PVZBlockTags.PLANT_SUIT_BLOCKS) || block.is(Blocks.MYCELIUM);
+		return block.defaultBlockState().is(PVZBlockTags.PLANT_SUIT_BLOCKS) || block.defaultBlockState().is(Blocks.MYCELIUM);
 	};
 	
 	public static final ICardPlacement LILY_PAD = (block) -> {
-		return block.is(BlockRegister.LILY_PAD.get());
+		return block.defaultBlockState().is(BlockRegister.LILY_PAD.get());
 	};
 	
 	public static final ICardPlacement WATER = (block) -> {
-		return block.is(Blocks.WATER);
+		return block.defaultBlockState().is(Blocks.WATER);
 	};
 	
 }

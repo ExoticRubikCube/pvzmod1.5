@@ -4,10 +4,10 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.impl.plant.PlantType;
 import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toclient.DatapackPacket;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 public class PVZDataPackManager {
 
@@ -22,19 +22,13 @@ public class PVZDataPackManager {
         event.addListener(new TransactionTypeLoader());
     }
 
-    public static void sendSyncPacketsTo(PlayerEntity player){
-        if(player instanceof ServerPlayerEntity) {
-            LotteryTypeLoader.JSONS.entrySet().forEach(entry -> {
-                PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new DatapackPacket(LotteryTypeLoader.NAME, entry.getKey().toString(), entry.getValue().toString()));
-            });
+    public static void sendSyncPacketsTo(Player player){
+        if(player instanceof ServerPlayer) {
+            LotteryTypeLoader.JSONS.forEach((key, value) -> PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new DatapackPacket(LotteryTypeLoader.NAME, key.toString(), value.toString())));
 
-            TransactionTypeLoader.JSONS.entrySet().forEach(entry -> {
-                PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new DatapackPacket(TransactionTypeLoader.NAME, entry.getKey().toString(), entry.getValue().toString()));
-            });
+            TransactionTypeLoader.JSONS.forEach((key, value) -> PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new DatapackPacket(TransactionTypeLoader.NAME, key.toString(), value.toString())));
 
-            ChallengeTypeLoader.JSONS.entrySet().forEach(entry -> {
-                PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new DatapackPacket(ChallengeTypeLoader.NAME, entry.getKey().toString(), entry.getValue().toString()));
-            });
+            ChallengeTypeLoader.JSONS.forEach((key, value) -> PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new DatapackPacket(ChallengeTypeLoader.NAME, key.toString(), value.toString())));
         }
     }
 

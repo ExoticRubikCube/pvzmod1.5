@@ -5,17 +5,17 @@ import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.entity.bullet.MelonEntity;
 import com.hungteen.pvz.common.entity.bullet.MelonEntity.MelonStates;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MelonRender extends EntityBlockRender<MelonEntity> {
 
-	public MelonRender(EntityRendererManager renderManager) {
-		super(renderManager);
+	public MelonRender(EntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Override

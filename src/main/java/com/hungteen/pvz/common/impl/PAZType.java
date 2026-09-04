@@ -8,11 +8,12 @@ import com.hungteen.pvz.api.types.ISkillType;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,7 +31,7 @@ public abstract class PAZType implements IPAZType {
     protected IRankType rankType = RankTypes.WHITE;
     protected ResourceLocation entityRenderResource;
     protected ResourceLocation lootTable;
-    protected Supplier<EntityType<? extends CreatureEntity>> entitySup;
+    protected Supplier<EntityType<? extends Mob>> entitySup;
     protected Supplier<? extends Item> summonCardSup;
     protected Supplier<? extends Item> enjoyCardSup;
     protected List<ISkillType> skills;
@@ -50,8 +51,8 @@ public abstract class PAZType implements IPAZType {
     }
 
     @Override
-    public TranslationTextComponent getText() {
-        return new TranslationTextComponent("entity." + this.getModID() + "." + this.toString());
+    public MutableComponent getText() {
+        return Component.translatable("entity." + this.getModID() + "." + this);
     }
 
     @Override
@@ -80,7 +81,7 @@ public abstract class PAZType implements IPAZType {
     }
 
     @Override
-    public Optional<EntityType<? extends CreatureEntity>> getEntityType() {
+    public Optional<EntityType<? extends Mob>> getEntityType() {
         return this.entitySup == null ? Optional.empty() : Optional.ofNullable(this.entitySup.get());
     }
 
@@ -130,7 +131,7 @@ public abstract class PAZType implements IPAZType {
             if(map.containsKey(plant.getCategoryName())) {
                 map.get(plant.getCategoryName()).add(plant);
             } else {
-                map.put(plant.getCategoryName(), new ArrayList<>(Arrays.asList(plant)));
+                map.put(plant.getCategoryName(), new ArrayList<>(List.of(plant)));
             }
         } else {
             PVZMod.LOGGER.warn("PAZTypeRegister : already add {}.", plant.toString());
@@ -150,14 +151,14 @@ public abstract class PAZType implements IPAZType {
             categoryList.add(Pair.of(l, tmp.getSortPriority()));
         });
         //sort category by priority.
-        Collections.sort(categoryList, new AlgorithmUtil.PairSorter<>());
+        categoryList.sort(new AlgorithmUtil.PairSorter<>());
         //deal with each category list one by one.
         for(Pair<String, Integer> category : categoryList) {
             //get priority category list.
             final List<Pair<T, Integer>> tmp = new ArrayList<>();
             categoryMap.get(category.getFirst()).forEach(l -> tmp.add(Pair.of(l, l.getSortPriority())));
             //sort list by priority.
-            Collections.sort(tmp, new AlgorithmUtil.PairSorter<>());
+            tmp.sort(new AlgorithmUtil.PairSorter<>());
             PVZMod.LOGGER.debug("PAZTypeRegister : sort category [{}] found {} {}.", category.getFirst(), tmp.size(), "types");
             //add to the final result list.
             tmp.forEach(pair -> list.add(pair.getFirst()));
@@ -171,7 +172,7 @@ public abstract class PAZType implements IPAZType {
     /**
      * to update the map from entity type to type.
      */
-    public static <T extends IPAZType> void postInit(List<T> list, Map<EntityType<? extends CreatureEntity>, T>  byEntityType) {
+    public static <T extends IPAZType> void postInit(List<T> list, Map<EntityType<? extends Mob>, T>  byEntityType) {
         list.forEach(type -> {
             type.getEntityType().ifPresent(l -> {
                 byEntityType.put(l, type);

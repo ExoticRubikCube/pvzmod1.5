@@ -62,8 +62,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.PEA_SHOOTER.get())
 			.summonCard(() -> ItemRegister.PEA_SHOOTER_CARD.get())
 			.enjoyCard(() -> ItemRegister.PEA_SHOOTER_ENJOY_CARD.get())
-			.plantModel(() -> PeaShooterModel::new).scale(1F)
-			.commonSkill(Arrays.asList(SkillTypes.PEA_DAMAGE))
+			.plantModel(() -> () -> new PeaShooterModel(PeaShooterModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of(SkillTypes.PEA_DAMAGE))
 	);
 	
 	public static final IPlantType SUN_FLOWER = new PVZPlants("sun_flower", new PlantFeatures()
@@ -72,9 +72,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SUN_FLOWER.get())
 			.summonCard(() -> ItemRegister.SUN_FLOWER_CARD.get())
 			.enjoyCard(() -> ItemRegister.SUN_FLOWER_ENJOY_CARD.get())
-			.plantModel(() -> SunFlowerModel::new).scale(1F)
+			.plantModel(() -> () -> new SunFlowerModel(SunFlowerModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeTo(() -> PVZPlants.TWIN_SUNFLOWER)
-			.commonSkill(Arrays.asList())
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType CHERRY_BOMB = new PVZPlants("cherry_bomb", new PlantFeatures()
@@ -83,8 +83,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.CHERRY_BOMB.get())
 			.summonCard(() -> ItemRegister.CHERRY_BOMB_CARD.get())
 			.enjoyCard(() -> ItemRegister.CHERRY_BOMB_ENJOY_CARD.get())
-			.plantModel(() -> CherryBombModel::new).scale(0.5F)
-			.cdSkill(Arrays.asList(SkillTypes.NORMAL_BOMB_DAMAGE))
+			.plantModel(() -> () -> new CherryBombModel(CherryBombModel.createBodyLayer().bakeRoot())).scale(0.5F)
+			.cdSkill(List.of(SkillTypes.NORMAL_BOMB_DAMAGE))
 	);
 	
 	public static final IPlantType WALL_NUT = new PVZPlants("wall_nut", new PlantFeatures()
@@ -93,8 +93,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.WALL_NUT.get())
 			.summonCard(() -> ItemRegister.WALL_NUT_CARD.get())
 			.enjoyCard(() -> ItemRegister.WALL_NUT_ENJOY_CARD.get())
-			.plantModel(() -> WallNutModel::new).scale(1F)
-			.cdSkill(Arrays.asList(SkillTypes.NUT_MORE_LIFE))
+			.plantModel(() -> () -> new WallNutModel(WallNutModel.createBodyLayer().bakeRoot())).scale(1F)
+			.cdSkill(List.of(SkillTypes.NUT_MORE_LIFE))
 	);
 	
 	public static final IPlantType POTATO_MINE = new PVZPlants("potato_mine", new PlantFeatures()
@@ -103,7 +103,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.POTATO_MINE.get())
 			.summonCard(() -> ItemRegister.POTATO_MINE_CARD.get())
 			.enjoyCard(() -> ItemRegister.POTATO_MINE_ENJOY_CARD.get())
-			.plantModel(() -> PotatoMineModel::new).scale(1F)
+			.plantModel(() -> () -> new PotatoMineModel(PotatoMineModel.createBodyLayer().bakeRoot())).scale(1F)
 			.commonSkill(Arrays.asList(SkillTypes.NORMAL_BOMB_DAMAGE, SkillTypes.MINE_FAST_PREPARE))
 			.placement(Placements.STABLE)
 	);
@@ -114,8 +114,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SNOW_PEA.get())
 			.summonCard(() -> ItemRegister.SNOW_PEA_CARD.get())
 			.enjoyCard(() -> ItemRegister.SNOW_PEA_ENJOY_CARD.get())
-			.plantModel(() -> SnowPeaModel::new).scale(1F)
-			.commonSkill(Arrays.asList(SkillTypes.PEA_DAMAGE))
+			.plantModel(() -> () -> new SnowPeaModel(SnowPeaModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of(SkillTypes.PEA_DAMAGE))
 	);
 	
 	public static final IPlantType CHOMPER = new PVZPlants("chomper", new PlantFeatures()
@@ -124,8 +124,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.CHOMPER.get())
 			.summonCard(() -> ItemRegister.CHOMPER_CARD.get())
 			.enjoyCard(() -> ItemRegister.CHOMPER_ENJOY_CARD.get())
-			.plantModel(() -> ChomperModel::new).scale(0.85F)
-			.commonSkill(Arrays.asList(SkillTypes.NORMAL_ENHANCE_STRENGTH))
+			.plantModel(() -> () -> new ChomperModel(ChomperModel.createBodyLayer().bakeRoot())).scale(0.85F)
+			.commonSkill(List.of(SkillTypes.NORMAL_ENHANCE_STRENGTH))
 	);
 	
 	public static final IPlantType REPEATER = new PVZPlants("repeater", new PlantFeatures()
@@ -134,9 +134,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.REPEATER.get())
 			.summonCard(() -> ItemRegister.REPEATER_CARD.get())
 			.enjoyCard(() -> ItemRegister.REPEATER_ENJOY_CARD.get())
-			.plantModel(() -> RepeaterModel::new).scale(1F)
+			.plantModel(() -> () -> new RepeaterModel(RepeaterModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeTo(() -> PVZPlants.GATLING_PEA)
-			.commonSunSkill(Arrays.asList(SkillTypes.PEA_DAMAGE))
+			.commonSunSkill(List.of(SkillTypes.PEA_DAMAGE))
 	);
 	
 	/*
@@ -149,8 +149,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.PUFF_SHROOM.get())
 			.summonCard(() -> ItemRegister.PUFF_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.PUFF_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> PuffShroomModel::new).scale(0.6F)
-			.cdSkill(Arrays.asList(SkillTypes.SPORE_DAMAGE))
+			.plantModel(() -> () -> new PuffShroomModel(PuffShroomModel.createBodyLayer().bakeRoot())).scale(0.6F)
+			.cdSkill(List.of(SkillTypes.SPORE_DAMAGE))
 	);
 	
 	public static final IPlantType SUN_SHROOM = new PVZPlants("sun_shroom", new PlantFeatures().isShroomPlant()
@@ -159,8 +159,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SUN_SHROOM.get())
 			.summonCard(() -> ItemRegister.SUN_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.SUN_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> SunShroomModel::new).scale(0.4F)
-			.commonSkill(Arrays.asList())
+			.plantModel(() -> () -> new SunShroomModel(SunShroomModel.createBodyLayer().bakeRoot())).scale(0.4F)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType FUME_SHROOM = new PVZPlants("fume_shroom", new PlantFeatures().isShroomPlant()
@@ -169,9 +169,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.FUME_SHROOM.get())
 			.summonCard(() -> ItemRegister.FUME_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.FUME_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> FumeShroomModel::new).scale(0.9F)
+			.plantModel(() -> () -> new FumeShroomModel(FumeShroomModel.createBodyLayer().bakeRoot())).scale(0.9F)
 			.upgradeTo(() -> PVZPlants.GLOOM_SHROOM)
-			.commonSkill(Arrays.asList(SkillTypes.SPORE_DAMAGE))
+			.commonSkill(List.of(SkillTypes.SPORE_DAMAGE))
 	);
 	
 	public static final IPlantType GRAVE_BUSTER = new PVZPlants("grave_buster", new PlantFeatures()
@@ -180,8 +180,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.GRAVE_BUSTER.get())
 			.summonCard(() -> ItemRegister.GRAVE_BUSTER_CARD.get())
 			.enjoyCard(() -> ItemRegister.GRAVE_BUSTER_ENJOY_CARD.get())
-			.plantModel(() -> GraveBusterModel::new).scale(1F)
-			.commonSkill(Arrays.asList())
+			.plantModel(() -> () -> new GraveBusterModel(GraveBusterModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType HYPNO_SHROOM = new PVZPlants("hypno_shroom", new PlantFeatures().isShroomPlant()
@@ -190,8 +190,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.HYPNO_SHROOM.get())
 			.summonCard(() -> ItemRegister.HYPNO_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.HYPNO_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> HypnoShroomModel::new).scale(1F)
-			.cdSkill(Arrays.asList())
+			.plantModel(() -> () -> new HypnoShroomModel(HypnoShroomModel.createBodyLayer().bakeRoot())).scale(1F)
+			.cdSkill(List.of())
 	);
 	
 	public static final IPlantType SCAREDY_SHROOM = new PVZPlants("scaredy_shroom", new PlantFeatures().isShroomPlant()
@@ -200,8 +200,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SCAREDY_SHROOM.get())
 			.summonCard(() -> ItemRegister.SCAREDY_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.SCAREDY_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> ScaredyShroomModel::new).scale(0.7F)
-			.commonSkill(Arrays.asList(SkillTypes.SPORE_DAMAGE))
+			.plantModel(() -> () -> new ScaredyShroomModel(ScaredyShroomModel.createBodyLayer().bakeRoot())).scale(0.7F)
+			.commonSkill(List.of(SkillTypes.SPORE_DAMAGE))
 	);
 	
 	public static final IPlantType ICE_SHROOM = new PVZPlants("ice_shroom", new PlantFeatures().isShroomPlant()
@@ -210,8 +210,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.ICE_SHROOM.get())
 			.summonCard(() -> ItemRegister.ICE_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.ICE_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> IceShroomModel::new).scale(1F)
-			.commonSkill(Arrays.asList())
+			.plantModel(() -> () -> new IceShroomModel(IceShroomModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType DOOM_SHROOM = new PVZPlants("doom_shroom", new PlantFeatures().isShroomPlant()
@@ -220,8 +220,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.DOOM_SHROOM.get())
 			.summonCard(() -> ItemRegister.DOOM_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.DOOM_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> DoomShroomModel::new).scale(1F)
-			.commonSunSkill(Arrays.asList(SkillTypes.HIGH_EXPLODE_DAMAGE))
+			.plantModel(() -> () -> new DoomShroomModel(DoomShroomModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSunSkill(List.of(SkillTypes.HIGH_EXPLODE_DAMAGE))
 	);
 	
 	/*
@@ -234,9 +234,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.LILY_PAD.get())
 			.summonCard(() -> ItemRegister.LILY_PAD_CARD.get())
 			.enjoyCard(() -> ItemRegister.LILY_PAD_ENJOY_CARD.get())
-			.plantModel(() -> LilyPadModel::new).scale(1F)
+			.plantModel(() -> () -> new LilyPadModel(LilyPadModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeTo(() -> PVZPlants.CAT_TAIL)
-			.cdSkill(Arrays.asList())
+			.cdSkill(List.of())
 	);
 	
 	public static final IPlantType SQUASH = new PVZPlants("squash", new PlantFeatures()
@@ -245,8 +245,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SQUASH.get())
 			.summonCard(() -> ItemRegister.SQUASH_CARD.get())
 			.enjoyCard(() -> ItemRegister.SQUASH_ENJOY_CARD.get())
-			.plantModel(() -> SquashModel::new).scale(0.5F)
-			.commonSkill(Arrays.asList(SkillTypes.NORMAL_ENHANCE_STRENGTH))
+			.plantModel(() -> () -> new SquashModel(SquashModel.createBodyLayer().bakeRoot())).scale(0.5F)
+			.commonSkill(List.of(SkillTypes.NORMAL_ENHANCE_STRENGTH))
 	);
 	
 	public static final IPlantType THREE_PEATER = new PVZPlants("three_peater", new PlantFeatures()
@@ -255,8 +255,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.THREE_PEATER.get())
 			.summonCard(() -> ItemRegister.THREE_PEATER_CARD.get())
 			.enjoyCard(() -> ItemRegister.THREE_PEATER_ENJOY_CARD.get())
-			.plantModel(() -> ThreePeaterModel::new).scale(0.98F)
-			.commonSunSkill(Arrays.asList(SkillTypes.PEA_DAMAGE))
+			.plantModel(() -> () -> new ThreePeaterModel(ThreePeaterModel.createBodyLayer().bakeRoot())).scale(0.98F)
+			.commonSunSkill(List.of(SkillTypes.PEA_DAMAGE))
 	);
 	
 	public static final IPlantType TANGLE_KELP = new PVZPlants("tangle_kelp", new PlantFeatures().isWaterPlant()
@@ -265,8 +265,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TANGLE_KELP.get())
 			.summonCard(() -> ItemRegister.TANGLE_KELP_CARD.get())
 			.enjoyCard(() -> ItemRegister.TANGLE_KELP_ENJOY_CARD.get())
-			.plantModel(() -> TangleKelpModel::new).scale(1F)
-			.commonSkill(Arrays.asList(SkillTypes.NORMAL_ENHANCE_STRENGTH))
+			.plantModel(() -> () -> new TangleKelpModel(TangleKelpModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of(SkillTypes.NORMAL_ENHANCE_STRENGTH))
 	);
 	
 	public static final IPlantType JALAPENO = new PVZPlants("jalapeno", new PlantFeatures()
@@ -275,8 +275,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.JALAPENO.get())
 			.summonCard(() -> ItemRegister.JALAPENO_CARD.get())
 			.enjoyCard(() -> ItemRegister.JALAPENO_ENJOY_CARD.get())
-			.plantModel(() -> JalapenoModel::new).scale(1.0F)
-			.cdSkill(Arrays.asList(SkillTypes.NORMAL_BOMB_DAMAGE))
+			.plantModel(() -> () -> new JalapenoModel(JalapenoModel.createBodyLayer().bakeRoot())).scale(1.0F)
+			.cdSkill(List.of(SkillTypes.NORMAL_BOMB_DAMAGE))
 	);
 	
 	public static final IPlantType SPIKE_WEED = new PVZPlants("spike_weed", new PlantFeatures()
@@ -285,10 +285,10 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SPIKE_WEED.get())
 			.summonCard(() -> ItemRegister.SPIKE_WEED_CARD.get())
 			.enjoyCard(() -> ItemRegister.SPIKE_WEED_ENJOY_CARD.get())
-			.plantModel(() -> SpikeWeedModel::new).scale(1F)
+			.plantModel(() -> () -> new SpikeWeedModel(SpikeWeedModel.createBodyLayer().bakeRoot())).scale(1F)
 			.placement(Placements.STABLE)
 			.upgradeTo(() -> PVZPlants.SPIKE_ROCK)
-			.commonSkill(Arrays.asList(SkillTypes.SPIKE_DAMAGE))
+			.commonSkill(List.of(SkillTypes.SPIKE_DAMAGE))
 	);
 	
 	public static final IPlantType TORCH_WOOD = new PVZPlants("torch_wood", new PlantFeatures()
@@ -297,7 +297,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TORCH_WOOD.get())
 			.summonCard(() -> ItemRegister.TORCH_WOOD_CARD.get())
 			.enjoyCard(() -> ItemRegister.TORCH_WOOD_ENJOY_CARD.get())
-			.plantModel(() -> TorchWoodModel::new).scale(1F)
+			.plantModel(() -> () -> new TorchWoodModel(TorchWoodModel.createBodyLayer().bakeRoot())).scale(1F)
 			.cdSkill(Arrays.asList(SkillTypes.WOOD_MORE_LIFE, SkillTypes.HEAT_PEA_RANGE, SkillTypes.LESS_SUN))
 	);
 	
@@ -307,8 +307,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TALL_NUT.get())
 			.summonCard(() -> ItemRegister.TALL_NUT_CARD.get())
 			.enjoyCard(() -> ItemRegister.TALL_NUT_ENJOY_CARD.get())
-			.plantModel(() -> TallNutModel::new).scale(0.4F)
-			.cdSkill(Arrays.asList(SkillTypes.NUT_MORE_LIFE))
+			.plantModel(() -> () -> new TallNutModel(TallNutModel.createBodyLayer().bakeRoot())).scale(0.4F)
+			.cdSkill(List.of(SkillTypes.NUT_MORE_LIFE))
 	);
 	
 	/*
@@ -320,8 +320,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SEA_SHROOM.get())
 			.summonCard(() -> ItemRegister.SEA_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.SEA_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> SeaShroomModel::new).scale(0.6F)
-			.commonSkill(Arrays.asList(SkillTypes.SPORE_DAMAGE))
+			.plantModel(() -> () -> new SeaShroomModel(SeaShroomModel.createBodyLayer().bakeRoot())).scale(0.6F)
+			.commonSkill(List.of(SkillTypes.SPORE_DAMAGE))
 	);
 	
 	public static final IPlantType PLANTERN = new PVZPlants("plantern", new PlantFeatures()
@@ -330,7 +330,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.PLANTERN.get())
 			.summonCard(() -> ItemRegister.PLANTERN_CARD.get())
 			.enjoyCard(() -> ItemRegister.PLANTERN_ENJOY_CARD.get())
-			.plantModel(() -> PlanternModel::new).scale(1F)
+			.plantModel(() -> () -> new PlanternModel(PlanternModel.createBodyLayer().bakeRoot())).scale(1F)
 			.commonSkill(Arrays.asList(SkillTypes.MORE_LIGHT_RANGE, SkillTypes.NIGHT_VISION))
 	);
 	
@@ -340,9 +340,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.CACTUS.get())
 			.summonCard(() -> ItemRegister.CACTUS_CARD.get())
 			.enjoyCard(() -> ItemRegister.CACTUS_ENJOY_CARD.get())
-			.plantModel(() -> CactusModel::new).scale(1F)
+			.plantModel(() -> () -> new CactusModel(CactusModel.createBodyLayer().bakeRoot())).scale(1F)
 			.placement(Placements.SAND)
-			.commonSkill(Arrays.asList(SkillTypes.MORE_THORN_DAMAGE))
+			.commonSkill(List.of(SkillTypes.MORE_THORN_DAMAGE))
 	);
 	
 	public static final IPlantType BLOVER = new PVZPlants("blover", new PlantFeatures()
@@ -351,8 +351,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.BLOVER.get())
 			.summonCard(() -> ItemRegister.BLOVER_CARD.get())
 			.enjoyCard(() -> ItemRegister.BLOVER_ENJOY_CARD.get())
-			.plantModel(() -> BloverModel::new).scale(1.2F)
-			.cdSkill(Arrays.asList(SkillTypes.BLOW_STRENGTH))
+			.plantModel(() -> () -> new BloverModel(BloverModel.createBodyLayer().bakeRoot())).scale(1.2F)
+			.cdSkill(List.of(SkillTypes.BLOW_STRENGTH))
 	);
 	
 	public static final IPlantType SPLIT_PEA = new PVZPlants("split_pea", new PlantFeatures()
@@ -361,7 +361,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SPLIT_PEA.get())
 			.summonCard(() -> ItemRegister.SPLIT_PEA_CARD.get())
 			.enjoyCard(() -> ItemRegister.SPLIT_PEA_ENJOY_CARD.get())
-			.plantModel(() -> SplitPeaModel::new).scale(1F)
+			.plantModel(() -> () -> new SplitPeaModel(SplitPeaModel.createBodyLayer().bakeRoot())).scale(1F)
 			.commonSkill(Arrays.asList(SkillTypes.PEA_DAMAGE, SkillTypes.SPLIT_DOUBLE_CHANCE))
 	);
 	
@@ -371,8 +371,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.STAR_FRUIT.get())
 			.summonCard(() -> ItemRegister.STAR_FRUIT_CARD.get())
 			.enjoyCard(() -> ItemRegister.STAR_FRUIT_ENJOY_CARD.get())
-			.plantModel(() -> StarFruitModel::new).scale(0.82F)
-			.commonSkill(Arrays.asList(SkillTypes.MORE_STAR_DAMAGE))
+			.plantModel(() -> () -> new StarFruitModel(StarFruitModel.createBodyLayer().bakeRoot())).scale(0.82F)
+			.commonSkill(List.of(SkillTypes.MORE_STAR_DAMAGE))
 	);
 	
 	public static final IPlantType PUMPKIN = new PVZPlants("pumpkin", new PlantFeatures()
@@ -383,7 +383,7 @@ public final class PVZPlants extends PlantType {
 			.summonCard(() -> ItemRegister.PUMPKIN_CARD.get())
 			.enjoyCard(() -> ItemRegister.PUMPKIN_ENJOY_CARD.get())
 			// (removed by GrassCarp when remodeling Pumpkin).plantModel(() -> PumpkinModel::new).scale(1F)
-			.cdSkill(Arrays.asList())
+			.cdSkill(List.of())
 	);
 	
 	public static final IPlantType MAGNET_SHROOM = new PVZPlants("magnet_shroom", new PlantFeatures().isShroomPlant()
@@ -392,9 +392,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.MAGNET_SHROOM.get())
 			.summonCard(() -> ItemRegister.MAGNET_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.MAGNET_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> MagnetShroomModel::new).scale(1.2F)
+			.plantModel(() -> () -> new MagnetShroomModel(MagnetShroomModel.createBodyLayer().bakeRoot())).scale(1.2F)
 			.upgradeTo(() -> PVZPlants.GOLD_MAGNET)
-			.commonSkill(Arrays.asList(SkillTypes.LESS_WORK_CD))
+			.commonSkill(List.of(SkillTypes.LESS_WORK_CD))
 	);
 	
 	/*
@@ -406,8 +406,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.CABBAGE_PULT.get())
 			.summonCard(() -> ItemRegister.CABBAGE_PULT_CARD.get())
 			.enjoyCard(() -> ItemRegister.CABBAGE_PULT_ENJOY_CARD.get())
-			.plantModel(() -> CabbagePultModel::new).scale(1F)
-			.commonSkill(Arrays.asList(SkillTypes.MORE_CABBAGE_DAMAGE))
+			.plantModel(() -> () -> new CabbagePultModel(CabbagePultModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of(SkillTypes.MORE_CABBAGE_DAMAGE))
 	);
 	
 	public static final IPlantType FLOWER_POT = new PVZPlants("flower_pot", new PlantFeatures()
@@ -417,9 +417,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.FLOWER_POT.get())
 			.summonCard(() -> ItemRegister.FLOWER_POT_CARD.get())
 			.enjoyCard(() -> ItemRegister.FLOWER_POT_ENJOY_CARD.get())
-			.plantModel(() -> FlowerPotModel::new).scale(0.85F)
+			.plantModel(() -> () -> new FlowerPotModel(FlowerPotModel.createBodyLayer().bakeRoot())).scale(0.85F)
 			.placement(Placements.ANY)
-			.cdSkill(Arrays.asList())
+			.cdSkill(List.of())
 	);
 	
 	public static final IPlantType KERNEL_PULT = new PVZPlants("kernel_pult", new PlantFeatures()
@@ -428,9 +428,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.KERNEL_PULT.get())
 			.summonCard(() -> ItemRegister.KERNEL_PULT_CARD.get())
 			.enjoyCard(() -> ItemRegister.KERNEL_PULT_ENJOY_CARD.get())
-			.plantModel(() -> KernelPultModel::new).scale(0.9F)
+			.plantModel(() -> () -> new KernelPultModel(KernelPultModel.createBodyLayer().bakeRoot())).scale(0.9F)
 			.upgradeTo(() -> PVZPlants.COB_CANNON)
-			.commonSkill(Arrays.asList(SkillTypes.MORE_KERNEL_DAMAGE))
+			.commonSkill(List.of(SkillTypes.MORE_KERNEL_DAMAGE))
 	);
 	
 	public static final IPlantType COFFEE_BEAN = new PVZPlants("coffee_bean", new PlantFeatures()
@@ -439,8 +439,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.COFFEE_BEAN.get())
 			.summonCard(() -> ItemRegister.COFFEE_BEAN_CARD.get())
 			.enjoyCard(() -> ItemRegister.COFFEE_BEAN_ENJOY_CARD.get())
-			.plantModel(() -> CoffeeBeanModel::new).scale(1F)
-			.cdSkill(Arrays.asList())
+			.plantModel(() -> () -> new CoffeeBeanModel(CoffeeBeanModel.createBodyLayer().bakeRoot())).scale(1F)
+			.cdSkill(List.of())
 	);
 	
 	public static final IPlantType GARLIC = new PVZPlants("garlic", new PlantFeatures()
@@ -449,8 +449,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.GARLIC.get())
 			.summonCard(() -> ItemRegister.GARLIC_CARD.get())
 			.enjoyCard(() -> ItemRegister.GARLIC_ENJOY_CARD.get())
-			.plantModel(() -> GarlicModel::new).scale(0.9F)
-			.cdSkill(Arrays.asList(SkillTypes.MORE_GARLIC_LIFE))
+			.plantModel(() -> () -> new GarlicModel(GarlicModel.createBodyLayer().bakeRoot())).scale(0.9F)
+			.cdSkill(List.of(SkillTypes.MORE_GARLIC_LIFE))
 	);
 	
 	public static final IPlantType UMBRELLA_LEAF = new PVZPlants("umbrella_leaf", new PlantFeatures()
@@ -459,8 +459,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.UMBRELLA_LEAF.get())
 			.summonCard(() -> ItemRegister.UMBRELLA_LEAF_CARD.get())
 			.enjoyCard(() -> ItemRegister.UMBRELLA_LEAF_ENJOY_CARD.get())
-			.plantModel(() -> UmbrellaLeafModel::new).scale(0.8F)
-			.commonSkill(Arrays.asList())
+			.plantModel(() -> () -> new UmbrellaLeafModel(UmbrellaLeafModel.createBodyLayer().bakeRoot())).scale(0.8F)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType MARIGOLD = new PVZPlants("marigold", new PlantFeatures()
@@ -469,8 +469,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.MARIGOLD.get())
 			.summonCard(() -> ItemRegister.MARIGOLD_CARD.get())
 			.enjoyCard(() -> ItemRegister.MARIGOLD_ENJOY_CARD.get())
-			.plantModel(() -> MariGoldModel::new).scale(0.5F)
-			.commonSkill(Arrays.asList())
+			.plantModel(() -> () -> new MariGoldModel(MariGoldModel.createBodyLayer().bakeRoot())).scale(0.5F)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType MELON_PULT = new PVZPlants("melon_pult", new PlantFeatures()
@@ -479,9 +479,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.MELON_PULT.get())
 			.summonCard(() -> ItemRegister.MELON_PULT_CARD.get())
 			.enjoyCard(() -> ItemRegister.MELON_PULT_ENJOY_CARD.get())
-			.plantModel(() -> MelonPultModel::new).scale(0.9F)
+			.plantModel(() -> () -> new MelonPultModel(MelonPultModel.createBodyLayer().bakeRoot())).scale(0.9F)
 			.upgradeTo(() -> PVZPlants.WINTER_MELON)
-			.commonSunSkill(Arrays.asList(SkillTypes.MORE_MELON_DAMAGE))
+			.commonSunSkill(List.of(SkillTypes.MORE_MELON_DAMAGE))
 	);
 	
 	/*
@@ -493,9 +493,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.GATLING_PEA.get())
 			.summonCard(() -> ItemRegister.GATLING_PEA_CARD.get())
 			.enjoyCard(() -> ItemRegister.GATLING_PEA_ENJOY_CARD.get())
-			.plantModel(() -> GatlingPeaModel::new).scale(1F)
+			.plantModel(() -> () -> new GatlingPeaModel(GatlingPeaModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeFrom(() -> PVZPlants.REPEATER)
-			.commonSunSkill(Arrays.asList(SkillTypes.PEA_DAMAGE))
+			.commonSunSkill(List.of(SkillTypes.PEA_DAMAGE))
 	);
 	
 	public static final IPlantType TWIN_SUNFLOWER = new PVZPlants("twin_sunflower", new PlantFeatures()
@@ -504,9 +504,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TWIN_SUNFLOWER.get())
 			.summonCard(() -> ItemRegister.TWIN_SUNFLOWER_CARD.get())
 			.enjoyCard(() -> ItemRegister.TWIN_SUNFLOWER_ENJOY_CARD.get())
-			.plantModel(() -> TwinSunFlowerModel::new).scale(0.45F)
+			.plantModel(() -> () -> new TwinSunFlowerModel(TwinSunFlowerModel.createBodyLayer().bakeRoot())).scale(0.45F)
 			.upgradeFrom(() -> PVZPlants.SUN_FLOWER)
-			.commonSunSkill(Arrays.asList())
+			.commonSunSkill(List.of())
 	);
 	
 	public static final IPlantType GLOOM_SHROOM = new PVZPlants("gloom_shroom", new PlantFeatures().isShroomPlant()
@@ -515,9 +515,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.GLOOM_SHROOM.get())
 			.summonCard(() -> ItemRegister.GLOOM_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.GLOOM_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> GloomShroomModel::new).scale(1F)
+			.plantModel(() -> () -> new GloomShroomModel(GloomShroomModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeFrom(() -> PVZPlants.FUME_SHROOM)
-			.commonSunSkill(Arrays.asList(SkillTypes.SPORE_DAMAGE))
+			.commonSunSkill(List.of(SkillTypes.SPORE_DAMAGE))
 	);
 	
 	public static final IPlantType CAT_TAIL = new PVZPlants("cat_tail", new PlantFeatures().isWaterPlant()
@@ -527,8 +527,8 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.CAT_TAIL.get())
 			.summonCard(() -> ItemRegister.CAT_TAIL_CARD.get())
 			.enjoyCard(() -> ItemRegister.CAT_TAIL_ENJOY_CARD.get())
-			.plantModel(() -> CatTailModel::new).scale(1F)
-			.commonSunSkill(Arrays.asList(SkillTypes.MORE_THORN_DAMAGE))
+			.plantModel(() -> () -> new CatTailModel(CatTailModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSunSkill(List.of(SkillTypes.MORE_THORN_DAMAGE))
 	);
 	
 	public static final IPlantType WINTER_MELON = new PVZPlants("winter_melon", new PlantFeatures()
@@ -537,9 +537,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.WINTER_MELON.get())
 			.summonCard(() -> ItemRegister.WINTER_MELON_CARD.get())
 			.enjoyCard(() -> ItemRegister.WINTER_MELON_ENJOY_CARD.get())
-			.plantModel(() -> WinterMelonModel::new).scale(0.9F)
+			.plantModel(() -> () -> new WinterMelonModel(WinterMelonModel.createBodyLayer().bakeRoot())).scale(0.9F)
 			.upgradeFrom(() -> PVZPlants.MELON_PULT)
-			.commonSunSkill(Arrays.asList(SkillTypes.MORE_MELON_DAMAGE))
+			.commonSunSkill(List.of(SkillTypes.MORE_MELON_DAMAGE))
 	);
 	
 	public static final IPlantType GOLD_MAGNET = new PVZPlants("gold_magnet", new PlantFeatures()
@@ -548,9 +548,9 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.GOLD_MAGNET.get())
 			.summonCard(() -> ItemRegister.GOLD_MAGNET_CARD.get())
 			.enjoyCard(() -> ItemRegister.GOLD_MAGNET_ENJOY_CARD.get())
-			.plantModel(() -> GoldMagnetModel::new).scale(1.2F)
+			.plantModel(() -> () -> new GoldMagnetModel(GoldMagnetModel.createBodyLayer().bakeRoot())).scale(1.2F)
 			.upgradeFrom(() -> PVZPlants.MAGNET_SHROOM)
-			.commonSunSkill(Arrays.asList())
+			.commonSunSkill(List.of())
 	);
 	
 	public static final IPlantType SPIKE_ROCK = new PVZPlants("spike_rock", new PlantFeatures()
@@ -559,7 +559,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SPIKE_ROCK.get())
 			.summonCard(() -> ItemRegister.SPIKE_ROCK_CARD.get())
 			.enjoyCard(() -> ItemRegister.SPIKE_ROCK_ENJOY_CARD.get())
-			.plantModel(() -> SpikeRockModel::new).scale(0.5F)
+			.plantModel(() -> () -> new SpikeRockModel(SpikeRockModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.placement(Placements.STABLE)
 			.upgradeFrom(() -> PVZPlants.SPIKE_WEED)
 			.commonSunSkill(Arrays.asList(SkillTypes.SPIKE_DAMAGE, SkillTypes.MORE_SPIKE))
@@ -571,10 +571,10 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.COB_CANNON.get())
 			.summonCard(() -> ItemRegister.COB_CANNON_CARD.get())
 			.enjoyCard(() -> ItemRegister.COB_CANNON_ENJOY_CARD.get())
-			.plantModel(() -> CobCannonModel::new).scale(1.1F)
+			.plantModel(() -> () -> new CobCannonModel(CobCannonModel.createBodyLayer().bakeRoot())).scale(1.1F)
 			.placement(Placements.ANY)
 			.upgradeFrom(() -> PVZPlants.KERNEL_PULT)
-			.commonSunSkill(Arrays.asList(SkillTypes.NORMAL_BOMB_DAMAGE))
+			.commonSunSkill(List.of(SkillTypes.NORMAL_BOMB_DAMAGE))
 	);
 	
 	public static final IPlantType IMITATER = new PVZPlants("imitater", new PlantFeatures()
@@ -583,7 +583,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.IMITATER.get())
 			.summonCard(() -> ItemRegister.IMITATER_CARD.get())
 			.enjoyCard(() -> ItemRegister.IMITATER_ENJOY_CARD.get())
-			.plantModel(() -> ImitaterModel::new).scale(0.9F)
+			.plantModel(() -> () -> new ImitaterModel(ImitaterModel.createBodyLayer().bakeRoot())).scale(0.9F)
 			.placement(Placements.NONE)
 	);
 	

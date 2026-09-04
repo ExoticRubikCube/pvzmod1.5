@@ -2,11 +2,12 @@ package com.hungteen.pvz.client.gui.search;
 
 import com.hungteen.pvz.client.gui.screen.AbstractOptionScreen;
 import com.hungteen.pvz.utils.StringUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class OptionWidget extends Widget {
+public class OptionWidget extends AbstractWidget {
 
 	private final AbstractOptionScreen<?> screen;
 	private SearchOption option;
@@ -28,10 +29,11 @@ public class OptionWidget extends Widget {
 		this.option = a;
 	}
 
-	public void renderButton(MatrixStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+	@Override
+	public void renderButton(PoseStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
 		stack.pushPose();
 		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.getTextureManager().bind(OptionSearchGui.TEXTURE);
+		minecraft.getTextureManager().bindForSetup(OptionSearchGui.TEXTURE);
 		int posX = this.isOptionUnLocked() ? 29 : 29 + 25;
 		int posY = 206;
 		this.blit(stack, this.x, this.y, posX, posY, this.width, this.height);
@@ -47,19 +49,18 @@ public class OptionWidget extends Widget {
 		return this.screen.isOptionUnLocked(option);
 	}
 
-	public List<ITextComponent> getToolTipText(Screen screen) {
-		List<ITextComponent> list = new ArrayList<>();
+	public List<Component> getToolTipText(Screen screen) {
+		List<Component> list = new ArrayList<>();
 		list.add(option.getType().getText());
 		return list;
-	}
-
-	public void setPosition(int xx, int yy) {
-		this.x = xx;
-		this.y = yy;
 	}
 
 	public SearchOption getSearchOption() {
 		return this.option;
 	}
 
+	@Override
+	public void updateNarration(NarrationElementOutput output) {
+		this.defaultButtonNarrationText(output);
+	}
 }

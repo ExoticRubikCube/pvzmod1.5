@@ -2,18 +2,19 @@ package com.hungteen.pvz.common.container;
 
 import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 
-public class SlotMachineContainer extends Container {
+public class SlotMachineContainer extends AbstractContainerMenu {
 
 	public final SlotMachineTileEntity te;
-	public final PlayerEntity player;
+	public final Player player;
 	
-	public SlotMachineContainer(int id, PlayerEntity player, BlockPos pos) {
+	public SlotMachineContainer(int id, Player player, BlockPos pos) {
 		super(ContainerRegister.SLOT_MACHINE.get(), id);
 		this.player = player;
 		this.te = (SlotMachineTileEntity) player.level.getBlockEntity(pos);
@@ -25,16 +26,16 @@ public class SlotMachineContainer extends Container {
 		this.te.setPlayer(player);
 		for(int i = 0; i < 3; ++ i) {
 			for(int j = 0; j < 9; ++ j) {
-				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 8 + 18 * j, 145 + 18 * i));
+				this.addSlot(new Slot(player.getInventory(), j + i * 9 + 9, 8 + 18 * j, 145 + 18 * i));
 			}
 		}
 		for(int i = 0; i < 9; ++ i) {
-			this.addSlot(new Slot(player.inventory, i, 8 + 18 * i, 203));
+			this.addSlot(new Slot(player.getInventory(), i, 8 + 18 * i, 203));
 		}
 	}
 
 	@Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 //		if (slot != null && slot.hasItem()) {
@@ -64,7 +65,7 @@ public class SlotMachineContainer extends Container {
     }
 	
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return this.te.isUsableByPlayer(playerIn);
 	}
 

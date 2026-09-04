@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class AlgorithmUtil {
 
@@ -68,7 +68,7 @@ public class AlgorithmUtil {
 		    String preFixStr = subStr.substring(0, length - 1);
 		    String suffFixStr = subStr.substring(1);
 		 
-		    while (preFixStr.length() > 0 && suffFixStr.length() > 0) {
+		    while (!preFixStr.isEmpty() && !suffFixStr.isEmpty()) {
 		        if (preFixStr.equals(suffFixStr)) {
 		            return preFixStr.length();
 		        }

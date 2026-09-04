@@ -4,19 +4,20 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.spawn.card.ImitaterCardItem;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class ImitaterContainer extends Container {
+public class ImitaterContainer extends AbstractContainerMenu {
 
-	private Inventory backpack;
-	private final PlayerEntity player;
+	private Container backpack;
+	private final Player player;
 	private final ItemStack stack;
 	
-	public ImitaterContainer(int id, PlayerEntity player) {
+	public ImitaterContainer(int id, Player player) {
 		super(ContainerRegister.IMITATER.get(), id);
 		this.player = player;
 		this.stack = this.player.getOffhandItem();
@@ -33,16 +34,16 @@ public class ImitaterContainer extends Container {
 		});//special slots
 		for(int i = 0; i < 3; ++ i) {
 			for(int j = 0; j < 9; ++ j) {
-				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 8 + 18 * j, 51 + 18 * i));
+				this.addSlot(new Slot(player.getInventory(), j + i * 9 + 9, 8 + 18 * j, 51 + 18 * i));
 			}
 		}
 		for(int i = 0; i < 9; ++ i) {
-			this.addSlot(new Slot(player.inventory, i, 8 + 18 * i, 109));
+			this.addSlot(new Slot(player.getInventory(), i, 8 + 18 * i, 109));
 		}
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		if (slot != null && slot.hasItem()) {
@@ -72,7 +73,7 @@ public class ImitaterContainer extends Container {
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		if(playerIn.getOffhandItem().getItem() != ItemRegister.IMITATER_CARD.get()) {
 			return false;
 		}

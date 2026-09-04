@@ -1,9 +1,9 @@
 package com.hungteen.pvz.client.model.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.Entity;
 
 /**
  * @program: pvzmod-1.16.5
@@ -18,13 +18,13 @@ public abstract class ComponentModel<T extends Entity> extends PVZEntityModel<T>
     }
 
     @Override
-    public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
     }
 
-    public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay){
+    public void render(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay){
         this.getTotalModel().render(matrixStack, buffer, packedLight, packedOverlay);
     }
 
-    public abstract ModelRenderer getTotalModel();
+    public abstract ModelPart getTotalModel();
 
 }

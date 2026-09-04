@@ -3,12 +3,12 @@ package com.hungteen.pvz.common.entity.creature;
 import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.api.interfaces.IHasGroup;
 import com.hungteen.pvz.api.interfaces.IHasOwner;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,12 +18,12 @@ import java.util.UUID;
  * @author: HungTeen
  * @create: 2022-02-11 16:00
  **/
-public class GardenPlantEntity extends CreatureEntity implements IHasOwner, IHasGroup {
+public class GardenPlantEntity extends PathfinderMob implements IHasOwner, IHasGroup {
 
-    private static final DataParameter<Integer> AGE = EntityDataManager.defineId(GardenPlantEntity.class, DataSerializers.INT);
-    private static final DataParameter<Integer> STATE = EntityDataManager.defineId(GardenPlantEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> AGE = SynchedEntityData.defineId(GardenPlantEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GardenPlantEntity.class, EntityDataSerializers.INT);
 
-    public GardenPlantEntity(EntityType<? extends CreatureEntity> entityType, World world) {
+    public GardenPlantEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 

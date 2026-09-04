@@ -4,9 +4,9 @@ import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -14,10 +14,10 @@ import net.minecraftforge.fml.common.Mod;
 public class PVZEntityEvents {
 
 	@SubscribeEvent
-	public static void onEntityJoinOverWorld(EntityJoinWorldEvent ev) {
+	public static void onEntityJoinOverWorld(EntityJoinLevelEvent ev) {
 		if(! PVZConfig.COMMON_CONFIG.RuleSettings.CanSpawnDefaultMonster.get()) {
-			if(! ev.getEntity().level.isClientSide && ev.getWorld().dimension() == World.OVERWORLD) {
-			    if(! (ev.getEntity() instanceof PVZZombieEntity) && ev.getEntity() instanceof MonsterEntity) {
+			if(! ev.getEntity().level.isClientSide && ev.getLevel().dimension() == Level.OVERWORLD) {
+			    if(! (ev.getEntity() instanceof PVZZombieEntity) && ev.getEntity() instanceof Monster) {
 				    ev.setCanceled(true);
 			    }
 			}

@@ -14,12 +14,12 @@ import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,14 +30,14 @@ public class GoldMagnetEntity extends PVZPlantEntity {
 	private final Set<DropEntity> coinSet = new HashSet<>();
 	private static final int SEARCH_CD = 60;
 
-	public GoldMagnetEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public GoldMagnetEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if (! level.isClientSide) {
+		if (! level.isClientSide()) {
 			this.tickCoinSet();
 			this.setAttackTime(this.coinSet.size());
 		}
@@ -78,8 +78,8 @@ public class GoldMagnetEntity extends PVZPlantEntity {
 		// absorb all coins in the set.
 		this.coinSet.forEach(coin -> {
 			final double speed = 0.35D;
-			Vector3d now = new Vector3d(this.getX(), this.getY() + this.getBbHeight(), this.getZ());
-			Vector3d vec = now.subtract(coin.position());
+			Vec3 now = new Vec3(this.getX(), this.getY() + this.getBbHeight(), this.getZ());
+			Vec3 vec = now.subtract(coin.position());
 			if (vec.length() <= 1) {
 				this.onCollectCoin(coin);
 			} else {
@@ -93,15 +93,15 @@ public class GoldMagnetEntity extends PVZPlantEntity {
 	 */
 	protected void onCollectCoin(DropEntity drop) {
 		this.getOwnerPlayer().ifPresent(player -> {
-			if(drop instanceof CoinEntity) {
+			if (drop instanceof CoinEntity) {
 				PlayerUtil.addResource(player, Resources.MONEY, drop.getAmount());
 				EntityUtil.playSound(this, SoundRegister.COIN_PICK.get());
-			} else if(drop instanceof JewelEntity) {
+			} else if (drop instanceof JewelEntity) {
 				PlayerUtil.addResource(player, Resources.GEM_NUM, drop.getAmount());
 				EntityUtil.playSound(this, SoundRegister.JEWEL_PICK.get());
 			}
 		});
-		drop.remove();
+		drop.discard();
 	}
 
 	@Override
@@ -119,8 +119,8 @@ public class GoldMagnetEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.5f, 1.3f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.5f, 1.3f);
 	}
 
 	@Override

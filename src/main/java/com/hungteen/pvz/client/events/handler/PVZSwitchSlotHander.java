@@ -11,8 +11,8 @@ import com.hungteen.pvz.common.capability.CapabilityHandler;
 public class PVZSwitchSlotHander {
 
     /**
-     * {@link com.hungteen.pvz.client.events.PVZInputEvents#onKeyDown(net.minecraftforge.client.event.InputEvent.KeyInputEvent)}
-     * {@link com.hungteen.pvz.client.events.PVZInputEvents#onMouseScroll(net.minecraftforge.client.event.InputEvent.MouseScrollEvent)}
+     * {@link com.hungteen.pvz.client.events.PVZInputEvents#onKeyDown(net.minecraftforge.client.event.InputEvent.Key)}
+     * {@link com.hungteen.pvz.client.events.PVZInputEvents#onMouseScroll(net.minecraftforge.client.event.InputEvent.MouseScrollingEvent)}
      */
     public static void changeCardSlot(double delta){
         ClientProxy.MC.player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {

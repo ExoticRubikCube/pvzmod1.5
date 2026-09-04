@@ -1,106 +1,116 @@
 package com.hungteen.pvz.client.model.entity.plant.appease;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.appease.SplitPeaEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Optional;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class SplitPeaModel extends PlantShooterModel<SplitPeaEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer body;
-	private final ModelRenderer head;
-	private final ModelRenderer back;
-	private final ModelRenderer mouth_r1;
-	private final ModelRenderer head_r1;
-	private final ModelRenderer front;
-	private final ModelRenderer down;
-	private final ModelRenderer n_r1;
-	private final ModelRenderer w_r1;
-	private final ModelRenderer e_r1;
-	private final ModelRenderer s_r1;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "split_pea"), "main");
 
-	public SplitPeaModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
+	private final ModelPart total;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart back;
+	private final ModelPart mouth_r1;
+	private final ModelPart head_r1;
+	private final ModelPart front;
+	private final ModelPart down;
+	private final ModelPart n_r1;
+	private final ModelPart w_r1;
+	private final ModelPart e_r1;
+	private final ModelPart s_r1;
 
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(body);
-		setRotationAngle(body, -0.0873F, 0.0F, 0.0F);
-		body.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -12.0F, 0.0F);
-		body.addChild(head);
-		setRotationAngle(head, 0.0873F, 0.0F, 0.0F);
-		head.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, 0.0F, false);
-
-		back = new ModelRenderer(this);
-		back.setPos(0.0F, -2.6F, 8.2F);
-		head.addChild(back);
-		back.texOffs(30, 0).addBox(-2.0F, -1.0F, -0.7F, 4.0F, 4.0F, 3.0F, 0.0F, false);
-		back.texOffs(10, 32).addBox(-5.0F, -5.0F, 1.0F, 10.0F, 1.0F, 0.0F, 0.0F, false);
-
-		mouth_r1 = new ModelRenderer(this);
-		mouth_r1.setPos(0.0F, 1.0F, 3.2F);
-		back.addChild(mouth_r1);
-		setRotationAngle(mouth_r1, 0.0F, 3.1416F, 0.0F);
-		mouth_r1.texOffs(44, 0).addBox(-3.0F, -3.0F, -1.0F, 6.0F, 6.0F, 2.0F, 0.0F, false);
-
-		head_r1 = new ModelRenderer(this);
-		head_r1.setPos(0.0F, -1.0F, -4.0F);
-		back.addChild(head_r1);
-		setRotationAngle(head_r1, 0.0F, 3.1416F, 0.0F);
-		head_r1.texOffs(0, 0).addBox(-5.0F, -5.0F, -5.0F, 10.0F, 10.0F, 10.0F, -0.5F, false);
-
-		front = new ModelRenderer(this);
-		front.setPos(0.0F, 12.0F, 0.0F);
-		head.addChild(front);
-		front.texOffs(0, 0).addBox(-5.0F, -22.0F, -9.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
-		front.texOffs(30, 0).addBox(-2.0F, -17.0F, -12.0F, 4.0F, 4.0F, 3.0F, 0.0F, false);
-		front.texOffs(44, 0).addBox(-3.0F, -18.0F, -13.0F, 6.0F, 6.0F, 2.0F, 0.0F, false);
-
-		down = new ModelRenderer(this);
-		down.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(down);
 
 
-		n_r1 = new ModelRenderer(this);
-		n_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(n_r1);
-		setRotationAngle(n_r1, -0.1745F, -0.7854F, 0.0F);
-		n_r1.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F, 0.0F, false);
-
-		w_r1 = new ModelRenderer(this);
-		w_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(w_r1);
-		setRotationAngle(w_r1, 0.1745F, -0.7854F, -0.1745F);
-		w_r1.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F, 0.0F, false);
-
-		e_r1 = new ModelRenderer(this);
-		e_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(e_r1);
-		setRotationAngle(e_r1, -0.1745F, -0.7854F, 0.1745F);
-		e_r1.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F, 0.0F, false);
-
-		s_r1 = new ModelRenderer(this);
-		s_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(s_r1);
-		setRotationAngle(s_r1, 0.1745F, -0.7854F, 0.0F);
-		s_r1.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F, 0.0F, false);
+public SplitPeaModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.body = root.getChild("body");
+		this.head = root.getChild("head");
+		this.back = root.getChild("back");
+		this.mouth_r1 = root.getChild("mouth_r1");
+		this.head_r1 = root.getChild("head_r1");
+		this.front = root.getChild("front");
+		this.down = root.getChild("down");
+		this.n_r1 = root.getChild("n_r1");
+		this.w_r1 = root.getChild("w_r1");
+		this.e_r1 = root.getChild("e_r1");
+		this.s_r1 = root.getChild("s_r1");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+		PartDefinition back_pd = head_pd.addOrReplaceChild("back",
+			CubeListBuilder.create()
+				.texOffs(30, 0).addBox(-2.0F, -1.0F, -0.7F, 4.0F, 4.0F, 3.0F)
+				.texOffs(10, 32).addBox(-5.0F, -5.0F, 1.0F, 10.0F, 1.0F, 0.0F),
+			PartPose.offset(0.0F, -2.6F, 8.2F));
+		PartDefinition mouth_r1_pd = back_pd.addOrReplaceChild("mouth_r1",
+			CubeListBuilder.create()
+				.texOffs(44, 0).addBox(-3.0F, -3.0F, -1.0F, 6.0F, 6.0F, 2.0F),
+			PartPose.offsetAndRotation(0.0F, 1.0F, 3.2F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition head_r1_pd = back_pd.addOrReplaceChild("head_r1",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-5.0F, -5.0F, -5.0F, 10.0F, 10.0F, 10.0F, new CubeDeformation(-0.5F)),
+			PartPose.offsetAndRotation(0.0F, -1.0F, -4.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition front_pd = head_pd.addOrReplaceChild("front",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-5.0F, -22.0F, -9.0F, 10.0F, 10.0F, 10.0F)
+				.texOffs(30, 0).addBox(-2.0F, -17.0F, -12.0F, 4.0F, 4.0F, 3.0F)
+				.texOffs(44, 0).addBox(-3.0F, -18.0F, -13.0F, 6.0F, 6.0F, 2.0F),
+			PartPose.offset(0.0F, 12.0F, 0.0F));
+		PartDefinition down_pd = total_pd.addOrReplaceChild("down",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition n_r1_pd = down_pd.addOrReplaceChild("n_r1",
+			CubeListBuilder.create()
+				.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.0F));
+		PartDefinition w_r1_pd = down_pd.addOrReplaceChild("w_r1",
+			CubeListBuilder.create()
+				.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, -0.1745F));
+		PartDefinition e_r1_pd = down_pd.addOrReplaceChild("e_r1",
+			CubeListBuilder.create()
+				.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.1745F));
+		PartDefinition s_r1_pd = down_pd.addOrReplaceChild("s_r1",
+			CubeListBuilder.create()
+				.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
 
 	@Override
 	public void setupAnim(SplitPeaEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
@@ -109,17 +119,17 @@ public class SplitPeaModel extends PlantShooterModel<SplitPeaEntity> {
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getHeadModel() {
+	public Optional<ModelPart> getHeadModel() {
 		return Optional.ofNullable(this.head);
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getBodyModel() {
+	public Optional<ModelPart> getBodyModel() {
 		return Optional.ofNullable(this.body);
 	}
 

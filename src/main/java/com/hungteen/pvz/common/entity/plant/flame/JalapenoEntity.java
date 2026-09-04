@@ -12,16 +12,16 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.*;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class JalapenoEntity extends PlantBomberEntity{
 
-	public JalapenoEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public JalapenoEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -44,7 +44,7 @@ public class JalapenoEntity extends PlantBomberEntity{
 	 * {@link #startBomb(boolean)}
 	 */
 	public static void fireMob(LivingEntity entity, float dx, float dz) {
-		final AxisAlignedBB aabb = new AxisAlignedBB(entity.position().add(dx, 1, dz), entity.position().add(- dx, - 1, - dz));
+		final AABB aabb = new AABB(entity.position().add(dx, 1, dz), entity.position().add(- dx, - 1, - dz));
 		for(Entity target : EntityUtil.getWholeTargetableEntities(entity, aabb)) {
 			float damage = 0;
 			if(entity instanceof JalapenoEntity) {
@@ -90,7 +90,7 @@ public class JalapenoEntity extends PlantBomberEntity{
 	 * spawn flame particle.
 	 */
 	private static void spawnFlame(LivingEntity entity, int dx, int dz) {
-		if(entity.level.isClientSide) {
+		if(entity.level.isClientSide()) {
 			for(int i = 0; i < 20; ++ i) {
 				WorldUtil.spawnRandomSpeedParticle(entity.level, ParticleTypes.FLAME, entity.position().add(dx, 0, dz), 0.1F);
 			}
@@ -101,7 +101,7 @@ public class JalapenoEntity extends PlantBomberEntity{
 	 * clear snow around.
 	 */
 	private static void clearSnow(LivingEntity entity, int dx, int dz) {
-		if(! entity.level.isClientSide) {
+		if(! entity.level.isClientSide()) {
 		    final BlockPos pos = entity.blockPosition().offset(dx, 0, dz);
 		    if(entity.level.getBlockState(pos).getBlock() == Blocks.SNOW || entity.level.getBlockState(pos).getBlock() == Blocks.SNOW_BLOCK) {
 			    entity.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
@@ -120,8 +120,8 @@ public class JalapenoEntity extends PlantBomberEntity{
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.7f, 1.5f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.7f, 1.5f);
 	}
 
 	@Override

@@ -10,15 +10,15 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.Level;
 
 public class CherryBombEntity extends PlantBomberEntity{
 
-	public CherryBombEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CherryBombEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -27,7 +27,7 @@ public class CherryBombEntity extends PlantBomberEntity{
 		if(server) {
 			int deathCnt = 0;
 			final float range = getExplodeRange();
-			final AxisAlignedBB aabb = EntityUtil.getEntityAABB(this, range, range);
+			final AABB aabb = EntityUtil.getEntityAABB(this, range, range);
 			for(Entity target : EntityUtil.getWholeTargetableEntities(this, aabb)) {
 				target.hurt(PVZEntityDamageSource.explode(this), this.getExplodeDamage());
 				if(! EntityUtil.isEntityValid(target)) {
@@ -37,9 +37,9 @@ public class CherryBombEntity extends PlantBomberEntity{
 			PVZPlantEntity.clearLadders(this, aabb);
 			EntityUtil.playSound(this, SoundRegister.CHERRY_BOMB.get());
 			//trigger advancement.
-			PlayerEntity owner = EntityUtil.getEntityOwner(level, this);
-			if(owner != null && owner instanceof ServerPlayerEntity) {
-				EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayerEntity) owner, this, deathCnt);
+			Player owner = EntityUtil.getEntityOwner(level, this);
+			if(owner != null && owner instanceof ServerPlayer) {
+				EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) owner, this, deathCnt);
 			}
 		} else {
 			for(int i = 0; i < 5; ++ i) {
@@ -63,8 +63,8 @@ public class CherryBombEntity extends PlantBomberEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.9f, 1f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.9f, 1f, false);
 	}
 	
 	@Override

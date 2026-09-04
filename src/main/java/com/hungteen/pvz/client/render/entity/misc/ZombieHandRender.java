@@ -5,17 +5,17 @@ import com.hungteen.pvz.client.render.entity.PVZEntityRender;
 import com.hungteen.pvz.common.entity.misc.ZombieHandEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ZombieHandRender extends PVZEntityRender<ZombieHandEntity>{
 
-	public ZombieHandRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new ZombieHandModel());
+	public ZombieHandRender(EntityRendererProvider.Context context) {
+		super(context, new ZombieHandModel(context.bakeLayer(ZombieHandModel.LAYER)));
 	}
 	
     @Override
@@ -24,9 +24,9 @@ public class ZombieHandRender extends PVZEntityRender<ZombieHandEntity>{
 	}
     
     @Override
-    public Vector3d getTranslateVec(ZombieHandEntity entity) {
+    public Vec3 getTranslateVec(ZombieHandEntity entity) {
     	int tick = entity.getTick();//1 - 40
-		return new Vector3d(0, 0.05f * tick, 0);
+		return new Vec3(0, 0.05f * tick, 0);
     }
     
 	@Override

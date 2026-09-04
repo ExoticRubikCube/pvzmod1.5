@@ -8,19 +8,19 @@ import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class SunFlowerEntity extends PlantProducerEntity{
 
-	public SunFlowerEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public SunFlowerEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -38,9 +38,9 @@ public class SunFlowerEntity extends PlantProducerEntity{
 	@Override
 	public void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list) {
 		super.addAlmanacEntries(list);
-		list.addAll(Arrays.asList(
-				Pair.of(PAZAlmanacs.GEN_SUN_AMOUNT, this.getSunAmount())
-		));
+		list.addAll(List.of(
+                Pair.of(PAZAlmanacs.GEN_SUN_AMOUNT, this.getSunAmount())
+        ));
 	}
 
 	/**
@@ -64,8 +64,8 @@ public class SunFlowerEntity extends PlantProducerEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8f, 1.3f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8f, 1.3f);
 	}
 	
 	@Override

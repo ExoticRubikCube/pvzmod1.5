@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.plant.defence.TallNutModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.defence.TallNutEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class TallNutRender extends PVZPlantRender<TallNutEntity>{
 
-	public TallNutRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new TallNutModel(), 0.45f);
+	public TallNutRender(EntityRendererProvider.Context context) {
+		super(context, new TallNutModel(context.bakeLayer(TallNutModel.LAYER)), 0.45f);
 	}
 
 //	@Override

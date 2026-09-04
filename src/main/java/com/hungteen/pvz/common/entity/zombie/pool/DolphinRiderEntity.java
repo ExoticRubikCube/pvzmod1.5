@@ -2,7 +2,7 @@ package com.hungteen.pvz.common.entity.zombie.pool;
 
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.ai.goal.attack.PVZZombieAttackGoal;
-import com.hungteen.pvz.common.entity.ai.navigator.ZombieWaterPathNavigator;
+import com.hungteen.pvz.common.entity.ai.navigator.ZombieWaterPathNavigation;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
@@ -14,18 +14,18 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -35,12 +35,12 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	private static final float UP_SPEED = 0.05f;
 	protected final float HorizontalJumpSpeed = 1.5F;
 	protected final float VerticalJumpSpeed = 0.7F;
-	protected Vector3d jumpDstPoint = Vector3d.ZERO;
+	protected Vec3 jumpDstPoint = Vec3.ZERO;
 	protected int dolphin_jump_cnt;
 	
-	public DolphinRiderEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public DolphinRiderEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
-		setPathfindingMalus(PathNodeType.WATER, 0);
+		setPathfindingMalus(BlockPathTypes.WATER, 0);
 		this.setIsWholeBody();
 		this.canBeMini = false;
 	}
@@ -53,8 +53,8 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-		this.goalSelector.addGoal(7, new RandomWalkingGoal(this, 1.0D));
+		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D));
 		this.goalSelector.addGoal(1, new PVZZombieAttackGoal(this, true));
 		this.goalSelector.addGoal(0, new DolphinJumpGoal(this));
 		this.registerTargetGoals();
@@ -63,10 +63,10 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	@Override
 	public void zombieTick() {
 		super.zombieTick();
-		if(! level.isClientSide) {//swim up
+		if(! level.isClientSide()) {//swim up
 			if(this.isInWater()) {
 				if(this.shouldUp()){
-				    Vector3d v = this.getDeltaMovement();
+				    Vec3 v = this.getDeltaMovement();
 				    this.setDeltaMovement(v.x(), UP_SPEED, v.z());
 				}
 				if(EntityUtil.isEntityValid(this) && this.dolphin_jump_cnt == this.getMaxJumpCount()) {
@@ -87,7 +87,7 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	 */
 	public void perfromJump() {
 		Optional.ofNullable(this.getTarget()).ifPresent(target -> {
-			Vector3d vec = MathUtil.getHorizontalNormalizedVec(this.position(), this.jumpDstPoint);
+			Vec3 vec = MathUtil.getHorizontalNormalizedVec(this.position(), this.jumpDstPoint);
 			final double speedXZ = this.HorizontalJumpSpeed + (this.random.nextDouble() - 0.6D) / 3;
 			final double speedY = this.VerticalJumpSpeed + (this.random.nextDouble() - 0.3D) / 2;
 			this.setDeltaMovement(vec.x * speedXZ , speedY, vec.z * speedXZ);
@@ -130,8 +130,7 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 		ZombieDolphinEntity dolphin = EntityRegister.ZOMBIE_DOLPHIN.get().create(level);
 		ZombieUtil.copySummonZombieData(this, dolphin);
 		EntityUtil.onEntityRandomPosSpawn(level, dolphin, blockPosition(), 3);
-		
-		this.remove();
+this.remove(RemovalReason.KILLED);
 	}
 	
 	/**
@@ -146,8 +145,8 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.7f, 1.6f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.7f, 1.6f);
 	}
 
 	@Override
@@ -156,8 +155,8 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	protected PathNavigator createNavigation(World worldIn) {
-		return new ZombieWaterPathNavigator(this, worldIn);
+	protected PathNavigation createNavigation(Level worldIn) {
+		return new ZombieWaterPathNavigation(this, worldIn);
 	}
 	
 	@Override
@@ -182,11 +181,11 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("jump_dst_point")) {
-			CompoundNBT nbt = compound.getCompound("jump_dst_point");
-			this.jumpDstPoint = new Vector3d(nbt.getDouble("XXX"), nbt.getDouble("YYY"), nbt.getDouble("ZZZ"));
+			CompoundTag nbt = compound.getCompound("jump_dst_point");
+			this.jumpDstPoint = new Vec3(nbt.getDouble("XXX"), nbt.getDouble("YYY"), nbt.getDouble("ZZZ"));
 		}
 		if(compound.contains("dolphin_jump_count")) {
 			this.dolphin_jump_cnt = compound.getInt("dolphin_jump_count");
@@ -194,9 +193,9 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		final CompoundNBT nbt = new CompoundNBT();
+		final CompoundTag nbt = new CompoundTag();
 		nbt.putDouble("XXX", this.jumpDstPoint.x);
 		nbt.putDouble("YYY", this.jumpDstPoint.y);
 		nbt.putDouble("ZZZ", this.jumpDstPoint.z);
@@ -241,7 +240,7 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 			if(dis < 64 || dis > Math.max(120, 120 * left_jump_chance * left_jump_chance)) {
 				return false;
 			}
-			Vector3d vec = MathUtil.getHorizontalNormalizedVec(zombie.position(), target.position())
+			Vec3 vec = MathUtil.getHorizontalNormalizedVec(zombie.position(), target.position())
 					.scale(this.zombie.HorizontalJumpSpeed)
 					.add(0, this.zombie.VerticalJumpSpeed * 2, 0);
 			if(! EntityUtil.canEntityPass(zombie, vec, 10)) {

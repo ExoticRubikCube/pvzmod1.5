@@ -45,7 +45,7 @@ public class WaveManager {
 //	}
 //
 
-//	public static void giveInvasionBonusToPlayer(World world, PlayerEntity player) {
+//	public static void giveInvasionBonusToPlayer(Level world, Player player) {
 //		if(! PlayerUtil.isPlayerSurvival(player)) return ;//do not effect to creative players.
 //		player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {
 //			int cnt = l.getPlayerData().getResource(Resources.KILL_COUNT);
@@ -72,7 +72,7 @@ public class WaveManager {
 //	/**
 //	 * get random enjoy card for bonus.
 //	 */
-//	private static ItemStack getRandomItemForPlayer(World world) {
+//	private static ItemStack getRandomItemForPlayer(Level world) {
 //		PVZInvasionData data = PVZInvasionData.getOverWorldInvasionData(world);
 //		for(IInvasionType ev : InvasionType.getAllInvasionEvents()) {
 //			if(data.hasEvent(ev)) {

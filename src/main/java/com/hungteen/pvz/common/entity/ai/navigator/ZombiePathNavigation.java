@@ -1,17 +1,17 @@
 package com.hungteen.pvz.common.entity.ai.navigator;
 
-import com.hungteen.pvz.common.entity.ai.processor.ZombieNodeProcessor;
+import com.hungteen.pvz.common.entity.ai.processor.ZombiePathNodeEvaluator;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
-public class ZombiePathNavigator extends GroundPathNavigator {
+public class ZombiePathNavigation extends GroundPathNavigation {
 
-	public ZombiePathNavigator(MobEntity p_i45875_1_, World p_i45875_2_) {
+	public ZombiePathNavigation(Mob p_i45875_1_, Level p_i45875_2_) {
 		super(p_i45875_1_, p_i45875_2_);
 	}
 
@@ -35,9 +35,9 @@ public class ZombiePathNavigator extends GroundPathNavigator {
 //			}
 //		}
 		/* end */
-		Vector3d vector3d = this.getTempMobPos();
+		Vec3 vector3d = this.getTempMobPos();
 		this.maxDistanceToWaypoint = this.mob.getBbWidth() > 0.75F ? this.mob.getBbWidth() / 2.0F : 0.75F - this.mob.getBbWidth() / 2.0F;
-		Vector3i vector3i = this.path.getNextNodePos();
+		Vec3i vector3i = this.path.getNextNodePos();
 		final double d0 = Math.abs(this.mob.getX() - ((double)vector3i.getX() + (this.mob.getBbWidth() + 1) / 2D)); //Forge: Fix MC-94054
 		final double d2 = Math.abs(this.mob.getZ() - ((double)vector3i.getZ() + (this.mob.getBbWidth() + 1) / 2D)); //Forge: Fix MC-94054
 		final boolean flag = d0 < (double) this.maxDistanceToWaypoint && d2 < (double) this.maxDistanceToWaypoint;
@@ -51,17 +51,17 @@ public class ZombiePathNavigator extends GroundPathNavigator {
 	/**
 	 * copy from super.
 	 */
-	private boolean shouldTargetNextNodeInDirection(Vector3d p_234112_1_) {
+	private boolean shouldTargetNextNodeInDirection(Vec3 p_234112_1_) {
 		if (this.path.getNextNodeIndex() + 1 >= this.path.getNodeCount()) {
 			return false;
 		} else {
-			Vector3d vector3d = Vector3d.atBottomCenterOf(this.path.getNextNodePos());
+			Vec3 vector3d = Vec3.atBottomCenterOf(this.path.getNextNodePos());
 			if (!p_234112_1_.closerThan(vector3d, 2.0D)) {
 				return false;
 			} else {
-				Vector3d vector3d1 = Vector3d.atBottomCenterOf(this.path.getNodePos(this.path.getNextNodeIndex() + 1));
-				Vector3d vector3d2 = vector3d1.subtract(vector3d);
-				Vector3d vector3d3 = p_234112_1_.subtract(vector3d);
+				Vec3 vector3d1 = Vec3.atBottomCenterOf(this.path.getNodePos(this.path.getNextNodeIndex() + 1));
+				Vec3 vector3d2 = vector3d1.subtract(vector3d);
+				Vec3 vector3d3 = p_234112_1_.subtract(vector3d);
 				return vector3d2.dot(vector3d3) > 0.0D;
 			}
 		}
@@ -69,7 +69,7 @@ public class ZombiePathNavigator extends GroundPathNavigator {
 
 	@Override
 	protected PathFinder createPathFinder(int p_179679_1_) {
-		this.nodeEvaluator = new ZombieNodeProcessor();
+		this.nodeEvaluator = new ZombiePathNodeEvaluator(false);
 		this.nodeEvaluator.setCanPassDoors(true);
 		return new PathFinder(this.nodeEvaluator, p_179679_1_);
 	}

@@ -4,31 +4,30 @@ import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.common.container.provider.PVZContainerProvider;
 import com.hungteen.pvz.common.container.shop.DaveShopContainer;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 
 public class CrazyDaveEntity extends AbstractDaveEntity {
 
-	public CrazyDaveEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CrazyDaveEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.transactionResource = StringUtil.prefix("crazy_dave");
 	}
 
 	@Override
-	protected void openContainer(ServerPlayerEntity player) {
-		NetworkHooks.openGui(player, new PVZContainerProvider() {
+	protected void openContainer(ServerPlayer player) {
+		NetworkHooks.openScreen(player, new PVZContainerProvider() {
 
 			@Override
-			public Container createMenu(int id, PlayerInventory inventory,
-										PlayerEntity playerEntity) {
+			public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory inventory,
+										Player playerEntity) {
 				return new DaveShopContainer(id, playerEntity, CrazyDaveEntity.this.getId());
 			}
 
@@ -38,8 +37,8 @@ public class CrazyDaveEntity extends AbstractDaveEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.9f, 2.6f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.9f, 2.6f);
 	}
 	
 	@Override

@@ -5,10 +5,10 @@ import com.hungteen.pvz.api.types.IEssenceType;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.tag.PVZBlockTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.TagKey;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -159,10 +159,10 @@ public class EssenceTypes {
 		private final Supplier<Item> itemSupplier;
 		private final Supplier<Block> oreSupplier;
 		private final Supplier<Block> blockSupplier;
-		private final ITag.INamedTag<Block> essenceTag;
+		private final TagKey<Block> essenceTag;
 		private final String essenceName;
 
-		public EssenceType(@Nonnull  String name, @Nonnull Supplier<Item> itemSup, @Nonnull Supplier<Block> oreSup, @Nonnull Supplier<Block> blockSup, ITag.INamedTag<Block> tag) {
+		public EssenceType(@Nonnull  String name, @Nonnull Supplier<Item> itemSup, @Nonnull Supplier<Block> oreSup, @Nonnull Supplier<Block> blockSup, TagKey<Block> tag) {
 			this.essenceName = name;
 			this.itemSupplier = itemSup;
 			this.oreSupplier = oreSup;
@@ -192,7 +192,7 @@ public class EssenceTypes {
 			return Optional.ofNullable(this.blockSupplier.get());
 		}
 
-		public Optional<ITag.INamedTag<Block>> getRadiationBlockTag() {
+		public Optional<TagKey<Block>> getRadiationBlockTag() {
 			return Optional.ofNullable(this.essenceTag);
 		}
 

@@ -4,18 +4,18 @@ import com.hungteen.pvz.client.model.entity.zombie.pool.PogoZombieModel;
 import com.hungteen.pvz.client.render.entity.zombie.PVZZombieRender;
 import com.hungteen.pvz.common.entity.zombie.pool.PogoZombieEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.phys.Vec3;
 
 public class PogoZombieRender extends PVZZombieRender<PogoZombieEntity>{
 
-	public PogoZombieRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new PogoZombieModel(), 0.45f);
+	public PogoZombieRender(EntityRendererProvider.Context context) {
+		super(context, new PogoZombieModel(context.bakeLayer(PogoZombieModel.LAYER)), 0.45f);
 	}
 
 	@Override
-	public Vector3d getTranslateVec(PogoZombieEntity entity) {
-		if(! entity.hasMetal()) return new Vector3d(0, 0.4, 0);
+	public Vec3 getTranslateVec(PogoZombieEntity entity) {
+		if(! entity.hasMetal()) return new Vec3(0, 0.4, 0);
 		return super.getTranslateVec(entity);
 	}
 	

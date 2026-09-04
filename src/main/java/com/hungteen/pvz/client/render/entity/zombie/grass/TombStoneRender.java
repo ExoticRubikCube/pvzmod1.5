@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.zombie.grass.TombStoneModel;
 import com.hungteen.pvz.client.render.entity.zombie.PVZZombieRender;
 import com.hungteen.pvz.common.entity.zombie.grass.TombStoneEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class TombStoneRender extends PVZZombieRender<TombStoneEntity>{
 
-	public TombStoneRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new TombStoneModel<>(), 0.4f);
+	public TombStoneRender(EntityRendererProvider.Context context) {
+		super(context, new TombStoneModel<>(context.bakeLayer(TombStoneModel.LAYER)), 0.4f);
 	}
 
 	@Override

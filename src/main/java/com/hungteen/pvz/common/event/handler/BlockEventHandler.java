@@ -5,15 +5,16 @@ import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.event.world.BlockEvent;
+
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.event.level.BlockEvent;
 
 public class BlockEventHandler {
 
@@ -21,11 +22,11 @@ public class BlockEventHandler {
 	 * trigger endermans around when dig amethyst ore.
 	 */
 	public static void triggerAmethystAround(BlockEvent.BreakEvent ev){
-		if(! ev.getWorld().isClientSide() && ev.getState().getBlock().equals(BlockRegister.AMETHYST_ORE.get()) && PlayerUtil.isValidPlayer(ev.getPlayer())){
+		if(! ev.getLevel().isClientSide() && ev.getState().getBlock().equals(BlockRegister.AMETHYST_ORE.get()) && PlayerUtil.isValidPlayer(ev.getPlayer())){
 			final float range = 10;
-			final AxisAlignedBB aabb = EntityUtil.getEntityAABB(ev.getPlayer(), range, range);
-			EntityUtil.getPredicateEntities(ev.getPlayer(), aabb, EndermanEntity.class, (e) -> true).forEach(enderman ->{
-				if(ev.getWorld().getRandom().nextFloat() < 0.4){
+			final AABB aabb = EntityUtil.getEntityAABB(ev.getPlayer(), range, range);
+			EntityUtil.getPredicateEntities(ev.getPlayer(), aabb, EnderMan.class, (e) -> true).forEach(enderman ->{
+				if(ev.getLevel().getRandom().nextFloat() < 0.4){
 					enderman.setTarget(ev.getPlayer());
 				}
 			});
@@ -33,7 +34,7 @@ public class BlockEventHandler {
 	}
 
 	public static void checkAndDropSeeds(BlockEvent.BreakEvent ev) {
-		PlayerEntity player = ev.getPlayer();
+		Player player = ev.getPlayer();
 		BlockState state = ev.getState();
 		BlockPos pos = ev.getPos();
 		if(! player.level.isClientSide) {

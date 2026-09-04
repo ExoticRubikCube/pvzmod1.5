@@ -9,34 +9,34 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class MetalItemEntity extends PVZItemBulletEntity {
 
-	private static final DataParameter<Integer> METAL_TYPE = EntityDataManager.defineId(MetalItemEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Integer> METAL_STATE = EntityDataManager.defineId(MetalItemEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> METAL_TYPE = SynchedEntityData.defineId(MetalItemEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> METAL_STATE = SynchedEntityData.defineId(MetalItemEntity.class,
+			EntityDataSerializers.INT);
 	private ItemStack stack = null;
 	
-	public MetalItemEntity(EntityType<?> type, World worldIn) {
+	public MetalItemEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public MetalItemEntity(World worldIn, LivingEntity shooter, MetalTypes metalType) {
+	public MetalItemEntity(Level worldIn, LivingEntity shooter, MetalTypes metalType) {
 		super(EntityRegister.METAL.get(), worldIn, shooter);
 		this.setMetalType(metalType);
 	}
@@ -51,19 +51,19 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 	public void tick() {
 		super.tick();
 		this.noPhysics = true;
-		if(! level.isClientSide && this.getThrower() instanceof MagnetShroomEntity) {
+		if(! level.isClientSide() && this.getThrower() instanceof MagnetShroomEntity) {
 			final MagnetShroomEntity thrower = (MagnetShroomEntity) this.getThrower();
 			if(this.distanceToSqr(thrower) <= 3) {
 				// near the thrower
 				if(this.getMetalState() == MetalStates.ABSORB) {
 					thrower.setMetalType(getMetalType());
-				    this.remove();
+this.remove(RemovalReason.KILLED);
 				} else if(this.getMetalState() == MetalStates.BULLET){
 					this.setMetalState(MetalStates.WAIT);
 				}
 			}
 			if(this.getMetalState() == MetalStates.BULLET || this.getMetalState() == MetalStates.ABSORB) {
-				Vector3d vec = thrower.position().add(0, thrower.getBbHeight(), 0).subtract(this.position());
+				Vec3 vec = thrower.position().add(0, thrower.getBbHeight(), 0).subtract(this.position());
 			    this.setDeltaMovement(vec.normalize().scale(0.8D));
 			} else if(this.getMetalState() == MetalStates.WAIT){
 				LivingEntity target = this.getAttackTarget(thrower);
@@ -72,7 +72,7 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 					return ;
 				}
 				this.setMetalState(MetalStates.SHOOT);
-				Vector3d vec = target.position().add(0, target.getEyeHeight(), 0).subtract(this.position());
+				Vec3 vec = target.position().add(0, target.getEyeHeight(), 0).subtract(this.position());
 				this.shootPea(vec.x, vec.y, vec.z, 1.4F, 0);
 			}
 		}
@@ -92,10 +92,10 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 	}
 	
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				target.hurt(PVZEntityDamageSource.metal(this, this.getThrower()), this.getAttackDamage());
@@ -105,7 +105,7 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || ! this.checkLive(result)) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
@@ -115,16 +115,16 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 	}
 	
 	@Override
-	protected boolean checkLive(RayTraceResult result) {
-		if(this.getMetalState() != MetalStates.SHOOT || result.getType() == RayTraceResult.Type.BLOCK) {
+	protected boolean checkLive(HitResult result) {
+		if(this.getMetalState() != MetalStates.SHOOT || result.getType() == HitResult.Type.BLOCK) {
 			return true;
 		}
 		return super.checkLive(result);
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.2f, 0.2f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.2f, 0.2f, false);
 	}
 
 	@Override
@@ -143,14 +143,14 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("metal_type", this.getMetalType().ordinal());
 		compound.putInt("metal_state", this.getMetalState().ordinal());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("metal_type")) {
 			this.setMetalType(MetalTypes.values()[compound.getInt("metal_type")]);

@@ -3,23 +3,23 @@ package com.hungteen.pvz.common.entity.plant.toxic;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.level.Level;
 
 public class SeaShroomEntity extends PuffShroomEntity {
 
-	public SeaShroomEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public SeaShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SwimGoal(this));
+		this.goalSelector.addGoal(2, new FloatGoal(this));
 	}
 	
 	@Override
@@ -28,8 +28,8 @@ public class SeaShroomEntity extends PuffShroomEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.5f, 0.8f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.5f, 0.8f);
 	}
 
 	@Override

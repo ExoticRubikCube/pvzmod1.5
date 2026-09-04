@@ -17,10 +17,10 @@ import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,21 +29,21 @@ public class PotatoMineEntity extends PlantCloserEntity{
 
 	public static final int RISING_ANIM_CD = 20;
 	
-	public PotatoMineEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public PotatoMineEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			if(this.getExistTick() == this.getPrepareCD() - RISING_ANIM_CD + 1) {
 				EntityUtil.playSound(this, SoundRegister.DIRT_RISE.get());
 			}
 		} else {
 			if(this.isRisingFromDirt()) {
 				for(int i = 0; i < 1; ++ i) {
-					Vector3d offset = new Vector3d(MathUtil.getRandomFloat(getRandom()), 0, MathUtil.getRandomFloat(getRandom())).normalize();
+					Vec3 offset = new Vec3(MathUtil.getRandomFloat(getRandom()), 0, MathUtil.getRandomFloat(getRandom())).normalize();
 					WorldUtil.spawnRandomSpeedParticle(level, ParticleRegister.DIRT_BURST_OUT.get(), this.position().add(offset), MathUtil.getRandomFloat(getRandom()) / 8, 0.06F);
 				}
 			}
@@ -62,9 +62,9 @@ public class PotatoMineEntity extends PlantCloserEntity{
 
 	@Override
 	public void performAttack(LivingEntity target1) {
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			final float range = 1.6F;
-			final AxisAlignedBB aabb = EntityUtil.getEntityAABB(this, range, range);
+			final AABB aabb = EntityUtil.getEntityAABB(this, range, range);
 			EntityUtil.getWholeTargetableEntities(this, aabb).forEach(target -> {
 				target.hurt(PVZEntityDamageSource.explode(this), this.getExplodeDamage());
 			});
@@ -74,7 +74,7 @@ public class PotatoMineEntity extends PlantCloserEntity{
 				EntityUtil.spawnParticle(this, 3);
 				EntityUtil.spawnParticle(this, 4);
 			}
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
@@ -146,7 +146,7 @@ public class PotatoMineEntity extends PlantCloserEntity{
 	}
 	
 	/**
-	 * {@link PotatoEntity#onImpact(net.minecraft.util.math.RayTraceResult)}
+	 * {@link PotatoEntity#onImpact(net.minecraft.util.math.HitResult)}
 	 */
 	public void setRisingFromDirt() {
 		this.setExistTick(this.getPrepareCD() - RISING_ANIM_CD - 2);
@@ -171,8 +171,8 @@ public class PotatoMineEntity extends PlantCloserEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.6f, 0.4f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.6f, 0.4f, false);
 	}
 
 	@Override

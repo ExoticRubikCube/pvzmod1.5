@@ -8,24 +8,24 @@ import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.state.Property;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class SlotMachineItem extends BlockItem {
 
@@ -34,48 +34,49 @@ public class SlotMachineItem extends BlockItem {
 	}
 
 	/**
-	 * copy from super.
+	 * Copy from super BlockItem#place using 1.19.2 BlockPlaceContext.
 	 */
 	@Override
-	public ActionResultType place(BlockItemUseContext p_195942_1_) {
-		if (!p_195942_1_.canPlace()) {
-			return ActionResultType.FAIL;
+	public InteractionResult place(BlockPlaceContext context) {
+		if (!context.canPlace()) {
+			return InteractionResult.FAIL;
 		} else {
-			BlockItemUseContext blockitemusecontext = this.updatePlacementContext(p_195942_1_);
-			if (blockitemusecontext == null) {
-				return ActionResultType.FAIL;
+			BlockPlaceContext blockplacecontext = this.updatePlacementContext(context);
+			if (blockplacecontext == null) {
+				return InteractionResult.FAIL;
 			} else {
-				BlockState blockstate = this.getPlacementState(blockitemusecontext);
+				BlockState blockstate = this.getPlacementState(blockplacecontext);
 				if (blockstate == null) {
-					return ActionResultType.FAIL;
-				} else if (!this.placeBlock(blockitemusecontext, blockstate)) {
-					return ActionResultType.FAIL;
+					return InteractionResult.FAIL;
+				} else if (!this.placeBlock(blockplacecontext, blockstate)) {
+					return InteractionResult.FAIL;
 				} else {
-					BlockPos blockpos = blockitemusecontext.getClickedPos();
-					World world = blockitemusecontext.getLevel();
-					PlayerEntity playerentity = blockitemusecontext.getPlayer();
-					ItemStack itemstack = blockitemusecontext.getItemInHand();
+					BlockPos blockpos = blockplacecontext.getClickedPos();
+					Level world = blockplacecontext.getLevel();
+					Player playerentity = blockplacecontext.getPlayer();
+					ItemStack itemstack = blockplacecontext.getItemInHand();
 					BlockState blockstate1 = world.getBlockState(blockpos);
 					Block block = blockstate1.getBlock();
+
 					if (block == blockstate.getBlock()) {
 						blockstate1 = this.updateBlockStateFromTag(blockpos, world, itemstack, blockstate1);
 						this.updateCustomBlockEntityTag(blockpos, world, playerentity, itemstack, blockstate1);
 						block.setPlacedBy(world, blockpos, blockstate1, playerentity, itemstack);
-						if (playerentity instanceof ServerPlayerEntity) {
-							CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) playerentity, blockpos,
-									itemstack);
+						if (playerentity instanceof ServerPlayer serverPlayer) {
+							CriteriaTriggers.PLACED_BLOCK.trigger(serverPlayer, blockpos, itemstack);
 						}
 					}
 
-					SoundType soundtype = blockstate1.getSoundType(world, blockpos, p_195942_1_.getPlayer());
+					SoundType soundtype = blockstate1.getSoundType(world, blockpos, context.getPlayer());
 					world.playSound(playerentity, blockpos,
-							this.getPlaceSound(blockstate1, world, blockpos, p_195942_1_.getPlayer()),
-							SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-					if (playerentity == null || !playerentity.abilities.instabuild) {
+							this.getPlaceSound(blockstate1, world, blockpos, playerentity),
+							SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+
+					if (!playerentity.getAbilities().instabuild) {
 						itemstack.shrink(1);
 					}
 
-					return ActionResultType.sidedSuccess(world.isClientSide);
+					return InteractionResult.sidedSuccess(world.isClientSide);
 				}
 			}
 		}
@@ -84,23 +85,23 @@ public class SlotMachineItem extends BlockItem {
 	/**
 	 * copy from super.
 	 */
-	protected boolean updateCustomBlockEntityTag(BlockPos p_195943_1_, World p_195943_2_,
-			@Nullable PlayerEntity p_195943_3_, ItemStack p_195943_4_, BlockState p_195943_5_) {
+	protected boolean updateCustomBlockEntityTag(BlockPos p_195943_1_, Level p_195943_2_,
+			@Nullable Player p_195943_3_, ItemStack p_195943_4_, BlockState p_195943_5_) {
 		return updateCustomBlockEntityTag(p_195943_2_, p_195943_3_, p_195943_1_, p_195943_4_);
 	}
 	
 	/**
 	 * copy from super.
 	 */
-	public static boolean updateCustomBlockEntityTag(World p_179224_0_, @Nullable PlayerEntity p_179224_1_,
+	public static boolean updateCustomBlockEntityTag(Level p_179224_0_, @Nullable Player p_179224_1_,
 			BlockPos p_179224_2_, ItemStack stack) {
 		MinecraftServer minecraftserver = p_179224_0_.getServer();
 		if (minecraftserver == null) {
 			return false;
 		} else {
-			CompoundNBT compoundnbt = stack.getTagElement("BlockEntityTag");
+			CompoundTag compoundnbt = stack.getTagElement("BlockEntityTag");
 			if (compoundnbt != null) {
-				TileEntity tileentity = p_179224_0_.getBlockEntity(p_179224_2_);
+				BlockEntity tileentity = p_179224_0_.getBlockEntity(p_179224_2_);
 				if (tileentity instanceof SlotMachineTileEntity) {
 					if (!p_179224_0_.isClientSide && tileentity.onlyOpCanSetNbt()
 							&& (p_179224_1_ == null || !p_179224_1_.canUseGameMasterBlocks())) {
@@ -110,14 +111,14 @@ public class SlotMachineItem extends BlockItem {
 					//new add.
 					((SlotMachineTileEntity) tileentity).init(SlotMachineBlock.getResourceTag(stack));
 
-					CompoundNBT compoundnbt1 = tileentity.save(new CompoundNBT());
-					CompoundNBT compoundnbt2 = compoundnbt1.copy();
+					CompoundTag compoundnbt1 = tileentity.saveWithFullMetadata();
+					CompoundTag compoundnbt2 = compoundnbt1.copy();
 					compoundnbt1.merge(compoundnbt);
 					compoundnbt1.putInt("x", p_179224_2_.getX());
 					compoundnbt1.putInt("y", p_179224_2_.getY());
 					compoundnbt1.putInt("z", p_179224_2_.getZ());
 					if (!compoundnbt1.equals(compoundnbt2)) {
-						tileentity.load(p_179224_0_.getBlockState(p_179224_2_), compoundnbt1);
+						tileentity.load(compoundnbt1);
 						tileentity.setChanged();
 						return true;
 					}
@@ -131,13 +132,13 @@ public class SlotMachineItem extends BlockItem {
 	/**
 	 * copy from super.
 	 */
-	private BlockState updateBlockStateFromTag(BlockPos p_219985_1_, World p_219985_2_, ItemStack p_219985_3_,
+	private BlockState updateBlockStateFromTag(BlockPos p_219985_1_, Level p_219985_2_, ItemStack p_219985_3_,
 			BlockState p_219985_4_) {
 		BlockState blockstate = p_219985_4_;
-		CompoundNBT compoundnbt = p_219985_3_.getTag();
+		CompoundTag compoundnbt = p_219985_3_.getTag();
 		if (compoundnbt != null) {
-			CompoundNBT compoundnbt1 = compoundnbt.getCompound("BlockStateTag");
-			StateContainer<Block, BlockState> statecontainer = p_219985_4_.getBlock().getStateDefinition();
+			CompoundTag compoundnbt1 = compoundnbt.getCompound("BlockStateTag");
+			StateDefinition<Block, BlockState> statecontainer = p_219985_4_.getBlock().getStateDefinition();
 
 			for (String s : compoundnbt1.getAllKeys()) {
 				Property<?> property = statecontainer.getProperty(s);

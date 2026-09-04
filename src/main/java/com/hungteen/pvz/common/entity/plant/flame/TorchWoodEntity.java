@@ -11,24 +11,24 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 public class TorchWoodEntity extends PVZPlantEntity {
 
-	private static final DataParameter<Integer> FLAME_TYPE = EntityDataManager.defineId(TorchWoodEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> FLAME_TYPE = SynchedEntityData.defineId(TorchWoodEntity.class, EntityDataSerializers.INT);
 	
-	public TorchWoodEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public TorchWoodEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -41,10 +41,10 @@ public class TorchWoodEntity extends PVZPlantEntity {
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(!level.isClientSide()) {
 			this.heatPeas();
 		}else {
-			IParticleData particle = ParticleRegister.YELLOW_FLAME.get();
+			ParticleOptions particle = ParticleRegister.YELLOW_FLAME.get();
 			if(this.getFlameType() == FlameTypes.BLUE) {
 				particle = ParticleRegister.BLUE_FLAME.get();
 			}
@@ -92,8 +92,8 @@ public class TorchWoodEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.95f, 1.5f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.95f, 1.5f, false);
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ public class TorchWoodEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("flame_type")) {
 			this.setFlameType(FlameTypes.values()[compound.getInt("flame_type")]);
@@ -110,7 +110,7 @@ public class TorchWoodEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("flame_type", this.getFlameType().ordinal());
 	}

@@ -1,7 +1,7 @@
 package com.hungteen.pvz.api.types;
 
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.TagKey;
 
 public interface IRankType {
 
@@ -19,12 +19,12 @@ public interface IRankType {
 	/**
 	 * get corresponding template card tag.
 	 */
-	ITag.INamedTag<Item> getCardTag();
+	TagKey<Item> getCardTag();
 	
 	/**
 	 * get corresponding material item.
 	 */
-	ITag.INamedTag<Item> getMaterial();
+	TagKey<Item> getMaterial();
 	
 	/**
 	 * enchant point.

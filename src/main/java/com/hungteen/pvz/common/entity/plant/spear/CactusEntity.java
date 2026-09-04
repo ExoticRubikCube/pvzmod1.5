@@ -10,17 +10,17 @@ import com.hungteen.pvz.common.entity.zombie.pool.BalloonZombieEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
 
 public class CactusEntity extends PlantShooterEntity {
 
-	private static final DataParameter<Float> CACTUS_HEIGHT = EntityDataManager.defineId(CactusEntity.class, DataSerializers.FLOAT);
-	private static final DataParameter<Boolean> POWERED = EntityDataManager.defineId(CactusEntity.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Float> CACTUS_HEIGHT = SynchedEntityData.defineId(CactusEntity.class, EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Boolean> POWERED = SynchedEntityData.defineId(CactusEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final float MAX_SEGMENT_NUM = 4;
 	public static final float SEGMENT_HEIGHT = 0.54F;
 	private static final float MIN_SHOOT_HEIGHT = 1.25F;
@@ -28,7 +28,7 @@ public class CactusEntity extends PlantShooterEntity {
 	protected static final double SHOOT_OFFSET = 0.3D; //pea position offset
 	
 	
-	public CactusEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CactusEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -42,7 +42,7 @@ public class CactusEntity extends PlantShooterEntity {
 	@Override
 	public void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			final LivingEntity target = this.getTarget();
 			if(EntityUtil.isEntityValid(target)) {
 				if(! this.isSuitableHeight(target)) {
@@ -60,7 +60,7 @@ public class CactusEntity extends PlantShooterEntity {
 	}
 	
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> data) {
+	public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
 		super.onSyncedDataUpdated(data);
 		if(data.equals(CACTUS_HEIGHT)){
 			this.refreshDimensions();
@@ -140,8 +140,8 @@ public class CactusEntity extends PlantShooterEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8F, 2.0F + this.getCactusHeight());
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8F, 2.0F + this.getCactusHeight());
 	}
 	
 	@Override
@@ -161,7 +161,7 @@ public class CactusEntity extends PlantShooterEntity {
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("cactus_powered")) {
 			this.setCactusPowered(compound.getBoolean("cactus_powered"));
@@ -172,7 +172,7 @@ public class CactusEntity extends PlantShooterEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("cactus_powered", this.isCactusPowered());
 		compound.putFloat("cactus_height", this.getCactusHeight());

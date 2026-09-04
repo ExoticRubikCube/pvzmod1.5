@@ -5,22 +5,19 @@ import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.BossEvent;
+import net.minecraft.world.level.Level;
 
 public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 
-	protected final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenScreen(true);
+	protected final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 	protected int refreshCountCD = 30; 
 	protected int spawnImmuneCD = 100;
 	protected float kickRange = 0;
@@ -30,7 +27,7 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 	protected int nearbyZombieCount = 0;
 	private int noTargetTick = 0;
 	
-	public AbstractBossZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public AbstractBossZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canCollideWithZombie = false;
 		this.canBeCharm = false;
@@ -42,7 +39,7 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	protected VariantType getSpawnType() {
+	public VariantType getRandomVariant() {
 		return VariantType.NORMAL;
 	}
 	
@@ -50,8 +47,8 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 	public void zombieTick() {
 		super.zombieTick();
 		final float percent = EntityUtil.getCurrentHealth(this) / EntityUtil.getCurrentMaxHealth(this);
-		this.bossInfo.setPercent(percent);
-		if(! level.isClientSide) {
+		this.bossInfo.setProgress(percent);
+		if(! level.isClientSide()) {
 			this.checkAndHeal(percent);
 			if(this.tickCount % this.refreshCountCD == 0) {
 				this.nearbyPlantCount = this.getNearbyPlantCount();
@@ -89,12 +86,12 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 		return super.isZombieInvulnerableTo(source) || this.tickCount <= this.spawnImmuneCD;
 	}
 	
-	public void startSeenByPlayer(ServerPlayerEntity player) {
+	public void startSeenByPlayer(ServerPlayer player) {
 		super.startSeenByPlayer(player);
 		this.bossInfo.addPlayer(player);
 	}
 
-	public void stopSeenByPlayer(ServerPlayerEntity player) {
+	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
 		this.bossInfo.removePlayer(player);
 	}
@@ -107,7 +104,7 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 	@Override
 	protected void doPush(Entity entityIn) {
 		super.doPush(entityIn);
-		if (! level.isClientSide && entityIn instanceof LivingEntity && EntityUtil.canTargetEntity(this, entityIn)) {
+		if (! level.isClientSide() && entityIn instanceof LivingEntity && EntityUtil.canTargetEntity(this, entityIn)) {
 			if(this.tickCount % 5 == 0) {
 				entityIn.hurt(PVZEntityDamageSource.causeCrushDamage(this), EntityUtil.getMaxHealthDamage((LivingEntity) entityIn, 0.5F));
 			}

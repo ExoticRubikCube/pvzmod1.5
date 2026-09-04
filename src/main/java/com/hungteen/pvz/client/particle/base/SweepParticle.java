@@ -1,18 +1,18 @@
 package com.hungteen.pvz.client.particle.base;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class SweepParticle extends SpriteTexturedParticle {
+public abstract class SweepParticle extends TextureSheetParticle {
 	
-	protected final IAnimatedSprite sprite;
+	protected final SpriteSet sprite;
 
-	protected SweepParticle(ClientWorld world, double x, double y, double z, double scale, IAnimatedSprite sprite) {
+	protected SweepParticle(ClientLevel world, double x, double y, double z, double scale, SpriteSet sprite) {
 	      super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 	      this.sprite = sprite;
 	      this.lifetime = 4;
@@ -39,8 +39,8 @@ public abstract class SweepParticle extends SpriteTexturedParticle {
 		}
 	}
 
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_LIT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_LIT;
 	}
 
 }

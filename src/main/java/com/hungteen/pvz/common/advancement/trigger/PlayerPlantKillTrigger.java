@@ -3,19 +3,13 @@ package com.hungteen.pvz.common.advancement.trigger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.utils.StringUtil;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.DamageSourcePredicate;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.EntityPredicate.AndPredicate;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-
-public class PlayerPlantKillTrigger extends AbstractCriterionTrigger<PlayerPlantKillTrigger.Instance> {
+public class PlayerPlantKillTrigger extends SimpleCriterionTrigger<PlayerPlantKillTrigger.Instance> {
 
 	private static final ResourceLocation ID = StringUtil.prefix("player_plant_kill");
 	public static final PlayerPlantKillTrigger INSTANCE = new PlayerPlantKillTrigger();
@@ -28,29 +22,29 @@ public class PlayerPlantKillTrigger extends AbstractCriterionTrigger<PlayerPlant
 	 * Deserialize a ICriterionInstance of this trigger from the data in the JSON.
 	 */
 	@Override
-	protected Instance createInstance(JsonObject json, AndPredicate player,
-			ConditionArrayParser p_230241_3_) {
-		return new PlayerPlantKillTrigger.Instance(player, EntityPredicate.fromJson(json.get("entity")), DamageSourcePredicate.fromJson(json.get("killing_blow")));
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite player,
+									  DeserializationContext p_230241_3_) {
+		return new Instance(player, EntityPredicate.fromJson(json.get("entity")), DamageSourcePredicate.fromJson(json.get("killing_blow")));
 	}
 
-	public void trigger(ServerPlayerEntity player, Entity entity, DamageSource source) {
+	public void trigger(ServerPlayer player, Entity entity, DamageSource source) {
 		this.trigger(player, (instance) -> {
 			return instance.test(player, entity, source);
 		});
 	}
 
-	public static class Instance extends CriterionInstance {
+	public static class Instance extends AbstractCriterionTriggerInstance {
 
 		private final EntityPredicate entity;
 		private final DamageSourcePredicate killingBlow;
 
-		public Instance(EntityPredicate.AndPredicate player, EntityPredicate entity, DamageSourcePredicate killingBlow) {
+		public Instance(EntityPredicate.Composite player, EntityPredicate entity, DamageSourcePredicate killingBlow) {
 			super(ID, player);
 			this.entity = entity;
 			this.killingBlow = killingBlow;
 		}
 
-		public boolean test(ServerPlayerEntity player, Entity entity, DamageSource source) {
+		public boolean test(ServerPlayer player, Entity entity, DamageSource source) {
 			return !this.killingBlow.matches(player, source) ? false : this.entity.matches(player, entity);
 		}
 

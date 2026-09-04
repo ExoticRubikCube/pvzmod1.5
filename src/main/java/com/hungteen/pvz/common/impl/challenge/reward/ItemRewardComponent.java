@@ -9,12 +9,12 @@ import com.hungteen.pvz.common.entity.misc.GiftBoxEntity;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ItemRewardComponent implements IRewardComponent {
     private final List<Pair<ItemStack, IAmountComponent>> list = new ArrayList<>();
 
     @Override
-    public void reward(ServerPlayerEntity player) {
+    public void reward(ServerPlayer player) {
     }
 
     @Override
@@ -53,14 +53,14 @@ public class ItemRewardComponent implements IRewardComponent {
                 if (e.isJsonObject()) {
                     final JsonObject obj = e.getAsJsonObject();
 
-                    ItemStack stack = new ItemStack(JSONUtils.getAsItem(obj, "item"));
+                    ItemStack stack = new ItemStack(GsonHelper.getAsItem(obj, "item"));
                     if (obj.has("data")) {
                         throw new JsonParseException("Disallowed data tag found");
                     }
 
                     if (obj.has("nbt")) {
                         try {
-                            CompoundNBT compoundnbt = JsonToNBT.parseTag(JSONUtils.convertToString(obj.get("nbt"), "nbt"));
+                            CompoundTag compoundnbt = TagParser.parseTag(GsonHelper.convertToString(obj.get("nbt"), "nbt"));
                             stack.setTag(compoundnbt);
                         } catch (CommandSyntaxException commandsyntaxexception) {
                             throw new JsonSyntaxException("Invalid nbt tag: " + commandsyntaxexception.getMessage());

@@ -8,16 +8,16 @@ import com.hungteen.pvz.client.render.layer.MetalItemLayer;
 import com.hungteen.pvz.common.entity.plant.assist.MagnetShroomEntity;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MagnetShroomRender extends PVZPlantRender<MagnetShroomEntity> {
 
-	public MagnetShroomRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new MagnetShroomModel(), 0.3f);
+	public MagnetShroomRender(EntityRendererProvider.Context context) {
+		super(context, new MagnetShroomModel(context.bakeLayer(MagnetShroomModel.LAYER)), 0.3f);
 	}
 
 	@Override

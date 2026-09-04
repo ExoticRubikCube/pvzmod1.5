@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.hungteen.pvz.common.entity.plant.base.PlantShooterEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.geom.ModelPart;
 
 public abstract class PlantShooterModel<T extends PlantShooterEntity> extends PVZPlantModel<T> {
 
@@ -34,11 +34,11 @@ public abstract class PlantShooterModel<T extends PlantShooterEntity> extends PV
 		return 15F;
 	}
 	
-	public Optional<ModelRenderer> getHeadModel(){
+	public Optional<ModelPart> getHeadModel(){
 		return Optional.empty();
 	}
 	
-	public Optional<ModelRenderer> getBodyModel(){
+	public Optional<ModelPart> getBodyModel(){
 		return Optional.empty();
 	}
 	

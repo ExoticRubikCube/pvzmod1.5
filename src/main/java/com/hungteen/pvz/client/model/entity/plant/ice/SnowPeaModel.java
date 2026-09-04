@@ -1,141 +1,147 @@
 package com.hungteen.pvz.client.model.entity.plant.ice;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.ice.SnowPeaEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Optional;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class SnowPeaModel extends PlantShooterModel<SnowPeaEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer body;
-	private final ModelRenderer head;
-	private final ModelRenderer hair;
-	private final ModelRenderer u_r1;
-	private final ModelRenderer m_r1;
-	private final ModelRenderer wu_r1;
-	private final ModelRenderer wd_r1;
-	private final ModelRenderer ed_r1;
-	private final ModelRenderer eu_r1;
-	private final ModelRenderer down;
-	private final ModelRenderer n_r1;
-	private final ModelRenderer w_r1;
-	private final ModelRenderer e_r1;
-	private final ModelRenderer s_r1;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "snow_pea"), "main");
 
-	public SnowPeaModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
+	private final ModelPart total;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart hair;
+	private final ModelPart u_r1;
+	private final ModelPart m_r1;
+	private final ModelPart wu_r1;
+	private final ModelPart wd_r1;
+	private final ModelPart ed_r1;
+	private final ModelPart eu_r1;
+	private final ModelPart down;
+	private final ModelPart n_r1;
+	private final ModelPart w_r1;
+	private final ModelPart e_r1;
+	private final ModelPart s_r1;
 
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(body);
-		setRotationAngle(body, -0.0873F, 0.0F, 0.0F);
-		body.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -12.0F, 0.0F);
-		body.addChild(head);
-		setRotationAngle(head, 0.0873F, 0.0F, 0.0F);
-		head.texOffs(30, 0).addBox(-2.0F, -5.0F, -8.0F, 4.0F, 4.0F, 3.0F, 0.0F, false);
-		head.texOffs(44, 0).addBox(-3.0F, -6.0F, -9.0F, 6.0F, 6.0F, 2.0F, 0.0F, false);
-		head.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
-		head.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
-
-		hair = new ModelRenderer(this);
-		hair.setPos(-1.0F, -4.5F, 5.0F);
-		head.addChild(hair);
-		hair.texOffs(0, 56).addBox(-2.0F, -3.5F, 0.0F, 6.0F, 6.0F, 2.0F, 0.0F, false);
-		hair.texOffs(2, 49).addBox(-1.0F, 0.5F, -1.0F, 3.0F, 3.0F, 4.0F, 0.0F, false);
-
-		u_r1 = new ModelRenderer(this);
-		u_r1.setPos(0.5F, -1.0F, 0.0F);
-		hair.addChild(u_r1);
-		setRotationAngle(u_r1, 0.2618F, -0.1745F, 0.0873F);
-		u_r1.texOffs(16, 55).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 6.0F, 0.0F, false);
-
-		m_r1 = new ModelRenderer(this);
-		m_r1.setPos(2.5F, -1.0F, 0.0F);
-		hair.addChild(m_r1);
-		setRotationAngle(m_r1, -0.1745F, 0.2618F, 0.0F);
-		m_r1.texOffs(32, 49).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F, 0.0F, false);
-
-		wu_r1 = new ModelRenderer(this);
-		wu_r1.setPos(3.5F, -3.0F, 0.0F);
-		hair.addChild(wu_r1);
-		setRotationAngle(wu_r1, 0.5236F, 0.2618F, 0.0F);
-		wu_r1.texOffs(48, 56).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F, 0.0F, false);
-
-		wd_r1 = new ModelRenderer(this);
-		wd_r1.setPos(3.5F, 2.0F, 0.0F);
-		hair.addChild(wd_r1);
-		setRotationAngle(wd_r1, -0.5236F, 0.5236F, 0.0F);
-		wd_r1.texOffs(48, 48).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F, 0.0F, false);
-
-		ed_r1 = new ModelRenderer(this);
-		ed_r1.setPos(-1.5F, 2.0F, 0.0F);
-		hair.addChild(ed_r1);
-		setRotationAngle(ed_r1, -0.4363F, -0.5236F, 0.0F);
-		ed_r1.texOffs(16, 47).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F, 0.0F, false);
-
-		eu_r1 = new ModelRenderer(this);
-		eu_r1.setPos(-1.5F, -3.0F, 0.0F);
-		hair.addChild(eu_r1);
-		setRotationAngle(eu_r1, 0.5236F, -0.5236F, 0.0F);
-		eu_r1.texOffs(34, 57).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 4.0F, 0.0F, false);
-
-		down = new ModelRenderer(this);
-		down.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(down);
 
 
-		n_r1 = new ModelRenderer(this);
-		n_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(n_r1);
-		setRotationAngle(n_r1, -0.1745F, -0.7854F, 0.0F);
-		n_r1.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F, 0.0F, false);
-
-		w_r1 = new ModelRenderer(this);
-		w_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(w_r1);
-		setRotationAngle(w_r1, 0.1745F, -0.7854F, -0.1745F);
-		w_r1.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F, 0.0F, false);
-
-		e_r1 = new ModelRenderer(this);
-		e_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(e_r1);
-		setRotationAngle(e_r1, -0.1745F, -0.7854F, 0.1745F);
-		e_r1.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F, 0.0F, false);
-
-		s_r1 = new ModelRenderer(this);
-		s_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(s_r1);
-		setRotationAngle(s_r1, 0.1745F, -0.7854F, 0.0F);
-		s_r1.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F, 0.0F, false);
+public SnowPeaModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.body = root.getChild("body");
+		this.head = root.getChild("head");
+		this.hair = root.getChild("hair");
+		this.u_r1 = root.getChild("u_r1");
+		this.m_r1 = root.getChild("m_r1");
+		this.wu_r1 = root.getChild("wu_r1");
+		this.wd_r1 = root.getChild("wd_r1");
+		this.ed_r1 = root.getChild("ed_r1");
+		this.eu_r1 = root.getChild("eu_r1");
+		this.down = root.getChild("down");
+		this.n_r1 = root.getChild("n_r1");
+		this.w_r1 = root.getChild("w_r1");
+		this.e_r1 = root.getChild("e_r1");
+		this.s_r1 = root.getChild("s_r1");
 	}
 
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(30, 0).addBox(-2.0F, -5.0F, -8.0F, 4.0F, 4.0F, 3.0F)
+				.texOffs(44, 0).addBox(-3.0F, -6.0F, -9.0F, 6.0F, 6.0F, 2.0F)
+				.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F)
+				.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+		PartDefinition hair_pd = head_pd.addOrReplaceChild("hair",
+			CubeListBuilder.create()
+				.texOffs(0, 56).addBox(-2.0F, -3.5F, 0.0F, 6.0F, 6.0F, 2.0F)
+				.texOffs(2, 49).addBox(-1.0F, 0.5F, -1.0F, 3.0F, 3.0F, 4.0F),
+			PartPose.offset(-1.0F, -4.5F, 5.0F));
+		PartDefinition u_r1_pd = hair_pd.addOrReplaceChild("u_r1",
+			CubeListBuilder.create()
+				.texOffs(16, 55).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 6.0F),
+			PartPose.offsetAndRotation(0.5F, -1.0F, 0.0F, 0.2618F, -0.1745F, 0.0873F));
+		PartDefinition m_r1_pd = hair_pd.addOrReplaceChild("m_r1",
+			CubeListBuilder.create()
+				.texOffs(32, 49).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F),
+			PartPose.offsetAndRotation(2.5F, -1.0F, 0.0F, -0.1745F, 0.2618F, 0.0F));
+		PartDefinition wu_r1_pd = hair_pd.addOrReplaceChild("wu_r1",
+			CubeListBuilder.create()
+				.texOffs(48, 56).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F),
+			PartPose.offsetAndRotation(3.5F, -3.0F, 0.0F, 0.5236F, 0.2618F, 0.0F));
+		PartDefinition wd_r1_pd = hair_pd.addOrReplaceChild("wd_r1",
+			CubeListBuilder.create()
+				.texOffs(48, 48).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F),
+			PartPose.offsetAndRotation(3.5F, 2.0F, 0.0F, -0.5236F, 0.5236F, 0.0F));
+		PartDefinition ed_r1_pd = hair_pd.addOrReplaceChild("ed_r1",
+			CubeListBuilder.create()
+				.texOffs(16, 47).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 5.0F),
+			PartPose.offsetAndRotation(-1.5F, 2.0F, 0.0F, -0.4363F, -0.5236F, 0.0F));
+		PartDefinition eu_r1_pd = hair_pd.addOrReplaceChild("eu_r1",
+			CubeListBuilder.create()
+				.texOffs(34, 57).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 4.0F),
+			PartPose.offsetAndRotation(-1.5F, -3.0F, 0.0F, 0.5236F, -0.5236F, 0.0F));
+		PartDefinition down_pd = total_pd.addOrReplaceChild("down",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition n_r1_pd = down_pd.addOrReplaceChild("n_r1",
+			CubeListBuilder.create()
+				.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.0F));
+		PartDefinition w_r1_pd = down_pd.addOrReplaceChild("w_r1",
+			CubeListBuilder.create()
+				.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, -0.1745F));
+		PartDefinition e_r1_pd = down_pd.addOrReplaceChild("e_r1",
+			CubeListBuilder.create()
+				.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.1745F));
+		PartDefinition s_r1_pd = down_pd.addOrReplaceChild("s_r1",
+			CubeListBuilder.create()
+				.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getHeadModel() {
+	public Optional<ModelPart> getHeadModel() {
 		return Optional.ofNullable(this.head);
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getBodyModel() {
+	public Optional<ModelPart> getBodyModel() {
 		return Optional.ofNullable(this.body);
 	}
 

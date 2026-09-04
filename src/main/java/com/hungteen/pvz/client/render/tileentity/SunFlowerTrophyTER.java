@@ -5,32 +5,32 @@ import com.hungteen.pvz.common.block.AbstractFacingBlock;
 import com.hungteen.pvz.common.block.special.SunFlowerTrophyBlock;
 import com.hungteen.pvz.common.tileentity.SunFlowerTrophyTileEntity;
 import com.hungteen.pvz.utils.StringUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class SunFlowerTrophyTER extends TileEntityRenderer<SunFlowerTrophyTileEntity> {
+public class SunFlowerTrophyTER implements BlockEntityRenderer<SunFlowerTrophyTileEntity> {
 
-	protected final SunFlowerModel model = new SunFlowerModel();
+	protected final SunFlowerModel model;
 	
-	public SunFlowerTrophyTER(TileEntityRendererDispatcher rendererDispatcherIn) {
-		super(rendererDispatcherIn);
+	public SunFlowerTrophyTER(BlockEntityRendererProvider.Context context) {
+		this.model = new SunFlowerModel(context.bakeLayer(SunFlowerModel.LAYER));
 	}
 
 	@Override
-	public void render(SunFlowerTrophyTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn,
-			IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(SunFlowerTrophyTileEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn,
+			MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		SunFlowerTrophyBlock block = (SunFlowerTrophyBlock) tileEntityIn.getBlockState().getBlock();
 		if(block == null) return ;
 		matrixStackIn.pushPose();
@@ -42,7 +42,7 @@ public class SunFlowerTrophyTER extends TileEntityRenderer<SunFlowerTrophyTileEn
 		if(facing == Direction.SOUTH) matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180));
 		else if(facing == Direction.WEST) matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(- 90));
 		else if(facing == Direction.EAST) matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90));
-		IVertexBuilder builder = bufferIn.getBuffer(RenderType.entityTranslucent(getResourceByBlock(block)));
+		VertexConsumer builder = bufferIn.getBuffer(RenderType.entityTranslucent(getResourceByBlock(block)));
 		this.model.renderToBuffer(matrixStackIn, builder, 200, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
 		
 		matrixStackIn.popPose();

@@ -14,30 +14,30 @@ import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 
-	private static final DataParameter<Integer> ZOMBIE_TYPE = EntityDataManager.defineId(ZombieDropBodyEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Integer> BODY_TYPE = EntityDataManager.defineId(ZombieDropBodyEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Integer> BODY_STATE = EntityDataManager.defineId(ZombieDropBodyEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Integer> ANIM_TIME = EntityDataManager.defineId(ZombieDropBodyEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ZOMBIE_TYPE = SynchedEntityData.defineId(ZombieDropBodyEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BODY_TYPE = SynchedEntityData.defineId(ZombieDropBodyEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BODY_STATE = SynchedEntityData.defineId(ZombieDropBodyEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ANIM_TIME = SynchedEntityData.defineId(ZombieDropBodyEntity.class,
+			EntityDataSerializers.INT);
 	public static final int MAX_EXIST_TICK = 60;
 	private static final int HAS_HAND_DEFENCE = 0;
 	private static final int MINI_BODY = 1;
@@ -45,7 +45,7 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 	private int max_exist_tick;
 	private float friction = 0.3F;
 
-	public ZombieDropBodyEntity(EntityType<?> p_i48580_1_, World p_i48580_2_) {
+	public ZombieDropBodyEntity(EntityType<?> p_i48580_1_, Level p_i48580_2_) {
 		super(p_i48580_1_, p_i48580_2_);
 		HEAD_ROT = this.random.nextInt(60) - 30;
 		this.max_exist_tick = MAX_EXIST_TICK;
@@ -63,9 +63,9 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 	public void tick() {
 		super.tick();
 		this.tickMove();
-		if (!this.level.isClientSide) {
+		if (!this.level.isClientSide()) {
 			if (this.getAnimTime() >= this.max_exist_tick) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			} else {
 				this.setAnimTime(this.getAnimTime() + 1);
 			}
@@ -82,7 +82,7 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 		this.updateInfo(zombie, type);
 		switch(type) {
 		case HAND:{
-			float j = 2 * 3.14159f * this.yRot / 360;
+			float j = 2 * 3.14159f * this.getYRot() / 360;
 			final float dis = 0.6F;
 			this.setPos(zombie.position().x - Math.sin(j) * dis, zombie.position().y + zombie.getEyeHeight(), zombie.position().z + Math.cos(j) * dis);
 			break;
@@ -122,7 +122,7 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 		double speedZ = (this.random.nextDouble() - 0.5D) * speedH;
 		double speedY = this.random.nextDouble() * speedV;
 		Optional.ofNullable(source.getSourcePosition()).ifPresent(vec -> {
-			Vector3d v = this.position().subtract(vec);
+			Vec3 v = this.position().subtract(vec);
 			this.setDeltaMovement(v.normalize().multiply(speed, speed, speed).add(speedX, speedY, speedZ));
 		});
 	}
@@ -140,18 +140,18 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 	public void lerpMotion(double p_70016_1_, double p_70016_3_, double p_70016_5_) {
 		this.setDeltaMovement(p_70016_1_, p_70016_3_, p_70016_5_);
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-			float f = MathHelper.sqrt(p_70016_1_ * p_70016_1_ + p_70016_5_ * p_70016_5_);
-			this.xRot = (float) (MathHelper.atan2(p_70016_3_, (double) f) * (double) (180F / (float) Math.PI));
-			this.yRot = (float) (MathHelper.atan2(p_70016_1_, p_70016_5_) * (double) (180F / (float) Math.PI));
-			this.xRotO = this.xRot;
-			this.yRotO = this.yRot;
-			this.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, this.xRot);
+			float f = Mth.sqrt((float) (p_70016_1_ * p_70016_1_ + p_70016_5_ * p_70016_5_));
+			this.setXRot((float) (Mth.atan2(p_70016_3_, f) * (double) (180F / (float) Math.PI)));
+			this.setYRot((float) (Mth.atan2(p_70016_1_, p_70016_5_) * (double) (180F / (float) Math.PI)));
+			this.xRotO = this.getXRot();
+			this.yRotO = this.getYRot();
+			this.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
 		}
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose p_213305_1_) {
-		return EntitySize.scalable(0.5F, 0.5F);
+	public EntityDimensions getDimensions(Pose p_213305_1_) {
+		return EntityDimensions.scalable(0.5F, 0.5F);
 	}
 	
 	public void setMaxLiveTick(int tick) {
@@ -163,7 +163,7 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT nbt) {
+	protected void readAdditionalSaveData(CompoundTag nbt) {
 		if (nbt.contains("body_anim_tick")) {
 			this.setAnimTime(nbt.getInt("body_anim_tick"));
 		}
@@ -179,7 +179,7 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT nbt) {
+	protected void addAdditionalSaveData(CompoundTag nbt) {
 		nbt.putInt("body_anim_tick", this.getAnimTime());
 		nbt.putInt("body_zombie_type", this.getZombieType().getId());
 		nbt.putInt("body_part_state", this.getBodyState());

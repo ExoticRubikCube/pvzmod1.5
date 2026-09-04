@@ -26,8 +26,8 @@ public final class OtherPlants extends PlantType {
 			.entityType(() -> EntityRegister.ICEBERG_LETTUCE.get())
 			.summonCard(() -> ItemRegister.ICEBERG_LETTUCE_CARD.get())
 			.enjoyCard(() -> ItemRegister.ICEBERG_LETTUCE_ENJOY_CARD.get())
-			.plantModel(() -> IcebergLettuceModel::new).scale(1F)
-			.commonSkill(Arrays.asList())
+			.plantModel(() -> () -> new IcebergLettuceModel(IcebergLettuceModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType BONK_CHOY = new OtherPlants("bonk_choy", new PlantFeatures()
@@ -36,8 +36,8 @@ public final class OtherPlants extends PlantType {
 			.entityType(() -> EntityRegister.BONK_CHOY.get())
 			.summonCard(() -> ItemRegister.BONK_CHOY_CARD.get())
 			.enjoyCard(() -> ItemRegister.BONK_CHOY_ENJOY_CARD.get())
-			.plantModel(() -> BonkChoyModel::new).scale(0.9F)
-			.commonSkill(Arrays.asList(SkillTypes.MORE_SWING_DAMAGE))
+			.plantModel(() -> () -> new BonkChoyModel(BonkChoyModel.createBodyLayer().bakeRoot())).scale(0.9F)
+			.commonSkill(List.of(SkillTypes.MORE_SWING_DAMAGE))
 	);
 	
 	public static final IPlantType GOLD_LEAF = new OtherPlants("gold_leaf", new PlantFeatures()
@@ -46,9 +46,9 @@ public final class OtherPlants extends PlantType {
 			.entityType(() -> EntityRegister.GOLD_LEAF.get())
 			.summonCard(() -> ItemRegister.GOLD_LEAF_CARD.get())
 			.enjoyCard(() -> ItemRegister.GOLD_LEAF_ENJOY_CARD.get())
-			.plantModel(() -> GoldLeafModel::new).scale(0.8F)
+			.plantModel(() -> () -> new GoldLeafModel(GoldLeafModel.createBodyLayer().bakeRoot())).scale(0.8F)
 			.placement(Placements.GOLD)
-			.cdSkill(Arrays.asList(SkillTypes.ADVANCE_GOLD))
+			.cdSkill(List.of(SkillTypes.ADVANCE_GOLD))
 	);
 	
 	public static final IPlantType ANGEL_STAR_FRUIT = new OtherPlants("angel_star_fruit", new PlantFeatures()
@@ -57,7 +57,7 @@ public final class OtherPlants extends PlantType {
 			.entityType(() -> EntityRegister.ANGEL_STAR_FRUIT.get())
 			.summonCard(() -> ItemRegister.ANGEL_STAR_FRUIT_CARD.get())
 			.enjoyCard(() -> ItemRegister.ANGEL_STAR_FRUIT_ENJOY_CARD.get())
-			.plantModel(() -> AngelStarFruitModel::new).scale(0.8F)
+			.plantModel(() -> () -> new AngelStarFruitModel(AngelStarFruitModel.createBodyLayer().bakeRoot())).scale(0.8F)
 			.commonSunSkill(Arrays.asList(SkillTypes.MORE_STAR_DAMAGE, SkillTypes.TEN_STARS))
 	);
 	
@@ -67,8 +67,8 @@ public final class OtherPlants extends PlantType {
 			.entityType(() -> EntityRegister.BAMBOO_LORD.get())
 			.summonCard(() -> ItemRegister.BAMBOO_LORD_CARD.get())
 			.enjoyCard(() -> ItemRegister.BAMBOO_LORD_ENJOY_CARD.get())
-			.plantModel(() -> BambooLordModel::new).scale(1F)
-			.commonSkill(Arrays.asList(SkillTypes.SMALL_BOMB_DAMAGE))
+			.plantModel(() -> () -> new BambooLordModel(BambooLordModel.createBodyLayer().bakeRoot())).scale(1F)
+			.commonSkill(List.of(SkillTypes.SMALL_BOMB_DAMAGE))
 	);
 	
 	public static void register() {

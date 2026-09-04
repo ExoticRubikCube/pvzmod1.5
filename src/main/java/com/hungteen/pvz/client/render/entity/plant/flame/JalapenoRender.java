@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.plant.flame.JalapenoModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.flame.JalapenoEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class JalapenoRender extends PVZPlantRender<JalapenoEntity>{
 
-	public JalapenoRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new JalapenoModel(), 0.4f);
+	public JalapenoRender(EntityRendererProvider.Context context) {
+		super(context, new JalapenoModel(context.bakeLayer(JalapenoModel.LAYER)), 0.4f);
 	}
 
 	@Override

@@ -1,23 +1,22 @@
 package com.hungteen.pvz.common.entity.ai.navigator;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.network.DebugPacketSender;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.SwimNodeProcessor;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class ZombieWaterPathNavigator extends SwimmerPathNavigator {
+public class ZombieWaterPathNavigation extends WaterBoundPathNavigation {
 
-	public ZombieWaterPathNavigator(MobEntity p_i45873_1_, World p_i45873_2_) {
+	public ZombieWaterPathNavigation(Mob p_i45873_1_, Level p_i45873_2_) {
 		super(p_i45873_1_, p_i45873_2_);
 	}
 
 	@Override
 	protected PathFinder createPathFinder(int p_179679_1_) {
-		this.nodeEvaluator = new SwimNodeProcessor(true);
+		this.nodeEvaluator = new SwimNodeEvaluator(true);
 		return new PathFinder(this.nodeEvaluator, p_179679_1_);
 	}
 
@@ -31,17 +30,17 @@ public class ZombieWaterPathNavigator extends SwimmerPathNavigator {
 			if (this.canUpdatePath()) {
 				this.followThePath();
 			} else if (this.path != null && !this.path.isDone()) {
-				Vector3d vector3d = this.path.getNextEntityPos(this.mob);
-				if (MathHelper.floor(this.mob.getX()) == MathHelper.floor(vector3d.x)
-						&& MathHelper.floor(this.mob.getY()) == MathHelper.floor(vector3d.y)
-						&& MathHelper.floor(this.mob.getZ()) == MathHelper.floor(vector3d.z)) {
+				Vec3 vector3d = this.path.getNextEntityPos(this.mob);
+				if (Mth.floor(this.mob.getX()) == Mth.floor(vector3d.x)
+						&& Mth.floor(this.mob.getY()) == Mth.floor(vector3d.y)
+						&& Mth.floor(this.mob.getZ()) == Mth.floor(vector3d.z)) {
 					this.path.advance();
 				}
 			}
 
-			DebugPacketSender.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
+			//DebugPacketSender.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
 			if (!this.isDone()) {
-				Vector3d vector3d1 = this.path.getNextEntityPos(this.mob);
+				Vec3 vector3d1 = this.path.getNextEntityPos(this.mob);
 				this.mob.getMoveControl().setWantedPosition(vector3d1.x, vector3d1.y, vector3d1.z, this.speedModifier);
 			}
 		}
@@ -51,15 +50,15 @@ public class ZombieWaterPathNavigator extends SwimmerPathNavigator {
 	protected void followThePath() {
 		if (this.path != null) {
 
-			Vector3d vector3d = this.getTempMobPos();
+			Vec3 vector3d = this.getTempMobPos();
 			float f = this.mob.getBbWidth();
 			float f1 = f > 0.75F ? f / 2.0F : 0.75F - f / 2.0F;
-			Vector3d vector3d1 = this.mob.getDeltaMovement();
+			Vec3 vector3d1 = this.mob.getDeltaMovement();
 			if (Math.abs(vector3d1.x) > 0.2D || Math.abs(vector3d1.z) > 0.2D) {
 				f1 = (float) ((double) f1 * vector3d1.length() * 6.0D);
 			}
 
-			Vector3d vector3d2 = Vector3d.atBottomCenterOf(this.path.getNextNodePos());
+			Vec3 vector3d2 = Vec3.atBottomCenterOf(this.path.getNextNodePos());
 			if (Math.abs(this.mob.getX() - vector3d2.x) < (double) f1
 					&& Math.abs(this.mob.getZ() - vector3d2.z) < (double) f1
 //					&& Math.abs(this.mob.getY() - vector3d2.y) < (double) (f1 * 2.0F)
@@ -72,7 +71,7 @@ public class ZombieWaterPathNavigator extends SwimmerPathNavigator {
 					.getNextNodeIndex(); --j) {
 				vector3d2 = this.path.getEntityPosAtNode(this.mob, j);
 				if (!(vector3d2.distanceToSqr(vector3d) > 36.0D)
-						&& this.canMoveDirectly(vector3d, vector3d2, 0, 0, 0)) {
+						&& this.canMoveDirectly(vector3d, vector3d2)) {
 					this.path.setNextNodeIndex(j);
 					break;
 				}

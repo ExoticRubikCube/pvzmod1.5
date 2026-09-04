@@ -1,9 +1,9 @@
 package com.hungteen.pvz.api.types;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,7 +50,7 @@ public interface IPAZType extends IIDType {
 	/**
 	 * get the entity type of current type.
 	 */
-	Optional<EntityType<? extends CreatureEntity>> getEntityType();
+	Optional<EntityType<? extends Mob>> getEntityType();
 	
 	/**
 	 * get summon card item of type.

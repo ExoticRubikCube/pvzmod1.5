@@ -2,16 +2,16 @@ package com.hungteen.pvz.client.render.entity.effects;
 
 import com.hungteen.pvz.common.entity.effect.OriginEffectEntity;
 import com.hungteen.pvz.utils.AnimationUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,13 +19,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class OriginEffectRender extends EntityRenderer<OriginEffectEntity>{
 
 
-	public OriginEffectRender(EntityRendererManager renderManager) {
-		super(renderManager);
+	public OriginEffectRender(EntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Override
-	public void render(OriginEffectEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
-			IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public void render(OriginEffectEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
+			MultiBufferSource bufferIn, int packedLightIn) {
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 		final int color = entityIn.getColor();
 		matrixStackIn.pushPose();
@@ -68,8 +68,8 @@ public class OriginEffectRender extends EntityRenderer<OriginEffectEntity>{
 		matrixStackIn.popPose();
 	}
 
-	private static void renderLight(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, float len, int color){
-		final IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(RenderType.lightning());
+	private static void renderLight(PoseStack matrixStackIn, MultiBufferSource bufferIn, float len, int color){
+		final VertexConsumer ivertexbuilder2 = bufferIn.getBuffer(RenderType.lightning());
 		matrixStackIn.pushPose();
 		for(int i = 0; (float)i < 4; ++i) {
 			Matrix4f matrix4f = matrixStackIn.last().pose();

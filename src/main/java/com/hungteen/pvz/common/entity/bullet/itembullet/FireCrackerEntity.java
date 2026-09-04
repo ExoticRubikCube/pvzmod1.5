@@ -6,54 +6,54 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class FireCrackerEntity extends PVZItemBulletEntity{
 
 	private static final float SPEED = 1.5F;
 	protected Entity target = null;
 	
-	public FireCrackerEntity(EntityType<?> type, World worldIn) {
+	public FireCrackerEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public FireCrackerEntity(World worldIn, LivingEntity owner) {
+	public FireCrackerEntity(Level worldIn, LivingEntity owner) {
 		super(EntityRegister.FIRE_CRACKER.get(), worldIn, owner);
 	}
 	
 	@Override
 	public void tick() {
 		super.tick();
-		if(! level.isClientSide && EntityUtil.isEntityValid(target)) {
+		if(! level.isClientSide() && EntityUtil.isEntityValid(target)) {
 			this.shoot(this.target);
 		}
 	}
 
-	public void shoot(Vector3d vec) {
+	public void shoot(Vec3 vec) {
 		this.setDeltaMovement(vec.scale(SPEED));
 	}
 	
 	public void shoot(Entity target) {
 		this.target = target;
-		Vector3d vec = target.position().subtract(this.position()).normalize();
+		Vec3 vec = target.position().subtract(this.position()).normalize();
 		this.shoot(vec);
 	}
 	
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				this.dealDamage(target); // attack 
@@ -62,15 +62,15 @@ public class FireCrackerEntity extends PVZItemBulletEntity{
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		} else if(! this.checkLive(result)) {
 			this.dealDamage(null);
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
 	private void dealDamage(Entity target) {
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			EntityUtil.playSound(this, SoundRegister.POTATO_MINE.get());
 		    float range = 3F;
 		    EntityUtil.getTargetableEntities(this.getOwnerOrSelf(), EntityUtil.getEntityAABB(this, range, range)).forEach((entity) -> {
@@ -88,15 +88,15 @@ public class FireCrackerEntity extends PVZItemBulletEntity{
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("target_entity_id")) {
-			this.target = (Entity) level.getEntity(compound.getInt("target_entity_id"));
+			this.target = level.getEntity(compound.getInt("target_entity_id"));
 		}
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		if(this.target != null) {
 			compound.putInt("target_entity_id", this.target.getId());
@@ -114,8 +114,8 @@ public class FireCrackerEntity extends PVZItemBulletEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.5F, 0.5F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.5F, 0.5F);
 	}
 
 }

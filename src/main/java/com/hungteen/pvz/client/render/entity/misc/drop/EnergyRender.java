@@ -4,16 +4,16 @@ import com.hungteen.pvz.client.model.entity.misc.DropModel;
 import com.hungteen.pvz.common.entity.misc.drop.EnergyEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class EnergyRender extends DropRender<EnergyEntity>{
 
-	public EnergyRender(EntityRendererManager renderManager) {
-		super(renderManager, new DropModel<>());
+	public EnergyRender(EntityRendererProvider.Context context) {
+		super(context, new DropModel<>(context.bakeLayer(DropModel.LAYER)));
 	}
 
 	@Override

@@ -2,8 +2,8 @@ package com.hungteen.pvz.common.network;
 
 import java.util.function.Supplier;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public class OpenGuiPacket {
 
@@ -13,31 +13,31 @@ public class OpenGuiPacket {
 		this.type = type;
 	}
 
-	public OpenGuiPacket(PacketBuffer buffer) {
+	public OpenGuiPacket(FriendlyByteBuf buffer) {
 		this.type = buffer.readInt();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type);
 	}
 
 	public static class Handler {
 		public static void onMessage(OpenGuiPacket message, Supplier<NetworkEvent.Context> ctx) {
-//			final ServerPlayerEntity player = ctx.get().getSender();
+//			final ServerPlayer player = ctx.get().getSender();
 //			ctx.get().enqueueWork(() -> {
 //				switch (Guis.values()[message.type]) {
 //				case PLAYER_INVENTORY: {
-//					NetworkHooks.openGui(player, new INamedContainerProvider() {
+//					NetworkHooks.openGui(player, new MenuProvider() {
 //
 //						@Override
-//						public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_,
-//								PlayerEntity p_createMenu_3_) {
+//						public Container createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
+//								Player p_createMenu_3_) {
 //							return new PlayerInventoryContainer(p_createMenu_1_, p_createMenu_3_);
 //						}
 //
 //						@Override
-//						public ITextComponent getDisplayName() {
-//							return new TranslationTextComponent("gui.pvz.player_inventory.show");
+//						public Component getDisplayName() {
+//							return Component.translatable("gui.pvz.player_inventory.show");
 //						}
 //					});
 //					return;

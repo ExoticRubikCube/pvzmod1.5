@@ -8,23 +8,23 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class Edgar090505Entity extends EdgarRobotEntity {
 
-    private static final DataParameter<BlockPos> ORIGIN_POS = EntityDataManager.defineId(Edgar090505Entity.class, DataSerializers.BLOCK_POS);
+    private static final EntityDataAccessor<BlockPos> ORIGIN_POS = SynchedEntityData.defineId(Edgar090505Entity.class, EntityDataSerializers.BLOCK_POS);
 
-    public Edgar090505Entity(EntityType<? extends CreatureEntity> type, World worldIn) {
+    public Edgar090505Entity(EntityType<? extends PathfinderMob> type, Level worldIn) {
         super(type, worldIn);
         this.refreshCountCD = 10;
         this.maxZombieSurround = 40;
@@ -48,7 +48,7 @@ public class Edgar090505Entity extends EdgarRobotEntity {
     @Override
     public void zombieTick() {
         super.zombieTick();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (this.getOriginPos() == BlockPos.ZERO) {
                 this.setOriginPos(this.blockPosition());
             } else {
@@ -73,7 +73,7 @@ public class Edgar090505Entity extends EdgarRobotEntity {
 
     @Override
     public int getBossStage() {
-        final float percent = this.bossInfo.getPercent();
+        final float percent = this.bossInfo.getProgress();
         return percent > 3F / 4 ? 1 :
                 percent > 2F / 4 ? 2 :
                         percent > 1F / 4 ? 3 : 4;
@@ -88,8 +88,8 @@ public class Edgar090505Entity extends EdgarRobotEntity {
         }
     }
 
-    public EntitySize getDimensions(Pose poseIn) {
-        return EntitySize.scalable(2F, 7.5F);
+    public EntityDimensions getDimensions(Pose poseIn) {
+        return EntityDimensions.scalable(2F, 7.5F);
     }
 
     @Override
@@ -118,18 +118,18 @@ public class Edgar090505Entity extends EdgarRobotEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("origin_pos")) {
-            CompoundNBT nbt = compound.getCompound("origin_pos");
+            CompoundTag nbt = compound.getCompound("origin_pos");
             this.setOriginPos(new BlockPos(nbt.getInt("origin_pos_x"), nbt.getInt("origin_pos_y"), nbt.getInt("origin_pos_z")));
         }
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("origin_pos_x", this.getOriginPos().getX());
         nbt.putInt("origin_pos_y", this.getOriginPos().getY());
         nbt.putInt("origin_pos_z", this.getOriginPos().getZ());

@@ -9,19 +9,19 @@ import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toserver.ClickButtonPacket;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -34,8 +34,8 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
     private int downHeight;
     protected int selectedPos;
 
-    public AbstractDaveShopScreen(AbstractDaveShopContainer screenContainer, PlayerInventory inv,
-                                  ITextComponent titleIn) {
+    public AbstractDaveShopScreen(AbstractDaveShopContainer screenContainer, Inventory inv,
+                                  Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageWidth = 285;
         this.imageHeight = 195;
@@ -45,15 +45,15 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
     protected void init() {
         super.init();
         for (int i = 0; i < TRADE_NUM_PER_PAGE; ++ i) {
-            this.trades[i] = this.addButton(new TradeButton(this.leftPos + 5, this.topPos + 27 + 20 * i, i, (button) -> {
+            this.trades[i] = this.addRenderableWidget(new TradeButton(this.leftPos + 5, this.topPos + 27 + 20 * i, i, (button) -> {
                 // select the trade.
                 if (button instanceof TradeButton) {
                     this.selectedPos = ((TradeButton) button).getId() + this.downHeight;
                 }
             }));
         }
-        this.buyButton = this.addButton(new Button(this.leftPos + 206, this.topPos + 85, 18, 18,
-                new TranslationTextComponent("gui.pvz.dave_shop.buy"), (button) -> {
+        this.buyButton = this.addRenderableWidget(new Button(this.leftPos + 206, this.topPos + 85, 18, 18,
+                Component.translatable("gui.pvz.dave_shop.buy"), (button) -> {
             if (this.buyButton.visible) {
                 PVZPacketHandler.CHANNEL.sendToServer(new ClickButtonPacket(this.getShopID(), 0, this.selectedPos));
             }
@@ -62,12 +62,12 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
         final List<AbstractDaveEntity.GoodType> goods = this.getAvailableGoods();
 
         //avoid crash.
-        this.selectedPos = MathHelper.clamp(this.selectedPos, 0, goods.size() - 1);
+        this.selectedPos = Mth.clamp(this.selectedPos, 0, goods.size() - 1);
         //render scroll.
         this.renderScroll(stack, goods);
         //render trades.
@@ -92,11 +92,11 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         }
         //update refresh time.
         this.menu.getLeftRefreshTime().ifPresent(time -> {
-            StringUtil.drawCenteredScaledString(stack, font, new TranslationTextComponent("gui.pvz.shop.left_time", time).getString(), this.leftPos + 117 + 120, this.topPos + 28, time > 12000 ? Colors.GREEN : time > 1200 ? Colors.YELLOW : Colors.RED, 0.8f);
+            StringUtil.drawCenteredScaledString(stack, font, Component.translatable("gui.pvz.shop.left_time", time).getString(), this.leftPos + 117 + 120, this.topPos + 28, time > 12000 ? Colors.GREEN : time > 1200 ? Colors.YELLOW : Colors.RED, 0.8f);
         });
         //update trade buttons.
         for (TradeButton trade : this.trades) {
-            if (trade.isHovered()) {
+            if (trade.isHoveredOrFocused()) {
                 trade.renderToolTip(stack, goods, mouseX, mouseY);
             }
             trade.visible = this.downHeight + trade.id < goods.size();
@@ -106,9 +106,9 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
     }
 
     @Override
-    protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
         stack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
         blit(stack, this.leftPos, this.topPos, this.getBlitOffset(), 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 512);
 
         final int width = 112;
@@ -121,7 +121,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         stack.popPose();
     }
 
-    protected void renderDetails(MatrixStack stack, AbstractDaveEntity.GoodType goodType) {
+    protected void renderDetails(PoseStack stack, AbstractDaveEntity.GoodType goodType) {
         if (goodType != null) {
             StringUtil.drawCenteredScaledString(stack, font, goodType.getGoodDescription().getString(), this.leftPos + 117 + 80, this.topPos + 28 + 20, Colors.BLACK, 1.5f);
         }
@@ -133,18 +133,18 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         return goods.size() > 0 ? goods.get(this.selectedPos) : null;
     }
 
-    protected void renderTrade(MatrixStack stack, AbstractDaveEntity.GoodType trade, int posX, int posY) {
+    protected void renderTrade(PoseStack stack, AbstractDaveEntity.GoodType trade, int posX, int posY) {
         StringUtil.drawCenteredScaledString(stack, font, trade.getGoodPrice() + "", posX + 31, posY + 4, Colors.WHITE, 1.2f);
         final int offsetX = posX + 81;
         final int offsetY = posY + 1;
         if(trade.getType().isEnergy()) {
-            this.minecraft.getTextureManager().bind(TEXTURE);
+            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
             blit(stack, offsetX, offsetY, this.getBlitOffset(), 112, 195, 16, 16, 256, 512);
         } else if(trade.getType().isSlot()){
-            this.minecraft.getTextureManager().bind(TEXTURE);
+            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
             blit(stack, offsetX, offsetY, this.getBlitOffset(), 128, 195, 16, 16, 256, 512);
         } else if(trade.getType().isMoney()){
-            this.minecraft.getTextureManager().bind(TEXTURE);
+            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
             blit(stack, offsetX, offsetY, this.getBlitOffset(), 144, 195, 16, 16, 256, 512);
         } else {
             this.itemRenderer.renderGuiItem(trade.getGood(), offsetX, offsetY);
@@ -159,14 +159,14 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
 
     protected abstract Pair<Integer, Integer> getMoneyBarPos();
 
-    protected abstract ITextComponent getShopTitle();
+    protected abstract Component getShopTitle();
 
-    private void renderScroll(MatrixStack stack, List<AbstractDaveEntity.GoodType> types) {
+    private void renderScroll(PoseStack stack, List<AbstractDaveEntity.GoodType> types) {
         final int x = (this.width - this.imageWidth) / 2;
         final int y = (this.height - this.imageHeight) / 2;
         int i = types.size() - TRADE_NUM_PER_PAGE + 1;
         stack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
         if (i > 1) {
             final int j = 159 - (27 + (i - 1) * 159 / i);
             final int k = 1 + j / i + 159 / i;
@@ -187,7 +187,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         final int size = this.getAvailableGoods().size();
         if (size > TRADE_NUM_PER_PAGE) {
             int next = (int) ((double) this.downHeight - p_mouseScrolled_5_);
-            this.downHeight = MathHelper.clamp(next, 0, size - TRADE_NUM_PER_PAGE);
+            this.downHeight = Mth.clamp(next, 0, size - TRADE_NUM_PER_PAGE);
         }
         return true;
     }
@@ -201,7 +201,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
 
         final int id;
 
-        public TradeButton(int x, int y, int id, Button.IPressable press) {
+        public TradeButton(int x, int y, int id, Button.OnPress press) {
             super(x, y, 100, 20, StringUtil.EMPTY, press);
             this.id = id;
             this.visible = false;
@@ -211,7 +211,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
             return this.id;
         }
 
-        public void renderToolTip(MatrixStack stack, List<AbstractDaveEntity.GoodType> goods, int mouseX, int mouseY) {
+        public void renderToolTip(PoseStack stack, List<AbstractDaveEntity.GoodType> goods, int mouseX, int mouseY) {
         	final int pos = downHeight + this.getId();
         	if(pos >= 0 && pos < goods.size()) {
         		final AbstractDaveEntity.GoodType goodType = goods.get(pos);
@@ -219,7 +219,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
                     if (goodType.getType().isItem()) {
                         AbstractDaveShopScreen.this.renderComponentTooltip(stack, AbstractDaveShopScreen.this.getTooltipFromItem(goodType.getGood()), mouseX, mouseY);
                     } else {
-                        AbstractDaveShopScreen.this.renderComponentTooltip(stack, Arrays.asList(goodType.getGoodDescription()), mouseX, mouseY);
+                        AbstractDaveShopScreen.this.renderComponentTooltip(stack, Collections.singletonList(goodType.getGoodDescription()), mouseX, mouseY);
                     }
                 }
         	}

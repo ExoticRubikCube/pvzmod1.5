@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.plant.assist.BloverModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.assist.BloverEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BloverRender extends PVZPlantRender<BloverEntity> {
 
-	public BloverRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new BloverModel(), 0.4F);
+	public BloverRender(EntityRendererProvider.Context context) {
+		super(context, new BloverModel(context.bakeLayer(BloverModel.LAYER)), 0.4F);
 	}
 
 //	@Override

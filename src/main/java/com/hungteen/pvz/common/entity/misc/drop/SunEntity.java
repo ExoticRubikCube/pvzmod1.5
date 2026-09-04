@@ -10,14 +10,15 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 /**
  * @program: pvzmod-1.18.x
  * @author: HungTeen
@@ -27,11 +28,11 @@ public class SunEntity extends DropEntity {
 
 	private static final float SUN_FALL_SPEED = 0.03F;
 	public LivingEntity controller = null;
-	public Vector3d ColorBase = new Vector3d(255,230,15);
-	public Vector3d ColorChange = new Vector3d(0,25,15);
+	public Vec3 ColorBase = new Vec3(255,230,15);
+	public Vec3 ColorChange = new Vec3(0,25,15);
 	private Entity following;
 
-	public SunEntity(EntityType<? extends MobEntity> type, World worldIn) {
+	public SunEntity(EntityType<? extends Mob> type, Level worldIn) {
 		super(type, worldIn);
 		setAmount(this.getDefaultAmount());
 		this.setNoGravity(true);
@@ -50,10 +51,10 @@ public class SunEntity extends DropEntity {
 			}
 			this.setDeltaMovement(this.getDeltaMovement().x * 0.94, speedY, this.getDeltaMovement().z * 0.94);
 		} else{
-			this.setDeltaMovement(Vector3d.ZERO);
+			this.setDeltaMovement(Vec3.ZERO);
 		}
 
-		if ((this.tickCount+this.getId()) % ((this.following instanceof PlayerEntity) ? 200 : 50) == 0 || (this.following != null && this.following.distanceToSqr(this) > 64.0D)) {
+		if ((this.tickCount+this.getId()) % ((this.following instanceof Player) ? 200 : 50) == 0 || (this.following != null && this.following.distanceToSqr(this) > 64.0D)) {
 			this.following = this.level.getNearestPlayer(this, 6.0D);
 		}
 		if (this.following == null && getAmount() < 150 && (this.tickCount+this.getId()) % 50 == 0){
@@ -70,10 +71,10 @@ public class SunEntity extends DropEntity {
 			if (following instanceof SunEntity){
 				if (this.distanceTo(following) < 0.5F){
 					((SunEntity) following).setAmount(((SunEntity) following).getAmount()+this.getAmount());
-					this.remove();
+this.remove(RemovalReason.KILLED);
 				}
 			}
-			Vector3d vec3 = new Vector3d(this.following.getX() - this.getX(), this.following.getY() + (double)this.following.getEyeHeight() / 2.0D - this.getY(), this.following.getZ() - this.getZ());
+			Vec3 vec3 = new Vec3(this.following.getX() - this.getX(), this.following.getY() + (double)this.following.getEyeHeight() / 2.0D - this.getY(), this.following.getZ() - this.getZ());
 			double d0 = vec3.lengthSqr();
 			if (d0 < 25.0D) {
 				double d1 = 1.0D - Math.sqrt(d0) / 5.0D;
@@ -86,8 +87,8 @@ public class SunEntity extends DropEntity {
 		}
 
 		if (this.controller == null){
-			ColorBase = new Vector3d(255,230,15);
-			ColorChange = new Vector3d(0,25,15);
+			ColorBase = new Vec3(255,230,15);
+			ColorChange = new Vec3(0,25,15);
 		}
 	}
 
@@ -101,29 +102,29 @@ public class SunEntity extends DropEntity {
 	}
 
 	@Override
-	public void onCollectedByPlayer(PlayerEntity living) {
-		if(! level.isClientSide) {
+	public void onCollectedByPlayer(Player living) {
+		if(! level.isClientSide()) {
 			PlayerUtil.addResource(living, Resources.SUN_NUM, this.getAmount());
 			PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
 		}
-		this.remove();
+this.remove(RemovalReason.KILLED);
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
+	public EntityDimensions getDimensions(Pose poseIn) {
 		int amount = this.getAmount();
 		float w = amount * 1f / 200 + 0.2f;
-		return EntitySize.scalable(w, w);
+		return EntityDimensions.scalable(w, w);
 	}
 
-	public static void spawnSunsByAmount(World world, BlockPos pos, int amount) {
+	public static void spawnSunsByAmount(Level world, BlockPos pos, int amount) {
 		spawnSunsByAmount(world, pos, amount, 75, 1);
 	}
 
 	/**
 	 * spawn sun in range, each is set to a specific amount.
 	 */
-	public static void spawnSunsByAmount(World world, BlockPos pos, int amount, int each, double speed) {
+	public static void spawnSunsByAmount(Level world, BlockPos pos, int amount, int each, double speed) {
 		while(amount >= each) {
 			amount -= each;
 			dropSunRandomly(world, pos, each, speed);
@@ -136,7 +137,7 @@ public class SunEntity extends DropEntity {
 	/**
 	 * spawn random speed sun entity with specific amount.
 	 */
-	public static void dropSunRandomly(World world, BlockPos pos, int amount, double speed) {
+	public static void dropSunRandomly(Level world, BlockPos pos, int amount, double speed) {
 		final SunEntity sun = EntityRegister.SUN.get().create(world);
 		sun.setAmount(amount);
 		speed *= 0.15;
@@ -144,14 +145,14 @@ public class SunEntity extends DropEntity {
 		final double dy = speed * 0.2 + 0.2;
 		final double dx = MathUtil.getRandomFloat(world.getRandom()) + speed * 0.2;
 		final double dz = MathUtil.getRandomFloat(world.getRandom()) + speed * 0.2;
-		sun.setDeltaMovement(new Vector3d(dx, 0, dz).scale(speed).add(0, dy, 0));
+		sun.setDeltaMovement(new Vec3(dx, 0, dz).scale(speed).add(0, dy, 0));
 	}
 
-	public static boolean canSunSpawn(EntityType<? extends SunEntity> zombieType, IWorld worldIn, SpawnReason reason, BlockPos pos, Random rand) {
-		if(worldIn instanceof ServerWorld) {
-			return ! ((ServerWorld) worldIn).isRainingAt(pos) && ((ServerWorld) worldIn).isDay() && worldIn.getBrightness(LightType.SKY, pos) >= 15;
+	public static boolean canSunSpawn(EntityType<? extends SunEntity> zombieType, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource rand) {
+		if(worldIn instanceof ServerLevel) {
+			return ! ((ServerLevel) worldIn).isRainingAt(pos) && ((ServerLevel) worldIn).isDay() && worldIn.getBrightness(LightLayer.SKY, pos) >= 15;
 		}
-		return worldIn.getBrightness(LightType.SKY, pos) >= 15;
+		return worldIn.getBrightness(LightLayer.SKY, pos) >= 15;
 	}
 
 	@Override

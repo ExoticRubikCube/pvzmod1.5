@@ -11,14 +11,14 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class TombStoneEntity extends AbstractTombStoneEntity {
 	private final int MinSummonCD = 360;
 	private final int MaxSummonCD = 1200;
 	
-	public TombStoneEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public TombStoneEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -44,7 +44,7 @@ public class TombStoneEntity extends AbstractTombStoneEntity {
 		this.waveSummonTick = 40;
 	}
 	
-	public static void spawnTombStone(World world, BlockPos pos) {
+	public static void spawnTombStone(Level world, BlockPos pos) {
 		TombStoneEntity tomb = EntityRegister.TOMB_STONE.get().create(world);
 		tomb.setZombieRising();
 		EntityUtil.onEntitySpawn(world, tomb, pos);
@@ -53,7 +53,7 @@ public class TombStoneEntity extends AbstractTombStoneEntity {
 	@Override
 	public void normalZombieTick() {
 		super.normalZombieTick();
-		if(! level.isClientSide) {//update wave spawn.
+		if(! level.isClientSide()) {//update wave spawn.
 			if(this.waveSummonTick > 0) {
 				-- this.waveSummonTick;
 				if(this.waveSummonTick == 1) {
@@ -72,7 +72,7 @@ public class TombStoneEntity extends AbstractTombStoneEntity {
 		final List<IZombieType> list = ZombieUtil.DEFAULT_ZOMBIES;
 		final IZombieType type = list.get(this.random.nextInt(list.size()));
 		type.getEntityType().ifPresent( t -> {
-				CreatureEntity zombie = t.create(this.level);
+				PathfinderMob zombie = (PathfinderMob) t.create(this.level);
 				if (zombie instanceof PVZZombieEntity){
 					((PVZZombieEntity)zombie).setZombieRising();
 					ZombieUtil.copySummonZombieData(this, (PVZZombieEntity) zombie);
@@ -108,7 +108,7 @@ public class TombStoneEntity extends AbstractTombStoneEntity {
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("wave_summon_tick")) {
 			this.waveSummonTick = compound.getInt("wave_summon_tick");
@@ -116,7 +116,7 @@ public class TombStoneEntity extends AbstractTombStoneEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("wave_summon_tick", this.waveSummonTick);
 	}

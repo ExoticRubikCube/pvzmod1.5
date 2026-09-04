@@ -8,30 +8,30 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.utils.WorldUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 public class SporeEntity extends PVZItemBulletEntity{
 
-	public SporeEntity(EntityType<?> type, World worldIn) {
+	public SporeEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public SporeEntity(World worldIn, LivingEntity living) {
+	public SporeEntity(Level worldIn, LivingEntity living) {
 		super(EntityRegister.SPORE.get(), worldIn, living);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		if(level.isClientSide) {
+		if(level.isClientSide()) {
 			for(int i = 0; i < 3; ++i) {
 				WorldUtil.spawnRandomSpeedParticle(level, ParticleRegister.SPORE.get(), this.position(), 0);
 	        }
@@ -52,10 +52,10 @@ public class SporeEntity extends PVZItemBulletEntity{
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				this.dealSporeDamage(target); // attack 
@@ -64,7 +64,7 @@ public class SporeEntity extends PVZItemBulletEntity{
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || !this.checkLive(result)) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
@@ -73,8 +73,8 @@ public class SporeEntity extends PVZItemBulletEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.25f, 0.25f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.25f, 0.25f);
 	}
 	
 	@Override

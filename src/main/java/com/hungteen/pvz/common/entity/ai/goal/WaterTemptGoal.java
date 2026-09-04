@@ -2,43 +2,46 @@ package com.hungteen.pvz.common.entity.ai.goal;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 
 public class WaterTemptGoal extends Goal {
-	private static final EntityPredicate ENTITY_PREDICATE = (new EntityPredicate()).range(10.0D)
-			.allowInvulnerable().allowSameTeam().allowNonAttackable().allowUnseeable();
-	protected final CreatureEntity creature;
+	private static final TargetingConditions ENTITY_PREDICATE =  TargetingConditions.forNonCombat()
+			.range(10.0D)
+			.ignoreLineOfSight()
+			.ignoreInvisibilityTesting();
+
+	protected final PathfinderMob creature;
 	private final double speed;
 	private double targetX;
 	private double targetY;
 	private double targetZ;
 	private double pitch;
 	private double yaw;
-	protected PlayerEntity closestPlayer;
+	protected Player closestPlayer;
 	private int delayTemptCounter;
 	private boolean isRunning;
 	private final Ingredient temptItem;
 	private final boolean scaredByPlayerMovement;
 
-	public WaterTemptGoal(CreatureEntity creatureIn, double speedIn, Ingredient temptItemsIn,
+	public WaterTemptGoal(PathfinderMob creatureIn, double speedIn, Ingredient temptItemsIn,
 			boolean scaredByPlayerMovementIn) {
 		this(creatureIn, speedIn, scaredByPlayerMovementIn, temptItemsIn);
 	}
 
-	public WaterTemptGoal(CreatureEntity creatureIn, double speedIn, boolean scaredByPlayerMovementIn,
+	public WaterTemptGoal(PathfinderMob creatureIn, double speedIn, boolean scaredByPlayerMovementIn,
 			Ingredient temptItemsIn) {
 		this.creature = creatureIn;
 		this.speed = speedIn;
 		this.temptItem = temptItemsIn;
 		this.scaredByPlayerMovement = scaredByPlayerMovementIn;
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-		if (!(creatureIn.getNavigation() instanceof SwimmerPathNavigator)) {
+		if (!(creatureIn.getNavigation() instanceof WaterBoundPathNavigation)) {
 			throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
 		}
 	}
@@ -77,8 +80,8 @@ public class WaterTemptGoal extends Goal {
 					return false;
 				}
 
-				if (Math.abs((double) this.closestPlayer.xRot - this.pitch) > 5.0D
-						|| Math.abs((double) this.closestPlayer.yRot - this.yaw) > 5.0D) {
+				if (Math.abs((double) this.closestPlayer.getXRot() - this.pitch) > 5.0D
+						|| Math.abs((double) this.closestPlayer.getYRot() - this.yaw) > 5.0D) {
 					return false;
 				}
 			} else {
@@ -87,8 +90,8 @@ public class WaterTemptGoal extends Goal {
 				this.targetZ = this.closestPlayer.getZ();
 			}
 
-			this.pitch = (double) this.closestPlayer.xRot;
-			this.yaw = (double) this.closestPlayer.yRot;
+			this.pitch = this.closestPlayer.getXRot();
+			this.yaw = this.closestPlayer.getYRot();
 		}
 
 		return this.canUse();

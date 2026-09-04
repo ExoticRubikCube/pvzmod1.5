@@ -3,7 +3,7 @@ package com.hungteen.pvz.common.impl.challenge.amount;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.api.raid.IAmountComponent;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.GsonHelper;
 
 import java.util.Random;
 
@@ -27,8 +27,8 @@ public class RandomAmount implements IAmountComponent {
 	public void readJson(JsonElement json) {
 		JsonObject obj = json.getAsJsonObject();
 		if(obj != null) {
-			this.min = JSONUtils.getAsInt(obj, "min");
-			this.max = JSONUtils.getAsInt(obj, "max");
+			this.min = GsonHelper.getAsInt(obj, "min");
+			this.max = GsonHelper.getAsInt(obj, "max");
 		}
 	}
 

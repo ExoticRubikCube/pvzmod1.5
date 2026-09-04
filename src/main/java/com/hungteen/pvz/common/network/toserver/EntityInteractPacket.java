@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import com.hungteen.pvz.common.entity.plant.explosion.CobCannonEntity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public class EntityInteractPacket {
 	private int type;
@@ -20,13 +20,13 @@ public class EntityInteractPacket {
 		this.num = num;
 	}
 	
-	public EntityInteractPacket(PacketBuffer buffer) {
+	public EntityInteractPacket(FriendlyByteBuf buffer) {
 		this.type = buffer.readInt();
 		this.op = buffer.readInt();
 		this.num = buffer.readInt();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type);
 		buffer.writeInt(this.op);
 		buffer.writeInt(this.num);
@@ -34,7 +34,7 @@ public class EntityInteractPacket {
 
 	public static class Handler {
 		public static void onMessage(EntityInteractPacket message, Supplier<NetworkEvent.Context> ctx) {
-			final ServerPlayerEntity player = ctx.get().getSender();
+			final ServerPlayer player = ctx.get().getSender();
 			ctx.get().enqueueWork(()->{
 		    	Entity entity = player.level.getEntity(message.type);
 		    	if(entity instanceof CobCannonEntity) {

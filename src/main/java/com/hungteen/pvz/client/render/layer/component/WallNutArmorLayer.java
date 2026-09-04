@@ -3,9 +3,9 @@ package com.hungteen.pvz.client.render.layer.component;
 import com.hungteen.pvz.client.model.entity.plant.defence.WallNutModel;
 import com.hungteen.pvz.common.entity.plant.defence.WallNutEntity;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * @program: pvzmod-1.16.5
@@ -18,7 +18,7 @@ public class WallNutArmorLayer extends ComponentLayer<WallNutEntity> {
     private final ResourceLocation ARMOR2 = StringUtil.prefix("textures/entity/plant/defence/wall_nut_armor_1.png");
     private final ResourceLocation ARMOR3 = StringUtil.prefix("textures/entity/plant/defence/wall_nut_armor_2.png");
 
-    public WallNutArmorLayer(IEntityRenderer<WallNutEntity, EntityModel<WallNutEntity>> entityRendererIn) {
+    public WallNutArmorLayer(RenderLayerParent<WallNutEntity, EntityModel<WallNutEntity>> entityRendererIn) {
         super(entityRendererIn, new WallNutModel.WallNutArmorModel());
     }
 

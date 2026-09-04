@@ -1,13 +1,12 @@
 package com.hungteen.pvz.common.item.spawn;
 
 import com.hungteen.pvz.common.item.PVZItemGroups;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -18,9 +17,9 @@ public class EdgarDollItem extends Item {
 	}
 	
 //	@Override
-//	public ActionResultType useOn(ItemUseContext context) {
-//		final PlayerEntity player = context.getPlayer();
-//		final World world = context.getLevel();
+//	public InteractionResultHolder useOn(ItemUseContext context) {
+//		final Player player = context.getPlayer();
+//		final Level world = context.getLevel();
 //		final BlockPos pos = context.getClickedPos();
 //		if(! world.isClientSide && ! player.getCooldowns().isOnCooldown(this) && context.getClickedFace() == Direction.UP) {
 //			if(this.canSpawnHere(world, pos)) {
@@ -33,12 +32,12 @@ public class EdgarDollItem extends Item {
 //	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
-		tooltip.add(new TranslationTextComponent("tooltip.pvz.wait_for_update").withStyle(TextFormatting.RED));
+		tooltip.add(Component.translatable("tooltip.pvz.wait_for_update").withStyle(ChatFormatting.RED));
 	}
 
-//	private boolean canSpawnHere(World world, BlockPos pos) {
+//	private boolean canSpawnHere(Level world, BlockPos pos) {
 //		for(int i = - 5; i <= 5; ++ i) {
 //			for(int j = - 5; j <= 5; ++ j) {
 //				for(int k = 1; k <= 12; ++ k) {

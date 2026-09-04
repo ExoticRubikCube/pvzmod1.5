@@ -5,25 +5,22 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.entity.EntityRegister;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
-@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
-public class CabbageEntity extends PultBulletEntity implements IRendersAsItem {
+public class CabbageEntity extends PultBulletEntity implements ItemSupplier {
 
-	public CabbageEntity(EntityType<?> type, World worldIn) {
+	public CabbageEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public CabbageEntity(World worldIn, LivingEntity shooter) {
+	public CabbageEntity(Level worldIn, LivingEntity shooter) {
 		super(EntityRegister.CABBAGE.get(), worldIn, shooter);
 	}
 
@@ -37,8 +34,8 @@ public class CabbageEntity extends PultBulletEntity implements IRendersAsItem {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.5F, 0.5F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.5F, 0.5F);
 	}
 
 }

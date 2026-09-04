@@ -10,12 +10,12 @@ import com.hungteen.pvz.utils.EntityUtil;
 
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SunShroomEntity extends PlantProducerEntity {
 	public static final int GROW_CD = 24000;
 	public static final int GROW_ANIM_CD = 10;
 	
-	public SunShroomEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public SunShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -101,10 +101,10 @@ public class SunShroomEntity extends PlantProducerEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return this.isInGrowStage(3) ? EntitySize.scalable(0.8f, 1.2f): 
-			   this.isInGrowStage(2) ? EntitySize.scalable(0.6f, 1f) :
-			   EntitySize.scalable(0.4f, 0.4f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return this.isInGrowStage(3) ? EntityDimensions.scalable(0.8f, 1.2f): 
+			   this.isInGrowStage(2) ? EntityDimensions.scalable(0.6f, 1f) :
+			   EntityDimensions.scalable(0.4f, 0.4f);
 	}
 	
 	@Override

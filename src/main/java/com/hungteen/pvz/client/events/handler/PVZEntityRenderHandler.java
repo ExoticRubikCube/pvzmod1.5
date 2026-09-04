@@ -5,22 +5,22 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
 import com.hungteen.pvz.utils.EntityUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.entity.LivingEntity;
+import com.mojang.math.Vector3f;
 
 public class PVZEntityRenderHandler {
 
 	public static final BlockState ICE_BLOCK = Blocks.FROSTED_ICE.defaultBlockState();
 	
-	public static void checkBungeeHandStand(LivingEntity entity, MatrixStack stack) {
+	public static void checkBungeeHandStand(LivingEntity entity, PoseStack stack) {
 		if(entity instanceof PVZPlantEntity || entity instanceof PVZZombieEntity) return ;
 		if(entity.getVehicle() instanceof BungeeZombieEntity) {
 			stack.mulPose(Vector3f.ZP.rotationDegrees(180F));
@@ -28,7 +28,7 @@ public class PVZEntityRenderHandler {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void checkAndRenderFrozenIce(LivingEntity entity, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public static void checkAndRenderFrozenIce(LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 		if(! EntityUtil.isEntityValid(entity) || ! EntityUtil.isEntityFrozen(entity)) return ;
 		matrixStackIn.pushPose();
 		float scale = 0.5F;
@@ -52,7 +52,7 @@ public class PVZEntityRenderHandler {
 	}
 	
 	@SuppressWarnings({ "deprecation", "rawtypes" })
-	public static void checkAndRenderButter(LivingRenderer r, LivingEntity entity, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public static void checkAndRenderButter(LivingEntityRenderer r, LivingEntity entity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 		if(! EntityUtil.isEntityValid(entity) || ! EntityUtil.isEntityButter(entity)) return ;
 		matrixStackIn.pushPose();
 		float scale = 0.7F;

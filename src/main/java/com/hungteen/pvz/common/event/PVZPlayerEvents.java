@@ -13,7 +13,7 @@ import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import com.hungteen.pvz.compat.CompatUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -42,52 +42,52 @@ public class PVZPlayerEvents {
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent ev) {
-		if (! ev.getPlayer().level.isClientSide) {
-			PlayerEventHandler.onPlayerLogin(ev.getPlayer());
+		if (! ev.getEntity().level.isClientSide) {
+			PlayerEventHandler.onPlayerLogin(ev.getEntity());
 
-			InvasionManager.addPlayer(ev.getPlayer());
+			InvasionManager.addPlayer(ev.getEntity());
 
-			PlayerEventHandler.unLockPAZs(ev.getPlayer());
+			PlayerEventHandler.unLockPAZs(ev.getEntity());
 
 			//sync to client data pack.
-			PVZDataPackManager.sendSyncPacketsTo(ev.getPlayer());
+			PVZDataPackManager.sendSyncPacketsTo(ev.getEntity());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent ev) {
-		if (! ev.getPlayer().level.isClientSide) {
-			PlayerEventHandler.onPlayerLogout(ev.getPlayer());
+		if (! ev.getEntity().level.isClientSide) {
+			PlayerEventHandler.onPlayerLogout(ev.getEntity());
 
-			InvasionManager.removePlayer(ev.getPlayer());
+			InvasionManager.removePlayer(ev.getEntity());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onPlayerClone(PlayerEvent.Clone ev) {
-		PlayerEventHandler.clonePlayerData(ev.getOriginal(), ev.getPlayer(), ev.isWasDeath());
+		PlayerEventHandler.clonePlayerData(ev.getOriginal(), ev.getEntity(), ev.isWasDeath());
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent ev) {
-		if(! ev.getPlayer().level.isClientSide) {
-			PlayerUtil.getOptManager(ev.getPlayer()).ifPresent(l -> l.syncToClient());
+		if(! ev.getEntity().level.isClientSide) {
+			PlayerUtil.getOptManager(ev.getEntity()).ifPresent(l -> l.syncToClient());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent ev) {
-		if(! ev.getPlayer().level.isClientSide) {
-			PlayerUtil.getOptManager(ev.getPlayer()).ifPresent(l -> l.syncToClient());
+		if(! ev.getEntity().level.isClientSide) {
+			PlayerUtil.getOptManager(ev.getEntity()).ifPresent(l -> l.syncToClient());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerInteractSpec(PlayerInteractEvent.EntityInteractSpecific ev) {
-		if(! ev.getWorld().isClientSide){
-			if(ev.getHand() == Hand.MAIN_HAND) {
-				PlayerEventHandler.quickRemoveByPlayer(ev.getPlayer(), ev.getTarget(), ev.getPlayer().getMainHandItem());
-				PlayerEventHandler.makeSuperMode(ev.getPlayer(), ev.getTarget(), ev.getPlayer().getMainHandItem());
+		if(! ev.getLevel().isClientSide){
+			if(ev.getHand() == InteractionHand.MAIN_HAND) {
+				PlayerEventHandler.quickRemoveByPlayer(ev.getEntity(), ev.getTarget(), ev.getEntity().getMainHandItem());
+				PlayerEventHandler.makeSuperMode(ev.getEntity(), ev.getTarget(), ev.getEntity().getMainHandItem());
 			}
 		}
 		BowlingGloveItem.onPickUp(ev);
@@ -95,23 +95,23 @@ public class PVZPlayerEvents {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void banBucket(PlayerInteractEvent.EntityInteractSpecific ev) {
-		if(! CompatUtil.canBucketEntity(ev.getPlayer().level, ev.getTarget(), ev.getItemStack())){
+		if(! CompatUtil.canBucketEntity(ev.getEntity().level, ev.getTarget(), ev.getItemStack())){
 			ev.setCanceled(true);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerTreeLevelUp(PlayerLevelChangeEvent ev) {
-		if (!ev.getPlayer().level.isClientSide && ev.isLevelUp()) {
-			PlayerEventHandler.unLockPAZs(ev.getPlayer());
-			PlayerUtil.playClientSound(ev.getPlayer(), SoundRegister.PLANT_GROW.get());
-			PlayerUtil.addResource(ev.getPlayer(), Resources.LOTTERY_CHANCE, 3);
+		if (!ev.getEntity().level.isClientSide && ev.isLevelUp()) {
+			PlayerEventHandler.unLockPAZs(ev.getEntity());
+			PlayerUtil.playClientSound(ev.getEntity(), SoundRegister.PLANT_GROW.get());
+			PlayerUtil.addResource(ev.getEntity(), Resources.LOTTERY_CHANCE, 3);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onSummonCardUse(SummonCardUseEvent ev) {
-//		PlayerEntity player = ev.getPlayer();
+//		Player player = ev.getPlayer();
 //		if(! player.level.isClientSide) { //unlock almanac
 //			SearchOption a = null;
 //			if(ev.getHeldStack().getItem() instanceof PlantCardItem) {// unlock plant card

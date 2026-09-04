@@ -8,9 +8,9 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.*;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,29 +20,29 @@ public class GarlicEntity extends PlantDefenderEntity {
 	protected final AlgorithmUtil.EntitySorter sorter;
 	private GarlicEntity garlic;
 	
-	public GarlicEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public GarlicEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.sorter = new AlgorithmUtil.EntitySorter(this);
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if(source instanceof PVZEntityDamageSource && ((PVZEntityDamageSource) source).isEatDamage() && source.getEntity() instanceof MobEntity) {
+		if(source instanceof PVZEntityDamageSource && ((PVZEntityDamageSource) source).isEatDamage() && source.getEntity() instanceof Mob) {
 			this.updateGarlic();
 			if(this.garlic != null) {
 				EntityUtil.playSound(source.getEntity(), SoundRegister.YUCK.get());
-				((MobEntity) source.getEntity()).setTarget(this.garlic);
+				((Mob) source.getEntity()).setTarget(this.garlic);
 			}
 		}
 		return super.hurt(source, amount);
 	}
 	
 	private void updateGarlic() {
-		if(! EntityUtil.isEntityValid(garlic) || ! this.getSensing().canSee(garlic)) {
+		if(! EntityUtil.isEntityValid(garlic) || ! this.getSensing().hasLineOfSight(garlic)) {
 			this.garlic = null;
 			final float range = this.getChangeRange();
 			List<GarlicEntity> list = level.getEntitiesOfClass(GarlicEntity.class, EntityUtil.getEntityAABB(this, range, range), target -> {
-				return ! target.is(this) && EntityUtil.isEntityValid(target) && this.getSensing().canSee(target) && ! EntityUtil.canTargetEntity(this, target);
+				return ! target.is(this) && EntityUtil.isEntityValid(target) && this.getSensing().hasLineOfSight(target) && ! EntityUtil.canTargetEntity(this, target);
 			});
 			if(list.isEmpty()) {
 				return ;
@@ -67,8 +67,8 @@ public class GarlicEntity extends PlantDefenderEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8F, 1.2F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8F, 1.2F);
 	}
 	
 	@Override

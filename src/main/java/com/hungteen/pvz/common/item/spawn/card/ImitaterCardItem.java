@@ -10,32 +10,33 @@ import com.hungteen.pvz.common.impl.plant.PlantType;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -48,71 +49,83 @@ import java.util.function.Consumer;
 public class ImitaterCardItem extends PlantCardItem {
 
 	public static final String IMITATE_STRING = "imitate_plant_type";
-	
+
 	public ImitaterCardItem() {
-		super(new Item.Properties().tab(PVZItemGroups.PVZ_PLANT_CARD).stacksTo(1).setISTER(() -> ImitaterCardISTER::new), PVZPlants.IMITATER, false);
+		super(new Item.Properties().tab(PVZItemGroups.PVZ_PLANT_CARD).stacksTo(1), PVZPlants.IMITATER, false);
 	}
 
 	public ImitaterCardItem(boolean isEnjoyCard) {
 		super(new Item.Properties().tab(PVZItemGroups.PVZ_PLANT_CARD).stacksTo(16), PVZPlants.IMITATER, isEnjoyCard);
 	}
+
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+		consumer.accept(new IClientItemExtensions() {
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				return new ImitaterCardISTER(
+					net.minecraft.client.Minecraft.getInstance().getBlockEntityRenderDispatcher(),
+					net.minecraft.client.Minecraft.getInstance().getEntityModels());
+			}
+		});
+	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
 		ItemStack heldStack = player.getItemInHand(handIn);
 		final ItemStack plantStack = getImitatedCard(heldStack);
 		/* left hand to open gui */
-		if(handIn == Hand.OFF_HAND) {
+		if(handIn == InteractionHand.OFF_HAND) {
 			if(! world.isClientSide) {
 				this.openImitateGui(player);
 			}
-			return ActionResult.success(heldStack);
+			return InteractionResultHolder.success(heldStack);
 		}
 		/* imitated card use */
 		if(plantStack.getItem() instanceof PlantCardItem) {
 			return super.use(world, player, handIn);
 		}
-		return ActionResult.fail(heldStack);
+		return InteractionResultHolder.fail(heldStack);
 	}
 	
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
-		final PlayerEntity player = context.getPlayer();
+	public InteractionResult useOn(UseOnContext context) {
+		final Player player = context.getPlayer();
 		final ItemStack heldStack = context.getItemInHand();
 		final ItemStack plantStack = getImitatedCard(heldStack);
 		/* left hand click means open gui */
-		if(context.getHand() == Hand.OFF_HAND) {
+		if(context.getHand() == InteractionHand.OFF_HAND) {
 			if(! player.level.isClientSide) {
 				this.openImitateGui(player);
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		/* imitated card use on block */ 
 		if(plantStack.getItem() instanceof PlantCardItem) {
 			return super.useOn(context);
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 	}
 	
-	private void openImitateGui(PlayerEntity player) {
-		if (player instanceof ServerPlayerEntity) {
-			NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider() {
+	private void openImitateGui(Player player) {
+		if (player instanceof ServerPlayer) {
+			NetworkHooks.openScreen((ServerPlayer) player, new MenuProvider() {
 
 				@Override
-				public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
+				public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
 					return new ImitaterContainer(id, player);
 				}
 
 				@Override
-				public ITextComponent getDisplayName() {
-					return new TranslationTextComponent("gui.pvz.imitater.show");
+				public Component getDisplayName() {
+					return Component.translatable("gui.pvz.imitater.show");
 				}
 				
 			});
 		}
 	}
 	
-	public static boolean summonImitater(PlayerEntity player, ItemStack heldStack, ItemStack plantStack, PlantCardItem cardItem, BlockPos pos, Consumer<ImitaterEntity> consumer) {
+	public static boolean summonImitater(Player player, ItemStack heldStack, ItemStack plantStack, PlantCardItem cardItem, BlockPos pos, Consumer<ImitaterEntity> consumer) {
 		return PlantCardItem.handlePlantEntity(player, PVZPlants.IMITATER, plantStack, pos, i -> {
 			if(i instanceof ImitaterEntity) {
 				final ImitaterEntity imitater = (ImitaterEntity) i;
@@ -151,17 +164,17 @@ public class ImitaterCardItem extends PlantCardItem {
 	/**
 	 * first is imitater card item, second is imitated card item.
 	 */
-	public static Pair<ItemStack, ItemStack> getDoubleStack(ItemStack stack){
-		final Inventory inv = getInventory(stack);
+	public static Pair<ItemStack, ItemStack> getDoubleStack(ItemStack stack) {
+		final Container inv = getInventory(stack);
 		return inv != null ? Pair.of(stack, inv.getItem(0)) : Pair.of(stack, stack);
 	}
-	
+
 	public static Optional<IPlantType> getImitatePlantType(ItemStack stack) {
-		final Inventory inv = getInventory(stack);
-		if(inv != null) {
-			final ItemStack itemstack = getInventory(stack).getItem(0);
-			if(itemstack.getItem() instanceof PlantCardItem) {
-				return Optional.ofNullable(((PlantCardItem) itemstack.getItem()).plantType);
+		final Container inv = getInventory(stack);
+		if (inv != null) {
+			final ItemStack itemstack = inv.getItem(0);
+			if (itemstack.getItem() instanceof PlantCardItem card) {
+				return Optional.ofNullable(card.plantType);
 			}
 		}
 		return Optional.empty();
@@ -172,27 +185,27 @@ public class ImitaterCardItem extends PlantCardItem {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		if(this.isEnjoyCard){
 			return;
 		}
 		Optional<IPlantType> opt = getImitatePlantType(stack);
 		if(! opt.isPresent()) {
-			tooltip.add(new TranslationTextComponent("tooltip.pvz.imitater_card.empty").withStyle(TextFormatting.RED));
+			tooltip.add(Component.translatable("tooltip.pvz.imitater_card.empty").withStyle(ChatFormatting.RED));
 		} else {
-			tooltip.add(new TranslationTextComponent("tooltip.pvz.imitater_card.full", opt.get().getText().getString()).withStyle(TextFormatting.LIGHT_PURPLE));
+			tooltip.add(Component.translatable("tooltip.pvz.imitater_card.full", opt.get().getText().getString()).withStyle(ChatFormatting.LIGHT_PURPLE));
 		    super.appendHoverText(getDoubleStack(stack).getSecond(), worldIn, tooltip, flagIn);
 		}
 	}
 	
 	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT oldCapNbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt) {
 		return new InvProvider(stack);
 	}
 
 	@Nullable
-	public static Inventory getInventory(ItemStack stack) {
+	public static Container getInventory(ItemStack stack) {
 		return (stack.getItem() instanceof ImitaterCardItem) ? new ItemInventory(stack, 1) {
 			@Override
 			public boolean canPlaceItem(int slot, @Nonnull ItemStack stack) {
@@ -217,7 +230,7 @@ public class ImitaterCardItem extends PlantCardItem {
 		@Nonnull
 		@Override
 		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(capability, opt);
+			return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
 		}
 	}
 

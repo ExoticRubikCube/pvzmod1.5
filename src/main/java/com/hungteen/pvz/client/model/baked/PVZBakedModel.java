@@ -6,32 +6,33 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraft.core.Direction;
+import net.minecraftforge.client.model.data.ModelData;
 
 @SuppressWarnings("deprecation")
-public abstract class PVZBakedModel implements IBakedModel {
+public abstract class PVZBakedModel implements BakedModel {
 	
-    protected IBakedModel existingModel;
+    protected BakedModel existingModel;
 
-    public PVZBakedModel(IBakedModel existingModel) {
+    public PVZBakedModel(BakedModel existingModel) {
         this.existingModel = existingModel;
     }
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
-        throw new AssertionError("IForgeBakedModel::getQuads should never be called, only IForgeBakedModel::getQuads");
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+        return this.existingModel.getQuads(state, side, rand);
     }
 
-	@Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-        return this.existingModel.getQuads(state, side, rand);
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, net.minecraftforge.client.model.data.ModelData data, net.minecraft.client.renderer.RenderType renderType) {
+        return this.existingModel.getQuads(state, side, rand, data, renderType);
     }
 
     @Override
@@ -60,7 +61,7 @@ public abstract class PVZBakedModel implements IBakedModel {
     }
 
     @Override
-    public ItemOverrideList getOverrides() {
+    public ItemOverrides getOverrides() {
         return this.existingModel.getOverrides();
     }
 

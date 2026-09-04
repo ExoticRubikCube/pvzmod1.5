@@ -5,16 +5,16 @@ import java.util.stream.Collectors;
 
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
 public class PVZRandomTargetGoal extends PVZTargetGoal {
 
-	public PVZRandomTargetGoal(MobEntity mobIn, boolean mustSee, boolean mustReach, float w, float h) {
+	public PVZRandomTargetGoal(Mob mobIn, boolean mustSee, boolean mustReach, float w, float h) {
 		super(mobIn, mustSee, mustReach, w, h);
 	}
 
-	public PVZRandomTargetGoal(MobEntity mobIn, boolean mustSee, boolean mustReach, float w, float h1, float h2) {
+	public PVZRandomTargetGoal(Mob mobIn, boolean mustSee, boolean mustReach, float w, float h1, float h2) {
 		super(mobIn, mustSee, mustReach, w, h1, h2);
 	}
 

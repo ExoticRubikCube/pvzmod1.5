@@ -3,14 +3,14 @@ package com.hungteen.pvz.common.advancement.trigger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate.AndPredicate;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
-public class InvasionTrigger extends AbstractCriterionTrigger<InvasionTrigger.Instance> {
+public class InvasionTrigger extends SimpleCriterionTrigger<InvasionTrigger.Instance> {
 
     private static final ResourceLocation ID = StringUtil.prefix("invasion");
     public static final InvasionTrigger INSTANCE = new InvasionTrigger();
@@ -23,23 +23,23 @@ public class InvasionTrigger extends AbstractCriterionTrigger<InvasionTrigger.In
      * Deserialize a ICriterionInstance of this trigger from the data in the JSON.
      */
     @Override
-    protected Instance createInstance(JsonObject json, AndPredicate player, ConditionArrayParser p_230241_3_) {
+    protected Instance createInstance(JsonObject json, EntityPredicate.Composite player, DeserializationContext p_230241_3_) {
         return new Instance(player);
     }
 
-    public void trigger(ServerPlayerEntity player) {
+    public void trigger(ServerPlayer player) {
         this.trigger(player, (instance) -> {
             return instance.test(player);
         });
     }
 
-    public static class Instance extends CriterionInstance {
+    public static class Instance extends AbstractCriterionTriggerInstance {
 
-        public Instance(AndPredicate player) {
+        public Instance(EntityPredicate.Composite player) {
             super(ID, player);
         }
 
-        public boolean test(ServerPlayerEntity player) {
+        public boolean test(ServerPlayer player) {
             return true;
         }
 

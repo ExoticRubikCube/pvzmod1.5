@@ -17,24 +17,24 @@ import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 
-	private static final DataParameter<Boolean> HAS_PICKAXE = EntityDataManager.defineId(DiggerZombieEntity.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HAS_PICKAXE = SynchedEntityData.defineId(DiggerZombieEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final int MAX_OUT_TIME = 30;
 	
-	public DiggerZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public DiggerZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -52,20 +52,20 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	@Override
 	public void normalZombieTick() {
 		super.normalZombieTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			LivingEntity target = this.getTarget();
 			if(this.hasPickaxe()) {
 				if(target != null) {
 				    if(this.distanceToSqr(target) <= 8) {
-				    	this.setAttackTime(MathHelper.clamp(this.getAttackTime() + 1, 0, MAX_OUT_TIME));
+				    	this.setAttackTime(Mth.clamp(this.getAttackTime() + 1, 0, MAX_OUT_TIME));
 				    } else {
-				    	this.setAttackTime(MathHelper.clamp(this.getAttackTime() - 1, 0, MAX_OUT_TIME));
+				    	this.setAttackTime(Mth.clamp(this.getAttackTime() - 1, 0, MAX_OUT_TIME));
 				    }
 			    } else {
-			    	this.setAttackTime(MathHelper.clamp(this.getAttackTime() - 1, 0, MAX_OUT_TIME));
+			    	this.setAttackTime(Mth.clamp(this.getAttackTime() - 1, 0, MAX_OUT_TIME));
 			    }
 			} else {
-				this.setAttackTime(MathHelper.clamp(this.getAttackTime() + 1, 0, MAX_OUT_TIME));
+				this.setAttackTime(Mth.clamp(this.getAttackTime() + 1, 0, MAX_OUT_TIME));
 			}
 		} else{
 			if(! this.isNotDigging()){
@@ -76,7 +76,7 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	}
 	
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> data) {
+	public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
 		super.onSyncedDataUpdated(data);
 		if(data.equals(HAS_PICKAXE)) {
 			this.updateAttributes(this.hasPickaxe());
@@ -110,7 +110,7 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	@Override
 	protected boolean isZombieInvulnerableTo(DamageSource source) {
 		if(! this.isNotDigging() && source.isProjectile()){
-			return ! (source.getEntity() instanceof SplitPeaEntity || source.getEntity() instanceof PlayerEntity || source.getEntity() instanceof MelonPultEntity || source.getEntity() instanceof WinterMelonEntity);
+			return ! (source.getEntity() instanceof SplitPeaEntity || source.getEntity() instanceof Player || source.getEntity() instanceof MelonPultEntity || source.getEntity() instanceof WinterMelonEntity);
 		}
 		return super.isZombieInvulnerableTo(source);
 	}
@@ -150,13 +150,13 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		if(this.isMiniZombie()) return EntitySize.scalable(0.4f, this.getAttackTime() * 0.02F + 0.1F);
-		return EntitySize.scalable(0.8f, this.getAttackTime() * 0.06F + 0.2F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		if(this.isMiniZombie()) return EntityDimensions.scalable(0.4f, this.getAttackTime() * 0.02F + 0.1F);
+		return EntityDimensions.scalable(0.8f, this.getAttackTime() * 0.06F + 0.2F);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("digger_has_pickaxe")) {
 			this.setPickaxe(compound.getBoolean("digger_has_pickaxe"));
@@ -164,7 +164,7 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("digger_has_pickaxe", this.hasPickaxe());
 	}

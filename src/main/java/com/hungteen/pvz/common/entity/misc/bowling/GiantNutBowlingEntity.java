@@ -5,20 +5,20 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class GiantNutBowlingEntity extends AbstractBowlingEntity {
 
-	public GiantNutBowlingEntity(EntityType<?> type, World worldIn) {
+	public GiantNutBowlingEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public GiantNutBowlingEntity(EntityType<?> type, World worldIn, PlayerEntity entity) {
+	public GiantNutBowlingEntity(EntityType<?> type, Level worldIn, Player entity) {
 		super(type, worldIn, entity);
 	}
 
@@ -35,8 +35,8 @@ public class GiantNutBowlingEntity extends AbstractBowlingEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(2.5F, 2.5F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(2.5F, 2.5F);
 	}
 	
 	@Override

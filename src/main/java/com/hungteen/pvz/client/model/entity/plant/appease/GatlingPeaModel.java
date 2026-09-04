@@ -1,93 +1,105 @@
 package com.hungteen.pvz.client.model.entity.plant.appease;
 
-import java.util.Optional;
-
 import com.hungteen.pvz.client.model.entity.plant.PlantShooterModel;
 import com.hungteen.pvz.common.entity.plant.appease.GatlingPeaEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Optional;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class GatlingPeaModel extends PlantShooterModel<GatlingPeaEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer body;
-	private final ModelRenderer head;
-	private final ModelRenderer barrel;
-	private final ModelRenderer eyebrow;
-	private final ModelRenderer down;
-	private final ModelRenderer n_r1;
-	private final ModelRenderer w_r1;
-	private final ModelRenderer e_r1;
-	private final ModelRenderer s_r1;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "gatling_pea"), "main");
 
-	public GatlingPeaModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
+	private final ModelPart total;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart barrel;
+	private final ModelPart eyebrow;
+	private final ModelPart down;
+	private final ModelPart n_r1;
+	private final ModelPart w_r1;
+	private final ModelPart e_r1;
+	private final ModelPart s_r1;
 
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(body);
-		setRotationAngle(body, -0.0873F, 0.0F, 0.0F);
-		body.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, false);
-
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -12.0F, 0.0F);
-		body.addChild(head);
-		setRotationAngle(head, 0.0873F, 0.0F, 0.0F);
-		head.texOffs(30, 0).addBox(-2.0F, -5.0F, -7.0F, 4.0F, 4.0F, 3.0F, 0.0F, false);
-		head.texOffs(44, 0).addBox(-3.0F, -6.0F, -8.0F, 6.0F, 6.0F, 2.0F, 0.0F, false);
-		head.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
-		head.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, 0.0F, false);
-		head.texOffs(0, 46).addBox(-5.5F, -6.0F, -4.5F, 11.0F, 7.0F, 11.0F, 0.0F, false);
-		head.texOffs(20, 30).addBox(-5.5F, -11.0F, -5.5F, 11.0F, 5.0F, 11.0F, 0.0F, false);
-
-		barrel = new ModelRenderer(this);
-		barrel.setPos(0.0F, -3.0F, -9.5F);
-		head.addChild(barrel);
-		barrel.texOffs(50, 20).addBox(-2.0F, -2.0F, -1.5F, 4.0F, 4.0F, 3.0F, 0.0F, false);
-
-		eyebrow = new ModelRenderer(this);
-		eyebrow.setPos(0.0F, 12.0F, -1.0F);
-		head.addChild(eyebrow);
-		eyebrow.texOffs(41, 19).addBox(-5.0F, -21.25F, -4.6F, 10.0F, 1.0F, 0.0F, 0.0F, false);
-
-		down = new ModelRenderer(this);
-		down.setPos(0.0F, 0.0F, 0.0F);
-		total.addChild(down);
 
 
-		n_r1 = new ModelRenderer(this);
-		n_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(n_r1);
-		setRotationAngle(n_r1, -0.1745F, -0.7854F, 0.0F);
-		n_r1.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 0.0F, 6.0F, 0.0F, false);
-
-		w_r1 = new ModelRenderer(this);
-		w_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(w_r1);
-		setRotationAngle(w_r1, 0.1745F, -0.7854F, -0.1745F);
-		w_r1.texOffs(6, 26).addBox(1.0F, -1.0F, -2.0F, 6.0F, 0.0F, 4.0F, 0.0F, false);
-
-		e_r1 = new ModelRenderer(this);
-		e_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(e_r1);
-		setRotationAngle(e_r1, -0.1745F, -0.7854F, 0.1745F);
-		e_r1.texOffs(26, 26).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 0.0F, 4.0F, 0.0F, false);
-
-		s_r1 = new ModelRenderer(this);
-		s_r1.setPos(0.0F, 0.8F, 0.0F);
-		down.addChild(s_r1);
-		setRotationAngle(s_r1, 0.1745F, -0.7854F, 0.0F);
-		s_r1.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 0.0F, 6.0F, 0.0F, false);
+public GatlingPeaModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.body = root.getChild("body");
+		this.head = root.getChild("head");
+		this.barrel = root.getChild("barrel");
+		this.eyebrow = root.getChild("eyebrow");
+		this.down = root.getChild("down");
+		this.n_r1 = root.getChild("n_r1");
+		this.w_r1 = root.getChild("w_r1");
+		this.e_r1 = root.getChild("e_r1");
+		this.s_r1 = root.getChild("s_r1");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+			CubeListBuilder.create()
+				.texOffs(30, 0).addBox(-2.0F, -5.0F, -7.0F, 4.0F, 4.0F, 3.0F)
+				.texOffs(44, 0).addBox(-3.0F, -6.0F, -8.0F, 6.0F, 6.0F, 2.0F)
+				.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F)
+				.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F)
+				.texOffs(0, 46).addBox(-5.5F, -6.0F, -4.5F, 11.0F, 7.0F, 11.0F)
+				.texOffs(20, 30).addBox(-5.5F, -11.0F, -5.5F, 11.0F, 5.0F, 11.0F),
+			PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+		PartDefinition barrel_pd = head_pd.addOrReplaceChild("barrel",
+			CubeListBuilder.create()
+				.texOffs(50, 20).addBox(-2.0F, -2.0F, -1.5F, 4.0F, 4.0F, 3.0F),
+			PartPose.offset(0.0F, -3.0F, -9.5F));
+		PartDefinition eyebrow_pd = head_pd.addOrReplaceChild("eyebrow",
+			CubeListBuilder.create()
+				.texOffs(41, 19).addBox(-5.0F, -21.25F, -4.6F, 10.0F, 1.0F, 0.0F),
+			PartPose.offset(0.0F, 12.0F, -1.0F));
+		PartDefinition down_pd = total_pd.addOrReplaceChild("down",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition n_r1_pd = down_pd.addOrReplaceChild("n_r1",
+			CubeListBuilder.create()
+				.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 0.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.0F));
+		PartDefinition w_r1_pd = down_pd.addOrReplaceChild("w_r1",
+			CubeListBuilder.create()
+				.texOffs(6, 26).addBox(1.0F, -1.0F, -2.0F, 6.0F, 0.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, -0.1745F));
+		PartDefinition e_r1_pd = down_pd.addOrReplaceChild("e_r1",
+			CubeListBuilder.create()
+				.texOffs(26, 26).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 0.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.1745F));
+		PartDefinition s_r1_pd = down_pd.addOrReplaceChild("s_r1",
+			CubeListBuilder.create()
+				.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 0.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
 
 	@Override
 	public void setupAnim(GatlingPeaEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
@@ -100,17 +112,17 @@ public class GatlingPeaModel extends PlantShooterModel<GatlingPeaEntity> {
 	}
 	
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getHeadModel() {
+	public Optional<ModelPart> getHeadModel() {
 		return Optional.ofNullable(this.head);
 	}
 	
 	@Override
-	public Optional<ModelRenderer> getBodyModel() {
+	public Optional<ModelPart> getBodyModel() {
 		return Optional.ofNullable(this.body);
 	}
 

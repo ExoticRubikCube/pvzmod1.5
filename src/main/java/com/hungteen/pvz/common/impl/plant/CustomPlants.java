@@ -26,8 +26,8 @@ public final class CustomPlants extends PlantType {
 			.entityType(() -> EntityRegister.WATER_GUARD.get())
 			.summonCard(() -> ItemRegister.WATER_GUARD_CARD.get())
 			.enjoyCard(() -> ItemRegister.WATER_GUARD_ENJOY_CARD.get())
-			.plantModel(() -> WaterGuardModel::new).scale(0.8F)
-			.cdSkill(Arrays.asList(SkillTypes.MORE_GUARD_LIFE))
+			.plantModel(() -> () -> new WaterGuardModel(WaterGuardModel.createBodyLayer().bakeRoot())).scale(0.8F)
+			.cdSkill(List.of(SkillTypes.MORE_GUARD_LIFE))
 	);
 	
 	public static final IPlantType BUTTER_PULT = new CustomPlants("butter_pult", new PlantFeatures()
@@ -36,8 +36,8 @@ public final class CustomPlants extends PlantType {
 			.entityType(() -> EntityRegister.BUTTER_PULT.get())
 			.summonCard(() -> ItemRegister.BUTTER_PULT_CARD.get())
 			.enjoyCard(() -> ItemRegister.BUTTER_PULT_ENJOY_CARD.get())
-			.plantModel(() -> KernelPultModel::new).scale(0.9F)
-			.commonSunSkill(Arrays.asList(SkillTypes.MORE_BUTTER_DAMAGE))
+			.plantModel(() -> () -> new KernelPultModel(KernelPultModel.createBodyLayer().bakeRoot())).scale(0.9F)
+			.commonSunSkill(List.of(SkillTypes.MORE_BUTTER_DAMAGE))
 	);
 	
 	public static void register() {

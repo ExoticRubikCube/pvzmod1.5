@@ -5,16 +5,15 @@ import com.hungteen.pvz.client.gui.screen.AbstractOptionScreen;
 import com.hungteen.pvz.common.container.AbstractOptionContainer;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.StringUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.IRenderable;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,12 +23,12 @@ import java.util.Locale;
 import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
-public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEventListener {
+public class OptionSearchGui extends GuiComponent implements GuiEventListener {
 
 	public static final ResourceLocation TEXTURE = StringUtil.prefix("textures/gui/container/almanac_search.png");
 	private Minecraft mc;
 	protected AbstractOptionContainer container;
-	private TextFieldWidget searchBar;
+	public EditBox searchBar;
 	protected final RecipeManager recipeManager = new RecipeManager();
 	private final List<CategoryToggleWidget> toggleTabs = Lists.newArrayList();
 	private CategoryToggleWidget currentTab;
@@ -57,7 +56,7 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 
 	public void initSearchBar() {
 		String s = this.searchBar != null ? this.searchBar.getValue() : "";
-		this.searchBar = new TextFieldWidget(this.mc.font, this.guiLeft + 25, this.guiTop + 14, 100, 14, new StringTextComponent(I18n.get("itemGroup.search")));
+		this.searchBar = new EditBox(this.mc.font, this.guiLeft + 25, this.guiTop + 14, 100, 14, Component.literal(I18n.get("itemGroup.search")));
 		this.searchBar.setMaxLength(50);
 		this.searchBar.setBordered(false);
 		this.searchBar.setVisible(true);
@@ -130,7 +129,7 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 		this.canType = false;
-		return IGuiEventListener.super.keyReleased(keyCode, scanCode, modifiers);
+		return GuiEventListener.super.keyReleased(keyCode, scanCode, modifiers);
 	}
 
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
@@ -141,7 +140,7 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 				this.updateSearch();
 				return true;
 			} else {
-				return IGuiEventListener.super.charTyped(p_charTyped_1_, p_charTyped_2_);
+				return GuiEventListener.super.charTyped(p_charTyped_1_, p_charTyped_2_);
 			}
 		} else {
 			return false;
@@ -174,13 +173,11 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 		}
 	}
 
-	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		stack.pushPose();
 		stack.translate(0.0F, 0.0F, 100.0F);
-		this.mc.getTextureManager().bind(TEXTURE);
+		this.mc.getTextureManager().bindForSetup(TEXTURE);
 		this.blit(stack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-		this.searchBar.render(stack, mouseX, mouseY, partialTicks);
 
 		for (CategoryToggleWidget a : this.toggleTabs) {
 			a.render(stack, mouseX, mouseY, partialTicks);
@@ -193,7 +190,7 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 	/**
 	 * render tool tips for ghost recipes and the page.
 	 */
-	public void renderTooltip(MatrixStack stack, int guiLeft, int guiTop, int mouseX, int mouseY) {
+	public void renderTooltip(PoseStack stack, int guiLeft, int guiTop, int mouseX, int mouseY) {
 		this.page.renderTooltip(stack, mouseX, mouseY);
 	    this.recipeManager.renderGhostRecipeTooltip(this.mc, stack, guiLeft, guiTop, mouseX, mouseY);
 	}
@@ -207,7 +204,7 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 
 	public boolean hasClickedOutside(double mouseX, double mouseY, int guiLeftIn, int guiTopIn, int mouseButton) {
 		boolean flag = mouseX < guiLeft || mouseY < guiTop || mouseX >= guiLeft + xSize || mouseY >= guiTop + ySize;
-		return flag && !this.currentTab.isHovered();
+		return flag && !this.currentTab.isHoveredOrFocused();
 	}
 
 	public Optional<SearchOption> getCurrentOption() {
@@ -233,7 +230,8 @@ public class OptionSearchGui extends AbstractGui implements IRenderable, IGuiEve
 		for (int i = 0; i < this.toggleTabs.size(); i++) {
 			CategoryToggleWidget toggle = this.toggleTabs.get(i);
 			toggle.visible = true;
-			toggle.setPosition(x, y + h * i);
+			toggle.x = x;
+			toggle.y = y + h * i;
 		}
 	}
 

@@ -4,35 +4,33 @@ import com.hungteen.pvz.common.container.CardFusionContainer;
 import com.hungteen.pvz.common.item.material.EssenceItem;
 import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class CardFusionTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class CardFusionTileEntity extends BlockEntity implements MenuProvider {
 
 	public final ItemStackHandler handler = new ItemStackHandler(12);
 	public static final int CRAFT_ESSENCE_COST = 8;
 	public static final int CRAFT_SUN_COST = 5000;
-	public IIntArray array = new IntArray(2);
+	public ContainerData array = new SimpleContainerData(2);
 	public int sunAmount = 0;
 	public int essenceAmount = 0;
 	
-	public CardFusionTileEntity() {
-		super(TileEntityRegister.CARD_FUSION.get());
+	public CardFusionTileEntity(BlockPos pos, BlockState state) {
+		super(TileEntityRegister.CARD_FUSION.get(), pos, state);
 	}
 
-	@Override
 	public void tick() {
 		if(! level.isClientSide) {
 			this.absorbSunAmount();
@@ -69,29 +67,28 @@ public class CardFusionTileEntity extends TileEntity implements ITickableTileEnt
 	}
 	
 	@Override
-    public void load(BlockState state, CompoundNBT compound) {
-    	super.load(state, compound);
+    public void load(CompoundTag compound) {
+    	super.load(compound);
     	this.handler.deserializeNBT(compound.getCompound("itemstack_list"));
     	this.sunAmount = compound.getInt("sun_amount");
 		this.essenceAmount = compound.getInt("essence_amount");
     }
     
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    protected void saveAdditional(CompoundTag compound) {
     	compound.put("itemstack_list", this.handler.serializeNBT());
     	compound.putInt("sun_amount", this.sunAmount);
 		compound.putInt("essence_amount", this.essenceAmount);
-    	return super.save(compound);
     }
     
 	@Override
-	public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
+	public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
 		return new CardFusionContainer(id, player, this.worldPosition);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("gui.pvz.card_fusion");
+	public Component getDisplayName() {
+		return Component.translatable("gui.pvz.card_fusion");
 	}
 
 }

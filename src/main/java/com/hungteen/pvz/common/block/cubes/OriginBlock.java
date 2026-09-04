@@ -6,20 +6,20 @@ import com.hungteen.pvz.api.types.IEssenceType;
 import com.hungteen.pvz.common.entity.effect.OriginEffectEntity;
 import com.hungteen.pvz.common.impl.EssenceTypes;
 import com.hungteen.pvz.utils.enums.Colors;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class OriginBlock extends Block {
 
@@ -27,20 +27,22 @@ public class OriginBlock extends Block {
     private static final int RADIATION_RANGE = 1;
 
     public OriginBlock() {
-        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(15, 50).harvestLevel(3).harvestTool(ToolType.PICKAXE)
+        super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).strength(15, 50)
                 .lightLevel(i -> 15).randomTicks().sound(SoundType.ANCIENT_DEBRIS).noOcclusion());
     }
 
     /**
      * update map when tags change.
      */
-    public static void updateRadiationMap() {
+    public static void updateRadiationMap(Registry<Block> blockRegistry) {
         BLOCK_TO_ESSENCE.clear();
 
         EssenceTypes.getEssences().forEach(e -> {
-            e.getRadiationBlockTag().ifPresent(tag -> {
-                tag.getValues().forEach(b -> {
-                    BLOCK_TO_ESSENCE.put(b, e);
+            e.getRadiationBlockTag().ifPresent(tagKey -> {
+                blockRegistry.getTag(tagKey).ifPresent(holders -> {
+                    holders.forEach(holder -> {
+                        BLOCK_TO_ESSENCE.put(holder.value(), e);
+                    });
                 });
             });
         });
@@ -48,7 +50,7 @@ public class OriginBlock extends Block {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
         super.tick(state, worldIn, pos, rand);
         if (! worldIn.isClientSide) {
             if (! worldIn.isAreaLoaded(pos, 3)) return;
@@ -73,7 +75,7 @@ public class OriginBlock extends Block {
     /**
      * check specific block and grow if matched.
      */
-    private boolean checkAndGrow(World world, int x, int y, int z) {
+    private boolean checkAndGrow(Level world, int x, int y, int z) {
         final BlockPos pos = new BlockPos(x, y, z);
         final BlockState blockstate = world.getBlockState(pos);
         final Block block = blockstate.getBlock();
@@ -87,4 +89,3 @@ public class OriginBlock extends Block {
     }
 
 }
-

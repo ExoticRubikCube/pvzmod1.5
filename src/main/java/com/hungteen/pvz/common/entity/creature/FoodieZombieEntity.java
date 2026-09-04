@@ -8,53 +8,53 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.entity.EntityRegister;
 
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.BreatheAirGoal;
-import net.minecraft.entity.ai.goal.BreedGoal;
-import net.minecraft.entity.ai.goal.FollowParentGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.BreathAirGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
-public class FoodieZombieEntity extends AnimalEntity {
+public class FoodieZombieEntity extends Animal {
 
 	private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(ItemRegister.FAKE_BRAIN.get(),
 			ItemRegister.REAL_BRAIN.get());
-	private static final DataParameter<Integer> GEN_TICK = EntityDataManager.defineId(FoodieZombieEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> GEN_TICK = SynchedEntityData.defineId(FoodieZombieEntity.class,
+			EntityDataSerializers.INT);
 	protected int lvl;
 	protected static final int MAX_LVL = 10;
 
-	public FoodieZombieEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
+	public FoodieZombieEntity(EntityType<? extends Animal> type, Level worldIn) {
 		super(type, worldIn);
 		this.moveControl = new MoveHelperController(this);
-		this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+		this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
 		this.refreshDimensions();
 		this.lvl = 1;
 	}
@@ -68,19 +68,19 @@ public class FoodieZombieEntity extends AnimalEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(0, new BreatheAirGoal(this));
+		this.goalSelector.addGoal(0, new BreathAirGoal(this));
 		this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
 		this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
 		this.goalSelector.addGoal(3, new WaterTemptGoal(this, 1.0D, false, TEMPTATION_ITEMS));
 		this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1D));
-		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-		this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 	}
 
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (! level.isClientSide && this.getGenTick() >= 0) {
+		if (! level.isClientSide() && this.getGenTick() >= 0) {
 			this.setGenTick(this.getGenTick() - 1);
 			if (this.getGenTick() == 0) {
 				this.produceSun();
@@ -101,30 +101,30 @@ public class FoodieZombieEntity extends AnimalEntity {
 
 	 
 	@Override
-	public ActionResultType interactAt(PlayerEntity player, Vector3d vec3d, Hand hand) {
+	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
 		ItemStack itemstack = player.getItemInHand(hand);
 		if (this.isFood(itemstack)) {
-			if (! this.level.isClientSide && this.getAge() == 0 && this.getGenTick() == - 1 && this.canFallInLove()) {
-				this.usePlayerItem(player, itemstack);
+			if (! this.level.isClientSide() && this.getAge() == 0 && this.getGenTick() == - 1 && this.canFallInLove()) {
+				this.usePlayerItem(player, InteractionHand.MAIN_HAND, itemstack);
 				this.playSound(SoundRegister.SLURP.get(), 1f, 1f);
 				this.setInLove(player);
 				this.setGenTick(this.getGenCD());// start gen tick
 				player.swing(hand, true);
-				return ActionResultType.CONSUME;
+				return InteractionResult.CONSUME;
 			}
 
 			if (this.isBaby()) {
-				this.usePlayerItem(player, itemstack);
+				this.usePlayerItem(player, InteractionHand.MAIN_HAND, itemstack);
 				this.ageUp((int) ((float) (-this.getAge() / 20) * 0.1F), true);
-				return ActionResultType.CONSUME;
+				return InteractionResult.CONSUME;
 			} else {
 				if (itemstack.getItem() == ItemRegister.REAL_BRAIN.get() && this.lvl <= MAX_LVL) {
 					++ this.lvl;
-					return ActionResultType.CONSUME;
+					return InteractionResult.CONSUME;
 				}
 			}
 		}
-	    return ActionResultType.FAIL;
+	    return InteractionResult.FAIL;
 	}
 
 	private int getGenCD() {
@@ -132,15 +132,15 @@ public class FoodieZombieEntity extends AnimalEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
+	public EntityDimensions getDimensions(Pose poseIn) {
 		if (this.isBaby()) {
-			return EntitySize.scalable(0.3f, 0.3f);
+			return EntityDimensions.scalable(0.3f, 0.3f);
 		}
-		return EntitySize.scalable(0.7f, 0.5f);
+		return EntityDimensions.scalable(0.7f, 0.5f);
 	}
 
 	@Override
-	public AgeableEntity getBreedOffspring(ServerWorld level, AgeableEntity ageable) {
+	public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob ageable) {
 		return EntityRegister.FOODIE_ZOMBIE.get().create(level);
 	}
 
@@ -153,23 +153,23 @@ public class FoodieZombieEntity extends AnimalEntity {
 		return true;
 	}
 
-	public CreatureAttribute getMobType() {
-		return CreatureAttribute.WATER;
+	public MobType getMobType() {
+		return MobType.WATER;
 	}
 
-	public boolean checkSpawnObstruction(IWorldReader worldIn) {
+	public boolean checkSpawnObstruction(LevelReader worldIn) {
 		return worldIn.isUnobstructed(this);
 	}
 
 	@Override
-	protected PathNavigator createNavigation(World worldIn) {
-		return new SwimmerPathNavigator(this, worldIn);
+	protected PathNavigation createNavigation(Level worldIn) {
+		return new WaterBoundPathNavigation(this, worldIn);
 	}
 
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 
 			for (int i = 0; i < 20; ++i) {
 				double d0 = this.random.nextGaussian() * 0.02D;
@@ -184,7 +184,7 @@ public class FoodieZombieEntity extends AnimalEntity {
 	};
 
 	private void doDeathSpawn() {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			SnorkelZombieEntity snorkel = EntityRegister.SNORKEL_ZOMBIE.get().create(level);
 			snorkel.setPos(this.getX(), this.getY(), this.getZ());
 			level.addFreshEntity(snorkel);
@@ -195,7 +195,7 @@ public class FoodieZombieEntity extends AnimalEntity {
 		return false;
 	}
 
-	public boolean canBeLeashed(PlayerEntity player) {
+	public boolean canBeLeashed(Player player) {
 		return true;
 	}
 
@@ -212,7 +212,7 @@ public class FoodieZombieEntity extends AnimalEntity {
 		return PVZLoot.FOODIE_ZOMBIE;
 	}
 
-	static class MoveHelperController extends MovementController {
+	static class MoveHelperController extends MoveControl {
 		private final FoodieZombieEntity zombie;
 
 		public MoveHelperController(FoodieZombieEntity zombie) {
@@ -225,7 +225,7 @@ public class FoodieZombieEntity extends AnimalEntity {
 				this.zombie.setDeltaMovement(this.zombie.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
 			}
 
-			if (this.operation == MovementController.Action.MOVE_TO && !this.zombie.getNavigation().isDone()) {
+			if (this.operation == MoveControl.Operation.MOVE_TO && !this.zombie.getNavigation().isDone()) {
 				double d0 = this.wantedX - this.zombie.getX();
 				double d1 = this.wantedY - this.zombie.getY();
 				double d2 = this.wantedZ - this.zombie.getZ();
@@ -233,20 +233,20 @@ public class FoodieZombieEntity extends AnimalEntity {
 				if (d3 < (double) 2.5000003E-7F) {
 					this.mob.setZza(0.0F);
 				} else {
-					float f = (float) (MathHelper.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
-					this.zombie.yRot = this.rotlerp(this.zombie.yRot, f, 10.0F);
-					this.zombie.yBodyRot = this.zombie.yRot;
-					this.zombie.yHeadRot = this.zombie.yRot;
+					float f = (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
+					this.zombie.setYRot(this.rotlerp(this.zombie.getYRot(), f, 10.0F));
+					this.zombie.yBodyRot = this.zombie.getYRot();
+					this.zombie.yHeadRot = this.zombie.getYRot();
 					float f1 = (float) (this.speedModifier
 							* this.zombie.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					if (this.zombie.isInWater()) {
 						this.zombie.setSpeed(f1 * 0.02F);
-						float f2 = -((float) (MathHelper.atan2(d1, (double) MathHelper.sqrt(d0 * d0 + d2 * d2))
+						float f2 = -((float) (Mth.atan2(d1, Mth.sqrt((float) (d0 * d0 + d2 * d2)))
 								* (double) (180F / (float) Math.PI)));
-						f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
-						this.zombie.xRot = this.rotlerp(this.zombie.xRot, f2, 5.0F);
-						float f3 = MathHelper.cos(this.zombie.xRot * ((float) Math.PI / 180F));
-						float f4 = MathHelper.sin(this.zombie.xRot * ((float) Math.PI / 180F));
+						f2 = Mth.clamp(Mth.wrapDegrees(f2), -85.0F, 85.0F);
+						this.zombie.setXRot(this.rotlerp(this.zombie.getXRot(), f2, 5.0F));
+						float f3 = Mth.cos(this.zombie.getXRot() * ((float) Math.PI / 180F));
+						float f4 = Mth.sin(this.zombie.getXRot() * ((float) Math.PI / 180F));
 						this.zombie.zza = f3 * f1;
 						this.zombie.yya = -f4 * f1;
 					} else {
@@ -264,7 +264,7 @@ public class FoodieZombieEntity extends AnimalEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("zombie_lvl")) {
 			this.lvl = compound.getInt("zombie_lvl");
@@ -275,7 +275,7 @@ public class FoodieZombieEntity extends AnimalEntity {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("zombie_lvl", this.lvl);
 		compound.putInt("gen_tick", this.getGenTick());

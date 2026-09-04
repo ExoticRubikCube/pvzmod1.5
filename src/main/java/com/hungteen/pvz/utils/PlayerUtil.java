@@ -11,17 +11,18 @@ import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toclient.PlaySoundPacket;
 import com.hungteen.pvz.common.world.invasion.Invasion;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.STitlePacket;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,12 +62,12 @@ public class PlayerUtil {
 	}
 
 	@Nullable
-	public static Optional<PlayerDataManager> getOptManager(PlayerEntity player) {
+	public static Optional<PlayerDataManager> getOptManager(Player player) {
 		return Optional.ofNullable(getManager(player));
 	}
 
 	@Nullable
-	public static PlayerDataManager getManager(PlayerEntity player) {
+	public static PlayerDataManager getManager(Player player) {
 		if(isValidPlayer(player)) {
 			final IPlayerDataCapability cap = player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).orElse(null);
 		    return cap != null ? cap.getPlayerData() : null;
@@ -74,35 +75,35 @@ public class PlayerUtil {
 		return null;
 	}
 	
-	public static void setResource(PlayerEntity player, Resources res, int num) {
+	public static void setResource(Player player, Resources res, int num) {
 		getOptManager(player).ifPresent(m -> {
 			m.setResource(res, num);
 		});
 	}
 	
-	public static int getResource(PlayerEntity player, Resources res) {
+	public static int getResource(Player player, Resources res) {
 		final PlayerDataManager manager = getManager(player);
 		return manager != null ? manager.getResource(res) : res.min;
 	}
 	
-	public static int getEmptyPos(PlayerEntity player) {
+	public static int getEmptyPos(Player player) {
 		final PlayerDataManager manager = getManager(player);
 		return manager != null ? manager.getCurrentPos() : 0;
 	}
 	
-	public static ItemStack getItemStack(PlayerEntity player, int pos) {
+	public static ItemStack getItemStack(Player player, int pos) {
 		final PlayerDataManager manager = getManager(player);
 		return manager != null ? manager.getItemAt(pos) : ItemStack.EMPTY;
 	}
 	
-	public static void setItemStack(PlayerEntity player, ItemStack stack, int pos) {
+	public static void setItemStack(Player player, ItemStack stack, int pos) {
 		final PlayerDataManager manager = getManager(player);
 		if(manager != null) {
 			manager.setItemAt(stack, pos, true);
 		}
 	}
 	
-	public static void addResource(PlayerEntity player, Resources res, int num) {
+	public static void addResource(Player player, Resources res, int num) {
 		if(isValidPlayer(player)) {
 			player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {
 			    l.getPlayerData().addResource(res, num);
@@ -110,24 +111,24 @@ public class PlayerUtil {
 		}
 	}
 	
-	public static void setItemStackCD(PlayerEntity player, ItemStack stack, int cd) {
+	public static void setItemStackCD(Player player, ItemStack stack, int cd) {
 		if(stack.getItem() instanceof SummonCardItem){
 			PlayerUtil.getOptManager(player).ifPresent(l -> l.saveSummonCardCD((SummonCardItem) stack.getItem(), cd));
 		}
 		player.getCooldowns().addCooldown(stack.getItem(), cd);
 	}
 	
-	public static void setPAZLock(PlayerEntity player, IPAZType plant, boolean is) {
+	public static void setPAZLock(Player player, IPAZType plant, boolean is) {
 		Optional.ofNullable(getManager(player)).ifPresent(l -> l.setPAZLocked(plant, is));
 	}
 	
-	public static boolean isPAZLocked(PlayerEntity player, IPAZType plant) {
+	public static boolean isPAZLocked(Player player, IPAZType plant) {
 		final PlayerDataManager manager = getManager(player);
 		return manager != null ? manager.isPAZLocked(plant) : true;
 	}
 
 	@Nonnull
-	public static Invasion getInvasion(PlayerEntity player) {
+	public static Invasion getInvasion(Player player) {
 		final PlayerDataManager manager = getManager(player);
 		return manager != null ? manager.getInvasion() : new Invasion(player);
 	}
@@ -136,56 +137,56 @@ public class PlayerUtil {
 	 * get player's group.
 	 * {@link EntityUtil#getEntityGroup(net.minecraft.entity.Entity)}
 	 */
-	public static PVZGroupType getPlayerGroupType(ServerPlayerEntity player) {
+	public static PVZGroupType getPlayerGroupType(ServerPlayer player) {
 		return EntityGroupHander.getPlayerGroup(player);
 	}
 	
-	public static void playClientSound(PlayerEntity player, SoundEvent ev) {
+	public static void playClientSound(Player player, SoundEvent ev) {
 		if(ev != null) {
 			PVZPacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> {
-				return (ServerPlayerEntity) player;
-			}), new PlaySoundPacket(ev.getRegistryName().toString()));
+				return (ServerPlayer) player;
+			}), new PlaySoundPacket(ForgeRegistries.SOUND_EVENTS.getKey(ev).toString()));
 		}
 	}
 
-	public static void sendTitleToPlayer(PlayerEntity player, ITextComponent text) {
-		if(player instanceof ServerPlayerEntity) {
-	         ((ServerPlayerEntity) player).connection.send(new STitlePacket(STitlePacket.Type.TITLE, text));
+	public static void sendTitleToPlayer(Player player, Component text) {
+		if (player instanceof ServerPlayer serverPlayer) {
+			serverPlayer.connection.send(new ClientboundSetTitleTextPacket(text));
+		}
+	}
+
+	public static void sendSubTitleToPlayer(Player player, Component text) {
+		if (player instanceof ServerPlayer serverPlayer) {
+			serverPlayer.connection.send(new ClientboundSetTitleTextPacket(Component.empty()));
+			serverPlayer.connection.send(new ClientboundSetSubtitleTextPacket(text));
 		}
 	}
 	
-	public static void sendSubTitleToPlayer(PlayerEntity player, ITextComponent text) {
-		if(player instanceof ServerPlayerEntity) {
-			 sendTitleToPlayer(player, new StringTextComponent(""));
-	         ((ServerPlayerEntity) player).connection.send(new STitlePacket(STitlePacket.Type.SUBTITLE, text));
-		}
-	}
-	
-	public static void sendMsgToAll(World world, ITextComponent text) {
+	public static void sendMsgToAll(Level world, Component text) {
 		world.getServer().getPlayerList().getPlayers().forEach(player -> {
 			sendMsgTo(player, text);
 		});
 	}
-	
-	public static void sendMsgTo(PlayerEntity player, ITextComponent text) {
-		player.sendMessage(text, Util.NIL_UUID);
+
+	public static void sendMsgTo(Player player, Component text) {
+		player.sendSystemMessage(text);
 	}
 	
 	/**
 	 * get all players in the server.
 	 */
-	public static List<ServerPlayerEntity> getServerPlayers(World world){
+	public static List<ServerPlayer> getServerPlayers(Level world){
 		return world.getServer().getPlayerList().getPlayers();
 	}
 	
-	public static boolean isPlayerSurvival(PlayerEntity player) {
+	public static boolean isPlayerSurvival(Player player) {
 		return ! player.isCreative() && ! player.isSpectator();
 	}
 	
 	/**
 	 * Avoid crash by fake player.
 	 */
-	public static boolean isValidPlayer(PlayerEntity player) {
+	public static boolean isValidPlayer(Player player) {
 		return player != null && ! (player instanceof FakePlayer);
 	}
 	

@@ -8,17 +8,17 @@ import com.hungteen.pvz.client.render.layer.fullskin.SunLayer;
 import com.hungteen.pvz.client.render.layer.fullskin.SunLightLayer;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.potion.EffectRegister;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class PVZZombieRender <T extends PVZZombieEntity> extends PVZCreatureRender<T> {
 
 	public static final float MINI_SCALE = 0.32F;
 	
-	public PVZZombieRender(EntityRendererManager rendererManager, EntityModel<T> entityModelIn, float shadowSizeIn) {
-		super(rendererManager, entityModelIn, shadowSizeIn);
+	public PVZZombieRender(EntityRendererProvider.Context context, EntityModel<T> entityModelIn, float shadowSizeIn) {
+		super(context, entityModelIn, shadowSizeIn);
 		this.addZombieLayers();
 	}
 
@@ -35,10 +35,10 @@ public abstract class PVZZombieRender <T extends PVZZombieEntity> extends PVZCre
 	}
 	
 	@Override
-	public Vector3d getTranslateVec(T entity) {
+	public Vec3 getTranslateVec(T entity) {
 		float height = this.getOffsetRisingHeight();
 		float downOffset = entity.getAnimTime() < 0 ? (- entity.getAnimTime() * 1.0f / PVZZombieEntity.RISING_CD) * height : 0;
-		return new Vector3d(0, downOffset, 0);
+		return new Vec3(0, downOffset, 0);
 	}
 	
 	@Override

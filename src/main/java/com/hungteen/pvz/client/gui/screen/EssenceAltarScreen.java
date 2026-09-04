@@ -14,18 +14,19 @@ import com.hungteen.pvz.common.network.toserver.ClickButtonPacket;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer> {
@@ -39,14 +40,14 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	private int mouseX;
 	private int mouseY;
 
-	public EssenceAltarScreen(EssenceAltarContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+	public EssenceAltarScreen(EssenceAltarContainer screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 		this.imageWidth = 176;
 		this.imageHeight = 166;
 		this.tips.add(new DisplayField.TipField(3, 3, Arrays.asList(
-				new TranslationTextComponent("gui.pvz.essence_altar.tip1"),
-				new TranslationTextComponent("gui.pvz.essence_altar.tip2"),
-				new TranslationTextComponent("gui.pvz.essence_altar.tip3")
+				Component.translatable("gui.pvz.essence_altar.tip1"),
+				Component.translatable("gui.pvz.essence_altar.tip2"),
+				Component.translatable("gui.pvz.essence_altar.tip3")
 		)));
 	}
 
@@ -60,19 +61,19 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 					PVZPacketHandler.CHANNEL.sendToServer(new ClickButtonPacket(GuiHandler.ESSENCE_ALTAR, this.currentPos + pos, 0));
 				}
 			});
-			this.addButton(this.buttons[i]);
+			this.addRenderableWidget(this.buttons[i]);
 			this.buttons[i].visible = true;
 		}
 	}
 
 	@Override
-	protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         stack.popPose();
 
-        this.minecraft.getTextureManager().bind(StringUtil.WIDGETS);
+        this.minecraft.getTextureManager().bindForSetup(StringUtil.WIDGETS);
 		final int count = this.menu.getAvailableSkills().size();
 		if(count > MAX_ENTRY_COUNT){
 			final int len = MathUtil.getBarLen(this.currentPos, count - MAX_ENTRY_COUNT, 76 - 15);
@@ -83,7 +84,7 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 		super.renderBg(stack, partialTicks, mouseX, mouseY);
 	}
 
-	private void renderEntry(MatrixStack stack, int buttonPos, ISkillType type, int lvl){
+	private void renderEntry(PoseStack stack, int buttonPos, ISkillType type, int lvl){
 		this.menu.getPAZType().ifPresent(pazType -> {
 			final int x = this.buttons[buttonPos].x;
 			final int y = this.buttons[buttonPos].y;
@@ -93,14 +94,14 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 			StringUtil.drawCenteredScaledString(stack, this.minecraft.font, type.getCostAt(lvl) + "", x + 13, y + 12, Colors.WHITE, 0.6F);
 			StringUtil.drawScaledString(stack, this.minecraft.font, type.getText().append(StringUtil.getRomanString(lvl + 1)).getString(), x + 18, y + 5, Colors.WHITE, 1F);
 
-			if(this.buttons[buttonPos].visible && this.buttons[buttonPos].isHovered()){
-				this.minecraft.screen.renderComponentTooltip(stack, Arrays.asList(type.getDescription()), this.mouseX, this.mouseY);
+			if(this.buttons[buttonPos].visible && this.buttons[buttonPos].isHoveredOrFocused()){
+				this.minecraft.screen.renderComponentTooltip(stack, Collections.singletonList(type.getDescription()), this.mouseX, this.mouseY);
 			}
 		});
 	}
 
-	private void renderLogo(MatrixStack stack, IRankType rank, int posX, int posY){
-		this.minecraft.getTextureManager().bind(StringUtil.WIDGETS);
+	private void renderLogo(PoseStack stack, IRankType rank, int posX, int posY){
+		this.minecraft.getTextureManager().bindForSetup(StringUtil.WIDGETS);
 		int x = 239;
 		int y = 74;
 		if(rank == RankTypes.GRAY){
@@ -124,13 +125,13 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	}
 	
 	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		super.render(stack, mouseX, mouseY, partialTicks);
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		final List<ISkillType> skills = this.menu.getAvailableSkills();
 		final List<Integer> levels = this.menu.getCurrentSkillLevel();
-		this.currentPos = MathHelper.clamp(this.currentPos, 0, Math.max(0, skills.size() - MAX_ENTRY_COUNT));
+		this.currentPos = Mth.clamp(this.currentPos, 0, Math.max(0, skills.size() - MAX_ENTRY_COUNT));
 		final int count = Math.min(skills.size(), MAX_ENTRY_COUNT);
 		for(int i = 0; i < MAX_ENTRY_COUNT; ++ i){
 			this.buttons[i].visible = (i < count);
@@ -170,14 +171,14 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
 		if (this.menu.getAvailableSkills().size() > MAX_ENTRY_COUNT) {
 			final int next = (int) ((double) this.currentPos - p_mouseScrolled_5_);
-			this.currentPos = MathHelper.clamp(next, 0, this.menu.getAvailableSkills().size() - MAX_ENTRY_COUNT);
+			this.currentPos = Mth.clamp(next, 0, this.menu.getAvailableSkills().size() - MAX_ENTRY_COUNT);
 		}
 		return true;
 	}
 
 	private static class EssenceButton extends PVZButton{
 
-		public EssenceButton(int x, int y, IPressable onPress) {
+		public EssenceButton(int x, int y, Button.OnPress onPress) {
 			super(StringUtil.WIDGETS, x, y, 82, 19, onPress);
 		}
 

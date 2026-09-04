@@ -2,42 +2,59 @@ package com.hungteen.pvz.client.model.entity.plant.enforce;
 
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class SquashModel extends PVZPlantModel<SquashEntity> {
-	private final ModelRenderer body;
-	private final ModelRenderer bone;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "squash"), "main");
 
-	public SquashModel() {
-		texWidth = 256;
-		texHeight = 256;
+	private final ModelPart body;
+	private final ModelPart bone;
 
-		body = new ModelRenderer(this);
-		body.setPos(0.0F, 24.0F, 0.0F);
-		body.texOffs(125, 202).addBox(-16.0F, -16.0F, -16.0F, 32.0F, 16.0F, 32.0F, 0.0F, false);
-		body.texOffs(138, 153).addBox(-14.0F, -32.0F, -14.0F, 28.0F, 16.0F, 28.0F, 0.0F, false);
-		body.texOffs(40, 148).addBox(-11.0F, -44.0F, -11.0F, 22.0F, 12.0F, 22.0F, 0.0F, false);
-
-		bone = new ModelRenderer(this);
-		bone.setPos(0.0F, -50.0F, 0.0F);
-		body.addChild(bone);
-		setRotationAngle(bone, 0.0F, 0.0F, 0.5236F);
-		bone.texOffs(235, 130).addBox(1.0F, -1.8038F, -2.0F, 4.0F, 9.0F, 4.0F, 0.0F, false);
+public SquashModel(ModelPart root) {
+		this.body = root.getChild("body");
+		this.bone = root.getChild("bone");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition body_pd = partdefinition.addOrReplaceChild("body",
+			CubeListBuilder.create()
+				.texOffs(125, 202).addBox(-16.0F, -16.0F, -16.0F, 32.0F, 16.0F, 32.0F)
+				.texOffs(138, 153).addBox(-14.0F, -32.0F, -14.0F, 28.0F, 16.0F, 28.0F)
+				.texOffs(40, 148).addBox(-11.0F, -44.0F, -11.0F, 22.0F, 12.0F, 22.0F),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition bone_pd = body_pd.addOrReplaceChild("bone",
+			CubeListBuilder.create()
+				.texOffs(235, 130).addBox(1.0F, -1.8038F, -2.0F, 4.0F, 9.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -50.0F, 0.0F, 0.0F, 0.0F, 0.5236F));
+		return LayerDefinition.create(meshdefinition, 256, 256);
+	}
+
 
 	@Override
 	public void setupAnim(SquashEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.body;
 	}
 

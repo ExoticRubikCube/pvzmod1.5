@@ -3,33 +3,33 @@ package com.hungteen.pvz.common.entity.bullet;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.entity.EntityRegister;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class StarEntity extends AbstractBulletEntity {
 
-	private static final DataParameter<Integer> STAR_TYPE = EntityDataManager.defineId(StarEntity.class,
-			DataSerializers.INT);
-	private static final DataParameter<Integer> STAR_STATE = EntityDataManager.defineId(StarEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> STAR_TYPE = SynchedEntityData.defineId(StarEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> STAR_STATE = SynchedEntityData.defineId(StarEntity.class,
+			EntityDataSerializers.INT);
 	
-	public StarEntity(EntityType<?> type, World worldIn) {
+	public StarEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public StarEntity(World worldIn, LivingEntity livingEntityIn, StarTypes starType, StarStates starState) {
+	public StarEntity(Level worldIn, LivingEntity livingEntityIn, StarTypes starType, StarStates starState) {
 		super(EntityRegister.STAR.get(), worldIn, livingEntityIn);
 		this.setStarType(starType);
 		this.setStarState(starState);
@@ -43,10 +43,10 @@ public class StarEntity extends AbstractBulletEntity {
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
+	protected void onImpact(HitResult result) {
 		boolean flag = false;
-		if (result.getType() == RayTraceResult.Type.ENTITY) {
-			Entity target = ((EntityRayTraceResult) result).getEntity();
+		if (result.getType() == HitResult.Type.ENTITY) {
+			Entity target = ((EntityHitResult) result).getEntity();
 			if (this.shouldHit(target)) {
 				target.invulnerableTime = 0;
 				this.dealStarDamage(target); // attack 
@@ -55,7 +55,7 @@ public class StarEntity extends AbstractBulletEntity {
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || !this.checkLive(result)) {
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
@@ -80,14 +80,14 @@ public class StarEntity extends AbstractBulletEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
+	public EntityDimensions getDimensions(Pose poseIn) {
 		if(this.getStarType() == StarTypes.BIG) {
-			return EntitySize.scalable(0.5f, 0.2f);
+			return EntityDimensions.scalable(0.5f, 0.2f);
 		}
 		if(this.getStarType() == StarTypes.HUGE) {
-			return EntitySize.scalable(0.8f, 0.2f);
+			return EntityDimensions.scalable(0.8f, 0.2f);
 		}
-		return EntitySize.scalable(0.2f, 0.2f);
+		return EntityDimensions.scalable(0.2f, 0.2f);
 	}
 
 	@Override
@@ -102,14 +102,14 @@ public class StarEntity extends AbstractBulletEntity {
 	public void lerpMotion(double x, double y, double z) {
 		this.setDeltaMovement(x, y, z);
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-		    this.yRot += 10;
-		    this.yRotO = this.yRot;
-		    this.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, this.xRot);
+		    this.setYRot(this.getYRot() + 10);
+		    this.yRotO = this.getYRot();
+		    this.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
 		}
 	}	
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("star_state")) {
 		    this.setStarState(StarStates.values()[compound.getInt("star_state")]);
@@ -121,7 +121,7 @@ public class StarEntity extends AbstractBulletEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("star_state", this.getStarState().ordinal());
 		compound.putInt("star_type", this.getStarType().ordinal());

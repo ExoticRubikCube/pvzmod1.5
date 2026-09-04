@@ -4,7 +4,7 @@ import com.hungteen.pvz.api.types.IZombieType;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.grass.DancingZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.GrassZombies;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,8 +70,8 @@ public class ZombieUtil {
 //	public static int caculateZombieLevel(PVZZombieEntity zombie) {
 //		final int difficulty = InvasionManager.getInvasionDifficulty() - 100;
 //		final int maxLevel = PVZConfig.COMMON_CONFIG.EntitySettings.ZombieSetting.ZombieMaxLevel.get();
-//		final int minLvl = MathHelper.clamp(difficulty / 50 + 1, 1, maxLevel);
-//		final int maxLvl = MathHelper.clamp(difficulty / 30 + 2, 1, maxLevel);
+//		final int minLvl = Mth.clamp(difficulty / 50 + 1, 1, maxLevel);
+//		final int maxLvl = Mth.clamp(difficulty / 30 + 2, 1, maxLevel);
 //		return MathUtil.getRandomMinMax(zombie.getRandom(), minLvl, maxLvl);
 //	}
 	

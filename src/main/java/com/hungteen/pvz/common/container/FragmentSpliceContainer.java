@@ -9,14 +9,14 @@ import com.hungteen.pvz.common.recipe.RecipeRegister;
 import com.hungteen.pvz.common.recipe.FragmentRecipe;
 import com.hungteen.pvz.common.tileentity.FragmentSpliceTileEntity;
 import com.hungteen.pvz.utils.PlayerUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -25,15 +25,15 @@ import java.util.Optional;
 public class FragmentSpliceContainer extends PVZContainer {
 
 	public final FragmentSpliceTileEntity te;
-	private final CraftingInventory craftSlots = new CraftingInventory(this, 5, 5);
-	private final IWorldPosCallable access;
-	private final PlayerEntity player;
+	private final CraftingContainer craftSlots = new CraftingContainer(this, 5, 5);
+	private final ContainerLevelAccess access;
+	private final Player player;
 
-	public FragmentSpliceContainer(int id, PlayerEntity player, BlockPos pos) {
+	public FragmentSpliceContainer(int id, Player player, BlockPos pos) {
 		super(ContainerRegister.FRAGMENT_SPLICE.get(), id);
 		this.te = (FragmentSpliceTileEntity) player.level.getBlockEntity(pos);
 		this.player = player;
-		this.access = IWorldPosCallable.create(player.level, pos);
+		this.access = ContainerLevelAccess.create(player.level, pos);
 		if(this.te == null) {
 			System.out.println("Error: Open Fragment Splice GUI !");
 			return ;
@@ -64,11 +64,11 @@ public class FragmentSpliceContainer extends PVZContainer {
 		// player inventory
 		for (int k = 0; k < 3; ++ k) {
 			for (int i1 = 0; i1 < 9; ++ i1) {
-				this.addSlot(new Slot(player.inventory, i1 + k * 9 + 9, 25 + i1 * 18, 143 + k * 18));
+				this.addSlot(new Slot(player.getInventory(), i1 + k * 9 + 9, 25 + i1 * 18, 143 + k * 18));
 			}
 		}
 		for (int l = 0; l < 9; ++ l) {
-			this.addSlot(new Slot(player.inventory, l, 25 + l * 18, 201));
+			this.addSlot(new Slot(player.getInventory(), l, 25 + l * 18, 201));
 		}
 	}
 
@@ -81,7 +81,7 @@ public class FragmentSpliceContainer extends PVZContainer {
 			IPAZType type = ((SummonCardItem) result.getItem()).type;
 			PlayerUtil.setPAZLock(this.player, type, false);
 			//*0.6.4 add unlock tip.
-			PlayerUtil.sendMsgTo(player, new TranslationTextComponent("entity."+type.getModID()+"."+ type).append(new TranslationTextComponent("help.pvz.is_unlocked")).withStyle(TextFormatting.GREEN));
+			PlayerUtil.sendMsgTo(player, Component.translatable("entity."+type.getModID()+"."+ type).append(Component.translatable("help.pvz.is_unlocked")).withStyle(ChatFormatting.GREEN));
 		}
 	}
 
@@ -91,7 +91,7 @@ public class FragmentSpliceContainer extends PVZContainer {
 				this.craftSlots.setItem(i * 5 + j, this.te.handler.getStackInSlot(i * 5 + j + 2).copy());
 			}
 		}
-		final Optional<FragmentRecipe> recipe = this.player.level.getRecipeManager().getRecipeFor(RecipeRegister.FRAGMENT_RECIPE_TYPE, this.craftSlots, this.player.level);
+		final Optional<FragmentRecipe> recipe = this.player.level.getRecipeManager().getRecipeFor(RecipeRegister.FRAGMENT_RECIPE_TYPE.get(), this.craftSlots, this.player.level);
 		return recipe.isPresent() ? recipe.get().getResultItem() : ItemStack.EMPTY;
 	}
 
@@ -100,7 +100,7 @@ public class FragmentSpliceContainer extends PVZContainer {
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		if (slot != null && slot.hasItem()) {
@@ -138,7 +138,7 @@ public class FragmentSpliceContainer extends PVZContainer {
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return stillValid(this.access, player, BlockRegister.FRAGMENT_SPLICE.get());
 	}
 

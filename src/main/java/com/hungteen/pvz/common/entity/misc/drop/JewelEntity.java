@@ -6,16 +6,16 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class JewelEntity extends DropEntity{
 
-	public JewelEntity(EntityType<? extends MobEntity> type, World worldIn) {
+	public JewelEntity(EntityType<? extends Mob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setAmount(1);
 	}
@@ -23,22 +23,22 @@ public class JewelEntity extends DropEntity{
 	@Override
 	protected void onDropped() {
 		super.onDropped();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			EntityUtil.playSound(this, SoundRegister.JEWEL_DROP.get());
 		}
 	}
 	
 	@Override
-	public void onCollectedByPlayer(PlayerEntity player) {
-		if(! this.level.isClientSide) {
+	public void onCollectedByPlayer(Player player) {
+		if(! this.level.isClientSide()) {
 			PlayerUtil.addResource(player, Resources.GEM_NUM, this.getAmount());
 			PlayerUtil.playClientSound(player, SoundRegister.JEWEL_PICK.get());
 		}
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.9f, 0.9f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.9f, 0.9f);
 	}
 	
 	@Override

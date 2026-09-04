@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.plant.light.SunShroomModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.light.SunShroomEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SunShroomRender extends PVZPlantRender<SunShroomEntity>{
 	
-	public SunShroomRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new SunShroomModel(), 0.3f);
+	public SunShroomRender(EntityRendererProvider.Context context) {
+		super(context, new SunShroomModel(context.bakeLayer(SunShroomModel.LAYER)), 0.3f);
 	}
 
 	@Override

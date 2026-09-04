@@ -5,20 +5,20 @@ import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -41,15 +41,15 @@ public class SunStorageSaplingItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		playerIn.startUsingItem(handIn);
-	    return ActionResult.success(playerIn.getItemInHand(handIn));
+	    return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 	}
 	
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if(entityLiving instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) entityLiving;
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+		if(entityLiving instanceof Player) {
+			Player player = (Player) entityLiving;
 			if(! worldIn.isClientSide) {
 				player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent((l) -> {
 					int sunNum = l.getPlayerData().getResource(Resources.SUN_NUM);
@@ -96,11 +96,11 @@ public class SunStorageSaplingItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent("tooltip.pvz.sun_storage_sapling.use").withStyle(TextFormatting.GREEN));
-		tooltip.add(new TranslationTextComponent("tooltip.pvz.sun_storage_sapling.amount", getStorageSunAmount(stack)).withStyle(TextFormatting.YELLOW));
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+		tooltip.add(Component.translatable("tooltip.pvz.sun_storage_sapling.use").withStyle(ChatFormatting.GREEN));
+		tooltip.add(Component.translatable("tooltip.pvz.sun_storage_sapling.amount", getStorageSunAmount(stack)).withStyle(ChatFormatting.YELLOW));
 		if(! isNotOnceSapling(stack)) {
-			tooltip.add(new TranslationTextComponent("tooltip.pvz.sun_storage_sapling.once").withStyle(TextFormatting.RED));
+			tooltip.add(Component.translatable("tooltip.pvz.sun_storage_sapling.once").withStyle(ChatFormatting.RED));
 		}
 	}
 	
@@ -112,31 +112,31 @@ public class SunStorageSaplingItem extends Item {
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
-		if (this.allowdedIn(group) && ! this.isOnce) {
+	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+		if (this.allowedIn(group) && ! this.isOnce) {
 			items.add(new ItemStack(this));
 			items.add(setStorageSunAmount(new ItemStack(this), this.MAX_STORAGE_NUM));
 		}
 	}
 	
 	@Override
-	public UseAction getUseAnimation(ItemStack stack) {
-		return UseAction.EAT;
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return UseAnim.EAT;
 	}
 	
 	@Override
 	public int getUseDuration(ItemStack stack) {
 		return 60;
 	}
-	
+
 	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
-		return ! this.isOnce;
+	public boolean isBarVisible(ItemStack stack) {
+		return !this.isOnce;
 	}
 
 	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
-		return (1 - getStorageSunAmount(stack) * 1.0F / this.MAX_STORAGE_NUM);
+	public int getBarWidth(ItemStack stack) {
+		return Math.round(13.0F * getStorageSunAmount(stack) / (float) this.MAX_STORAGE_NUM);
 	}
 
 }

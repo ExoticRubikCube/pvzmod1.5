@@ -10,37 +10,35 @@ import com.hungteen.pvz.common.entity.misc.drop.DropEntity.DropStates;
 import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
 import com.hungteen.pvz.utils.MathUtil;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class SunConverterTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class SunConverterTileEntity extends BlockEntity implements MenuProvider {
 
 	public final ItemStackHandler handler = new ItemStackHandler(9);
-	public final IIntArray array = new IntArray(1);
+	public final ContainerData array = new SimpleContainerData(1);
 	private final Set<SunEntity> sunSet = new HashSet<>();
 	private final int MaxSearchTick = 60;
 	private final double MaxSearchRange = 10;
 	private int absorbPos = - 1;
 	public int tickExist = 0;
 	
-	public SunConverterTileEntity() {
-		super(TileEntityRegister.SUN_CONVERTER.get());
+	public SunConverterTileEntity(BlockPos pos, BlockState state) {
+		super(TileEntityRegister.SUN_CONVERTER.get(), pos, state);
 	}
 	
-	@Override
 	public void tick() {
 		++ this.tickExist;
 		this.tickSunSet();
@@ -55,7 +53,7 @@ public class SunConverterTileEntity extends TileEntity implements ITickableTileE
 			//maintain the set.
 			Set<SunEntity> tmp = new HashSet<>();
 			this.sunSet.forEach((sun) -> {
-				if(sun != null && ! sun.removed && sun.getDropState() == DropStates.ABSORB) {
+				if(sun != null && ! sun.isRemoved() && sun.getDropState() == DropStates.ABSORB) {
 					tmp.add(sun);
 				}
 			});
@@ -83,8 +81,8 @@ public class SunConverterTileEntity extends TileEntity implements ITickableTileE
 			this.sunSet.forEach((sun) -> {
 				if(! this.checkCanWorkNow()) return ;
 				double speed = 0.15D;
-				Vector3d now = new Vector3d(worldPosition.getX() + 0.5D, worldPosition.getY() + 1D, worldPosition.getZ() + 0.5D);
-				Vector3d vec = now.subtract(sun.position());
+				Vec3 now = new Vec3(worldPosition.getX() + 0.5D, worldPosition.getY() + 1D, worldPosition.getZ() + 0.5D);
+				Vec3 vec = now.subtract(sun.position());
 				if(vec.length() <= 1) {
 				    this.onCollectSun(sun);
 				} else {
@@ -121,7 +119,7 @@ public class SunConverterTileEntity extends TileEntity implements ITickableTileE
 		if(amount > 0) {
 			sun.setAmount(amount);
 		} else {
-			sun.remove();
+			sun.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 		}
 	}
 	
@@ -145,7 +143,7 @@ public class SunConverterTileEntity extends TileEntity implements ITickableTileE
 	/**
 	 * Don't rename this method to canInteractWith due to conflicts with Container
 	 */
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean isUsableByPlayer(Player player) {
 		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		}
@@ -153,27 +151,26 @@ public class SunConverterTileEntity extends TileEntity implements ITickableTileE
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
-    	super.load(state, compound);
+	public void load(CompoundTag compound) {
+    	super.load(compound);
 		this.handler.deserializeNBT(compound.getCompound("itemstack_list"));
 		this.tickExist = compound.getInt("exist_tick");
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	protected void saveAdditional(CompoundTag compound) {
 		compound.put("itemstack_list", this.handler.serializeNBT());
 		compound.putInt("exist_tick", this.tickExist);
-		return super.save(compound);
 	}
 
 	@Override
-	public Container createMenu(int id, PlayerInventory inv, PlayerEntity player) {
+	public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
 		return new SunConverterContainer(id, player, this.worldPosition);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("block.pvz.sun_converter");
+	public Component getDisplayName() {
+		return Component.translatable("block.pvz.sun_converter");
 	}
 
 }

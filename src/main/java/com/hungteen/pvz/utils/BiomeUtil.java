@@ -1,17 +1,15 @@
 package com.hungteen.pvz.utils;
 
 import com.hungteen.pvz.common.world.biome.BiomeRegister;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeMaker;
-import net.minecraft.world.biome.Biomes;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -27,11 +25,11 @@ public class BiomeUtil {
 	public static final Set<Biome> OVERWORLD_FOREST = new HashSet<>();
 	public static final Set<Biome> NETHER = new HashSet<>();
 	public static final Set<Biome> THE_END = new HashSet<>();
-	
+
 	public static void initBiomeSet() {
 		for(Biome biome : ForgeRegistries.BIOMES) {
-			if(biome == BiomeRegister.ZEN_GARDEN.get()) continue;//zen garden will not be add
-			RegistryKey<Biome> biomeKey = getKey(biome);
+			if(biome == BiomeRegister.ZEN_GARDEN.get()) continue;
+			ResourceKey<Biome> biomeKey = getKey(biome);
 			if(isOverworld(biomeKey)) {
 				if(isLand(biomeKey)) {
 					OVERWORLD_LAND.add(biome);
@@ -63,65 +61,64 @@ public class BiomeUtil {
 			}
 		}
 	}
-	
-	public static boolean isLand(RegistryKey<Biome> biomeKey) {
-		return ! BiomeDictionary.hasType(biomeKey, Type.WATER);
-	}
-	
-	public static boolean isOcean(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.OCEAN);
-	}
-	
-	public static boolean isDesert(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.SANDY);
-	}
-	
-	public static boolean isPlain(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.PLAINS);
-	}
-	
-	public static boolean isConiferous(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.CONIFEROUS);
-	}
-	
-	public static boolean isSnowy(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.SNOWY);
-	}
-	
-	public static boolean isForest(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.FOREST);
-	}
-	
-	public static boolean isOverworld(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.OVERWORLD);
-	}
-	
-	public static boolean isNether(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.NETHER);
+
+	public static boolean hasTag(ResourceKey<Biome> biomeKey, TagKey<Biome> tag) {
+		return ForgeRegistries.BIOMES.getHolder(biomeKey)
+				.map(holder -> holder.is(tag))
+				.orElse(false);
 	}
 
-	public static boolean isNetherWaste(RegistryKey<Biome> biomeKey) {
+	public static boolean isLand(ResourceKey<Biome> biomeKey) {
+		return !isOcean(biomeKey) && !hasTag(biomeKey, BiomeTags.IS_RIVER);
+	}
+
+	public static boolean isOcean(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, BiomeTags.IS_OCEAN);
+	}
+
+	public static boolean isDesert(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, Tags.Biomes.IS_DESERT) || hasTag(biomeKey, Tags.Biomes.IS_SANDY);
+	}
+
+	public static boolean isPlain(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, Tags.Biomes.IS_PLAINS);
+	}
+
+	public static boolean isConiferous(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, Tags.Biomes.IS_CONIFEROUS);
+	}
+
+	public static boolean isSnowy(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, Tags.Biomes.IS_SNOWY);
+	}
+
+	public static boolean isForest(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, BiomeTags.IS_FOREST);
+	}
+
+	public static boolean isOverworld(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, BiomeTags.IS_OVERWORLD);
+	}
+
+	public static boolean isNether(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, BiomeTags.IS_NETHER);
+	}
+
+	public static boolean isNetherWaste(ResourceKey<Biome> biomeKey) {
 		return biomeKey.equals(Biomes.NETHER_WASTES);
 	}
-	
-	public static boolean isTheEnd(RegistryKey<Biome> biomeKey) {
-		return BiomeDictionary.hasType(biomeKey, Type.END);
+
+	public static boolean isTheEnd(ResourceKey<Biome> biomeKey) {
+		return hasTag(biomeKey, BiomeTags.IS_END);
 	}
-	
-	public static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(BiomeMaker.class, /* getSkyColorWithTemperatureModifier */ "func_244206_a", float.class);
-	
+
 	public static int getSkyColor(float temp) {
-		final int skyColour;
-		try {
-			skyColour = (int) GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER.invoke(null, temp);
-		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Error: Unable to get sky colour", e);
-		}
-		return skyColour;
+		float f = temp / 3.0F;
+		f = Mth.clamp(f, -1.0F, 1.0F);
+		return Mth.hsvToRgb(0.62222224F - f * 0.05F, 0.5F + f * 0.1F, 1.0F);
 	}
-	
-	public static RegistryKey<Biome> getKey(final Biome biome) {
-		return RegistryKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
+
+	public static ResourceKey<Biome> getKey(final Biome biome) {
+		return ResourceKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
 	}
-	
 }

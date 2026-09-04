@@ -5,25 +5,28 @@ import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.misc.tag.PVZBlockTags;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
-public class BlockTagGenerator extends BlockTagsProvider{
+public class BlockTagGenerator extends BlockTagsProvider {
 
 	public BlockTagGenerator(DataGenerator generatorIn, ExistingFileHelper helper) {
 		super(generatorIn, PVZMod.MOD_ID, helper);
 	}
 	
 	@Override
-	protected void addTags() {
+	public void addTags() {
 		PVZAPI.get().getEssences().forEach(e -> {
 			//add to radiation block.
 			e.getRadiationBlockTag().ifPresent(t -> {
@@ -44,7 +47,7 @@ public class BlockTagGenerator extends BlockTagsProvider{
 	}
 	
 	private Block[] getFilterBlocks(Predicate<Block> predicate) {
-		return registry.stream()
+		return StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
 				.filter(predicate)
 				.sorted(Comparator.comparing(ForgeRegistries.BLOCKS::getKey))
 				.toArray(Block[]::new);

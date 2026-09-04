@@ -1,19 +1,20 @@
 package com.hungteen.pvz.client.particle.base;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class BombParticle extends SpriteTexturedParticle {
+public class BombParticle extends TextureSheetParticle {
 
-	protected final IAnimatedSprite sprite;
+	protected final SpriteSet sprite;
 
-	protected BombParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
-			IAnimatedSprite sprite) {
+	protected BombParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+                           SpriteSet sprite) {
 		super(world, x, y, z, xSpeed, ySpeed, zSpeed);
 		this.lifetime = 6 + this.random.nextInt(4);
 		this.setColor(1, 0, 0);
@@ -41,8 +42,8 @@ public class BombParticle extends SpriteTexturedParticle {
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_LIT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_LIT;
 	}
 
 }

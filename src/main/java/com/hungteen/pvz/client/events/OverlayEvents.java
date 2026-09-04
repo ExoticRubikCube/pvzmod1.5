@@ -4,9 +4,10 @@ import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.events.handler.PVZOverlayHandler;
 import com.hungteen.pvz.common.entity.plant.explosion.CobCannonEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -16,49 +17,52 @@ public class OverlayEvents {
 	private static Minecraft mc = Minecraft.getInstance();
 
 	@SubscribeEvent
-	public static void onPostRenderOverlay(RenderGameOverlayEvent.Post ev) {
-		if (ev.getType() != RenderGameOverlayEvent.ElementType.ALL || ! canRender() || mc.options.hideGui) {
+	public static void onPostRenderOverlay(RenderGuiEvent.Post ev) {
+		final PoseStack stack = ev.getPoseStack();
+		final int width = ev.getWindow().getGuiScaledWidth();
+		final int height = ev.getWindow().getGuiScaledHeight();
+		if (! canRender() || mc.options.hideGui) {
 			return;
 		}
 		/* no opened gui */
 		if (mc.screen == null && PVZInputEvents.ShowOverlay) {
 			/* render resources on left upper corner */
 			if(! mc.options.renderDebug) {
-				PVZOverlayHandler.renderResources(ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight());
+				PVZOverlayHandler.renderResources(stack, width, height);
 			}
 
 			/* render plant food on left lower corner */
 			if (PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderPlantFoodBar.get()) {
-				PVZOverlayHandler.renderPlantFood(ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight());
+				PVZOverlayHandler.renderPlantFood(stack, width, height);
 			}
 
 			/* render invasion bar on right lower corner */
 			if(PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderInvasionProgress.get()) {
-				PVZOverlayHandler.renderInvasionProgress(ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight());
-				PVZOverlayHandler.renderMission(ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight());
+				PVZOverlayHandler.renderInvasionProgress(stack, width, height);
+				PVZOverlayHandler.renderMission(stack, width, height);
 			}
 			
 			if(mc.player.getVehicle() instanceof CobCannonEntity) {
 				CobCannonEntity cob = (CobCannonEntity) mc.player.getVehicle();
 				if(cob.getCornNum() > 0) {
-					PVZOverlayHandler.renderTargetAim(ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight());
+					PVZOverlayHandler.renderTargetAim(stack, width, height);
 				}
 			}
 			
 			/* render card slots on left side */
-//			PVZOverlayHandler.drawCardInventory(mc.player, ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight());
+//			PVZOverlayHandler.drawCardInventory(mc.player, stack, width, height);
 		}
 	}
 
 //	@SubscribeEvent
-//	public static void onRenderFog(RenderGameOverlayEvent.Pre ev) {
-//		if (ev.getType() != RenderGameOverlayEvent.ElementType.ALL || mc.player == null || mc.player.isSpectator()) {
+//	public static void onRenderFog(RenderGuiEvent.Pre ev) {
+//		if (mc.player == null || mc.player.isSpectator()) {
 //			return;
 //		}
 //		if (PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderFog.get()) {
 //			int tick = PlayerUtil.getResource(ClientProxy.MC.player, Resources.NO_FOG_TICK);
 //			if(tick < 0) {
-//				PVZOverlayHandler.renderFog(ev.getMatrixStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight(), Math.min(- tick * 1F / FogManager.CD, 1F));
+//				PVZOverlayHandler.renderFog(ev.getPoseStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight(), Math.min(- tick * 1F / FogManager.CD, 1F));
 //			}
 //		}
 //	}

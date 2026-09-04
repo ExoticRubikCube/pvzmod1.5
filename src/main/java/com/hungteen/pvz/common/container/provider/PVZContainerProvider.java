@@ -1,11 +1,11 @@
 package com.hungteen.pvz.common.container.provider;
 
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import javax.annotation.Nullable;
 
@@ -14,16 +14,16 @@ import javax.annotation.Nullable;
  * @author: HungTeen
  * @create: 2022-02-07 10:04
  **/
-public abstract class PVZContainerProvider implements INamedContainerProvider {
+public abstract class PVZContainerProvider implements MenuProvider {
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return StringUtil.EMPTY;
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return null;
     }
 }

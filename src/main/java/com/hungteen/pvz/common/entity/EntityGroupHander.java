@@ -4,12 +4,12 @@ import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Mth;
 
 public class EntityGroupHander {
 
@@ -20,30 +20,30 @@ public class EntityGroupHander {
      */
     public static PVZGroupType getEntityGroupType(Entity entity){
         final EntityType<?> entityType = entity.getType();
-        if(PVZEntityTypeTags.PVZ_PLANT_GROUP_ENTITIES.contains(entityType)){
+        if(entityType.is(PVZEntityTypeTags.PVZ_PLANT_GROUP_ENTITIES)){
             return PVZGroupType.PLANTS;
         }
-        if(PVZEntityTypeTags.PVZ_ZOMBIE_GROUP_ENTITIES.contains(entityType)){
+        if(entityType.is(PVZEntityTypeTags.PVZ_ZOMBIE_GROUP_ENTITIES)){
             return PVZGroupType.ZOMBIES;
         }
         //this type is a monster or in monster tag (can not be banned).
-        if((entityType.getCategory() == EntityClassification.MONSTER || PVZEntityTypeTags.PVZ_OTHER_MONSTERS.contains(entityType)) && ! PVZEntityTypeTags.PVZ_NOT_MONSTERS.contains(entityType)){
+        if((entityType.getCategory() == MobCategory.MONSTER || entityType.is(PVZEntityTypeTags.PVZ_OTHER_MONSTERS)) && ! entityType.is(PVZEntityTypeTags.PVZ_NOT_MONSTERS)){
             return PVZGroupType.OTHER_MONSTERS;
         }
         //this type is a tamable entity or in guardian tag (can not be banned).
-        if((entity instanceof TameableEntity || PVZEntityTypeTags.PVZ_OTHER_GUARDIANS.contains(entityType)) && ! PVZEntityTypeTags.PVZ_NOT_GUARDIANS.contains(entityType)){
+        if((entity instanceof TamableAnimal || entityType.is(PVZEntityTypeTags.PVZ_OTHER_GUARDIANS)) && ! entityType.is(PVZEntityTypeTags.PVZ_NOT_GUARDIANS)){
             return PVZGroupType.OTHER_GUARDIANS;
         }
         return PVZGroupType.NEUTRALS;
     }
 
-    public static PVZGroupType getPlayerGroup(PlayerEntity player){
+    public static PVZGroupType getPlayerGroup(Player player){
         final int group = PlayerUtil.getResource(player, Resources.GROUP_TYPE);
         return getGroup(group);
     }
 
     public static PVZGroupType getGroup(int type){
-        final int group = MathHelper.clamp(type, Resources.GROUP_TYPE.min, Resources.GROUP_TYPE.max);
+        final int group = Mth.clamp(type, Resources.GROUP_TYPE.min, Resources.GROUP_TYPE.max);
         return PVZGroupType.values()[group + 2];
     }
 

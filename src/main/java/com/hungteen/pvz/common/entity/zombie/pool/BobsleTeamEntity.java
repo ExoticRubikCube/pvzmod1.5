@@ -10,14 +10,14 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 
@@ -26,7 +26,7 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 	private PVZZombiePartEntity[] parts = new PVZZombiePartEntity[PART_NUM];
 	private int outSnowTick;
 	
-	public BobsleTeamEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public BobsleTeamEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setIsWholeBody();
 		this.resetParts();
@@ -54,7 +54,7 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 			if(this.parts[i] == null) {
 				continue;
 			}
-			this.parts[i].remove();
+			this.parts[i].remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 			this.parts[i] = null;
 		}
 	}
@@ -70,10 +70,10 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 			}
 			float j = 2 * 3.14159f * this.yHeadRot / 360;
 			float dis = this.getPartOffset(i);
-			Vector3d pos = this.position();
-			this.parts[i].yRotO = this.yRot;
-			this.parts[i].xRotO = this.xRot;
-			this.parts[i].moveTo(pos.x() - Math.sin(j) * dis, pos.y() + 0.05f, pos.z() + Math.cos(j) * dis, this.yRot, this.xRot);
+			Vec3 pos = this.position();
+			this.parts[i].yRotO = this.getYRot();
+			this.parts[i].xRotO = this.getXRot();
+			this.parts[i].moveTo(pos.x() - Math.sin(j) * dis, pos.y() + 0.05f, pos.z() + Math.cos(j) * dis, this.getYRot(), this.getXRot());
 			this.parts[i].setOwner(this);
 		}
 	}
@@ -100,13 +100,13 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 	@Override
 	public void zombieTick() {
 		super.zombieTick();
-		if(!level.isClientSide) {
+		if(!level.isClientSide()) {
 			if(this.isInWaterOrBubble() || (this.isOnGround() && !EntityUtil.isOnSnow(this) && !EntityUtil.isOnIce(this))) {
 				++ this.outSnowTick;
 				if(this.outSnowTick > MAX_OUT_SNOW_TICK) {
 					this.onFallBody(DamageSource.DRY_OUT);
 					this.onRemoveWhenDeath();
-					this.remove();
+this.remove(RemovalReason.KILLED);
 				}
 			} else {
 				this.outSnowTick = 0;
@@ -116,7 +116,7 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 	
 	@Override
 	protected void onRemoveWhenDeath() {
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			for(int i = 0; i < 4; ++ i) {
 				BobsleZombieEntity zombie = EntityRegister.BOBSLE_ZOMBIE.get().create(level);
 				ZombieUtil.copySummonZombieData(this, zombie);
@@ -132,8 +132,8 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(1.25f, 1.4f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(1.25f, 1.4f);
 	}
 	
 	@Override
@@ -157,7 +157,7 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("out_snow_tick")) {
 			this.outSnowTick = compound.getInt("out_snow_tick");
@@ -165,7 +165,7 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("out_snow_tick", this.outSnowTick);
 	}

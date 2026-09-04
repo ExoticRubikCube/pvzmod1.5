@@ -22,23 +22,26 @@ import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.hungteen.pvz.utils.others.WeightList;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,17 +49,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class AbstractDaveEntity extends CreatureEntity implements IHasGroup {
+public abstract class AbstractDaveEntity extends PathfinderMob implements IHasGroup {
 
-	private static final DataParameter<CompoundNBT> GOODS = EntityDataManager.defineId(AbstractDaveEntity.class, DataSerializers.COMPOUND_TAG);
-	private static final DataParameter<Integer> EXIST_TICK = EntityDataManager.defineId(AbstractDaveEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<CompoundTag> GOODS = SynchedEntityData.defineId(AbstractDaveEntity.class, EntityDataSerializers.COMPOUND_TAG);
+	private static final EntityDataAccessor<Integer> EXIST_TICK = SynchedEntityData.defineId(AbstractDaveEntity.class, EntityDataSerializers.INT);
 	private static final int REFRESH_CD = 24000;
 	protected ResourceLocation transactionResource = null;
 	private final Set<GoodType> set = new HashSet<>();
 	@Nullable
-	private PlayerEntity customer;
+	private Player customer;
 
-	public AbstractDaveEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public AbstractDaveEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.refreshDimensions();
 	}
@@ -64,15 +67,15 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(GOODS, new CompoundNBT());
+		this.entityData.define(GOODS, new CompoundTag());
 		this.entityData.define(EXIST_TICK, 0);
 	}
 
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(3, new LookAtCustomerGoal(this));
-		this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 0.25D) {
+		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.25D) {
 			
 			@Override
 			public boolean canUse() {
@@ -87,7 +90,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 	@Override
 	public void tick() {
 		super.tick();
-		if(! this.level.isClientSide){
+		if(! this.level.isClientSide()){
 			if(this.getExistTick() == 0 || this.getLeftRefreshTime() <= 0){
 				this.refreshTransactions();
 			}
@@ -95,13 +98,13 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 	}
 
 	@Override
-	public ActionResultType interactAt(PlayerEntity player, Vector3d vec3d, Hand hand) {
+	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
 		if (this.canOpenShop(player, player.getItemInHand(hand))) {
-			if (!level.isClientSide && player instanceof ServerPlayerEntity && ! this.hasCustomer()) {
-				this.openContainer((ServerPlayerEntity) player);
+			if (!level.isClientSide() && player instanceof ServerPlayer && ! this.hasCustomer()) {
+				this.openContainer((ServerPlayer) player);
 				this.setCustomer(player);
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		return super.interactAt(player, vec3d, hand);
 	}
@@ -157,12 +160,12 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 
 	/**
 	 * get origin goods in shopper's nbt.
-	 * {@link  com.hungteen.pvz.common.container.shop.AbstractDaveShopContainer#getValidGoods(PlayerEntity)}
+	 * {@link  com.hungteen.pvz.common.container.shop.AbstractDaveShopContainer#getValidGoods(Player)}
 	 */
 	public List<GoodType> getGoodList(){
 		final List<GoodType> goods = new ArrayList<>();
 		this.getGoods().getAllKeys().forEach(key -> {
-			final CompoundNBT tmp = this.getGoods().getCompound(key);
+			final CompoundTag tmp = this.getGoods().getCompound(key);
 			final GoodType goodType = new GoodType(tmp);
 			goods.add(goodType);
 		});
@@ -171,20 +174,20 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 
 	protected void addGoodToTransactions(int id, GoodType goodType){
 		goodType.setPos(id);
-		final CompoundNBT nbt = this.getGoods().copy();
+		final CompoundTag nbt = this.getGoods().copy();
 		nbt.put("good_" + id, goodType.saveToNBT());
 		this.setGoods(nbt);
 	}
 
 	public void sellGoodForTransactions(GoodType goodType){
 		goodType.shrink();
-		final CompoundNBT nbt = this.getGoods().copy();
+		final CompoundTag nbt = this.getGoods().copy();
 		nbt.put("good_" + goodType.getPos(), goodType.saveToNBT());
 		this.setGoods(nbt);
 	}
 
 	public void clearTransaction(){
-		this.setGoods(new CompoundNBT());
+		this.setGoods(new CompoundTag());
 	}
 
 	protected void addEnvelopeTrades(int id) {
@@ -244,7 +247,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 		return (int) (this.getExistTick() + REFRESH_CD - this.level.getGameTime());
 	}
 
-	protected abstract void openContainer(ServerPlayerEntity player);
+	protected abstract void openContainer(ServerPlayer player);
 	
 	@Override
 	public int getAmbientSoundInterval() {
@@ -252,8 +255,8 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.9f, 2.6f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.9f, 2.6f);
 	}
 	
 	@Override
@@ -271,12 +274,12 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 		return SoundRegister.CRAZY_SAY.get();
 	}
 
-	public void setCustomer(@Nullable PlayerEntity player) {
+	public void setCustomer(@Nullable Player player) {
 		this.customer = player;
 	}
 
 	@Nullable
-	public PlayerEntity getCustomer() {
+	public Player getCustomer() {
 		return this.customer;
 	}
 
@@ -285,7 +288,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 	}
 
 	@Nullable
-	public Entity changeDimension(ServerWorld level, net.minecraftforge.common.util.ITeleporter teleporter) {
+	public Entity changeDimension(ServerLevel level, net.minecraftforge.common.util.ITeleporter teleporter) {
 		this.resetCustomer();
 		return super.changeDimension(level, teleporter);
 	}
@@ -296,7 +299,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 	}
 	
 	protected void resetCustomer() {
-		this.setCustomer((PlayerEntity) null);
+		this.setCustomer(null);
 	}
 
 	public void die(DamageSource cause) {
@@ -304,16 +307,16 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 		this.resetCustomer();
 	}
 
-	protected boolean canOpenShop(PlayerEntity player, ItemStack heldItem){
+	protected boolean canOpenShop(Player player, ItemStack heldItem){
 		return heldItem.isEmpty();
 	}
 
-	public boolean canBeLeashed(PlayerEntity player) {
+	public boolean canBeLeashed(Player player) {
 		return false;
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compoundNBT) {
+	public void readAdditionalSaveData(CompoundTag compoundNBT) {
 		super.readAdditionalSaveData(compoundNBT);
 		if(compoundNBT.contains("goods_nbt")){
 			this.setGoods(compoundNBT.getCompound("goods_nbt"));
@@ -322,23 +325,23 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 			this.setExistTick(compoundNBT.getInt("exist_tick"));
 		}
 		if(compoundNBT.contains("transaction_res")){
-			this.transactionResource = new ResourceLocation(compoundNBT.getString("transaction_res"));
+			this.transactionResource = ResourceLocation.parse(compoundNBT.getString("transaction_res"));
 		}
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compoundNBT) {
+	public void addAdditionalSaveData(CompoundTag compoundNBT) {
 		super.addAdditionalSaveData(compoundNBT);
 		compoundNBT.put("goods_nbt", this.getGoods());
 		compoundNBT.putInt("exist_tick", this.getExistTick());
 		compoundNBT.putString("transaction_res", this.transactionResource.toString());
 	}
 
-	public void setGoods(CompoundNBT nbt){
+	public void setGoods(CompoundTag nbt){
 		this.entityData.set(GOODS, nbt);
 	}
 
-	public CompoundNBT getGoods() {
+	public CompoundTag getGoods() {
 		return this.entityData.get(GOODS);
 	}
 
@@ -350,11 +353,11 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 		return this.entityData.get(EXIST_TICK);
 	}
 
-	public static class LookAtCustomerGoal extends LookAtGoal {
+	public static class LookAtCustomerGoal extends LookAtPlayerGoal {
 		private final AbstractDaveEntity dave;
 
 		public LookAtCustomerGoal(AbstractDaveEntity dave) {
-			super(dave, PlayerEntity.class, 8.0F);
+			super(dave, Player.class, 8.0F);
 			this.dave = dave;
 		}
 
@@ -443,7 +446,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 			this.mustChoose = mustChoose;
 		}
 
-		public GoodType(CompoundNBT nbt){
+		public GoodType(CompoundTag nbt){
 			this.type = GoodTypes.values()[nbt.getInt("good_type")];
 			this.good = ItemStack.of(nbt.getCompound("good"));
 			this.goodPrice = nbt.getInt("good_price");
@@ -453,10 +456,10 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 			this.pos = nbt.getInt("pos");
 		}
 
-		public CompoundNBT saveToNBT(){
-			final CompoundNBT nbt = new CompoundNBT();
+		public CompoundTag saveToNBT(){
+			final CompoundTag nbt = new CompoundTag();
 			nbt.putInt("good_type", this.type.ordinal());
-			nbt.put("good", this.good.save(new CompoundNBT()));
+			nbt.put("good", this.good.save(new CompoundTag()));
 			nbt.putInt("good_price", this.goodPrice);
 			nbt.putInt("weight", this.weight);
 			nbt.putInt("limit", this.transactionLimit);
@@ -497,7 +500,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 			return this.getType().getPriority();
 		}
 
-		public ITextComponent getGoodDescription(){
+		public Component getGoodDescription(){
 			return this.type.getGoodDescription(this.good);
 		}
 
@@ -545,7 +548,7 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 			return lvl;
 		}
 
-		public boolean isValid(PlayerEntity player){
+		public boolean isValid(Player player){
 			if(isEnergy()){
 				return PlayerUtil.getResource(player, Resources.MAX_ENERGY_NUM) == lvl - 1;
 			}
@@ -555,15 +558,15 @@ public abstract class AbstractDaveEntity extends CreatureEntity implements IHasG
 			return true;
 		}
 
-		public ITextComponent getGoodDescription(ItemStack stack){
+		public Component getGoodDescription(ItemStack stack){
 			if(isEnergy()){
-				return new TranslationTextComponent("gui.pvz.shop.more_energy");
+				return Component.translatable("gui.pvz.shop.more_energy");
 			}
 			if(isSlot()){
-				return new TranslationTextComponent("gui.pvz.shop.more_slot");
+				return Component.translatable("gui.pvz.shop.more_slot");
 			}
 			if(isMoney()){
-				return new TranslationTextComponent("gui.pvz.shop." + this.toString().toLowerCase());
+				return Component.translatable("gui.pvz.shop." + this.toString().toLowerCase());
 			}
 			return stack.getItem().getDescription();
 		}

@@ -3,14 +3,14 @@ package com.hungteen.pvz.common.enchantment.card;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 import com.hungteen.pvz.common.enchantment.PVZEnchantmentTypes;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 public class BandageEnchantment extends PVZEnchantment {
 
     public BandageEnchantment() {
-        super(Rarity.UNCOMMON, PVZEnchantmentTypes.SUMMON_CARD, new EquipmentSlotType[] {EquipmentSlotType.MAINHAND});
+        super(Rarity.UNCOMMON, PVZEnchantmentTypes.SUMMON_CARD, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
     public static float getHealPercent(ItemStack stack){

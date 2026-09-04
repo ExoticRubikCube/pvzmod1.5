@@ -2,11 +2,11 @@ package com.hungteen.pvz.client.gui.screen;
 
 import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.utils.StringUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,16 +24,16 @@ public class ChallengeEnvelopeScreen extends Screen{
 	}
 
 	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(stack);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
         int cornerX = (this.width - this.xSize) / 2;
         int cornerY = (this.height - this.ySize) / 2;
         this.blit(stack, cornerX, cornerY, 0, 0, this.xSize, this.ySize);
 
 		int midX = this.width / 2;
 		int midY = cornerY + 30;
-		for (Pair<IFormattableTextComponent, Integer> message : challengeComponent.getMessages()) {
+		for (Pair<MutableComponent, Integer> message : challengeComponent.getMessages()) {
 			StringUtil.drawCenteredScaledString(stack, this.font, message.getFirst().getString(), midX, midY, message.getSecond(), 1.2f);
 			midY += 20;
 		}

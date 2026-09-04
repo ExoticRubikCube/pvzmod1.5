@@ -2,10 +2,10 @@ package com.hungteen.pvz.common.capability.challenge;
 
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.capability.player.IPlayerDataCapability;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -13,9 +13,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class RaiderDataProvider implements ICapabilitySerializable<CompoundNBT> {
+public class RaiderDataProvider implements ICapabilitySerializable<CompoundTag> {
 
-    private final IRaiderDataCapability capability = CapabilityHandler.RAIDER_DATA_CAPABILITY.getDefaultInstance();
+    private final IRaiderDataCapability capability = new RaiderDataCapability();
 
     public RaiderDataProvider(int ch) {
         capability.init(ch);
@@ -28,12 +28,12 @@ public class RaiderDataProvider implements ICapabilitySerializable<CompoundNBT> 
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         return capability.SavetoNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         capability.LoadfromNBT(nbt);
     }
 }

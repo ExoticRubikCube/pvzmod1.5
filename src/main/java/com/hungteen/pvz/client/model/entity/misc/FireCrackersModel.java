@@ -1,351 +1,319 @@
 package com.hungteen.pvz.client.model.entity.misc;
 
 import com.hungteen.pvz.common.entity.misc.FireCrackersEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.7.5
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class FireCrackersModel extends EntityModel<FireCrackersEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer bombs;
-	private final ModelRenderer bone;
-	private final ModelRenderer bomb1;
-	private final ModelRenderer bomb2;
-	private final ModelRenderer bone2;
-	private final ModelRenderer bomb3;
-	private final ModelRenderer bomb4;
-	private final ModelRenderer bone3;
-	private final ModelRenderer bomb5;
-	private final ModelRenderer bomb6;
-	private final ModelRenderer bone4;
-	private final ModelRenderer bomb7;
-	private final ModelRenderer bomb8;
-	private final ModelRenderer bone5;
-	private final ModelRenderer bomb9;
-	private final ModelRenderer bomb10;
-	private final ModelRenderer bone6;
-	private final ModelRenderer bomb11;
-	private final ModelRenderer bomb12;
-	private final ModelRenderer bone7;
-	private final ModelRenderer bomb13;
-	private final ModelRenderer bomb14;
-	private final ModelRenderer bone8;
-	private final ModelRenderer bomb15;
-	private final ModelRenderer bomb16;
-	private final ModelRenderer bone9;
-	private final ModelRenderer bomb17;
-	private final ModelRenderer bomb18;
-	private final ModelRenderer bone10;
-	private final ModelRenderer bomb19;
-	private final ModelRenderer bomb20;
-	private final ModelRenderer bone11;
-	private final ModelRenderer bomb21;
-	private final ModelRenderer bomb22;
-	private final ModelRenderer bone12;
-	private final ModelRenderer bomb23;
-	private final ModelRenderer bomb24;
-	private final ModelRenderer bone13;
-	private final ModelRenderer bomb25;
-	private final ModelRenderer bomb26;
-	private final ModelRenderer bone14;
-	private final ModelRenderer bomb27;
-	private final ModelRenderer bomb28;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "fire_crackers"), "main");
 
-	public FireCrackersModel() {
-		texWidth = 64;
-		texHeight = 64;
+	private final ModelPart total;
+	private final ModelPart bombs;
+	private final ModelPart bone;
+	private final ModelPart bomb1;
+	private final ModelPart bomb2;
+	private final ModelPart bone2;
+	private final ModelPart bomb3;
+	private final ModelPart bomb4;
+	private final ModelPart bone3;
+	private final ModelPart bomb5;
+	private final ModelPart bomb6;
+	private final ModelPart bone4;
+	private final ModelPart bomb7;
+	private final ModelPart bomb8;
+	private final ModelPart bone5;
+	private final ModelPart bomb9;
+	private final ModelPart bomb10;
+	private final ModelPart bone6;
+	private final ModelPart bomb11;
+	private final ModelPart bomb12;
+	private final ModelPart bone7;
+	private final ModelPart bomb13;
+	private final ModelPart bomb14;
+	private final ModelPart bone8;
+	private final ModelPart bomb15;
+	private final ModelPart bomb16;
+	private final ModelPart bone9;
+	private final ModelPart bomb17;
+	private final ModelPart bomb18;
+	private final ModelPart bone10;
+	private final ModelPart bomb19;
+	private final ModelPart bomb20;
+	private final ModelPart bone11;
+	private final ModelPart bomb21;
+	private final ModelPart bomb22;
+	private final ModelPart bone12;
+	private final ModelPart bomb23;
+	private final ModelPart bomb24;
+	private final ModelPart bone13;
+	private final ModelPart bomb25;
+	private final ModelPart bomb26;
+	private final ModelPart bone14;
+	private final ModelPart bomb27;
+	private final ModelPart bomb28;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 21.25F, 0.0F);
-		setRotationAngle(total, 0.0F, 0.0F, 0.7854F);
-		total.texOffs(0, 46).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 17.0F, -0.8F, false);
-		total.texOffs(0, 46).addBox(-1.0F, -1.0F, 7.0F, 2.0F, 2.0F, 2.0F, -0.75F, false);
 
-		bombs = new ModelRenderer(this);
-		bombs.setPos(0.0F, 1.0F, 0.0F);
-		total.addChild(bombs);
-		
 
-		bone = new ModelRenderer(this);
-		bone.setPos(0.0F, 0.0F, 8.0F);
-		bombs.addChild(bone);
-		
 
-		bomb1 = new ModelRenderer(this);
-		bomb1.setPos(-0.25F, 0.0F, -1.0F);
-		bone.addChild(bomb1);
-		setRotationAngle(bomb1, 0.0F, -0.5236F, 0.0F);
-		bomb1.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb1.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb2 = new ModelRenderer(this);
-		bomb2.setPos(0.25F, 0.0F, -1.0F);
-		bone.addChild(bomb2);
-		setRotationAngle(bomb2, 0.0F, -2.618F, 0.0F);
-		bomb2.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb2.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone2 = new ModelRenderer(this);
-		bone2.setPos(0.0F, 0.0F, 6.0F);
-		bombs.addChild(bone2);
-		
-
-		bomb3 = new ModelRenderer(this);
-		bomb3.setPos(-0.25F, 0.0F, -1.0F);
-		bone2.addChild(bomb3);
-		setRotationAngle(bomb3, 0.0F, -0.5236F, 0.0F);
-		bomb3.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb3.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb4 = new ModelRenderer(this);
-		bomb4.setPos(0.25F, 0.0F, -1.0F);
-		bone2.addChild(bomb4);
-		setRotationAngle(bomb4, 0.0F, -2.618F, 0.0F);
-		bomb4.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb4.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone3 = new ModelRenderer(this);
-		bone3.setPos(0.0F, 0.0F, 6.0F);
-		bombs.addChild(bone3);
-		
-
-		bomb5 = new ModelRenderer(this);
-		bomb5.setPos(-0.25F, 0.0F, -1.0F);
-		bone3.addChild(bomb5);
-		setRotationAngle(bomb5, 0.0F, -0.5236F, 0.0F);
-		bomb5.texOffs(0, 58).addBox(-5.0F, -2.0F, -2.7321F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb5.texOffs(0, 54).addBox(-3.0F, -2.0F, -2.7321F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb6 = new ModelRenderer(this);
-		bomb6.setPos(0.25F, 0.0F, -1.0F);
-		bone3.addChild(bomb6);
-		setRotationAngle(bomb6, 0.0F, -2.618F, 0.0F);
-		bomb6.texOffs(0, 58).addBox(-5.0F, -2.0F, 0.7321F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb6.texOffs(0, 54).addBox(-3.0F, -2.0F, 0.7321F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone4 = new ModelRenderer(this);
-		bone4.setPos(0.0F, 0.0F, 4.0F);
-		bombs.addChild(bone4);
-		
-
-		bomb7 = new ModelRenderer(this);
-		bomb7.setPos(-0.25F, 0.0F, -1.0F);
-		bone4.addChild(bomb7);
-		setRotationAngle(bomb7, 0.0F, -0.5236F, 0.0F);
-		bomb7.texOffs(0, 58).addBox(-5.0F, -2.0F, -2.7321F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb7.texOffs(0, 54).addBox(-3.0F, -2.0F, -2.7321F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb8 = new ModelRenderer(this);
-		bomb8.setPos(0.25F, 0.0F, -1.0F);
-		bone4.addChild(bomb8);
-		setRotationAngle(bomb8, 0.0F, -2.618F, 0.0F);
-		bomb8.texOffs(0, 58).addBox(-5.0F, -2.0F, 0.7321F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb8.texOffs(0, 54).addBox(-3.0F, -2.0F, 0.7321F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone5 = new ModelRenderer(this);
-		bone5.setPos(0.0F, 0.0F, 4.0F);
-		bombs.addChild(bone5);
-		
-
-		bomb9 = new ModelRenderer(this);
-		bomb9.setPos(-0.25F, 0.0F, -1.0F);
-		bone5.addChild(bomb9);
-		setRotationAngle(bomb9, 0.0F, -0.5236F, 0.0F);
-		bomb9.texOffs(0, 58).addBox(-6.0F, -2.0F, -4.4641F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb9.texOffs(0, 54).addBox(-4.0F, -2.0F, -4.4641F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb10 = new ModelRenderer(this);
-		bomb10.setPos(0.25F, 0.0F, -1.0F);
-		bone5.addChild(bomb10);
-		setRotationAngle(bomb10, 0.0F, -2.618F, 0.0F);
-		bomb10.texOffs(0, 58).addBox(-6.0F, -2.0F, 2.4641F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb10.texOffs(0, 54).addBox(-4.0F, -2.0F, 2.4641F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone6 = new ModelRenderer(this);
-		bone6.setPos(0.0F, 0.0F, 4.0F);
-		bombs.addChild(bone6);
-		
-
-		bomb11 = new ModelRenderer(this);
-		bomb11.setPos(-0.25F, 0.0F, -1.0F);
-		bone6.addChild(bomb11);
-		setRotationAngle(bomb11, 0.0F, -0.5236F, 0.0F);
-		bomb11.texOffs(0, 58).addBox(-7.0F, -2.0F, -6.1962F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb11.texOffs(0, 54).addBox(-5.0F, -2.0F, -6.1962F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb12 = new ModelRenderer(this);
-		bomb12.setPos(0.25F, 0.0F, -1.0F);
-		bone6.addChild(bomb12);
-		setRotationAngle(bomb12, 0.0F, -2.618F, 0.0F);
-		bomb12.texOffs(0, 58).addBox(-7.0F, -2.0F, 4.1962F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb12.texOffs(0, 54).addBox(-5.0F, -2.0F, 4.1962F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone7 = new ModelRenderer(this);
-		bone7.setPos(0.0F, 0.0F, 4.0F);
-		bombs.addChild(bone7);
-		
-
-		bomb13 = new ModelRenderer(this);
-		bomb13.setPos(-0.25F, 0.0F, -1.0F);
-		bone7.addChild(bomb13);
-		setRotationAngle(bomb13, 0.0F, -0.5236F, 0.0F);
-		bomb13.texOffs(0, 58).addBox(-8.0F, -2.0F, -7.9282F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb13.texOffs(0, 54).addBox(-6.0F, -2.0F, -7.9282F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb14 = new ModelRenderer(this);
-		bomb14.setPos(0.25F, 0.0F, -1.0F);
-		bone7.addChild(bomb14);
-		setRotationAngle(bomb14, 0.0F, -2.618F, 0.0F);
-		bomb14.texOffs(0, 58).addBox(-8.0F, -2.0F, 5.9282F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb14.texOffs(0, 54).addBox(-6.0F, -2.0F, 5.9282F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone8 = new ModelRenderer(this);
-		bone8.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone8);
-		setRotationAngle(bone8, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb15 = new ModelRenderer(this);
-		bomb15.setPos(-0.25F, 1.0F, 0.0F);
-		bone8.addChild(bomb15);
-		setRotationAngle(bomb15, 0.0F, -0.5236F, 0.0F);
-		bomb15.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb15.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb16 = new ModelRenderer(this);
-		bomb16.setPos(0.25F, 1.0F, 0.0F);
-		bone8.addChild(bomb16);
-		setRotationAngle(bomb16, 0.0F, -2.618F, 0.0F);
-		bomb16.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb16.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone9 = new ModelRenderer(this);
-		bone9.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone9);
-		setRotationAngle(bone9, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb17 = new ModelRenderer(this);
-		bomb17.setPos(-0.25F, 1.0F, 0.0F);
-		bone9.addChild(bomb17);
-		setRotationAngle(bomb17, 0.0F, -0.5236F, 0.0F);
-		bomb17.texOffs(0, 58).addBox(-5.0F, -2.0F, -2.7321F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb17.texOffs(0, 54).addBox(-3.0F, -2.0F, -2.7321F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb18 = new ModelRenderer(this);
-		bomb18.setPos(0.25F, 1.0F, 0.0F);
-		bone9.addChild(bomb18);
-		setRotationAngle(bomb18, 0.0F, -2.618F, 0.0F);
-		bomb18.texOffs(0, 58).addBox(-5.0F, -2.0F, 0.7321F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb18.texOffs(0, 54).addBox(-3.0F, -2.0F, 0.7321F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone10 = new ModelRenderer(this);
-		bone10.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone10);
-		setRotationAngle(bone10, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb19 = new ModelRenderer(this);
-		bomb19.setPos(-0.25F, 1.0F, 0.0F);
-		bone10.addChild(bomb19);
-		setRotationAngle(bomb19, 0.0F, -0.5236F, 0.0F);
-		bomb19.texOffs(0, 58).addBox(-6.0F, -2.0F, -4.4641F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb19.texOffs(0, 54).addBox(-4.0F, -2.0F, -4.4641F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb20 = new ModelRenderer(this);
-		bomb20.setPos(0.25F, 1.0F, 0.0F);
-		bone10.addChild(bomb20);
-		setRotationAngle(bomb20, 0.0F, -2.618F, 0.0F);
-		bomb20.texOffs(0, 58).addBox(-6.0F, -2.0F, 2.4641F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb20.texOffs(0, 54).addBox(-4.0F, -2.0F, 2.4641F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone11 = new ModelRenderer(this);
-		bone11.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone11);
-		setRotationAngle(bone11, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb21 = new ModelRenderer(this);
-		bomb21.setPos(-0.25F, 1.0F, 0.0F);
-		bone11.addChild(bomb21);
-		setRotationAngle(bomb21, 0.0F, -0.5236F, 0.0F);
-		bomb21.texOffs(0, 58).addBox(-7.0F, -2.0F, -6.1962F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb21.texOffs(0, 54).addBox(-5.0F, -2.0F, -6.1962F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb22 = new ModelRenderer(this);
-		bomb22.setPos(0.25F, 1.0F, 0.0F);
-		bone11.addChild(bomb22);
-		setRotationAngle(bomb22, 0.0F, -2.618F, 0.0F);
-		bomb22.texOffs(0, 58).addBox(-7.0F, -2.0F, 4.1962F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb22.texOffs(0, 54).addBox(-5.0F, -2.0F, 4.1962F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone12 = new ModelRenderer(this);
-		bone12.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone12);
-		setRotationAngle(bone12, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb23 = new ModelRenderer(this);
-		bomb23.setPos(-0.25F, 1.0F, 0.0F);
-		bone12.addChild(bomb23);
-		setRotationAngle(bomb23, 0.0F, -0.5236F, 0.0F);
-		bomb23.texOffs(0, 58).addBox(-8.0F, -2.0F, -7.9282F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb23.texOffs(0, 54).addBox(-6.0F, -2.0F, -7.9282F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb24 = new ModelRenderer(this);
-		bomb24.setPos(0.25F, 1.0F, 0.0F);
-		bone12.addChild(bomb24);
-		setRotationAngle(bomb24, 0.0F, -2.618F, 0.0F);
-		bomb24.texOffs(0, 58).addBox(-8.0F, -2.0F, 5.9282F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb24.texOffs(0, 54).addBox(-6.0F, -2.0F, 5.9282F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone13 = new ModelRenderer(this);
-		bone13.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone13);
-		setRotationAngle(bone13, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb25 = new ModelRenderer(this);
-		bomb25.setPos(-0.25F, 1.0F, 0.0F);
-		bone13.addChild(bomb25);
-		setRotationAngle(bomb25, 0.0F, -0.5236F, 0.0F);
-		bomb25.texOffs(0, 58).addBox(-9.0F, -2.0F, -9.6603F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb25.texOffs(0, 54).addBox(-7.0F, -2.0F, -9.6603F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb26 = new ModelRenderer(this);
-		bomb26.setPos(0.25F, 1.0F, 0.0F);
-		bone13.addChild(bomb26);
-		setRotationAngle(bomb26, 0.0F, -2.618F, 0.0F);
-		bomb26.texOffs(0, 58).addBox(-9.0F, -2.0F, 7.6603F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb26.texOffs(0, 54).addBox(-7.0F, -2.0F, 7.6603F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bone14 = new ModelRenderer(this);
-		bone14.setPos(0.0F, -1.0F, 6.0F);
-		bombs.addChild(bone14);
-		setRotationAngle(bone14, 0.0F, 0.0F, 1.5708F);
-		
-
-		bomb27 = new ModelRenderer(this);
-		bomb27.setPos(-0.25F, 1.0F, 0.0F);
-		bone14.addChild(bomb27);
-		setRotationAngle(bomb27, 0.0F, -0.5236F, 0.0F);
-		bomb27.texOffs(0, 58).addBox(-10.0F, -2.0F, -11.3923F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb27.texOffs(0, 54).addBox(-8.0F, -2.0F, -11.3923F, 3.0F, 2.0F, 2.0F, -0.82F, false);
-
-		bomb28 = new ModelRenderer(this);
-		bomb28.setPos(0.25F, 1.0F, 0.0F);
-		bone14.addChild(bomb28);
-		setRotationAngle(bomb28, 0.0F, -2.618F, 0.0F);
-		bomb28.texOffs(0, 58).addBox(-10.0F, -2.0F, 9.3923F, 4.0F, 2.0F, 2.0F, -0.5F, false);
-		bomb28.texOffs(0, 54).addBox(-8.0F, -2.0F, 9.3923F, 3.0F, 2.0F, 2.0F, -0.82F, false);
+public FireCrackersModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.bombs = root.getChild("bombs");
+		this.bone = root.getChild("bone");
+		this.bomb1 = root.getChild("bomb1");
+		this.bomb2 = root.getChild("bomb2");
+		this.bone2 = root.getChild("bone2");
+		this.bomb3 = root.getChild("bomb3");
+		this.bomb4 = root.getChild("bomb4");
+		this.bone3 = root.getChild("bone3");
+		this.bomb5 = root.getChild("bomb5");
+		this.bomb6 = root.getChild("bomb6");
+		this.bone4 = root.getChild("bone4");
+		this.bomb7 = root.getChild("bomb7");
+		this.bomb8 = root.getChild("bomb8");
+		this.bone5 = root.getChild("bone5");
+		this.bomb9 = root.getChild("bomb9");
+		this.bomb10 = root.getChild("bomb10");
+		this.bone6 = root.getChild("bone6");
+		this.bomb11 = root.getChild("bomb11");
+		this.bomb12 = root.getChild("bomb12");
+		this.bone7 = root.getChild("bone7");
+		this.bomb13 = root.getChild("bomb13");
+		this.bomb14 = root.getChild("bomb14");
+		this.bone8 = root.getChild("bone8");
+		this.bomb15 = root.getChild("bomb15");
+		this.bomb16 = root.getChild("bomb16");
+		this.bone9 = root.getChild("bone9");
+		this.bomb17 = root.getChild("bomb17");
+		this.bomb18 = root.getChild("bomb18");
+		this.bone10 = root.getChild("bone10");
+		this.bomb19 = root.getChild("bomb19");
+		this.bomb20 = root.getChild("bomb20");
+		this.bone11 = root.getChild("bone11");
+		this.bomb21 = root.getChild("bomb21");
+		this.bomb22 = root.getChild("bomb22");
+		this.bone12 = root.getChild("bone12");
+		this.bomb23 = root.getChild("bomb23");
+		this.bomb24 = root.getChild("bomb24");
+		this.bone13 = root.getChild("bone13");
+		this.bomb25 = root.getChild("bomb25");
+		this.bomb26 = root.getChild("bomb26");
+		this.bone14 = root.getChild("bone14");
+		this.bomb27 = root.getChild("bomb27");
+		this.bomb28 = root.getChild("bomb28");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create()
+				.texOffs(0, 46).addBox(-1.0F, -1.0F, -8.0F, 2.0F, 2.0F, 17.0F, new CubeDeformation(-0.8F))
+				.texOffs(0, 46).addBox(-1.0F, -1.0F, 7.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(-0.75F)),
+			PartPose.offsetAndRotation(0.0F, 21.25F, 0.0F, 0.0F, 0.0F, 0.7854F));
+		PartDefinition bombs_pd = total_pd.addOrReplaceChild("bombs",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 1.0F, 0.0F));
+		PartDefinition bone_pd = bombs_pd.addOrReplaceChild("bone",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 8.0F));
+		PartDefinition bomb1_pd = bone_pd.addOrReplaceChild("bomb1",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb2_pd = bone_pd.addOrReplaceChild("bomb2",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone2_pd = bombs_pd.addOrReplaceChild("bone2",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 6.0F));
+		PartDefinition bomb3_pd = bone2_pd.addOrReplaceChild("bomb3",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb4_pd = bone2_pd.addOrReplaceChild("bomb4",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone3_pd = bombs_pd.addOrReplaceChild("bone3",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 6.0F));
+		PartDefinition bomb5_pd = bone3_pd.addOrReplaceChild("bomb5",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-5.0F, -2.0F, -2.7321F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-3.0F, -2.0F, -2.7321F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb6_pd = bone3_pd.addOrReplaceChild("bomb6",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-5.0F, -2.0F, 0.7321F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-3.0F, -2.0F, 0.7321F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone4_pd = bombs_pd.addOrReplaceChild("bone4",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 4.0F));
+		PartDefinition bomb7_pd = bone4_pd.addOrReplaceChild("bomb7",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-5.0F, -2.0F, -2.7321F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-3.0F, -2.0F, -2.7321F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb8_pd = bone4_pd.addOrReplaceChild("bomb8",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-5.0F, -2.0F, 0.7321F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-3.0F, -2.0F, 0.7321F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone5_pd = bombs_pd.addOrReplaceChild("bone5",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 4.0F));
+		PartDefinition bomb9_pd = bone5_pd.addOrReplaceChild("bomb9",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-6.0F, -2.0F, -4.4641F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-4.0F, -2.0F, -4.4641F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb10_pd = bone5_pd.addOrReplaceChild("bomb10",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-6.0F, -2.0F, 2.4641F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-4.0F, -2.0F, 2.4641F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone6_pd = bombs_pd.addOrReplaceChild("bone6",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 4.0F));
+		PartDefinition bomb11_pd = bone6_pd.addOrReplaceChild("bomb11",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-7.0F, -2.0F, -6.1962F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-5.0F, -2.0F, -6.1962F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb12_pd = bone6_pd.addOrReplaceChild("bomb12",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-7.0F, -2.0F, 4.1962F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-5.0F, -2.0F, 4.1962F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone7_pd = bombs_pd.addOrReplaceChild("bone7",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, 0.0F, 4.0F));
+		PartDefinition bomb13_pd = bone7_pd.addOrReplaceChild("bomb13",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-8.0F, -2.0F, -7.9282F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-6.0F, -2.0F, -7.9282F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 0.0F, -1.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb14_pd = bone7_pd.addOrReplaceChild("bomb14",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-8.0F, -2.0F, 5.9282F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-6.0F, -2.0F, 5.9282F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 0.0F, -1.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone8_pd = bombs_pd.addOrReplaceChild("bone8",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb15_pd = bone8_pd.addOrReplaceChild("bomb15",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb16_pd = bone8_pd.addOrReplaceChild("bomb16",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-4.0F, -2.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-2.0F, -2.0F, -1.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone9_pd = bombs_pd.addOrReplaceChild("bone9",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb17_pd = bone9_pd.addOrReplaceChild("bomb17",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-5.0F, -2.0F, -2.7321F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-3.0F, -2.0F, -2.7321F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb18_pd = bone9_pd.addOrReplaceChild("bomb18",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-5.0F, -2.0F, 0.7321F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-3.0F, -2.0F, 0.7321F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone10_pd = bombs_pd.addOrReplaceChild("bone10",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb19_pd = bone10_pd.addOrReplaceChild("bomb19",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-6.0F, -2.0F, -4.4641F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-4.0F, -2.0F, -4.4641F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb20_pd = bone10_pd.addOrReplaceChild("bomb20",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-6.0F, -2.0F, 2.4641F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-4.0F, -2.0F, 2.4641F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone11_pd = bombs_pd.addOrReplaceChild("bone11",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb21_pd = bone11_pd.addOrReplaceChild("bomb21",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-7.0F, -2.0F, -6.1962F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-5.0F, -2.0F, -6.1962F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb22_pd = bone11_pd.addOrReplaceChild("bomb22",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-7.0F, -2.0F, 4.1962F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-5.0F, -2.0F, 4.1962F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone12_pd = bombs_pd.addOrReplaceChild("bone12",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb23_pd = bone12_pd.addOrReplaceChild("bomb23",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-8.0F, -2.0F, -7.9282F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-6.0F, -2.0F, -7.9282F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb24_pd = bone12_pd.addOrReplaceChild("bomb24",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-8.0F, -2.0F, 5.9282F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-6.0F, -2.0F, 5.9282F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone13_pd = bombs_pd.addOrReplaceChild("bone13",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb25_pd = bone13_pd.addOrReplaceChild("bomb25",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-9.0F, -2.0F, -9.6603F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-7.0F, -2.0F, -9.6603F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb26_pd = bone13_pd.addOrReplaceChild("bomb26",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-9.0F, -2.0F, 7.6603F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-7.0F, -2.0F, 7.6603F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		PartDefinition bone14_pd = bombs_pd.addOrReplaceChild("bone14",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(0.0F, -1.0F, 6.0F, 0.0F, 0.0F, 1.5708F));
+		PartDefinition bomb27_pd = bone14_pd.addOrReplaceChild("bomb27",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-10.0F, -2.0F, -11.3923F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-8.0F, -2.0F, -11.3923F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(-0.25F, 1.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
+		PartDefinition bomb28_pd = bone14_pd.addOrReplaceChild("bomb28",
+			CubeListBuilder.create()
+				.texOffs(0, 58).addBox(-10.0F, -2.0F, 9.3923F, 4.0F, 2.0F, 2.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 54).addBox(-8.0F, -2.0F, 9.3923F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.82F)),
+			PartPose.offsetAndRotation(0.25F, 1.0F, 0.0F, 0.0F, -2.618F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
 
 	@Override
 	public void setupAnim(FireCrackersEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
@@ -353,11 +321,11 @@ public class FireCrackersModel extends EntityModel<FireCrackersEntity> {
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		total.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;

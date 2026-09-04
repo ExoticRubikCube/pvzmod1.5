@@ -2,12 +2,12 @@ package com.hungteen.pvz.client.render.entity.bullet;
 
 import com.hungteen.pvz.common.entity.bullet.itembullet.NutEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 public class NutRender extends BulletRender<NutEntity> {
 
-	public NutRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn);
+	public NutRender(EntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Override

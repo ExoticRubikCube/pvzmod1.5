@@ -9,8 +9,8 @@ import com.hungteen.pvz.common.item.tool.GardenCompassItem;
 import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.common.world.challenge.Challenge;
 import com.hungteen.pvz.common.world.challenge.PVZChallengeData;
-import com.hungteen.pvz.common.world.feature.GenStructures;
-import net.minecraft.entity.Entity;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -32,7 +32,6 @@ import org.apache.logging.log4j.Logger;
 @Mod(PVZMod.MOD_ID)
 @Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PVZMod {
-
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     // Mod ID.
@@ -41,7 +40,8 @@ public class PVZMod {
 	public static final String MOD_VERSION = "0.6.5";
 	// Proxy of Server and Client.
 	public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-	
+
+	@SuppressWarnings("removal")
     public PVZMod() {
 		{
 			final Pair<PVZConfig.Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(PVZConfig.Common::new);
@@ -53,13 +53,13 @@ public class PVZMod {
     		ModLoadingContext.get().registerConfig(Type.CLIENT, specPair.getRight());
     		PVZConfig.CLIENT_CONFIG = specPair.getLeft();
     	}
-    	
+
     	IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     	RegistryHandler.deferredRegister(modBus);
     	
     	IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-    	forgeBus.addListener(EventPriority.NORMAL, GenStructures::addDimensionalSpacing);
-    	forgeBus.addListener(EventPriority.HIGH, BiomeRegister::biomeModification);
+		//BiomeLoadingEvent 已废弃，若需修改 Biome 建议改用 JSON Biome Modifiers
+		// forgeBus.addListener(EventPriority.HIGH, BiomeRegister::biomeModification);
 		forgeBus.addListener(EventPriority.NORMAL, PVZDataPackManager::addReloadListenerEvent);
     	
     	AdvancementHandler.init();
@@ -78,7 +78,7 @@ public class PVZMod {
 		event.enqueueWork(() -> {
             PROXY.setUp();
             RegistryHandler.setUp(event);
-			OriginBlock.updateRadiationMap();
+			OriginBlock.updateRadiationMap(Registry.BLOCK);
 		});
     }
 	

@@ -5,14 +5,14 @@ import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 import com.hungteen.pvz.common.enchantment.PVZEnchantmentTypes;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 public class BreakOutEnchantment extends PVZEnchantment{
 
 	public BreakOutEnchantment() {
-		super(Rarity.VERY_RARE, PVZEnchantmentTypes.PLANT_OR_OUTER_CARD, new EquipmentSlotType[] {EquipmentSlotType.MAINHAND});
+		super(Rarity.VERY_RARE, PVZEnchantmentTypes.PLANT_OR_OUTER_CARD, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
 		this.isTradeable = false;
 	}
 

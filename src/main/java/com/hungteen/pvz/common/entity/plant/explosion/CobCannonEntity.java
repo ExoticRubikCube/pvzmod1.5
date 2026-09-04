@@ -1,5 +1,8 @@
 package com.hungteen.pvz.common.entity.plant.explosion;
 
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.common.ForgeMod;
+
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZRandomTargetGoal;
@@ -13,21 +16,26 @@ import com.hungteen.pvz.common.network.toserver.EntityInteractPacket;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,8 +46,8 @@ import java.util.Optional;
 
 public class CobCannonEntity extends PVZPlantEntity {
 
-	protected static final DataParameter<Integer> CORN_NUM = EntityDataManager.defineId(CobCannonEntity.class,
-			DataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> CORN_NUM = SynchedEntityData.defineId(CobCannonEntity.class,
+			EntityDataSerializers.INT);
 	protected Optional<LivingEntity> lockTarget = Optional.empty();
 	protected Optional<BlockPos> lockPos = Optional.empty();
 	protected int cornCnt = 0;
@@ -47,7 +55,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 	protected int preTick = 0;
 	private int climbTick = 0;
 
-	public CobCannonEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CobCannonEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canCollideWithPlant = false;
 		this.isImmuneToWeak = true;
@@ -74,7 +82,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			++ this.preTick;
 			if (this.getAttackTime() == 0 && this.preTick >= this.getPreCD()) {
 				this.preTick = 0;
@@ -102,24 +110,24 @@ public class CobCannonEntity extends PVZPlantEntity {
 	public void checkAndAttack() {
 		//is in player's control and not in attacking.
 		if(this.getAttackTime() == 0 && this.isPlayerRiding()) {
-			final PlayerEntity player = (PlayerEntity) this.getPassengers().get(0);
-			final Vector3d look = player.getLookAngle();
-		    final Vector3d start = player.position().add(0, player.getEyeHeight(), 0);
+			final Player player = (Player) this.getPassengers().get(0);
+			final Vec3 look = player.getLookAngle();
+		    final Vec3 start = player.position().add(0, player.getEyeHeight(), 0);
 		    final double range = 60;
-		    Vector3d end = start.add(look.normalize().multiply(range, range, range));
-		    RayTraceContext ray = new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, player);
-		    RayTraceResult result = level.clip(ray);
-		    if(result.getType() != RayTraceResult.Type.MISS) {// hit something
+		    Vec3 end = start.add(look.normalize().multiply(range, range, range));
+		    ClipContext ray = new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player);
+		    HitResult result = level.clip(ray);
+		    if(result.getType() != HitResult.Type.MISS) {// hit something
 			    end = result.getLocation();
 		    }
-			EntityRayTraceResult entityRay = this.rayTraceEntities(level, player, range, start, end);
+			EntityHitResult entityRay = this.rayTraceEntities(level, player, range, start, end);
 		    if(entityRay != null && entityRay.getType() == Type.ENTITY) {
 			    if(entityRay.getEntity() instanceof LivingEntity) {//attack entity
 			    	this.setAttackTime(this.getAnimCD());
 			    	this.setCornNum(this.getCornNum() - 1);
 			    	this.lockTarget = Optional.ofNullable((LivingEntity) entityRay.getEntity());
 			    }
-		    } else if(result.getType() == RayTraceResult.Type.BLOCK) {//attack block.
+		    } else if(result.getType() == HitResult.Type.BLOCK) {//attack block.
 		    	this.setAttackTime(this.getAnimCD());
 		    	BlockPos pos = new BlockPos(end.x(), end.y(), end.z());
 		    	this.setCornNum(this.getCornNum() - 1);
@@ -183,21 +191,21 @@ public class CobCannonEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public ActionResultType interactAt(PlayerEntity player, Vector3d vec3d, Hand hand) {
+	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
 		if (player.isSecondaryUseActive() || EntityUtil.canTargetEntity(this, player)) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		ItemStack stack = player.getItemInHand(hand);
 		if(this.getAttackTime() == 0 && stack.isEmpty()) {
 			if(this.mountTo(player)) {
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		} else if(stack.getItem() == ItemRegister.CORN.get()) { 
 			if(this.cornCnt < this.MaxCornCnt) {
 			    ++ this.cornCnt;
 			    stack.shrink(Math.min(stack.getCount(), this.MaxCornCnt - this.cornCnt));
 			}
-			return ActionResultType.CONSUME;
+			return InteractionResult.CONSUME;
 		}
 		return super.interactAt(player, vec3d, hand);
 	}
@@ -214,11 +222,11 @@ public class CobCannonEntity extends PVZPlantEntity {
 	}
 	
 	/**
-	 * Gets the EntityRayTraceResult representing the entity hit
+	 * Gets the EntityHitResult representing the entity hit
 	 */
 	@Nullable
-	protected EntityRayTraceResult rayTraceEntities(World world, PlayerEntity player, double range, Vector3d startVec, Vector3d endVec) {
-		return ProjectileHelper.getEntityHitResult(world, player, startVec, endVec, 
+	protected EntityHitResult rayTraceEntities(Level world, Player player, double range, Vec3 startVec, Vec3 endVec) {
+		return ProjectileUtil.getEntityHitResult(world, player, startVec, endVec, 
 				player.getBoundingBox().inflate(range), entity -> {
 			return EntityUtil.isEntityValid(entity) && entity instanceof LivingEntity && ! entity.is(this);
 		});
@@ -226,7 +234,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 
 	public boolean isPlayerRiding() {
 		for (Entity entity : this.getPassengers()) {
-			if (entity instanceof PlayerEntity)
+			if (entity instanceof Player)
 				return true;
 		}
 		return false;
@@ -238,23 +246,23 @@ public class CobCannonEntity extends PVZPlantEntity {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private boolean isRidingPlayer(PlayerEntity player) {
+	private boolean isRidingPlayer(Player player) {
 		return player.getVehicle() != null && player.getVehicle() == this;
 	}
 
-	public void travel(Vector3d p_213352_1_) {
+	public void travel(Vec3 p_213352_1_) {
 		if (this.isAlive()) {
 			if (this.isVehicle() && this.isPlayerRiding()) {
-				PlayerEntity player = (PlayerEntity) this.getPassengers().get(0);
+				Player player = (Player) this.getPassengers().get(0);
 				if (player == null) {
 					System.out.println("ERROR : Wrong judge !");
 					return;
 				}
-				this.yRot = player.yRot;
-				this.yRotO = this.yRot;
-				this.xRot = player.xRot * 0.5F;
-				this.setRot(this.yRot, this.xRot);
-				this.yBodyRot = this.yRot;
+				this.setYRot(player.getYRot());
+				this.yRotO = this.getYRot();
+				this.setXRot(player.getXRot() * 0.5F);
+				this.setRot(this.getYRot(), this.getXRot());
+				this.yBodyRot = this.getYRot();
 				this.yHeadRot = this.yBodyRot;
 				float f = player.xxa * 0.5F;
 				float f1 = player.zza;
@@ -264,19 +272,19 @@ public class CobCannonEntity extends PVZPlantEntity {
 				//jump
 				if(this.horizontalCollision) {
 					if(++ this.climbTick <= 8) {
-						final Vector3d Vector3d = this.getDeltaMovement();
-	                    this.setDeltaMovement(Vector3d.x, 0.2D, Vector3d.z);
+						final Vec3 Vec3 = this.getDeltaMovement();
+	                    this.setDeltaMovement(Vec3.x, 0.2D, Vec3.z);
 					}
 				} else {
 					this.climbTick = 0;
 				}
 				this.flyingSpeed = this.getSpeed() * 0.1F;
 				this.setSpeed((float) this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-				super.travel(new Vector3d((double) f, p_213352_1_.y, (double) f1));
+				super.travel(new Vec3(f, p_213352_1_.y, f1));
 				this.animationSpeedOld = this.animationSpeed;
 				double d2 = this.getX() - this.xo;
 				double d3 = this.getZ() - this.zo;
-				float f4 = MathHelper.sqrt(d2 * d2 + d3 * d3) * 4.0F;
+				float f4 = Mth.sqrt((float) (d2 * d2 + d3 * d3)) * 4.0F;
 				if (f4 > 1.0F) {
 					f4 = 1.0F;
 				}
@@ -294,10 +302,10 @@ public class CobCannonEntity extends PVZPlantEntity {
 		return this.isInWaterOrBubble();
 	}
 
-	protected boolean mountTo(PlayerEntity player) {
-		if (!this.level.isClientSide) {
-			this.yRot = player.yRot;
-			this.xRot = player.xRot;
+	protected boolean mountTo(Player player) {
+		if (!this.level.isClientSide()) {
+			this.setYRot(player.getYRot());
+			this.setXRot(player.getXRot());
 			player.startRiding(this);
 			return true;
 		}
@@ -315,8 +323,8 @@ public class CobCannonEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public boolean canBeRiddenInWater(Entity rider) {
-		return false;
+	public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+		return type != ForgeMod.WATER_TYPE.get();
 	}
 
 	@Override
@@ -350,8 +358,8 @@ public class CobCannonEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(1.25f, 1f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(1.25f, 1f);
 	}
 
 	@Override
@@ -360,7 +368,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("cannon_pre_tick")) {
 			this.preTick = compound.getInt("cannon_pre_tick");
@@ -378,13 +386,13 @@ public class CobCannonEntity extends PVZPlantEntity {
 			}
 		}
 		if(compound.contains("cannon_lock_pos")) {
-			CompoundNBT nbt = compound.getCompound("cannon_lock_pos");
+			CompoundTag nbt = compound.getCompound("cannon_lock_pos");
 			this.lockPos = Optional.ofNullable(new BlockPos(nbt.getInt("lock_posX"), nbt.getInt("lock_posY"), nbt.getInt("lock_posZ")));
 		}
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("cannon_pre_tick", this.preTick);
 		compound.putInt("cannon_corn_num", this.getCornNum());
@@ -393,7 +401,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 			compound.putInt("cannon_lock_target", this.lockTarget.get().getId());
 		}
 		if(this.lockPos.isPresent()) {
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			nbt.putInt("lock_posX", this.lockPos.get().getX());
 			nbt.putInt("lock_posY", this.lockPos.get().getY());
 			nbt.putInt("lock_posZ", this.lockPos.get().getZ());

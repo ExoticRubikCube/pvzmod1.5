@@ -7,15 +7,15 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class ChallengeInfoScreen extends Screen{
 
 	public static final ResourceLocation TEXTURE = StringUtil.prefix("textures/gui/container/almanac.png");
 	private static final int MAX_ENTRY_COUNT = 14;
-	private final List<IFormattableTextComponent> entries = new ArrayList<>();
+	private final List<MutableComponent> entries = new ArrayList<>();
 	private final IChallengeComponent challengeComponent;
 	private final int xSize = 150;
 	private final int ySize = 200;
@@ -42,9 +42,9 @@ public class ChallengeInfoScreen extends Screen{
 	private void initEntries(IChallengeComponent challengeComponent){
 		for(int i = 0; i < challengeComponent.getTotalWaveCount(); ++ i){
 			final IWaveComponent waveComponent = challengeComponent.getWaves().get(i);
-			this.entries.add(new TranslationTextComponent("gui.pvz.challenge_info.wave", i + 1, waveComponent.getLastDuration()).withStyle(TextFormatting.BOLD).withStyle(TextFormatting.RED));
+			this.entries.add(Component.translatable("gui.pvz.challenge_info.wave", i + 1, waveComponent.getLastDuration()).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED));
 			challengeComponent.getSpawns(i).forEach(spawn -> {
-				this.entries.add(new TranslationTextComponent("gui.pvz.challenge_info.spawn", spawn.getSpawnTick(), spawn.getSpawnAmount(), spawn.getSpawnType().getDescription().getString()));
+				this.entries.add(Component.translatable("gui.pvz.challenge_info.spawn", spawn.getSpawnTick(), spawn.getSpawnAmount(), spawn.getSpawnType().getDescription().getString()));
 			});
 		}
 	}
@@ -53,19 +53,19 @@ public class ChallengeInfoScreen extends Screen{
 	public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
 		if (this.entries.size() > MAX_ENTRY_COUNT) {
 			final int next = (int) ((double) this.currentPos - p_mouseScrolled_5_);
-			this.currentPos = MathHelper.clamp(next, 0, this.entries.size() - MAX_ENTRY_COUNT);
+			this.currentPos = Mth.clamp(next, 0, this.entries.size() - MAX_ENTRY_COUNT);
 		}
 		return true;
 	}
 
 	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		super.render(stack, mouseX, mouseY, partialTicks);
 		int cornerX = (this.width - this.xSize) / 2;
 		int cornerY = (this.height - this.ySize) / 2;
 
 		{
-			this.minecraft.getTextureManager().bind(TEXTURE);
+			this.minecraft.getTextureManager().bindForSetup(TEXTURE);
 			blit(stack, cornerX, cornerY, 0, 0, this.xSize, this.ySize);
 			if(this.entries.size() <= MAX_ENTRY_COUNT) {
 				blit(stack, cornerX + 130, cornerY + 49, 162, 0, 12, 15);
@@ -85,16 +85,16 @@ public class ChallengeInfoScreen extends Screen{
 		{
 			int dx = cornerX + 9, dy = cornerY + 9;
 			int scale = 2;
-			RenderSystem.pushMatrix();
-			RenderSystem.scaled(scale, scale, scale);
-			RenderSystem.translated((dx % scale) * 1.0d / scale , (dy % scale) * 1.0d / scale, 0);
+			stack.pushPose();
+			stack.scale((float) scale, (float) scale, (float) scale);
+			stack.translate((double)(dx % scale) / scale , (double)(dy % scale) / scale, 0);
 			this.itemRenderer.renderGuiItem(new ItemStack(ItemRegister.CHALLENGE_ENVELOPE.get()), dx / scale, dy / scale);
-			RenderSystem.popMatrix();
+			stack.popPose();
 		}
 
 		{
 			for(int i = 0; i < Math.min(this.entries.size(), MAX_ENTRY_COUNT); ++ i){
-				this.currentPos = MathHelper.clamp(this.currentPos, 0, this.entries.size() - 1);
+				this.currentPos = Mth.clamp(this.currentPos, 0, this.entries.size() - 1);
 				final String text = this.entries.get(this.currentPos + i).getString();
 				final int incHeight = 10;
 				final int posX = cornerX + 8 + 2;
@@ -104,7 +104,7 @@ public class ChallengeInfoScreen extends Screen{
 		}
 	}
 
-	protected void renderBar(MatrixStack stack, SearchOption a) {
+	protected void renderBar(PoseStack stack, SearchOption a) {
 //		stack.pushPose();
 //		//Do not change the position values, if changed pls modify with the below method.
 //		final int len = 22;
@@ -115,7 +115,7 @@ public class ChallengeInfoScreen extends Screen{
 //			if(guideBook != ItemStack.EMPTY){
 //				this.itemRenderer.renderGuiItem(guideBook, this.leftPos + posX, this.topPos + posY);
 //			} else{
-//				this.minecraft.getTextureManager().bind(TEXTURE);
+//				this.minecraft.getTextureManager().bindForSetup(TEXTURE);
 //				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 0, 16, 16);
 //			}
 //		}
@@ -132,7 +132,7 @@ public class ChallengeInfoScreen extends Screen{
 //		}
 //		posX += len;
 //		{
-//			this.minecraft.getTextureManager().bind(TEXTURE);
+//			this.minecraft.getTextureManager().bindForSetup(TEXTURE);
 //			if(a.getType().getSkills().isEmpty()) {
 //				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 16, 16, 16);
 //			} else {
@@ -142,7 +142,7 @@ public class ChallengeInfoScreen extends Screen{
 //		stack.popPose();
 	}
 
-	protected void renderTooltip(MatrixStack stack, int mouseX, int mouseY) {
+	protected void renderTooltip(PoseStack stack, int mouseX, int mouseY) {
 //		if(this.option != null){
 //			final int len = 22;
 //			int posX = this.leftPos + 53;
@@ -156,24 +156,24 @@ public class ChallengeInfoScreen extends Screen{
 //				if(this.option.getType() instanceof IPlantType){
 //					Item item = ((IPlantType) this.option.getType()).getEssence().getEssenceItem();
 //					this.minecraft.screen.renderComponentTooltip(stack, Arrays.asList(
-//							new TranslationTextComponent("item.pvz." + item.getRegistryName().getPath())
+//							Component.translatable("item.pvz." + item.getRegistryName().getPath())
 //					), mouseX, mouseY);
 //				}
 //			}
 //			posX += len;
 //			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
 //				this.minecraft.screen.renderComponentTooltip(stack, Arrays.asList(
-//						new TranslationTextComponent("item.pvz." + this.option.getType().getRank().getTemplateCard().getRegistryName().getPath())
+//						Component.translatable("item.pvz." + this.option.getType().getRank().getTemplateCard().getRegistryName().getPath())
 //				), mouseX, mouseY);
 //			}
 //			posX += len;
 //			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
-//				List<ITextComponent> list = new ArrayList<>();
+//				List<Component> list = new ArrayList<>();
 //				this.option.getType().getSkills().forEach(skill -> {
-//					list.add(skill.getText().withStyle(TextFormatting.GREEN));
+//					list.add(skill.getText().withStyle(ChatFormatting.GREEN));
 //				});
 //				if(list.isEmpty()) {
-////					list.add(new TranslationTextComponent("gui.))
+////					list.add(Component.translatable("gui.))
 //					this.minecraft.screen.renderComponentTooltip(stack, list, mouseX, mouseY);
 //				} else {
 //					this.minecraft.screen.renderComponentTooltip(stack, list, mouseX, mouseY);

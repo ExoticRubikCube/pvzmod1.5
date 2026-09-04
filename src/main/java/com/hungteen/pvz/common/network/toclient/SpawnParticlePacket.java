@@ -5,10 +5,10 @@ import java.util.function.Supplier;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraftforge.network.NetworkEvent;
 
 public class SpawnParticlePacket {
 
@@ -24,14 +24,14 @@ public class SpawnParticlePacket {
 		this.type = type;
 	}
 	
-	public SpawnParticlePacket(PacketBuffer buffer) {
+	public SpawnParticlePacket(FriendlyByteBuf buffer) {
 		this.type = buffer.readInt();
 		this.x = buffer.readDouble();
 		this.y = buffer.readDouble();
 		this.z = buffer.readDouble();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type);
 		buffer.writeDouble(x);
 		buffer.writeDouble(y);
@@ -43,7 +43,7 @@ public class SpawnParticlePacket {
 		public static void onMessage(SpawnParticlePacket message, Supplier<NetworkEvent.Context> ctx) {
 		    ctx.get().enqueueWork(()->{
 		    	int id = message.type;
-		    	IParticleData particle = null;
+		    	ParticleOptions particle = null;
 		    	if(id == 0) {
 		    		particle = ParticleRegister.RED_BOMB.get();
 		    	} else if(id == 1) {

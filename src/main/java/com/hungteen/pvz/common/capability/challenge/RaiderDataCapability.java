@@ -1,5 +1,5 @@
 package com.hungteen.pvz.common.capability.challenge;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public class RaiderDataCapability implements IRaiderDataCapability {
 
@@ -9,13 +9,13 @@ public class RaiderDataCapability implements IRaiderDataCapability {
         challenge = ch;
     }
 
-    public CompoundNBT SavetoNBT(){
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag SavetoNBT(){
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("in_challenge",challenge);
         return nbt;
     }
 
-    public void LoadfromNBT(CompoundNBT nbt){
+    public void LoadfromNBT(CompoundTag nbt){
         this.challenge = nbt.getInt("in_challenge");
     }
 

@@ -1,51 +1,57 @@
 package com.hungteen.pvz.common.world.structure;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
-import net.minecraft.world.gen.feature.template.BlockIgnoreStructureProcessor;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public abstract class PVZTemplateComponent extends TemplateStructurePiece {
 
-	private static final BlockPos STRUCTURE_OFFSET = new BlockPos(0, 0, 0);
+	private static final BlockPos STRUCTURE_OFFSET = BlockPos.ZERO;
 	protected final Rotation rotation;
 	protected final ResourceLocation res;
-	
-	public PVZTemplateComponent(IStructurePieceType type, TemplateManager manager, ResourceLocation res,BlockPos pos, Rotation rotation) {
-		super(type, 0);
-		this.templatePosition = pos;
-		this.rotation = rotation;
-		this.res=res;
-		this.setUpTemplate(manager);
-	}
-	
-	public PVZTemplateComponent(IStructurePieceType type, TemplateManager manager, CompoundNBT nbt) {
-		super(type, nbt);
-		this.res = new ResourceLocation(nbt.getString("Template"));
-		this.rotation = Rotation.valueOf(nbt.getString("Rot"));
-		this.setUpTemplate(manager);
+
+	private static StructurePlaceSettings makeSettings(Rotation rotation) {
+		return new StructurePlaceSettings().setRotation(rotation)
+				.setMirror(Mirror.NONE)
+				.setRotationPivot(STRUCTURE_OFFSET)
+				.addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
 	}
 
-	private void setUpTemplate(TemplateManager p_204754_1_) {
-		Template template = p_204754_1_.getOrCreate(this.res);
-		PlacementSettings placementsettings = (new PlacementSettings()).setRotation(this.rotation)
-				.setMirror(Mirror.NONE).setRotationPivot(STRUCTURE_OFFSET)
-				.addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
-		this.setup(template, this.templatePosition, placementsettings);
+	private static String displayName(ResourceLocation r) {
+		return r.toString();
 	}
-	
+
+	public PVZTemplateComponent(StructurePieceType type, StructureTemplateManager mgr, ResourceLocation res, BlockPos pos, Rotation rotation) {
+		super(type, 0, mgr, res, displayName(res), makeSettings(rotation), pos);
+		this.rotation = rotation;
+		this.res = res;
+	}
+
+	public PVZTemplateComponent(StructurePieceType type, StructureTemplateManager mgr, CompoundTag tag) {
+		super(type, tag, mgr, (resourceLocation) -> {
+			Rotation rot = Rotation.valueOf(tag.getString("Rot"));
+			return makeSettings(rot);
+		});
+		this.res = ResourceLocation.tryParse(tag.contains("StructureTemplate") ? tag.getString("StructureTemplate") : tag.getString("Template"));
+		this.rotation = Rotation.valueOf(tag.getString("Rot"));
+	}
+
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT tagCompound) {
-		super.addAdditionalSaveData(tagCompound);
-		tagCompound.putString("Template", this.res.toString());
-        tagCompound.putString("Rot", this.rotation.name());
+	protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound) {
+		super.addAdditionalSaveData(context, tagCompound);
+		if (this.res != null) {
+			tagCompound.putString("StructureTemplate", this.res.toString());
+		}
+		tagCompound.putString("Rot", this.rotation.name());
 	}
-	
+
 }

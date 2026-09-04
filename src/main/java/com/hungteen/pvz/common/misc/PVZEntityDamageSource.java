@@ -6,14 +6,13 @@ import com.hungteen.pvz.common.entity.bullet.itembullet.MetalItemEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.SporeEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -21,9 +20,9 @@ import java.util.List;
 
 public class PVZEntityDamageSource extends EntityDamageSource {
 
-	private final List<EffectInstance> effects = new ArrayList<>();
-	private Entity attackOwner = null;
-	private Entity attacker = null;
+	private final List<MobEffectInstance> effects = new ArrayList<>();
+	private Entity attackOwner;
+	private Entity attacker;
 	private boolean isAppease = false;//shooter.
 	private boolean isParabola = false;//pult.
 	private boolean isIceDamage = false;
@@ -55,39 +54,39 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 	
 	//projectiles
 	public static PVZEntityDamageSource pea(PeaEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("pea", pea, shooter).setAppease();
+		return new PVZEntityDamageSource("pea", pea, shooter).setAppease();
 	}
 	
 	public static PVZEntityDamageSource snowPea(PeaEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("snow_pea", pea, shooter).setAppease().setIceDamage();
+		return new PVZEntityDamageSource("snow_pea", pea, shooter).setAppease().setIceDamage();
 	}
 	
 	public static PVZEntityDamageSource flamePea(PeaEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("flame_pea", pea, shooter).setAppease().setFlameDamage();
+		return new PVZEntityDamageSource("flame_pea", pea, shooter).setAppease().setFlameDamage();
 	}
 	
 	public static PVZEntityDamageSource spore(SporeEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("spore", pea, shooter).setAppease();
+		return new PVZEntityDamageSource("spore", pea, shooter).setAppease();
 	}
 	
 	public static PVZEntityDamageSource fume(FumeEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("fume", pea, shooter).setAppease().setThroughDamage();
+		return new PVZEntityDamageSource("fume", pea, shooter).setAppease().setThroughDamage();
 	}
 	
 	public static PVZEntityDamageSource star(StarEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("star", pea, shooter).setAppease();
+		return new PVZEntityDamageSource("star", pea, shooter).setAppease();
 	}
 	
 	public static PVZEntityDamageSource metal(MetalItemEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("metal", pea, shooter).setAppease();
+		return new PVZEntityDamageSource("metal", pea, shooter).setAppease();
 	}
 	
 	public static PVZEntityDamageSource cabbage(CabbageEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("cabbage", pea, shooter).setParabola();
+		return new PVZEntityDamageSource("cabbage", pea, shooter).setParabola();
 	}
 	
 	public static PVZEntityDamageSource kernel(KernelEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("kernel", pea, shooter).setParabola();
+		return new PVZEntityDamageSource("kernel", pea, shooter).setParabola();
 	}
 	
 	public static PVZEntityDamageSource corn(CornEntity pea, Entity shooter) {
@@ -95,19 +94,19 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 	}
 	
 	public static PVZEntityDamageSource butter(ButterEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("butter", pea, shooter).setParabola();
+		return new PVZEntityDamageSource("butter", pea, shooter).setParabola();
 	}
 	
 	public static PVZEntityDamageSource melon(MelonEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("melon", pea, shooter).setParabola();
+		return new PVZEntityDamageSource("melon", pea, shooter).setParabola();
 	}
 	
 	public static PVZEntityDamageSource winterMelon(MelonEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("winter_melon", pea, shooter).setParabola().setIceDamage();
+		return new PVZEntityDamageSource("winter_melon", pea, shooter).setParabola().setIceDamage();
 	}
 	
 	public static PVZEntityDamageSource ball(BallEntity pea, Entity shooter) {
-		return (PVZEntityDamageSource) new PVZEntityDamageSource("ball", pea, shooter).setParabola();
+		return new PVZEntityDamageSource("ball", pea, shooter).setParabola();
 	}
 	
 	//normal
@@ -186,9 +185,9 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 	}
 
 	@Override
-	public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+	public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
 		String s = "death.attack.pvz." + this.getMsgId();
-		return new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName());
+		return Component.translatable(s, entityLivingBaseIn.getDisplayName());
 	}
 
 	@Override
@@ -205,7 +204,7 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 	 * Gets the location from which the damage originates.
 	 */
 	@Nullable
-	public Vector3d getSourcePosition() {
+	public Vec3 getSourcePosition() {
 		return this.attacker != null ? this.attacker.position() : null;
 	}
 
@@ -219,11 +218,11 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 	}
 	
 	//handle effects.
-	public void addEffect(EffectInstance instance) {
+	public void addEffect(MobEffectInstance instance) {
 		this.effects.add(instance);
 	}
 	
-	public List<EffectInstance> getEffects(){
+	public List<MobEffectInstance> getEffects(){
 		return this.effects;
 	}
 	

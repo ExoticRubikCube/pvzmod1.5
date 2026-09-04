@@ -4,15 +4,15 @@ import com.hungteen.pvz.client.model.entity.plant.explosion.DoomShroomModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.explosion.DoomShroomEntity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class DoomShroomRender extends PVZPlantRender<DoomShroomEntity>{
 
-	public DoomShroomRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new DoomShroomModel(), 0.5f);
+	public DoomShroomRender(EntityRendererProvider.Context context) {
+		super(context, new DoomShroomModel(context.bakeLayer(DoomShroomModel.LAYER)), 0.5f);
 	}
 
 	@Override

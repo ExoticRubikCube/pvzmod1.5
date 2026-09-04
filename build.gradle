@@ -1,14 +1,17 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
@@ -24,12 +27,12 @@ version = "${config.mc_version}-${config.mod_version}"
 group = "com.hungteen.${config.mod_id}"
 archivesBaseName = "${config.mod_name}"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'parchment', version: '2022.11.27-1.19.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -111,26 +114,18 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
-    
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2-47:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2-47")
-    
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    
-    implementation fg.deobf("curse.maven:jade-324717:${jade_version}")
+    minecraft 'net.minecraftforge:forge:1.19.2-43.5.2'
 
-//    implementation fg.deobf("curse.maven:craid-532546:${craid_version}")
-    
-    implementation fg.deobf("curse.maven:configured-457570:${configured_version}")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77:api")
+    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77")
 
-    //ban the annoying mod.
-//    implementation fg.deobf("curse.maven:getinthebucketmod-345984:${bucket_version}")
+    implementation fg.deobf("curse.maven:jei-238222:5846858")
+    implementation fg.deobf("curse.maven:jade-324717:4914105")
+    implementation fg.deobf("curse.maven:configured-457570:4462837")
 }
 
-task apiJar(type: Jar) {
-    classifier = 'api'
+tasks.register('apiJar', Jar) {
+    archiveClassifier = 'api'
 
     include 'com/hungteen/pvz/api/**'
 
@@ -139,11 +134,19 @@ task apiJar(type: Jar) {
     from sourceSets.main.output
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xmaxerrs', '500']
+}
+
 artifacts {
     archives apiJar
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    exclude '**/.cache/**'
+
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'META-INF/mods.toml'

@@ -7,20 +7,20 @@ import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.enums.Colors;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChallengeTypeLoader extends JsonReloadListener{
+public class ChallengeTypeLoader extends SimpleJsonResourceReloadListener{
 
 	public static final String NAME = "challenge";
 	public static final Map<ResourceLocation, IChallengeComponent> CHALLENGE_MAP = Maps.newHashMap();
@@ -33,7 +33,7 @@ public class ChallengeTypeLoader extends JsonReloadListener{
 	}
 
 	@Override
-	public void apply(Map<ResourceLocation, JsonElement> map, IResourceManager manager, IProfiler profiler) {
+	public void apply(Map<ResourceLocation, JsonElement> map, ResourceManager manager, ProfilerFiller profiler) {
 		/* refresh */
 		CHALLENGE_MAP.clear();
 		RES_MAP.clear();
@@ -50,8 +50,8 @@ public class ChallengeTypeLoader extends JsonReloadListener{
 
 	public static void updateResource(ResourceLocation res, JsonElement jsonElement) {
 		try {
-			JsonObject jsonObject = JSONUtils.convertToJsonObject(jsonElement, NAME);
-			String type = JSONUtils.getAsString(jsonObject, "type", "");
+			JsonObject jsonObject = GsonHelper.convertToJsonObject(jsonElement, NAME);
+			String type = GsonHelper.getAsString(jsonObject, "type", "");
 			IChallengeComponent challengeType = ChallengeManager.getChallengeComponent(type);
 			if(! challengeType.readJson(jsonObject)) {
 				PVZMod.LOGGER.debug("Skipping loading challenge {} as it's conditions were not met", res);
@@ -59,11 +59,11 @@ public class ChallengeTypeLoader extends JsonReloadListener{
 			}
 			/* messages */
 			{
-				final List<Pair<IFormattableTextComponent, Integer>> messages = new ArrayList<>();
-				final JsonArray jsonMsgs = JSONUtils.getAsJsonArray(jsonObject, "messages", null);
+				final List<Pair<MutableComponent, Integer>> messages = new ArrayList<>();
+				final JsonArray jsonMsgs = GsonHelper.getAsJsonArray(jsonObject, "messages", null);
 				if(jsonMsgs == null){//no msg, use default.
 					for(int i = 0; i < 6; ++ i){
-						final IFormattableTextComponent component = new TranslationTextComponent("challenge." + res.getNamespace() + "." + res.getPath() + ".msg" + (i + 1));
+						final MutableComponent component = Component.translatable("challenge." + res.getNamespace() + "." + res.getPath() + ".msg" + (i + 1));
 						messages.add(Pair.of(component, Colors.BLACK));
 					}
 				} else{
@@ -71,10 +71,10 @@ public class ChallengeTypeLoader extends JsonReloadListener{
 						final JsonElement e = jsonMsgs.get(i);
 						if (e.isJsonObject()) {
 							final JsonObject obj = e.getAsJsonObject();
-							final String name = JSONUtils.getAsString(obj, "title", null);
-							final int color = JSONUtils.getAsInt(obj, "color", Colors.BAT_BLACK);
+							final String name = GsonHelper.getAsString(obj, "title", null);
+							final int color = GsonHelper.getAsInt(obj, "color", Colors.BAT_BLACK);
 							if (name != null) {
-								messages.add(Pair.of(new TranslationTextComponent(name), color));
+								messages.add(Pair.of(Component.translatable(name), color));
 							}
 						}
 					}

@@ -1,48 +1,37 @@
 package com.hungteen.pvz.common.world.structure.zombie;
 
-import com.hungteen.pvz.common.world.structure.PVZStructureBase;
 import com.mojang.serialization.Codec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import java.util.Optional;
 
-public class BucketHouseStructure extends PVZStructureBase<NoFeatureConfig>{
+import com.hungteen.pvz.common.world.structure.StructureRegister;
 
-	public BucketHouseStructure(Codec<NoFeatureConfig> p_i231997_1_) {
-		super(p_i231997_1_);
+public class BucketHouseStructure extends Structure {
+
+	public static final Codec<BucketHouseStructure> CODEC = simpleCodec(BucketHouseStructure::new);
+
+	public BucketHouseStructure(StructureSettings settings) {
+		super(settings);
 	}
-	
-    @Override
-    public String getPVZStructureName() {
-    	return "bucket_house";
-    }
-    
+
 	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory() {
-		return Start::new;
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext ctx) {
+		return onTopOfChunkCenter(ctx, Heightmap.Types.WORLD_SURFACE_WG, (StructurePiecesBuilder builder) -> {
+			Rotation rotation = Rotation.values()[ctx.random().nextInt(Rotation.values().length)];
+			BlockPos pos = new BlockPos(ctx.chunkPos().getMinBlockX(), 90, ctx.chunkPos().getMinBlockZ());
+			BucketHouseComponents.generate(ctx.structureTemplateManager(), pos, rotation, builder, ctx.random());
+		});
 	}
 
-	public static class Start extends StructureStart<NoFeatureConfig> {
-
-		public Start(Structure<NoFeatureConfig> structure, int chunkPosX, int chunkPosZ, MutableBoundingBox bounds, int references, long seed) {
-            super(structure, chunkPosX, chunkPosZ, bounds, references, seed);
-        }
-		
-		@Override
-		public void generatePieces(DynamicRegistries p_230364_1_, ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ,
-				Biome biomeIn, NoFeatureConfig p_230364_7_) {
-			Rotation rotation = Rotation.values()[this.random.nextInt(Rotation.values().length)];
-	        BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
-	        BucketHouseComponents.generate(templateManagerIn, blockpos, rotation, this.pieces, this.random);
-			this.calculateBoundingBox();
-		}
+	@Override
+	public StructureType<?> type() {
+		return StructureRegister.BUCKET_HOUSE_TYPE.get();
 	}
+
 }

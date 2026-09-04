@@ -1,26 +1,28 @@
 package com.hungteen.pvz.common.entity.misc;
 
+import net.minecraftforge.fluids.FluidType;
+
 import com.hungteen.pvz.common.entity.zombie.PVZZombieToolBase;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.level.Level;
 
 public class DuckyTubeEntity extends PVZZombieToolBase {
 
 //	private static final float UP_SPEED = 0.05f;
 
-	public DuckyTubeEntity(EntityType<? extends MobEntity> type, World worldIn) {
+	public DuckyTubeEntity(EntityType<? extends Mob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new FloatGoal(this));
 	}
 
 //	@Override
@@ -41,8 +43,8 @@ public class DuckyTubeEntity extends PVZZombieToolBase {
 //	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.2f, 0.2f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.2f, 0.2f, false);
 	}
 
 	@Override
@@ -66,8 +68,7 @@ public class DuckyTubeEntity extends PVZZombieToolBase {
 	}
 
 	@Override
-	public boolean canBeRiddenInWater(Entity rider) {
+	public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
 		return true;
 	}
-
 }

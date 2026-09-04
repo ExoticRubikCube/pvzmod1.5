@@ -11,10 +11,10 @@ import com.hungteen.pvz.common.entity.zombie.pool.BalloonZombieEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
 
@@ -25,14 +25,14 @@ public class CatTailEntity extends PlantShooterEntity {
 	private int powerTick = 0;
 	private final int POWER_CD = 200;
 	
-	public CatTailEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public CatTailEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SwimGoal(this));
+		this.goalSelector.addGoal(2, new FloatGoal(this));
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class CatTailEntity extends PlantShooterEntity {
 	@Override
 	public void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			if(this.powerTick > 0) {
 				-- this.powerTick;
 			}
@@ -130,8 +130,8 @@ public class CatTailEntity extends PlantShooterEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8F, 1F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8F, 1F);
 	}
 	
 	@Override
@@ -150,7 +150,7 @@ public class CatTailEntity extends PlantShooterEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("power_thorn_count")){
 			this.powerCount = compound.getInt("power_thorn_count");
@@ -161,7 +161,7 @@ public class CatTailEntity extends PlantShooterEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("power_thorn_count", this.powerCount);
 		compound.putInt("power_shoot_tick", this.powerTick);

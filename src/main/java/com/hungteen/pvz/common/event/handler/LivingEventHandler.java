@@ -9,8 +9,8 @@ import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class LivingEventHandler {
@@ -52,15 +52,15 @@ public class LivingEventHandler {
 	 */
 	public static void handleHurtDamage(final LivingHurtEvent ev) {
 		//all paz entity can not deal more than limit damage to other entities.
-		if(ev.getSource() instanceof PVZEntityDamageSource && ! (ev.getEntityLiving() instanceof IPAZEntity && ev.getSource().getEntity() instanceof IPAZEntity)){
+		if(ev.getSource() instanceof PVZEntityDamageSource && ! (ev.getEntity() instanceof IPAZEntity && ev.getSource().getEntity() instanceof IPAZEntity)){
 			ev.setAmount(Math.min(ConfigUtil.getLimitDamage(), ev.getAmount()));
 		}
 		//(not boss)zombie damage to zombie or both are boss entity.
-		if(ev.getEntityLiving() instanceof IZombieEntity && ev.getSource().getEntity() instanceof IZombieEntity && (! (ev.getSource().getEntity() instanceof AbstractBossZombieEntity) || (ev.getEntityLiving() instanceof AbstractBossZombieEntity))){
+		if(ev.getEntity() instanceof IZombieEntity && ev.getSource().getEntity() instanceof IZombieEntity && (! (ev.getSource().getEntity() instanceof AbstractBossZombieEntity) || (ev.getEntity() instanceof AbstractBossZombieEntity))){
 			ev.setAmount(Math.min(100, ev.getAmount()));
 		}
 		//avoid instant kill mod.
-		if(ev.getSource() != DamageSource.OUT_OF_WORLD && ev.getAmount() > ev.getEntityLiving().getMaxHealth() * 0.8 && ev.getEntityLiving() instanceof AbstractBossZombieEntity){
+		if(!ev.getSource().equals(DamageSource.OUT_OF_WORLD) && ev.getAmount() > ev.getEntity().getMaxHealth() * 0.8 && ev.getEntity() instanceof AbstractBossZombieEntity){
 			ev.setAmount(ConfigUtil.getLimitDamage());
 		}
 	}

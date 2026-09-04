@@ -1,17 +1,19 @@
 package com.hungteen.pvz.client.particle;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.SimpleParticleType;
+
+import org.jetbrains.annotations.Nullable;
 
 public class SporeParticle extends PVZNormalParticle {
 
-	public SporeParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+	public SporeParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 		super(world, x, y, z, xSpeed, ySpeed, zSpeed);
 		this.quadSize = 0.2f;
-		if(xSpeed <= 0.01F) {
+		if (xSpeed <= 0.01F) {
 			this.lifetime = this.random.nextInt(2) + 1;
 		} else {
 			this.lifetime = this.random.nextInt(20) + 20;
@@ -24,25 +26,21 @@ public class SporeParticle extends PVZNormalParticle {
 		this.bCol = f;
 	}
 
-	public static class Factory implements IParticleFactory<BasicParticleType> {
+	public static class Provider implements ParticleProvider<SimpleParticleType> {
 
-		private final IAnimatedSprite sprite;
+		private final SpriteSet sprite;
 
-		public Factory(IAnimatedSprite sprite) {
+		public Provider(SpriteSet sprite) {
 			this.sprite = sprite;
 		}
 
+		@Nullable
 		@Override
-		public Particle createParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z,
+		public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z,
 				double xSpeed, double ySpeed, double zSpeed) {
 			SporeParticle particle = new SporeParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
 			particle.pickSprite(this.sprite);
 			return particle;
-		}
-
-		@SuppressWarnings("unused")
-		private Factory() {
-			throw new UnsupportedOperationException("Use the Factory(IAnimatedSprite sprite) constructor");
 		}
 	}
 

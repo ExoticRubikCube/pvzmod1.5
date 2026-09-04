@@ -1,8 +1,8 @@
 package com.hungteen.pvz.common.enchantment;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class PVZEnchantment extends Enchantment {
 
@@ -10,7 +10,7 @@ public class PVZEnchantment extends Enchantment {
 	protected boolean isCurse = false;
 	protected boolean isTreasureOnly = false;
 	
-	public PVZEnchantment(Rarity rarity, EnchantmentType enchant, EquipmentSlotType[] slotTypes) {
+	public PVZEnchantment(Rarity rarity, EnchantmentCategory enchant, EquipmentSlot[] slotTypes) {
 		super(rarity, enchant, slotTypes);
 	}
 	

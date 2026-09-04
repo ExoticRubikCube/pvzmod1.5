@@ -6,8 +6,8 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PlayerStatsPacket{
 
@@ -19,12 +19,12 @@ public class PlayerStatsPacket{
 		this.data = y;
 	}
 	
-	public PlayerStatsPacket(PacketBuffer buffer) {
+	public PlayerStatsPacket(FriendlyByteBuf buffer) {
 		this.type = buffer.readInt();
 		this.data = buffer.readInt();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type);
 		buffer.writeInt(this.data);
 	}

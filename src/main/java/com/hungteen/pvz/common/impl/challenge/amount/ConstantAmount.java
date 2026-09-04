@@ -2,7 +2,7 @@ package com.hungteen.pvz.common.impl.challenge.amount;
 
 import com.google.gson.JsonElement;
 import com.hungteen.pvz.api.raid.IAmountComponent;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.GsonHelper;
 
 public class ConstantAmount implements IAmountComponent {
 	
@@ -19,7 +19,7 @@ public class ConstantAmount implements IAmountComponent {
 
 	@Override
 	public void readJson(JsonElement json) {
-		this.cnt = JSONUtils.convertToInt(json, NAME);
+		this.cnt = GsonHelper.convertToInt(json, NAME);
 	}
 
 }

@@ -5,8 +5,8 @@ import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.client.render.layer.component.WallNutArmorLayer;
 import com.hungteen.pvz.common.entity.plant.defence.WallNutEntity;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -17,8 +17,8 @@ public class WallNutRender extends PVZPlantRender<WallNutEntity>{
 	private final ResourceLocation TEX2 = StringUtil.prefix("textures/entity/plant/defence/wall_nut_1.png");
 	private final ResourceLocation TEX3 = StringUtil.prefix("textures/entity/plant/defence/wall_nut_2.png");
 
-	public WallNutRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new WallNutModel<>(), 0.55f);
+	public WallNutRender(EntityRendererProvider.Context context) {
+		super(context, new WallNutModel<>(context.bakeLayer(WallNutModel.LAYER)), 0.55f);
 	}
 
 	@Override

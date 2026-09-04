@@ -1,33 +1,33 @@
 package com.hungteen.pvz.client.render.layer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.entity.Entity;
+import com.mojang.math.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class DancerLightLayer<T extends Entity> extends LayerRenderer<T, EntityModel<T>>{
+public class DancerLightLayer<T extends Entity> extends RenderLayer<T, EntityModel<T>>{
 	   
-	public DancerLightLayer(IEntityRenderer<T, EntityModel<T>> entityRendererIn) {
+	public DancerLightLayer(RenderLayerParent<T, EntityModel<T>> entityRendererIn) {
 		super(entityRendererIn);
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn,
+	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entitylivingbaseIn,
 			float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
 			float headPitch) {
 		if(! entitylivingbaseIn.isAlive() || entitylivingbaseIn.isInvisible()) {
 			return ;
 		}
-        IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(RenderType.lightning());
+        VertexConsumer ivertexbuilder2 = bufferIn.getBuffer(RenderType.lightning());
         matrixStackIn.pushPose();
         for(int i = 0; (float)i < 4; ++i) {
            Matrix4f matrix4f = matrixStackIn.last().pose();

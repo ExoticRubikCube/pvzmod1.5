@@ -5,14 +5,15 @@ import com.hungteen.pvz.common.container.PVZContainer;
 import com.hungteen.pvz.common.entity.npc.AbstractDaveEntity;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,11 +23,11 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractDaveShopContainer extends PVZContainer {
 
-    protected final PlayerEntity player;
+    protected final Player player;
     protected final Optional<AbstractDaveEntity> daveOpt;
-    protected Inventory output = new Inventory(1);
+    protected final net.minecraft.world.SimpleContainer output = new net.minecraft.world.SimpleContainer(1);
 
-    public AbstractDaveShopContainer(ContainerType<? extends Container> type, int id, PlayerEntity player, int entityId) {
+    public AbstractDaveShopContainer(MenuType<? extends AbstractContainerMenu> type, int id, Player player, int entityId) {
         super(type, id);
         this.player = player;
         final Entity entity = player.level.getEntity(entityId);
@@ -51,8 +52,8 @@ public abstract class AbstractDaveShopContainer extends PVZContainer {
         this.buyGood(goodType);
         this.daveOpt.ifPresent(dave -> {
             dave.sellGoodForTransactions(goodType);
-            if (player instanceof ServerPlayerEntity) {
-                PVZTradeTrigger.INSTANCE.trigger((ServerPlayerEntity) player, dave, goodType.getGoodPrice());
+            if (player instanceof ServerPlayer) {
+                PVZTradeTrigger.INSTANCE.trigger((ServerPlayer) player, dave, goodType.getGoodPrice());
             }
         });
     }
@@ -69,7 +70,7 @@ public abstract class AbstractDaveShopContainer extends PVZContainer {
         }
     }
 
-    public List<AbstractDaveEntity.GoodType> getValidGoods(PlayerEntity player) {
+    public List<AbstractDaveEntity.GoodType> getValidGoods(Player player) {
         if (this.daveOpt.isPresent()) {
             return this.daveOpt.get().getGoodList().stream().filter(goodType -> {
                 return goodType.getType().isValid(player) && (goodType.isMustChoose() || goodType.getTransactionLimit() > 0);
@@ -90,12 +91,12 @@ public abstract class AbstractDaveShopContainer extends PVZContainer {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -124,10 +125,10 @@ public abstract class AbstractDaveShopContainer extends PVZContainer {
     }
 
     @Override
-    public void removed(PlayerEntity player) {
+    public void removed(Player player) {
         super.removed(player);
         this.daveOpt.ifPresent(dave -> dave.setCustomer(null));
-        this.clearContainer(player, player.level, this.output);
+        this.clearContainer(player,this.output);
     }
 
 }

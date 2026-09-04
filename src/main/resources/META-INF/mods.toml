@@ -1,6 +1,6 @@
 modLoader="javafml" 
 license="GNU LESSER GENERAL PUBLIC LICENSE" 
-loaderVersion="[36,)" 
+loaderVersion="[43,)" 
 issueTrackerURL="https://github.com/HungTeen/pvzmod/issues"
 
 [[mods]]
@@ -17,11 +17,11 @@ configBackground="pvz:textures/block/amethyst_block.png"
 [[dependencies.pvz]]
     modId="forge"
     mandatory=true
-    versionRange="[36.1.0,)"
+    versionRange="[43.0.0,)"
     
 [[dependencies.pvz]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16,)"
+    versionRange="[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"

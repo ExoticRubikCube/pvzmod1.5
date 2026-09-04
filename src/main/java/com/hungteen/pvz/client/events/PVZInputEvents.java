@@ -22,7 +22,7 @@ public class PVZInputEvents {
 	public static int CurrentResourcePos = 0;
 	
 	@SubscribeEvent
-	public static void onKeyDown(InputEvent.KeyInputEvent ev) {
+	public static void onKeyDown(InputEvent.Key ev) {
 		Minecraft mc = Minecraft.getInstance();
 		if(mc.isWindowActive() && ClientProxy.MC.player != null) {
 			/* change display of resource overlay */
@@ -31,7 +31,7 @@ public class PVZInputEvents {
 			}
 			
 //			/* change card slot position */
-//			if(ClientProxy.MC.player.getItemInHand(Hand.MAIN_HAND).getItem() instanceof SummonCardItem) {
+//			if(ClientProxy.MC.player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SummonCardItem) {
 //				if(KeyBindRegister.UP_TOGGLE.consumeClick()) {
 //					PVZSwitchSlotHander.changeCardSlot(1F);
 //				}
@@ -51,7 +51,7 @@ public class PVZInputEvents {
 	}
 	
 	@SubscribeEvent
-	public static void onMouseDown(InputEvent.MouseInputEvent ev) {
+	public static void onMouseDown(InputEvent.MouseButton.Pre ev) {
 		if(ClientProxy.MC.isWindowActive() && ClientProxy.MC.player != null) {
 			if(ClientProxy.MC.player.getVehicle() instanceof CobCannonEntity) {
 				CobCannonEntity cob = (CobCannonEntity) ClientProxy.MC.player.getVehicle();
@@ -63,7 +63,7 @@ public class PVZInputEvents {
 	}
 	
 	@SubscribeEvent
-    public static void onMouseScroll(InputEvent.MouseScrollEvent ev) {
+    public static void onMouseScroll(InputEvent.MouseScrollingEvent ev) {
 //		double delta = ev.getScrollDelta();
 //		if(delta != 0.0 && EntityUtil.isEntityValid(ClientProxy.MC.player) && KeyBindRegister.SHIFT.isDown()) {
 //			if(ClientProxy.MC.player.getMainHandItem().getItem() instanceof SummonCardItem) {
@@ -74,7 +74,7 @@ public class PVZInputEvents {
     }
 	
 	/**
-	 * {@link #onKeyDown(net.minecraftforge.client.event.InputEvent.KeyInputEvent)}
+	 * {@link #onKeyDown(InputEvent.Key)}
 	 */
 	private static void changeToggle(int offset) {
 		int result = (CurrentResourcePos + offset + SWITCH_NUM) % SWITCH_NUM;

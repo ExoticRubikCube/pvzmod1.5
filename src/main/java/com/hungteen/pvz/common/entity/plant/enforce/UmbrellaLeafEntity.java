@@ -9,10 +9,10 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -21,19 +21,19 @@ public class UmbrellaLeafEntity extends PVZPlantEntity{
 	public static final int ANIM_TICK = 10;
 	private int inc = 0;
 	
-	public UmbrellaLeafEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public UmbrellaLeafEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			this.tickLeaf();
 			if(this.getAttackTime() == 0 && inc > 0) {
 				EntityUtil.playSound(this, SoundRegister.DRAG.get());
 			}
-			this.setAttackTime(MathHelper.clamp(this.getAttackTime() + inc, 0, ANIM_TICK));
+			this.setAttackTime(Mth.clamp(this.getAttackTime() + inc, 0, ANIM_TICK));
 		}
 	}
 	
@@ -76,8 +76,8 @@ public class UmbrellaLeafEntity extends PVZPlantEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.7F, 1.2F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.7F, 1.2F);
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class UmbrellaLeafEntity extends PVZPlantEntity{
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("anim_inc_num")) {
 			this.inc = compound.getInt("anim_inc_num");
@@ -94,7 +94,7 @@ public class UmbrellaLeafEntity extends PVZPlantEntity{
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("anim_inc_num", this.inc);
 	}

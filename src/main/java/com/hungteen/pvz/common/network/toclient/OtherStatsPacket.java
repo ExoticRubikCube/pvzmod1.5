@@ -6,13 +6,13 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.misc.PVZPacketTypes;
 import com.hungteen.pvz.utils.PlayerUtil;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public class OtherStatsPacket{
 
 	private final PVZPacketTypes type;
-	private int pos = 0;
+	private int pos;
 	private int data = 0;
 	private boolean flag = false;
 
@@ -28,14 +28,14 @@ public class OtherStatsPacket{
 		this.data = data;
 	}
 	
-	public OtherStatsPacket(PacketBuffer buffer) {
+	public OtherStatsPacket(FriendlyByteBuf buffer) {
 		this.type = PVZPacketTypes.values()[buffer.readInt()];
 		this.pos = buffer.readInt();
 		this.data = buffer.readInt();
 		this.flag = buffer.readBoolean();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type.ordinal());
 		buffer.writeInt(this.pos);
 		buffer.writeInt(this.data);

@@ -6,15 +6,15 @@ import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class Edgar090517Entity extends Edgar090505Entity {
 
-    public Edgar090517Entity(EntityType<? extends CreatureEntity> type, World worldIn) {
+    public Edgar090517Entity(EntityType<? extends PathfinderMob> type, Level worldIn) {
         super(type, worldIn);
         this.refreshCountCD = 10;
         this.maxZombieSurround = 60;
@@ -34,15 +34,15 @@ public class Edgar090517Entity extends Edgar090505Entity {
 
     @Override
     public int getBossStage() {
-        final float percent = this.bossInfo.getPercent();
+        final float percent = this.bossInfo.getProgress();
         return percent > 4F / 5 ? 1 :
                 percent > 3F / 5 ? 2 :
                         percent > 2F / 5 ? 3 :
                                 percent > 1F / 5 ? 4 : 5;
     }
 
-    public EntitySize getDimensions(Pose poseIn) {
-        return EntitySize.scalable(2F, 9F);
+    public EntityDimensions getDimensions(Pose poseIn) {
+        return EntityDimensions.scalable(2F, 9F);
     }
 
     @Override

@@ -7,18 +7,18 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class PlantDefenderEntity extends PVZPlantEntity implements ICanAttract {
 
-	public PlantDefenderEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public PlantDefenderEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -48,7 +48,7 @@ public abstract class PlantDefenderEntity extends PVZPlantEntity implements ICan
 		if(entity instanceof ICanBeAttracted && ! ((ICanBeAttracted) entity).canBeAttractedBy(this)) {
 			return false;
 		}
-		if(! this.getSensing().canSee(entity)) {
+		if(! this.getSensing().hasLineOfSight(entity)) {
 			return false;
 		}
 		return true;
@@ -56,8 +56,8 @@ public abstract class PlantDefenderEntity extends PVZPlantEntity implements ICan
 	
 	@Override
 	public void attract(LivingEntity target) {
-		if(target instanceof MobEntity && (! (((MobEntity) target).getTarget() instanceof ICanAttract))) {
-			((MobEntity) target).setTarget(this);
+		if(target instanceof Mob && (! (((Mob) target).getTarget() instanceof ICanAttract))) {
+			((Mob) target).setTarget(this);
 		}
 		if(target instanceof ICanBeAttracted) {
 			((ICanBeAttracted) target).attractBy(this);

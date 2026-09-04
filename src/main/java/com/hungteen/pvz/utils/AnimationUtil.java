@@ -1,6 +1,6 @@
 package com.hungteen.pvz.utils;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public class AnimationUtil {
 
@@ -9,22 +9,22 @@ public class AnimationUtil {
 	
 	public static float upDown(float x, float t, float scale) {
 		final float sita = PI / t;
-		return MathHelper.abs(MathHelper.sin(sita * x)) * scale;
+		return Mth.abs(Mth.sin(sita * x)) * scale;
 	}
 	
 	public static float upDownUpDown(float x, float t, float scale) {
 		final float sita = 2 * PI / t;
-		return MathHelper.sin(sita * x) * scale;
+		return Mth.sin(sita * x) * scale;
 	}
 	
 	public static float up(float x, float t, float scale) {
 		final float sita = PI / 2 / t;
-		return MathHelper.sin(sita * x) * scale;
+		return Mth.sin(sita * x) * scale;
 	}
 	
 	public static float down(float x, float t, float scale) {
 		final float sita = PI / 2 / t;
-		return MathHelper.cos(sita * x) * scale;
+		return Mth.cos(sita * x) * scale;
 	}
 	
 	public static float getUpDown(float x, float t, float maxAngle) {

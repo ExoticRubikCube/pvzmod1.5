@@ -11,16 +11,16 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SnowBlock;
-import net.minecraft.enchantment.FrostWalkerEnchantment;
-import net.minecraft.entity.*;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 	
 	private PVZZombiePartEntity part;
 	
-	public ZomboniEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public ZomboniEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setImmuneAllEffects();
 		this.resetParts();
@@ -37,10 +37,10 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 	@Override
 	public void zombieTick() {
 		super.zombieTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			FrostWalkerEnchantment.onEntityMoved(this, level, this.blockPosition(), 1);
 			BlockPos blockpos = this.blockPosition();
-			BlockState state = Blocks.SNOW.defaultBlockState().setValue(SnowBlock.LAYERS, 1);
+			BlockState state = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 1);
             if ((this.level.isEmptyBlock(blockpos) || level.getBlockState(blockpos).getBlock() == Blocks.SNOW) && state.canSurvive(this.level, blockpos)) {
                this.level.setBlockAndUpdate(blockpos, state);
             }
@@ -68,7 +68,7 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 	@Override
 	public void removeParts() {
 		if(this.part != null) {
-			this.part.remove();
+			this.part.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 			this.part = null;
 		}
 	}
@@ -79,12 +79,12 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 			if(! this.part.isAddedToWorld()) {
 				this.level.addFreshEntity(this.part);
 			}
-			float j = 2 * 3.14159f * this.yRot / 360;
+			float j = 2 * 3.14159f * this.getYRot() / 360;
 			float dis = this.getPartOffset();
-			Vector3d pos = this.position();
-			this.part.yRotO = this.yRot;
-			this.part.xRotO = this.xRot;
-			this.part.moveTo(pos.x() - Math.sin(j) * dis, pos.y() + 0.2f, pos.z() + Math.cos(j) * dis, this.yRot, this.xRot);
+			Vec3 pos = this.position();
+			this.part.yRotO = this.getYRot();
+			this.part.xRotO = this.getXRot();
+			this.part.moveTo(pos.x() - Math.sin(j) * dis, pos.y() + 0.2f, pos.z() + Math.cos(j) * dis, this.getYRot(), this.getXRot());
 			this.part.setOwner(this);
 		}
 	}
@@ -94,9 +94,9 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 	}
 	
 	@Override
-	public void remove() {
+	public void remove(net.minecraft.world.entity.Entity.RemovalReason reason) {
 		removeParts();
-		super.remove();
+		super.remove(reason);
 	}
 	
 	public float getPartOffset() {
@@ -129,8 +129,8 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.8f, 2.3f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.8f, 2.3f);
 	}
 
 	@Override

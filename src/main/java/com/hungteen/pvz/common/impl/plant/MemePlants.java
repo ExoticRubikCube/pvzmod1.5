@@ -22,9 +22,9 @@ public final class MemePlants extends PlantType {
 			.entityType(() -> EntityRegister.STRANGE_CAT.get())
 			.summonCard(() -> ItemRegister.STRANGE_CAT_CARD.get())
 			.enjoyCard(() -> ItemRegister.STRANGE_CAT_ENJOY_CARD.get())
-			.plantModel(() -> StrangeCatModel::new).scale(0.18F)
+			.plantModel(() -> () -> new StrangeCatModel(StrangeCatModel.createBodyLayer().bakeRoot())).scale(0.18F)
 			.placement(Placements.ANY)
-			.cdSkill(Arrays.asList(SkillTypes.LESS_SUN))
+			.cdSkill(List.of(SkillTypes.LESS_SUN))
 	);
 	
 	public static void register() {

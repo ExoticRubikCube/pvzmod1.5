@@ -13,9 +13,9 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 	public static final int UP_CD = 20;
 	public static final float UP_SPEED = 2F;
 	
-	public BambooLordEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public BambooLordEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -66,7 +66,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 		final float range = 30;
 		List<LivingEntity> list = new ArrayList<>();
 		EntityUtil.getTargetableLivings(this, EntityUtil.getEntityAABB(this, range, range)).forEach(target -> {
-			if(this.getSensing().canSee(target)) {
+			if(this.getSensing().hasLineOfSight(target)) {
 				list.add(target);
 			}
 		});
@@ -84,7 +84,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 		for(int i = 0; i < 3; ++ i) {
 			EntityUtil.spawnParticle(this, 5);
 		}
-		this.remove();
+this.remove(RemovalReason.KILLED);
 	}
 
 	@Override
@@ -124,8 +124,8 @@ public class BambooLordEntity extends PlantCloserEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.6F, 1F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.6F, 1F);
 	}
 	
 	@Override

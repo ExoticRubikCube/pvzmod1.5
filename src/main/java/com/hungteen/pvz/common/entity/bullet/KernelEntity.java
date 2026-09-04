@@ -3,20 +3,20 @@ package com.hungteen.pvz.common.entity.bullet;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.entity.EntityRegister;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class KernelEntity extends PultBulletEntity {
 
-	public KernelEntity(EntityType<?> type, World worldIn) {
+	public KernelEntity(EntityType<?> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public KernelEntity(World worldIn, LivingEntity shooter) {
+	public KernelEntity(Level worldIn, LivingEntity shooter) {
 		super(EntityRegister.KERNEL.get(), worldIn, shooter);
 	}
 
@@ -25,8 +25,8 @@ public class KernelEntity extends PultBulletEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.4F, 0.4F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.4F, 0.4F);
 	}
 	
 }

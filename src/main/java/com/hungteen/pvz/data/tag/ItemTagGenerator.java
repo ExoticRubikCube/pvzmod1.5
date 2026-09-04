@@ -9,27 +9,29 @@ import com.hungteen.pvz.common.item.material.TemplateCardItem;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
-import net.minecraft.block.Block;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 public class ItemTagGenerator extends ItemTagsProvider{
 
-	public ItemTagGenerator(DataGenerator generatorIn, BlockTagsProvider provider, ExistingFileHelper helper) {
-		super(generatorIn, provider, PVZMod.MOD_ID, helper);
+	public ItemTagGenerator(DataGenerator generatorIn, BlockTagsProvider blockTagProvider, ExistingFileHelper helper) {
+		super(generatorIn, blockTagProvider, PVZMod.MOD_ID, helper);
 	}
 	
 	@Override
-	protected void addTags() {
+	public void addTags() {
 		//mc tag
 		this.tag(PVZItemTags.ARROWS).add(ItemRegister.TARGET_ARROW.get());
 		
@@ -81,7 +83,7 @@ public class ItemTagGenerator extends ItemTagsProvider{
 	}
 	
 	private Item[] getFilterItems(Predicate<Item> predicate) {
-		return registry.stream()
+		return StreamSupport.stream(ForgeRegistries.ITEMS.spliterator(), false)
 				.filter(predicate)
 				.sorted(Comparator.comparing(ForgeRegistries.ITEMS::getKey))
 				.toArray(Item[]::new);

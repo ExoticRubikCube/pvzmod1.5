@@ -2,14 +2,13 @@ package com.hungteen.pvz.common.misc.sound;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class SoundRegister {
 
-	//https://minecraft.gamepedia.com/Sounds.json#Java_Edition_values
 	public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, PVZMod.MOD_ID);
 
 	public static final RegistryObject<SoundEvent> ADVANCEMENT = registerSound("advancement");

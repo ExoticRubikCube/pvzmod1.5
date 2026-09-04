@@ -3,66 +3,101 @@ package com.hungteen.pvz.client.render.entity.zombie.roof;
 import com.hungteen.pvz.client.model.entity.zombie.roof.BungeeZombieModel;
 import com.hungteen.pvz.client.render.entity.zombie.PVZZombieRender;
 import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.world.LightType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import com.mojang.math.Matrix4f;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BungeeZombieRender extends PVZZombieRender<BungeeZombieEntity> {
 
-	public BungeeZombieRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new BungeeZombieModel(), 0);
+	public BungeeZombieRender(EntityRendererProvider.Context context) {
+		super(context, new BungeeZombieModel(context.bakeLayer(BungeeZombieModel.LAYER)), 0);
 	}
 
 	@Override
-	public void render(BungeeZombieEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
-			IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public void render(BungeeZombieEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
+			MultiBufferSource bufferIn, int packedLightIn) {
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 		this.renderLine(entityIn, partialTicks, matrixStackIn, bufferIn);
 	}
-	
-	private void renderLine(BungeeZombieEntity entityLivingIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn) {
-	      matrixStackIn.pushPose();
-	      double d0 = (double)(MathHelper.lerp(partialTicks * 0.5F, 0, 0) * ((float)Math.PI / 180F));
-	      double d1 = (double)(MathHelper.lerp(partialTicks * 0.5F, 0, 0) * ((float)Math.PI / 180F));
-	      double d2 = Math.cos(d0);
-	      double d3 = Math.sin(d0);
-	      double d4 = Math.sin(d1);
-	      double d5 = Math.cos(d1);
-	      double d6 = entityLivingIn.getOriginPos().getX() - d2 * 0.7D - d3 * 0.5D * d5;
-	      double d7 = entityLivingIn.getOriginPos().getY() - d4 * 0.5D - 0.25D;
-	      double d8 = entityLivingIn.getOriginPos().getZ() - d3 * 0.7D + d2 * 0.5D * d5;
-	      double d9 = (double)(MathHelper.lerp(partialTicks, entityLivingIn.yBodyRot, entityLivingIn.yBodyRotO) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
-	      d2 = Math.cos(d9) * (double)entityLivingIn.getBbWidth() * 0.4D;
-	      d3 = Math.sin(d9) * (double)entityLivingIn.getBbWidth() * 0.4D;
-	      double d10 = MathHelper.lerp((double)partialTicks, entityLivingIn.xo, entityLivingIn.getX()) + d2;
-	      double d11 = MathHelper.lerp((double)partialTicks, entityLivingIn.yo, entityLivingIn.getY());
-	      double d12 = MathHelper.lerp((double)partialTicks, entityLivingIn.zo, entityLivingIn.getZ()) + d3;
-	      matrixStackIn.translate(d2, -(1.6D - (double)entityLivingIn.getBbHeight()) * 0.5D, d3);
-	      float f = (float)(d6 - d10);
-	      float f1 = (float)(d7 - d11);
-	      float f2 = (float)(d8 - d12);
-	      IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.leash());
-	      Matrix4f matrix4f = matrixStackIn.last().pose();
-	      float f4 = MathHelper.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
-	      float f5 = f2 * f4;
-	      float f6 = f * f4;
-	      int i = this.getBlockLightLevel(entityLivingIn, new BlockPos(entityLivingIn.getEyePosition(partialTicks)));
-	      int j = entityLivingIn.level.getBrightness(LightType.BLOCK, entityLivingIn.getOriginPos());
-	      int k = entityLivingIn.level.getBrightness(LightType.SKY, new BlockPos(entityLivingIn.getEyePosition(partialTicks)));
-	      int l = entityLivingIn.level.getBrightness(LightType.SKY, entityLivingIn.getOriginPos());
-	      renderSide(ivertexbuilder, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6);
-	      renderSide(ivertexbuilder, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6);
-	      matrixStackIn.popPose();
-	 }
-	
+
+	private void renderLine(BungeeZombieEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn) {
+		matrixStackIn.pushPose();
+
+		double d6 = entityLivingIn.getOriginPos().getX() + 0.5D;
+		double d7 = entityLivingIn.getOriginPos().getY();
+		double d8 = entityLivingIn.getOriginPos().getZ() + 0.5D;
+
+		double d9 = (double)(Mth.lerp(partialTicks, entityLivingIn.yBodyRotO, entityLivingIn.yBodyRot) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
+		Vec3 vec31 = entityLivingIn.getLeashOffset();
+		double d1 = Math.cos(d9) * vec31.z + Math.sin(d9) * vec31.x;
+		double d2 = Math.sin(d9) * vec31.z - Math.cos(d9) * vec31.x;
+
+		double d10 = Mth.lerp(partialTicks, entityLivingIn.xo, entityLivingIn.getX()) + d1;
+		double d11 = Mth.lerp(partialTicks, entityLivingIn.yo, entityLivingIn.getY()) + vec31.y;
+		double d12 = Mth.lerp(partialTicks, entityLivingIn.zo, entityLivingIn.getZ()) + d2;
+
+		matrixStackIn.translate(d1, vec31.y, d2);
+
+		float f = (float)(d6 - d10);
+		float f1 = (float)(d7 - d11);
+		float f2 = (float)(d8 - d12);
+
+		VertexConsumer vertexconsumer = bufferIn.getBuffer(RenderType.leash());
+		Matrix4f matrix4f = matrixStackIn.last().pose();
+
+		float f4 = Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
+		float f5 = f2 * f4;
+		float f6 = f * f4;
+
+		BlockPos blockpos = new BlockPos(entityLivingIn.getEyePosition(partialTicks));
+		BlockPos blockpos1 = entityLivingIn.getOriginPos();
+
+		int i = this.getBlockLightLevel(entityLivingIn, blockpos);
+		int j = entityLivingIn.level.getBrightness(LightLayer.BLOCK, blockpos1);
+		int k = entityLivingIn.level.getBrightness(LightLayer.SKY, blockpos);
+		int l = entityLivingIn.level.getBrightness(LightLayer.SKY, blockpos1);
+
+		for(int i1 = 0; i1 <= 24; ++i1) {
+			addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, i1, false);
+		}
+
+		for(int j1 = 24; j1 >= 0; --j1) {
+			addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true);
+		}
+		matrixStackIn.popPose();
+	}
+
+	private static void addVertexPair(VertexConsumer buffer, Matrix4f pose, float x, float y, float z,
+	                                  int blockLight1, int blockLight2, int skyLight1, int skyLight2,
+	                                  float p_174317_, float p_174318_, float p_174319_, float p_174320_,
+	                                  int index, boolean reverse) {
+		float f = (float)index / 24.0F;
+		int i = (int)Mth.lerp(f, (float)blockLight1, (float)blockLight2);
+		int j = (int)Mth.lerp(f, (float)skyLight1, (float)skyLight2);
+		int k = LightTexture.pack(i, j);
+
+		float f1 = index % 2 == (reverse ? 1 : 0) ? 0.7F : 1.0F;
+		float f2 = 0.5F * f1;
+		float f3 = 0.4F * f1;
+		float f4 = 0.3F * f1;
+
+		float f5 = x * f;
+		float f6 = y > 0.0F ? y * f * f : y - y * (1.0F - f) * (1.0F - f);
+		float f7 = z * f;
+
+		buffer.vertex(pose, f5 - p_174319_, f6 + p_174318_, f7 + p_174320_).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+		buffer.vertex(pose, f5 + p_174319_, f6 + p_174317_ - p_174318_, f7 - p_174320_).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+	}
 }

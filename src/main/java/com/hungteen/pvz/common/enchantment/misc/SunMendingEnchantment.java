@@ -3,18 +3,18 @@ package com.hungteen.pvz.common.enchantment.misc;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Mth;
 
 public class SunMendingEnchantment extends PVZEnchantment {
 
 	public SunMendingEnchantment() {
-		super(Rarity.VERY_RARE, EnchantmentType.BREAKABLE, EquipmentSlotType.values());
+		super(Rarity.VERY_RARE, EnchantmentCategory.BREAKABLE, EquipmentSlot.values());
 		this.isTradeable = false;
 		this.isTreasureOnly = true;
 	}
@@ -23,7 +23,7 @@ public class SunMendingEnchantment extends PVZEnchantment {
 		if (! stack.isEmpty() && stack.isDamaged()) {
 			final int lvl = getLevel(stack);
 			final int needSunEach = Math.max(5, 30 - 5 * lvl);
-			final int repairDamage = Math.min(stack.getDamageValue(), MathHelper.floor(amount * stack.getXpRepairRatio() / needSunEach));
+			final int repairDamage = Math.min(stack.getDamageValue(), Mth.floor(amount * 2F / needSunEach));
             stack.setDamageValue(stack.getDamageValue() - repairDamage);
         }
 	}

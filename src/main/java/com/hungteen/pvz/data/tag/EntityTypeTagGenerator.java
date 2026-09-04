@@ -2,17 +2,18 @@ package com.hungteen.pvz.data.tag;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.EntityRegister;
-import com.hungteen.pvz.common.entity.PVZEntityClassifications;
+import com.hungteen.pvz.common.entity.PVZMobCategorys;
 import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.EntityTypeTagsProvider;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 public class EntityTypeTagGenerator extends EntityTypeTagsProvider{
 
@@ -21,7 +22,7 @@ public class EntityTypeTagGenerator extends EntityTypeTagsProvider{
 	}
 	
 	@Override
-	protected void addTags() {
+	public void addTags() {
 		/* mc tags */
 		
 		/* forge tags */
@@ -41,7 +42,7 @@ public class EntityTypeTagGenerator extends EntityTypeTagsProvider{
 		);
 
 		//for zombie group.
-		this.tag(PVZEntityTypeTags.PVZ_OTHER_MONSTERS).add(getFilterTypes(type -> type.getCategory() == EntityClassification.MONSTER));
+		this.tag(PVZEntityTypeTags.PVZ_OTHER_MONSTERS).add(getFilterTypes(type -> type.getCategory() == MobCategory.MONSTER));
 
 		this.tag(PVZEntityTypeTags.PVZ_NOT_MONSTERS).add(EntityType.PIG);
 		this.tag(PVZEntityTypeTags.PVZ_NOT_GUARDIANS).add(EntityType.PIG);
@@ -49,12 +50,12 @@ public class EntityTypeTagGenerator extends EntityTypeTagsProvider{
 		
 		// for plant entities.
 		this.tag(PVZEntityTypeTags.PVZ_PLANTS)
-				.add(getFilterTypes(type -> type.getCategory() == PVZEntityClassifications.PVZ_PLANT))
+				.add(getFilterTypes(type -> type.getCategory() == PVZMobCategorys.PVZ_PLANT))
 				.add(EntityRegister.CRAZY_DAVE.get());
 
 		// for zombie entities.
 		this.tag(PVZEntityTypeTags.PVZ_ZOMBIES)
-				.add(getFilterTypes(type -> type.getCategory() == PVZEntityClassifications.PVZ_ZOMBIE));
+				.add(getFilterTypes(type -> type.getCategory() == PVZMobCategorys.PVZ_ZOMBIE));
 
 		this.tag(PVZEntityTypeTags.BUNGEE_SPAWNS)
 				.add(EntityRegister.NORMAL_ZOMBIE.get())
@@ -63,12 +64,12 @@ public class EntityTypeTagGenerator extends EntityTypeTagsProvider{
 				.add(EntityRegister.LADDER_ZOMBIE.get());
 
 	}
-	
+
 	@SuppressWarnings("unused")
 	private EntityType<?>[] getFilterTypes(Predicate<EntityType<?>> predicate) {
-		return registry.stream()
+		return StreamSupport.stream(ForgeRegistries.ENTITY_TYPES.spliterator(), false)
 				.filter(predicate)
-				.sorted(Comparator.comparing(ForgeRegistries.ENTITIES::getKey))
+				.sorted(Comparator.comparing(ForgeRegistries.ENTITY_TYPES::getKey))
 				.toArray(EntityType<?>[]::new);
 	}
 	

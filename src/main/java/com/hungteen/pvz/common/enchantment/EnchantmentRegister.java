@@ -11,8 +11,8 @@ import com.hungteen.pvz.common.enchantment.misc.EnergyTransferEnchantment;
 import com.hungteen.pvz.common.enchantment.misc.RangeReachEnchantment;
 import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
 import com.hungteen.pvz.common.enchantment.misc.SunShovelEnchantment;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

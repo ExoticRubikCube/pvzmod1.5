@@ -9,20 +9,20 @@ import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 
 public class TrickZombieEntity extends PVZZombieEntity{
 
@@ -31,7 +31,7 @@ public class TrickZombieEntity extends PVZZombieEntity{
 	private int lastSummonTick = 0;
 	private final int summonGap = 40;
 	
-	public TrickZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public TrickZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -44,7 +44,7 @@ public class TrickZombieEntity extends PVZZombieEntity{
 	
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if(amount >= 1.1F && ! level.isClientSide && this.tickCount - this.lastSummonTick >= this.summonGap && this.getRandom().nextInt(SUMMON_CHACNE) == 0) {
+		if(amount >= 1.1F && ! level.isClientSide() && this.tickCount - this.lastSummonTick >= this.summonGap && this.getRandom().nextInt(SUMMON_CHACNE) == 0) {
 			this.lastSummonTick = this.tickCount;
 			TrickZombieEntity zombie = EntityRegister.TRICK_ZOMBIE.get().create(level);
 			BlockPos pos = blockPosition().offset(this.getRandom().nextInt(5) - 2, this.getRandom().nextInt(2), this.getRandom().nextInt(5) - 2);
@@ -55,12 +55,12 @@ public class TrickZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public ActionResultType interactAt(PlayerEntity player, Vector3d vec3d, Hand hand) {
-		if(! level.isClientSide && player.getItemInHand(hand).getItem() == ItemRegister.CANDY.get() && ! this.isCharmed()) {
+	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
+		if(! level.isClientSide() && player.getItemInHand(hand).getItem() == ItemRegister.CANDY.get() && ! this.isCharmed()) {
 			if(this.getRandom().nextInt(3) == 0) {
 				player.getItemInHand(hand).shrink(1);
 			    this.setCharmed(true);
-			    return ActionResultType.CONSUME;
+			    return InteractionResult.CONSUME;
 			}
 		}
 		return super.interactAt(player, vec3d, hand);
@@ -71,7 +71,7 @@ public class TrickZombieEntity extends PVZZombieEntity{
 		if(! this.hasEffect(EffectRegister.COLD_EFFECT.get()) && ! this.isCharmed()) {
 			if(this.getRandom().nextInt(EXPLOSION_CHANCE) == 0) {
 //				Explosion.Mode mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
-				this.level.explode(this, getX(), getY(), getZ(), 0.5f, Explosion.Mode.NONE);
+				this.level.explode(this, getX(), getY(), getZ(), 0.5f, Explosion.BlockInteraction.NONE);
 			}
 		}
 		super.dropAllDeathLoot(damageSourceIn);
@@ -83,9 +83,9 @@ public class TrickZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		if(this.isMiniZombie()) return EntitySize.scalable(0.3F, 0.5F);
-		return EntitySize.scalable(0.6f, 1.2f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		if(this.isMiniZombie()) return EntityDimensions.scalable(0.3F, 0.5F);
+		return EntityDimensions.scalable(0.6f, 1.2f);
 	}
 	
 	@Override

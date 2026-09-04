@@ -13,25 +13,27 @@ import com.hungteen.pvz.common.network.toclient.OtherStatsPacket;
 import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.hungteen.pvz.utils.others.WeightList;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.util.RandomSource;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -45,8 +47,8 @@ import static com.hungteen.pvz.common.world.invasion.InvasionManager.suitableInv
  **/
 public class Invasion {
 
-    private final World world;
-    private final PlayerEntity player;
+    private final Level world;
+    private final Player player;
     //what will spawn in this invasion. (update)
     private final WeightList<SpawnType> spawnList = new WeightList<>();
     //the set of every spawn type, used to check invader. (update)
@@ -73,7 +75,7 @@ public class Invasion {
     /* misc */
     private BlockPos availableSpawnPos;
 
-    public Invasion(PlayerEntity player) {
+    public Invasion(Player player) {
         this.player = player;
         this.world = player.level;
         this.invasionLvl = PlayerUtil.getResource(player, Resources.TREE_LVL);
@@ -121,7 +123,7 @@ public class Invasion {
                     return entity instanceof PVZPlantEntity;
                 }).count() + 1;
         final int zombiecount = EntityUtil
-                .getPredicateEntities(player, EntityUtil.getEntityAABB(player, range, range), MobEntity.class, e -> {
+                .getPredicateEntities(player, EntityUtil.getEntityAABB(player, range, range), Mob.class, e -> {
                     return isInvasionEntity(e.getType());
                 }).size();
         return predicate.test(plantcount, zombiecount, maxzombieCount);
@@ -148,7 +150,7 @@ public class Invasion {
 
     public boolean spawnWaveInvaders() {
         //can only spawn in overworld, and peaceful, and wave enable.
-        if (player.isSpectator() || !world.dimension().equals(World.OVERWORLD) || world.getDifficulty() == Difficulty.PEACEFUL || !ConfigUtil.enableHugeWave()) {
+        if (player.isSpectator() || !world.dimension().equals(Level.OVERWORLD) || world.getDifficulty() == Difficulty.PEACEFUL || !ConfigUtil.enableHugeWave()) {
             PVZMod.LOGGER.info("wave "+ currentWave +" zombies of "+player.getName().getString()+" failed for some case at " + (int) world.getDayTime());
             return false;
         }
@@ -234,7 +236,7 @@ public class Invasion {
         }
         if(entity instanceof LivingEntity) {
         	if(InvasionManager.hasInvisInvasion(this)){
-        		((LivingEntity) entity).addEffect(EffectUtil.viewEffect(Effects.INVISIBILITY, 1000000, 1));
+        		((LivingEntity) entity).addEffect(EffectUtil.viewEffect(MobEffects.INVISIBILITY, 1000000, 1));
         	}
         }
         if(entity instanceof PVZZombieEntity){
@@ -256,11 +258,11 @@ public class Invasion {
         return MathUtil.getRandomMinMax(world.random, minCnt, maxCnt);
     }
 
-    public void load(CompoundNBT baseTag) {
+    public void load(CompoundTag baseTag) {
         this.invasionLvl = baseTag.getInt("invasion_level");
         this.isRunning = baseTag.getBoolean("invasion_running");
         if (baseTag.contains("wave_nbt")) {//wave.
-            final CompoundNBT nbt = baseTag.getCompound("wave_nbt");
+            final CompoundTag nbt = baseTag.getCompound("wave_nbt");
             for (int i = 0; i < InvasionManager.MAX_WAVE_NUM; ++i) {
                 this.waveTime[i] = nbt.getInt("wave_time_" + i);
                 this.waveTriggered[i] = nbt.getBoolean("wave_triggered_" + i);
@@ -269,7 +271,7 @@ public class Invasion {
             this.currentWave = nbt.getInt("current_wave");
         }
         if (baseTag.contains("mission_nbt")) {
-            final CompoundNBT nbt = baseTag.getCompound("mission_nbt");
+            final CompoundTag nbt = baseTag.getCompound("mission_nbt");
             for (int i = 0; i < MissionManager.KILL_IN_SECOND; ++i) {
                 if (nbt.contains("kill_count" + i)) {
                     this.killQueue[i] = nbt.getInt("kill_count" + i);
@@ -280,22 +282,24 @@ public class Invasion {
         }
         if (baseTag.contains("invasion_resources")) {
             this.activeResources.clear();
-            final ListNBT list = (ListNBT) baseTag.get("invasion_resources");
-            for (int i = 0; i < list.size(); ++i) {
-                final CompoundNBT tmp = (CompoundNBT) list.get(i);
-                this.activeResources.add(new ResourceLocation(tmp.getString("type")));
+            final ListTag list = (ListTag) baseTag.get("invasion_resources");
+            if (list != null) {
+                for (Tag tag : list) {
+                    final CompoundTag tmp = (CompoundTag) tag;
+                    this.activeResources.add(ResourceLocation.parse(tmp.getString("type")));
+                }
             }
         }
         if (baseTag.contains("spawn_resource")) {
-            this.spawnResource = new ResourceLocation(baseTag.getString("spawn_resource"));
+            this.spawnResource = ResourceLocation.parse(baseTag.getString("spawn_resource"));
         }
     }
 
-    public void save(CompoundNBT baseTag) {
+    public void save(CompoundTag baseTag) {
         baseTag.putInt("invasion_level", this.invasionLvl);
         baseTag.putBoolean("invasion_running", this.isRunning);
         {//wave.
-            final CompoundNBT nbt = new CompoundNBT();
+            final CompoundTag nbt = new CompoundTag();
             for (int i = 0; i < InvasionManager.MAX_WAVE_NUM; ++i) {
                 nbt.putInt("wave_time_" + i, this.waveTime[i]);
                 nbt.putBoolean("wave_triggered_" + i, this.waveTriggered[i]);
@@ -305,7 +309,7 @@ public class Invasion {
             baseTag.put("wave_nbt", nbt);
         }
         {//mission.
-            final CompoundNBT nbt = new CompoundNBT();
+            final CompoundTag nbt = new CompoundTag();
             for (int i = 0; i < MissionManager.KILL_IN_SECOND; ++i) {
                 nbt.putInt("kill_count" + i, killQueue[i]);
             }
@@ -314,9 +318,9 @@ public class Invasion {
             baseTag.put("mission_nbt", nbt);
         }
         {
-            ListNBT list = new ListNBT();
+            ListTag list = new ListTag();
             this.activeResources.forEach(res -> {
-                final CompoundNBT tmp = new CompoundNBT();
+                final CompoundTag tmp = new CompoundTag();
                 tmp.putString("type", res.toString());
                 list.add(tmp);
             });
@@ -330,7 +334,7 @@ public class Invasion {
     /**
      * start invasion.
      * send random mission to player.
-     * {@link InvasionManager#enableInvasion(ServerPlayerEntity)}
+     * {@link InvasionManager#enableInvasion(ServerPlayer)}
      */
     public void enable() {
     	this.invasionLvl = PlayerUtil.getResource(player, Resources.TREE_LVL);
@@ -344,12 +348,13 @@ public class Invasion {
         if (PVZConfig.COMMON_CONFIG.InvasionSettings.ShowEventMessages.get()) {
             this.getActiveInvasions().forEach(type -> PlayerUtil.sendMsgTo(player, type.getText()));
             if (!getSpawnList().isEmpty()) {
-                final IFormattableTextComponent msg = new StringTextComponent("");
+                final MutableComponent msg = Component.literal("");
                 for (int i = 0; i < getSpawnList().getLen(); ++i) {
                     final EntityType<?> type = getSpawnList().getItem(i).getSpawnType();
-                    final IFormattableTextComponent component = new TranslationTextComponent("entity."
-                            + type.getRegistryName().getNamespace() + "." + type.getRegistryName().getPath());
-                    msg.append(i == 0 ? component : new StringTextComponent(",").append(component));
+                    final ResourceLocation resLoc = ForgeRegistries.ENTITY_TYPES.getKey(type);
+                    final MutableComponent component = Component.translatable("entity."
+                            + resLoc.getNamespace() + "." + resLoc.getPath());
+                    msg.append(i == 0 ? component : Component.literal(",").append(component));
                 }
                 PlayerUtil.sendMsgToAll(world, msg);
             }
@@ -510,15 +515,15 @@ public class Invasion {
         return this.isRunning;
     }
 
-    public World getWorld() {
+    public Level getWorld() {
         return this.world;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 
-    public Random getRandom() {
+    public RandomSource getRandom() {
         return this.player.getRandom();
     }
 
@@ -529,29 +534,29 @@ public class Invasion {
         return this.spawnTypes.contains(entityType);
     }
 
-    private void sendWavePacket(PlayerEntity player, int pos, int data) {
-        if (player instanceof ServerPlayerEntity) {
+    private void sendWavePacket(Player player, int pos, int data) {
+        if (player instanceof ServerPlayer) {
             PVZPacketHandler.CHANNEL.send(
                     PacketDistributor.PLAYER.with(() -> {
-                        return (ServerPlayerEntity) player;
+                        return (ServerPlayer) player;
                     }),
                     new OtherStatsPacket(PVZPacketTypes.WAVE, pos, data)
             );
         }
     }
 
-    private void sendWaveFlagPacket(PlayerEntity player, int pos, boolean flag) {
-        if (player instanceof ServerPlayerEntity) {
+    private void sendWaveFlagPacket(Player player, int pos, boolean flag) {
+        if (player instanceof ServerPlayer) {
             PVZPacketHandler.CHANNEL.send(
                     PacketDistributor.PLAYER.with(() -> {
-                        return (ServerPlayerEntity) player;
+                        return (ServerPlayer) player;
                     }),
                     new OtherStatsPacket(PVZPacketTypes.WAVE_FLAG, pos, flag)
             );
         }
     }
 
-    public void sendAllWavePacket(PlayerEntity player) {
+    public void sendAllWavePacket(Player player) {
         for (int i = 0; i < InvasionManager.MAX_WAVE_NUM; ++i) {
             sendWavePacket(player, i, this.waveTime[i]);
             sendWaveFlagPacket(player, i, this.waveTriggered[i]);
@@ -590,7 +595,7 @@ public class Invasion {
      * max : 10 20 35 50 65 80 100 ...
      * min : 20 40 60 80 100
      */
-    private static int getPlayerWaveCount(Random random, int lvl) {
+    private static int getPlayerWaveCount(RandomSource random, int lvl) {
         final int max = Math.min(lvl <= 20 ? (lvl + 9) / 10 : lvl <= 80 ? (lvl - 6) / 15 + 2 : lvl / 20 + 3, InvasionManager.MAX_WAVE_NUM);
         final int min = Math.max(1, Math.min(lvl <= 40 ? (lvl + 19) / 20 : (lvl + 39) / 40 + 1, max - 1));
         return MathUtil.getRandomMinMax(random, min, max);

@@ -2,22 +2,22 @@ package com.hungteen.pvz.common.entity.effect;
 
 import com.hungteen.pvz.common.entity.PVZEntityBase;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class AbstractEffectEntity extends PVZEntityBase {
 
-	private static final DataParameter<Integer> EXIST_TICK = EntityDataManager.defineId(AbstractEffectEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> EXIST_TICK = SynchedEntityData.defineId(AbstractEffectEntity.class,
+			EntityDataSerializers.INT);
 	protected int maxEffectTick;
 	
-	public AbstractEffectEntity(EntityType<?> type, World world) {
+	public AbstractEffectEntity(EntityType<?> type, Level world) {
 		super(type, world);
 	}
 
@@ -30,10 +30,10 @@ public abstract class AbstractEffectEntity extends PVZEntityBase {
 	@Override
 	public void tick() {
 		super.tick();
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			this.setExistTick(this.getExistTick() + 1);
 			if(this.getExistTick() > this.maxEffectTick) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
@@ -52,13 +52,13 @@ public abstract class AbstractEffectEntity extends PVZEntityBase {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("effect_exist_tick", this.getExistTick());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("effect_exist_tick")) {
 			this.setExistTick(compound.getInt("effect_exist_tick"));

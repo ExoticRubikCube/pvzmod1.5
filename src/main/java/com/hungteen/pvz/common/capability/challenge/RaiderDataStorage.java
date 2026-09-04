@@ -1,18 +1,14 @@
 package com.hungteen.pvz.common.capability.challenge;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 
-public class RaiderDataStorage implements Capability.IStorage<IRaiderDataCapability>{
-    @Override
-    public INBT writeNBT(Capability<IRaiderDataCapability> capability, IRaiderDataCapability instance, Direction side) {
+public class RaiderDataStorage {
+    public Tag writeNBT(IRaiderDataCapability instance) {
         return instance.SavetoNBT();
     }
 
-    @Override
-    public void readNBT(Capability<IRaiderDataCapability> capability, IRaiderDataCapability instance, Direction side, INBT nbt) {
-        instance.LoadfromNBT((CompoundNBT) nbt);
+    public void readNBT(IRaiderDataCapability instance, Tag nbt) {
+        instance.LoadfromNBT((CompoundTag) nbt);
     }
 }

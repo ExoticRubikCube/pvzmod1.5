@@ -12,12 +12,12 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class BonkChoyEntity extends PVZPlantEntity {
 
-	public BonkChoyEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public BonkChoyEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -39,7 +39,7 @@ public class BonkChoyEntity extends PVZPlantEntity {
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			if(this.isPlantInSuperMode() && this.getSuperTime() % 5 == 0) {
 				final float range = 5F;
 				EntityUtil.getTargetableEntities(this, EntityUtil.getEntityAABB(this, range, range)).forEach((target) -> {
@@ -105,14 +105,14 @@ public class BonkChoyEntity extends PVZPlantEntity {
 		public boolean canUse() {
 			LivingEntity living = this.attacker.getTarget();
 			if (! EntityUtil.isEntityValid(living)) return false;
-			return this.attacker.canSee(living) && EntityUtil.getAttackRange(attacker, living, 3F) >= EntityUtil.getNearestDistance(this.attacker, living);
+			return this.attacker.hasLineOfSight(living) && EntityUtil.getAttackRange(attacker, living, 3F) >= EntityUtil.getNearestDistance(this.attacker, living);
 		}
 		
 		@Override
 		public boolean canContinueToUse() {
 			LivingEntity living = this.attacker.getTarget();
 			if (! EntityUtil.isEntityValid(living)) return false;
-			return this.attacker.canSee(living) && EntityUtil.getAttackRange(attacker, living, 3F) >= EntityUtil.getNearestDistance(this.attacker, living);
+			return this.attacker.hasLineOfSight(living) && EntityUtil.getAttackRange(attacker, living, 3F) >= EntityUtil.getNearestDistance(this.attacker, living);
 		}
 		
 		@Override

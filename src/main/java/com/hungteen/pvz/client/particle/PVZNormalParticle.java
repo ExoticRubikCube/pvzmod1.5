@@ -1,12 +1,12 @@
 package com.hungteen.pvz.client.particle;
 
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
 
-public abstract class PVZNormalParticle extends SpriteTexturedParticle{
+public abstract class PVZNormalParticle extends TextureSheetParticle{
 
-	public PVZNormalParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+	public PVZNormalParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 		super(world, x, y, z, xSpeed, ySpeed, zSpeed);
 		this.xd = xSpeed;
 		this.yd = ySpeed;
@@ -30,8 +30,8 @@ public abstract class PVZNormalParticle extends SpriteTexturedParticle{
     }
 	
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
 	}
 
 }

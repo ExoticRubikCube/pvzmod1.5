@@ -2,12 +2,12 @@ package com.hungteen.pvz.common.enchantment.card;
 
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 import com.hungteen.pvz.common.enchantment.PVZEnchantmentTypes;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CharmEnchantment extends PVZEnchantment{
 
 	public CharmEnchantment() {
-		super(Rarity.VERY_RARE, PVZEnchantmentTypes.ENTITY_CARD, new EquipmentSlotType[] {EquipmentSlotType.MAINHAND});
+		super(Rarity.VERY_RARE, PVZEnchantmentTypes.ENTITY_CARD, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
 		this.isTradeable = false;
 		this.isTreasureOnly = true;
 	}

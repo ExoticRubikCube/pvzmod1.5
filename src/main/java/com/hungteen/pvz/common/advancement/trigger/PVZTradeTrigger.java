@@ -4,16 +4,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.common.advancement.predicate.AmountPredicate;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.EntityPredicate.AndPredicate;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 
-public class PVZTradeTrigger extends AbstractCriterionTrigger<PVZTradeTrigger.Instance> {
+public class PVZTradeTrigger extends SimpleCriterionTrigger<PVZTradeTrigger.Instance> {
 
 	private static final ResourceLocation ID = StringUtil.prefix("trade");
 	public static final PVZTradeTrigger INSTANCE = new PVZTradeTrigger();
@@ -26,29 +25,29 @@ public class PVZTradeTrigger extends AbstractCriterionTrigger<PVZTradeTrigger.In
 	 * Deserialize a ICriterionInstance of this trigger from the data in the JSON.
 	 */
 	@Override
-	protected Instance createInstance(JsonObject json, AndPredicate player,
-			ConditionArrayParser p_230241_3_) {
-		return new PVZTradeTrigger.Instance(player, EntityPredicate.fromJson(json.get("entity")), AmountPredicate.deserialize(json.get("amount")));
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite player,
+									  DeserializationContext p_230241_3_) {
+		return new Instance(player, EntityPredicate.fromJson(json.get("entity")), AmountPredicate.deserialize(json.get("amount")));
 	}
 
-	public void trigger(ServerPlayerEntity player, Entity entity, int amount) {
+	public void trigger(ServerPlayer player, Entity entity, int amount) {
 		this.trigger(player, (instance) -> {
 			return instance.test(player, entity, amount);
 		});
 	}
 
-	public static class Instance extends CriterionInstance {
+	public static class Instance extends AbstractCriterionTriggerInstance {
 
 		private final EntityPredicate entity;
 		private final AmountPredicate amount;
 
-		public Instance(EntityPredicate.AndPredicate player, EntityPredicate entity, AmountPredicate amount) {
+		public Instance(EntityPredicate.Composite player, EntityPredicate entity, AmountPredicate amount) {
 			super(ID, player);
 			this.entity = entity;
 			this.amount = amount;
 		}
 
-		public boolean test(ServerPlayerEntity player, Entity entity, int amount) {
+		public boolean test(ServerPlayer player, Entity entity, int amount) {
 			return !this.amount.test(player, amount) ? false : this.entity.matches(player, entity);
 		}
 

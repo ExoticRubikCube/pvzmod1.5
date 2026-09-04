@@ -5,16 +5,16 @@ import com.hungteen.pvz.client.render.entity.PVZCreatureRender;
 import com.hungteen.pvz.common.entity.npc.SunDaveEntity;
 import com.hungteen.pvz.utils.StringUtil;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SunDaveRender extends PVZCreatureRender<SunDaveEntity> {
 
-	public SunDaveRender(EntityRendererManager renderManagerIn) {
-		super(renderManagerIn, new SunDaveModel(), 0.5F);
+	public SunDaveRender(EntityRendererProvider.Context context) {
+		super(context, new SunDaveModel(context.bakeLayer(SunDaveModel.LAYER)), 0.5F);
 	}
 
 	@Override

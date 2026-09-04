@@ -9,16 +9,14 @@ import com.hungteen.pvz.common.item.tool.plant.BowlingGloveItem;
 import com.hungteen.pvz.common.item.tool.plant.PeaGunItem;
 import com.hungteen.pvz.common.world.challenge.Challenge;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.*;
 import java.util.function.Supplier;
-
-;
 
 public class PVZAPIImpl implements IPVZAPI{
 
@@ -108,7 +106,7 @@ public class PVZAPIImpl implements IPVZAPI{
 	}
 
 	@Override
-	public boolean createRaid(ServerWorld world, ResourceLocation res, BlockPos pos) {
+	public boolean createRaid(ServerLevel world, ResourceLocation res, BlockPos pos) {
 		if(! ChallengeManager.hasChallengeNearby(world, pos)) {
 			return ChallengeManager.createChallenge(world, res, pos);
 		}
@@ -116,16 +114,16 @@ public class PVZAPIImpl implements IPVZAPI{
 	}
 
 	@Override
-	public boolean isRaider(ServerWorld world, Entity entity) {
+	public boolean isRaider(ServerLevel world, Entity entity) {
 		return ChallengeManager.isRaider(world, entity);
 	}
 
-	public Challenge getEntityChallenge(ServerWorld world, Entity entity){
+	public Challenge getEntityChallenge(ServerLevel world, Entity entity){
 		return ChallengeManager.getEntityChallenge(world, entity);
 	}
 
 	@Override
-	public Optional<Challenge> getNearByRaid(ServerWorld world, BlockPos pos) {
+	public Optional<Challenge> getNearByRaid(ServerLevel world, BlockPos pos) {
 		return ChallengeManager.getChallengeNearBy(world, pos);
 	}
 

@@ -5,12 +5,12 @@ import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.part.PVZHealthPartEntity;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.interfaces.IMultiPartZombie;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 /**
  * use outer defence life as extra life.
@@ -20,7 +20,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 	protected PVZHealthPartEntity part;
 	public boolean hitDefence = false;
 	
-	public DefenceZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public DefenceZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		resetParts();
 	}
@@ -28,7 +28,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 	@Override
 	public void tick() {
 		super.tick();
-		if(! this.level.isClientSide) {
+		if(! this.level.isClientSide()) {
 			updateParts();
 		}
 	}
@@ -36,7 +36,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 	@Override
 	public void removeParts() {
 		if(EntityUtil.isEntityValid(this.part)) {
-			this.part.remove();
+			this.part.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 			this.part = null;
 		}
 	}
@@ -50,12 +50,12 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 			if(! this.part.isAddedToWorld()) {
 				this.level.addFreshEntity(this.part);
 			}
-			float j = 2 * 3.14159f * this.yRot / 360;
+			float j = 2 * 3.14159f * this.getYRot() / 360;
 			float dis = this.getPartWidthOffset();
-			Vector3d pos = this.position();
-			this.part.yRotO = this.yRot;
-			this.part.xRotO = this.xRot;
-			this.part.moveTo(pos.x() - Math.sin(j) * dis, pos.y() + this.getPartHeightOffset(), pos.z() + Math.cos(j) * dis, this.yRot, this.xRot);
+			Vec3 pos = this.position();
+			this.part.yRotO = this.getYRot();
+			this.part.xRotO = this.getXRot();
+			this.part.moveTo(pos.x() - Math.sin(j) * dis, pos.y() + this.getPartHeightOffset(), pos.z() + Math.cos(j) * dis, this.getYRot(), this.getXRot());
 			this.part.setOwner(this);
 		} else {
 			this.removeParts();
@@ -84,7 +84,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 	@Override
 	public void onOuterDefenceBroken() {
 		super.onOuterDefenceBroken();
-		if(! this.level.isClientSide){
+		if(! this.level.isClientSide()){
 			EntityUtil.playSound(this, this.getPartDeathSound());
 		}
 		this.hitDefence = false;
@@ -93,7 +93,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 	@Override
 	public void onOuterDefenceHurt() {
 		super.onOuterDefenceHurt();
-		if(! this.level.isClientSide){
+		if(! this.level.isClientSide()){
 			EntityUtil.playSound(this, this.getPartHurtSound());
 		}
 		this.hitDefence = false;

@@ -1,30 +1,36 @@
 package com.hungteen.pvz.client;
 
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import com.hungteen.pvz.PVZMod;
 
 @OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = PVZMod.MOD_ID)
 public class KeyBindRegister {
 
-	public static final KeyBinding SHOW_OVERLAY = new KeyBinding("key.pvz.show_overlay", 261, "key.categories.pvz");
-//	public static final KeyBinding UP_TOGGLE = new KeyBinding("key.pvz.up_toggle", 265, "key.categories.pvz");
-//	public static final KeyBinding DOWN_TOGGLE = new KeyBinding("key.pvz.down_toggle", 264, "key.categories.pvz");
-	public static final KeyBinding LEFT_TOGGLE = new KeyBinding("key.pvz.left_toggle", 263, "key.categories.pvz");
-	public static final KeyBinding RIGHT_TOGGLE = new KeyBinding("key.pvz.right_toggle", 262, "key.categories.pvz");
-//	public static final KeyBinding SHIFT = new KeyBinding("key.pvz.shift", 340, "key.categories.pvz");
+	public static final KeyMapping SHOW_OVERLAY = new KeyMapping("key.pvz.show_overlay", 261, "key.categories.pvz");
+//	public static final KeyMapping UP_TOGGLE = new KeyMapping("key.pvz.up_toggle", 265, "key.categories.pvz");
+//	public static final KeyMapping DOWN_TOGGLE = new KeyMapping("key.pvz.down_toggle", 264, "key.categories.pvz");
+	public static final KeyMapping LEFT_TOGGLE = new KeyMapping("key.pvz.left_toggle", 263, "key.categories.pvz");
+	public static final KeyMapping RIGHT_TOGGLE = new KeyMapping("key.pvz.right_toggle", 262, "key.categories.pvz");
+//	public static final KeyMapping SHIFT = new KeyMapping("key.pvz.shift", 340, "key.categories.pvz");
+	
+	@SubscribeEvent
+	public static void onRegisterKeys(RegisterKeyMappingsEvent event) {
+		event.register(SHOW_OVERLAY);
+		event.register(LEFT_TOGGLE);
+		event.register(RIGHT_TOGGLE);
+	}
 	
 	/**
 	 * {@link ClientProxy#setUpClient()}
 	 */
 	public static void init() {
-		ClientRegistry.registerKeyBinding(SHOW_OVERLAY);
-//		ClientRegistry.registerKeyBinding(UP_TOGGLE);
-//		ClientRegistry.registerKeyBinding(DOWN_TOGGLE);
-		ClientRegistry.registerKeyBinding(LEFT_TOGGLE);
-		ClientRegistry.registerKeyBinding(RIGHT_TOGGLE);
-//		ClientRegistry.registerKeyBinding(SHIFT);
 	}
 	
 }

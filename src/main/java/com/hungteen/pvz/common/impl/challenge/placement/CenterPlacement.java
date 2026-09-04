@@ -4,10 +4,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hungteen.pvz.api.raid.IPlacementComponent;
 import com.hungteen.pvz.utils.MathUtil;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class CenterPlacement implements IPlacementComponent {
 	
@@ -16,10 +16,10 @@ public class CenterPlacement implements IPlacementComponent {
 	private int radius;
 	
 	@Override
-	public BlockPos getPlacePosition(World world, BlockPos origin) {
+	public BlockPos getPlacePosition(Level world, BlockPos origin) {
 		final int dx = MathUtil.getRandomInRange(world.getRandom(), this.radius);
 		final int dz = MathUtil.getRandomInRange(world.getRandom(), this.radius);
-		final int height = this.onSurface ? world.getHeight(Heightmap.Type.WORLD_SURFACE, origin.getX() + dx, origin.getZ() + dz) : origin.getY();
+		final int height = this.onSurface ? world.getHeight(Heightmap.Types.WORLD_SURFACE, origin.getX() + dx, origin.getZ() + dz) : origin.getY();
 		return new BlockPos(origin.getX() + dx, height, origin.getZ() + dz);
 	}
 	
@@ -27,8 +27,8 @@ public class CenterPlacement implements IPlacementComponent {
 	public void readJson(JsonElement json) {
 		JsonObject obj = json.getAsJsonObject();
 		if(obj != null) {
-			this.radius = JSONUtils.getAsInt(obj, "radius", 1);
-			this.onSurface = JSONUtils.getAsBoolean(obj, "ground", true);
+			this.radius = GsonHelper.getAsInt(obj, "radius", 1);
+			this.onSurface = GsonHelper.getAsBoolean(obj, "ground", true);
 		}
 	}
 

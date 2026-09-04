@@ -5,12 +5,12 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.events.handler.PVZEntityRenderHandler;
 import com.hungteen.pvz.client.gui.screen.PVZMainMenuScreen;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,11 +19,12 @@ import net.minecraftforge.fml.common.Mod;
 public class PVZClientEvents {
 	
 	@SubscribeEvent 
-	public static void onLivingRender(@SuppressWarnings("rawtypes") RenderLivingEvent.Pre ev) {
-		final MatrixStack stack = ev.getMatrixStack();
-		final IRenderTypeBuffer buffer = ev.getBuffers();
-		final int light = ev.getLight();
-//		ev.getMatrixStack().rotate(Vector3f.ZP.rotationDegrees(180F));
+	@SuppressWarnings("rawtypes")
+	public static void onLivingRender(RenderLivingEvent.Pre ev) {
+		final PoseStack stack = ev.getPoseStack();
+		final MultiBufferSource buffer = ev.getMultiBufferSource();
+		final int light = ev.getPackedLight();
+//		ev.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(180F));
 		PVZEntityRenderHandler.checkBungeeHandStand(ev.getEntity(), stack);
 		PVZEntityRenderHandler.checkAndRenderFrozenIce(ev.getEntity(), stack, buffer, light);
 		PVZEntityRenderHandler.checkAndRenderButter(ev.getRenderer(), ev.getEntity(), stack, buffer, light);
@@ -35,11 +36,11 @@ public class PVZClientEvents {
 	}
 	
 	@SubscribeEvent
-	public static void onGuiOpened(GuiOpenEvent event) {
-		if(PVZConfig.CLIENT_CONFIG.OtherSettings.ShowPVZMainMenu.get()) {//show pvz menu.
-		    if (event.getGui() instanceof MainMenuScreen && ! (event.getGui() instanceof PVZMainMenuScreen)) {
-			    event.setGui(new PVZMainMenuScreen());
-		    }
+	public static void onGuiOpened(ScreenEvent.Opening event) {
+		if(PVZConfig.CLIENT_CONFIG.OtherSettings.ShowPVZMainMenu.get()) {
+			if (event.getScreen() instanceof TitleScreen && ! (event.getScreen() instanceof PVZMainMenuScreen)) {
+				event.setNewScreen(new PVZMainMenuScreen());
+			}
 		}
 	}
 	

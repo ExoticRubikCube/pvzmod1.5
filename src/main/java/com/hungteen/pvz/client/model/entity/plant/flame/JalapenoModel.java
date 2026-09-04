@@ -2,57 +2,75 @@ package com.hungteen.pvz.client.model.entity.plant.flame;
 
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.flame.JalapenoEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.EntityModel;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 
+import com.hungteen.pvz.PVZMod;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 // Made with Blockbench 3.6.6
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
-
 public class JalapenoModel extends PVZPlantModel<JalapenoEntity> {
-	private final ModelRenderer total;
-	private final ModelRenderer cube_r1;
-	private final ModelRenderer cube_r2;
-	private final ModelRenderer cube_r3;
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "jalapeno"), "main");
 
-	public JalapenoModel() {
-		texWidth = 64;
-		texHeight = 64;
+	private final ModelPart total;
+	private final ModelPart cube_r1;
+	private final ModelPart cube_r2;
+	private final ModelPart cube_r3;
 
-		total = new ModelRenderer(this);
-		total.setPos(0.0F, 24.0F, 0.0F);
-		total.texOffs(0, 0).addBox(-5.0F, -20.0F, -5.0F, 10.0F, 13.0F, 10.0F, 0.0F, false);
-		total.texOffs(0, 38).addBox(-5.0F, -20.0F, -5.0F, 10.0F, 13.0F, 10.0F, -0.5F, false);
-		total.texOffs(0, 30).addBox(0.0F, -29.0F, -7.0F, 0.0F, 9.0F, 8.0F, 0.0F, false);
 
-		cube_r1 = new ModelRenderer(this);
-		cube_r1.setPos(0.0F, -20.5F, 0.0F);
-		total.addChild(cube_r1);
-		setRotationAngle(cube_r1, 0.1309F, 0.0F, 0.0F);
-		cube_r1.texOffs(32, 15).addBox(-4.0F, -1.3F, -4.25F, 8.0F, 1.0F, 8.0F, 0.6F, false);
-		cube_r1.texOffs(24, 30).addBox(-4.0F, -1.5F, -4.25F, 8.0F, 3.0F, 8.0F, 0.0F, false);
 
-		cube_r2 = new ModelRenderer(this);
-		cube_r2.setPos(0.0F, -4.5F, 0.0F);
-		total.addChild(cube_r2);
-		setRotationAngle(cube_r2, -0.2182F, 0.0F, 0.0F);
-		cube_r2.texOffs(0, 23).addBox(-4.0F, -4.5F, -4.75F, 8.0F, 7.0F, 8.0F, 0.0F, false);
 
-		cube_r3 = new ModelRenderer(this);
-		cube_r3.setPos(0.0F, -4.5F, 0.0F);
-		total.addChild(cube_r3);
-		setRotationAngle(cube_r3, -0.4363F, 0.0F, 0.0F);
-		cube_r3.texOffs(30, 0).addBox(-3.0F, 1.5F, -3.0F, 6.0F, 5.0F, 5.0F, 0.0F, false);
+public JalapenoModel(ModelPart root) {
+		this.total = root.getChild("total");
+		this.cube_r1 = root.getChild("cube_r1");
+		this.cube_r2 = root.getChild("cube_r2");
+		this.cube_r3 = root.getChild("cube_r3");
 	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+	
+		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-5.0F, -20.0F, -5.0F, 10.0F, 13.0F, 10.0F)
+				.texOffs(0, 38).addBox(-5.0F, -20.0F, -5.0F, 10.0F, 13.0F, 10.0F, new CubeDeformation(-0.5F))
+				.texOffs(0, 30).addBox(0.0F, -29.0F, -7.0F, 0.0F, 9.0F, 8.0F),
+			PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition cube_r1_pd = total_pd.addOrReplaceChild("cube_r1",
+			CubeListBuilder.create()
+				.texOffs(32, 15).addBox(-4.0F, -1.3F, -4.25F, 8.0F, 1.0F, 8.0F, new CubeDeformation(0.6F))
+				.texOffs(24, 30).addBox(-4.0F, -1.5F, -4.25F, 8.0F, 3.0F, 8.0F),
+			PartPose.offsetAndRotation(0.0F, -20.5F, 0.0F, 0.1309F, 0.0F, 0.0F));
+		PartDefinition cube_r2_pd = total_pd.addOrReplaceChild("cube_r2",
+			CubeListBuilder.create()
+				.texOffs(0, 23).addBox(-4.0F, -4.5F, -4.75F, 8.0F, 7.0F, 8.0F),
+			PartPose.offsetAndRotation(0.0F, -4.5F, 0.0F, -0.2182F, 0.0F, 0.0F));
+		PartDefinition cube_r3_pd = total_pd.addOrReplaceChild("cube_r3",
+			CubeListBuilder.create()
+				.texOffs(30, 0).addBox(-3.0F, 1.5F, -3.0F, 6.0F, 5.0F, 5.0F),
+			PartPose.offsetAndRotation(0.0F, -4.5F, 0.0F, -0.4363F, 0.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
 
 	@Override
 	public void setupAnim(JalapenoEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 	}
 
 	@Override
-	public ModelRenderer getPlantWholeBody() {
+	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
 

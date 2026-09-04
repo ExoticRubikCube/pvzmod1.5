@@ -8,16 +8,16 @@ import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 public class YetiZombieEntity extends PVZZombieEntity{
 
@@ -26,7 +26,7 @@ public class YetiZombieEntity extends PVZZombieEntity{
 	private int live_tick = 0;
 	private boolean hasInvis = false;
 	
-	public YetiZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public YetiZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.canBeFrozen = false;
 	}
@@ -46,24 +46,24 @@ public class YetiZombieEntity extends PVZZombieEntity{
 	@Override
 	public void normalZombieTick() {
 		super.normalZombieTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			++ this.live_tick;
 			if(this.live_tick > this.getYetiMaxLiveTick() / 2) {
 				if(! this.hasInvis) {
 				    this.hasInvis = true;
-				    this.addEffect(new EffectInstance(Effects.INVISIBILITY, 2000, 2, false, true));
+				    this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2000, 2, false, true));
 				}
 				this.heal(0.5f);
 			} else if(this.live_tick >= this.getYetiMaxLiveTick()) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		if(this.isMiniZombie()) return EntitySize.scalable(0.6F, 1.2F);
-		return EntitySize.scalable(1f, 2.6f);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		if(this.isMiniZombie()) return EntityDimensions.scalable(0.6F, 1.2F);
+		return EntityDimensions.scalable(1f, 2.6f);
 	}
 	
 	@Override
@@ -87,14 +87,14 @@ public class YetiZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("yeti_live_tick", this.live_tick);
 		compound.putBoolean("yeti_invis", this.hasInvis);
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("yeti_live_tick")) {
 			this.live_tick = compound.getInt("yeti_live_tick");

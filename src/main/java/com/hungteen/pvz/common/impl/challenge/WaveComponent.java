@@ -8,7 +8,7 @@ import com.hungteen.pvz.api.raid.ISpawnComponent;
 import com.hungteen.pvz.api.raid.IWaveComponent;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.StringUtil;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +25,23 @@ public class WaveComponent implements IWaveComponent {
 	public boolean readJson(JsonObject json) {
 		
 		/* duration */
-		this.duration = JSONUtils.getAsInt(json, "duration", 0);
+		this.duration = GsonHelper.getAsInt(json, "duration", 0);
 		if(this.duration == 0) {
 			throw new JsonSyntaxException("Wave duration cannot be empty or zero");
 		}
 		
 		/* pre tick */
-		this.preCD = JSONUtils.getAsInt(json, "pre_tick", 100);
+		this.preCD = GsonHelper.getAsInt(json, "pre_tick", 100);
 		
 		/* spawn placement */
 		this.placement = ChallengeManager.readPlacement(json, false);
 		
 		/* spawn list */
-		JsonArray jsonSpawns = JSONUtils.getAsJsonArray(json, StringUtil.SPAWNS, new JsonArray());
+		JsonArray jsonSpawns = GsonHelper.getAsJsonArray(json, StringUtil.SPAWNS, new JsonArray());
 		for(int i = 0; i < jsonSpawns.size(); ++ i) {
 			JsonObject obj = jsonSpawns.get(i).getAsJsonObject();
 		    if(obj != null) {
-		    	String type = JSONUtils.getAsString(obj, "type", "");
+		    	String type = GsonHelper.getAsString(obj, "type", "");
 	            ISpawnComponent spawn = ChallengeManager.getSpawnComponent(type);
 	            if(! spawn.readJson(obj)) {
 	            	return false;

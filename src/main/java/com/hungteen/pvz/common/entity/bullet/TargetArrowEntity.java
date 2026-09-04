@@ -6,34 +6,34 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 
-public class TargetArrowEntity extends AbstractArrowEntity {
+public class TargetArrowEntity extends AbstractArrow {
 
-	public TargetArrowEntity(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
+	public TargetArrowEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
-	public TargetArrowEntity(World worldIn, LivingEntity living) {
+	public TargetArrowEntity(Level worldIn, LivingEntity living) {
 		super(EntityRegister.TARGET_ARROW.get(), living, worldIn);
 	}
 	
 	@Override
 	public void tick() {
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			if(! EntityUtil.isEntityValid(this.getOwner())) { // shooter died
-				this.remove();
+				this.remove(RemovalReason.KILLED);
 				return ;
 			} else {
 				if(this.getOwner() instanceof BungeeZombieEntity) {
@@ -41,7 +41,7 @@ public class TargetArrowEntity extends AbstractArrowEntity {
 					if(EntityUtil.isEntityValid(bungee.getStealTarget())) {
 						this.shoot(bungee.getStealTarget());
 					} else {
-						this.remove();
+						this.remove(RemovalReason.KILLED);
 						return ;
 					}
 				}
@@ -51,8 +51,8 @@ public class TargetArrowEntity extends AbstractArrowEntity {
 	}
 	
 	@Override
-	protected void onHitEntity(EntityRayTraceResult result) {
-		if(result.getEntity() instanceof LivingEntity && this.getOwner() instanceof PlayerEntity) {// summon bungee
+	protected void onHitEntity(EntityHitResult result) {
+		if(result.getEntity() instanceof LivingEntity && this.getOwner() instanceof Player) {// summon bungee
 			if(! BungeeZombieEntity.canBungeeSteal(result.getEntity())) {
 				super.onHitEntity(result);
 				return ;
@@ -63,19 +63,19 @@ public class TargetArrowEntity extends AbstractArrowEntity {
 			zombie.setStealTarget((LivingEntity) result.getEntity());
 			EntityUtil.onEntitySpawn(level, zombie, blockPosition().above(20));
 			super.onHitEntity(result);
-			this.remove();
+this.remove(RemovalReason.KILLED);
 		}
 	}
 	
 	public void shoot(LivingEntity target) {
-		Vector3d speed = target.position().subtract(this.position()).normalize();
+		Vec3 speed = target.position().subtract(this.position()).normalize();
 		double multi = 1.3D;
 		this.setDeltaMovement(speed.multiply(multi, multi, multi));
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return EntitySize.scalable(0.5F, 0.5F);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.5F, 0.5F);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class TargetArrowEntity extends AbstractArrowEntity {
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

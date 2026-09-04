@@ -5,9 +5,9 @@ import com.google.gson.JsonParser;
 import com.hungteen.pvz.common.datapack.ChallengeTypeLoader;
 import com.hungteen.pvz.common.datapack.LotteryTypeLoader;
 import com.hungteen.pvz.common.datapack.TransactionTypeLoader;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -23,13 +23,13 @@ public class DatapackPacket {
 		this.data = data;
 	}
 
-	public DatapackPacket(PacketBuffer buffer) {
+	public DatapackPacket(FriendlyByteBuf buffer) {
 		this.type = buffer.readUtf();
 		this.res = buffer.readUtf();
 		this.data = buffer.readUtf();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeUtf(this.type);
 		buffer.writeUtf(this.res);
 		buffer.writeUtf(this.data);
@@ -38,7 +38,7 @@ public class DatapackPacket {
 	public static class Handler {
 		public static void onMessage(DatapackPacket message, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				final ResourceLocation resourceLocation = new ResourceLocation(message.res);
+				final ResourceLocation resourceLocation = ResourceLocation.parse(message.res);
 				final JsonElement jsonElement = new JsonParser().parse(message.data);
 
 				if(message.type.equals(LotteryTypeLoader.NAME)){

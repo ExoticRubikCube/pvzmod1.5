@@ -4,18 +4,17 @@ import javax.annotation.Nullable;
 
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.ChunkAccess;
 
 public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 	
@@ -71,7 +70,7 @@ public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 	@Override
 	public void tick() {
 		super.tick();
-		World world = zombie.level;
+		Level world = zombie.level;
 		if (this.isEntityNearBy() && this.blockPos != null) {
 			if (this.breakingTime % 2 == 0) {
 				if (this.breakingTime % 6 == 0) {
@@ -80,7 +79,7 @@ public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 			}
 			if (this.breakingTime > this.getBreakTime(zombie)) {
 				world.destroyBlock(this.blockPos, false);
-				if (!world.isClientSide) {
+				if (!world.isClientSide()) {
 					this.playBrokenSound(world, this.blockPos);
 				}
 			}
@@ -102,14 +101,14 @@ public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 				: this.findNearestBlock();
 	}
 
-	protected int getBreakTime(MobEntity entity) {
+	protected int getBreakTime(Mob entity) {
 		return 60;
 	}
 	
-	public void playBreakingSound(IWorld worldIn, BlockPos pos) {
+	public void playBreakingSound(LevelAccessor worldIn, BlockPos pos) {
 	}
 
-	public void playBrokenSound(World worldIn, BlockPos pos) {
+	public void playBrokenSound(Level worldIn, BlockPos pos) {
 	}
 
 	protected boolean isEntityNearBy() {
@@ -122,7 +121,7 @@ public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 	}
 
 	@Nullable
-	private BlockPos findTarget(BlockPos pos, IBlockReader worldIn) {
+	private BlockPos findTarget(BlockPos pos, BlockGetter worldIn) {
 		if (worldIn.getBlockState(pos).getBlock() == this.plantBlock) {
 			return pos;
 		} else {
@@ -143,8 +142,8 @@ public class ZombieBreakPlantBlockGoal extends MoveToBlockGoal {
 	 * Return true to set given position as destination
 	 */
 	@SuppressWarnings("deprecation")
-	protected boolean isValidTarget(IWorldReader worldIn, BlockPos pos) {
-		IChunk ichunk = worldIn.getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.FULL, false);
+	protected boolean isValidTarget(LevelReader worldIn, BlockPos pos) {
+		ChunkAccess ichunk = worldIn.getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.FULL, false);
 		if (ichunk == null) {
 			return false;
 		} else {

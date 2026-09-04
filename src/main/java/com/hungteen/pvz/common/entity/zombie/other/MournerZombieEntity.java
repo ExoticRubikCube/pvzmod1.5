@@ -9,24 +9,24 @@ import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 public class MournerZombieEntity extends PVZZombieEntity{
 
-	private static final DataParameter<Boolean> RIGHT_SHAKE = EntityDataManager.defineId(MournerZombieEntity.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> RIGHT_SHAKE = SynchedEntityData.defineId(MournerZombieEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final int SHAKE_CD = 10;
 	
-	public MournerZombieEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public MournerZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setRightShake(this.getRandom().nextInt(2) == 0 ? true : false);
 		this.canLostHand = false;
@@ -81,14 +81,14 @@ public class MournerZombieEntity extends PVZZombieEntity{
 	
 	@Override
 	protected void onRemoveWhenDeath() {
-		if(!level.isClientSide) {
+		if(!level.isClientSide()) {
 			TombStoneEntity tomb = EntityRegister.TOMB_STONE.get().create(level);
 			ZombieUtil.onZombieSpawn(this, tomb, blockPosition());
 		}
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("is_right_shake")) {
 			this.setRightShake(compound.getBoolean("is_right_shake"));
@@ -96,7 +96,7 @@ public class MournerZombieEntity extends PVZZombieEntity{
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("is_right_shake", this.isRightShake());
 	}

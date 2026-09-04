@@ -1,27 +1,24 @@
 package com.hungteen.pvz.utils;
 
 import com.hungteen.pvz.PVZMod;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.resources.IResource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StringUtil {
 
 	private static final List<String> ROMAN_NUMBERS = Arrays.asList("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X");
-	public static final StringTextComponent EMPTY = new StringTextComponent("");
+	public static final Component EMPTY = Component.literal("");
 	public static final ResourceLocation WIDGETS = StringUtil.prefix("textures/gui/widgets.png");
 	public static final String TE_TAG = "BlockEntityTag";
 	public static final String ARMOR_PREFIX = PVZMod.MOD_ID + ":textures/models/armor/";
@@ -63,26 +60,26 @@ public class StringUtil {
 	
 	
 	public static ResourceLocation prefix(String a) {
-		return new ResourceLocation(PVZMod.MOD_ID, a);
+		return ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, a);
 	}
 
 	public static String identify(String modId, String name){
 		return modId + ":" + name;
 	}
 
-	public static void drawScaledString(MatrixStack stack, FontRenderer render, String string, int x, int y, int color, float scale) {
+	public static void drawScaledString(PoseStack stack, Font render, String string, int x, int y, int color, float scale) {
 		stack.pushPose();
 		stack.scale(scale, scale, scale);
 		render.draw(stack, string, x / scale, y / scale, color);
 		stack.popPose();
 	}
 	
-	public static void drawCenteredString(MatrixStack stack, FontRenderer render, String string, int x, int y, int color) {
+	public static void drawCenteredString(PoseStack stack, Font render, String string, int x, int y, int color) {
 		final int width = render.width(string);
 		render.draw(stack, string, x - width / 2, y, color);
 	}
 
-	public static void drawCenteredScaledString(MatrixStack stack, FontRenderer render, String string, int x, int y, int color,
+	public static void drawCenteredScaledString(PoseStack stack, Font render, String string, int x, int y, int color,
 			float scale) {
 		int width = render.width(string);
 		stack.pushPose();
@@ -103,32 +100,30 @@ public class StringUtil {
 	 * get lang from resource.
 	 */
 	public static List<String> getLangTextList(Minecraft mc, String name) {
-		try (IResource iresource = StringUtil.getTxtResource(mc, name);
-				BufferedReader bufferedreader = new BufferedReader(
-						new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));) {
-			List<String> list = bufferedreader.lines().map(String::trim).filter((p_215277_0_) -> {
-				return p_215277_0_.hashCode() != 125780783;
-			}).collect(Collectors.toList());
-			return list;
-		} catch (IOException var36) {
+		Optional<Resource> optionalResource = StringUtil.getTxtResource(mc, name);
+		if (optionalResource.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		try (BufferedReader bufferedreader = optionalResource.get().openAsReader()) {
+			return bufferedreader.lines()
+					.map(String::trim)
+					.filter(p_215277_0_ -> p_215277_0_.hashCode() != 125780783)
+					.collect(Collectors.toList());
+		} catch (IOException e) {
 			return Collections.emptyList();
 		}
 	}
-	
-	public static IResource getTxtResource(Minecraft mc, String name) {
+
+	public static Optional<Resource> getTxtResource(Minecraft mc, String name) {
 		ResourceLocation fileLoc = StringUtil.prefix("lang/others/" + mc.options.languageCode + "/" + name + ".txt");
-        ResourceLocation backupLoc = StringUtil.prefix("lang/others/en_us/" + name + ".txt");
-        IResource resource = null;
-        try {
-            resource = mc.getResourceManager().getResource(fileLoc);
-        } catch (IOException e) {
-            try {
-                resource = mc.getResourceManager().getResource(backupLoc);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return resource;
+		ResourceLocation backupLoc = StringUtil.prefix("lang/others/en_us/" + name + ".txt");
+
+		Optional<Resource> resource = mc.getResourceManager().getResource(fileLoc);
+		if (resource.isEmpty()) {
+			resource = mc.getResourceManager().getResource(backupLoc);
+		}
+		return resource;
 	}
 
 	public static String getRomanString(int num){

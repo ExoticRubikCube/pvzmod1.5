@@ -9,19 +9,19 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class ZombieHandEntity extends AbstractOwnerEntity {
 
 	private int lifeTick;
 	private final int maxLifeTick = 40;
 
-	public ZombieHandEntity(EntityType<? extends Entity> entityTypeIn, World worldIn) {
+	public ZombieHandEntity(EntityType<? extends Entity> entityTypeIn, Level worldIn) {
 		super(entityTypeIn, worldIn);
 		this.setInvulnerable(true);
 		this.noPhysics = true;
@@ -33,17 +33,17 @@ public class ZombieHandEntity extends AbstractOwnerEntity {
 		if(this.lifeTick < maxLifeTick) {
 			++ this.lifeTick;
 		} else {
-			if(! this.level.isClientSide) {
+			if(! this.level.isClientSide()) {
 			    this.performAttack();
-			    this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
 	
 	/**
-	 * {@link CoffinEntity#finalizeSpawn(net.minecraft.world.IServerWorld, net.minecraft.world.DifficultyInstance, net.minecraft.entity.SpawnReason, net.minecraft.entity.ILivingEntityData, net.minecraft.nbt.CompoundNBT)}
+	 * {@link CoffinEntity#finalizeSpawn(net.minecraft.world.ServerLevelAccessor, net.minecraft.world.DifficultyInstance, net.minecraft.entity.MobSpawnType, net.minecraft.entity.SpawnGroupData, net.minecraft.nbt.CompoundTag)}
 	 */
-	public static void spawnRangeZombieHands(World world, PVZZombieEntity zombie, int range) {
+	public static void spawnRangeZombieHands(Level world, PVZZombieEntity zombie, int range) {
 		for(int i = - range; i <= range; ++ i) {
 			for(int j = - range; j <= range; ++ j) {
 				final ZombieHandEntity hand = EntityRegister.ZOMBIE_HAND.get().create(world);
@@ -79,8 +79,8 @@ public class ZombieHandEntity extends AbstractOwnerEntity {
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.4f, 0.5f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.4f, 0.5f, false);
 	}
 
 	@Override

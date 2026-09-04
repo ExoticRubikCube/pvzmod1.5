@@ -2,13 +2,13 @@ package com.hungteen.pvz.common.enchantment.misc;
 
 import com.hungteen.pvz.common.enchantment.PVZEnchantment;
 
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class EnergyTransferEnchantment extends PVZEnchantment{
 
 	public EnergyTransferEnchantment() {
-		super(Rarity.UNCOMMON, EnchantmentType.WEAPON, new EquipmentSlotType[] {EquipmentSlotType.MAINHAND});
+		super(Rarity.UNCOMMON, EnchantmentCategory.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
 	}
 	
 	@Override

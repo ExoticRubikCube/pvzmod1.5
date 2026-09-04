@@ -10,13 +10,13 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -24,10 +24,10 @@ import java.util.List;
 
 public class SpikeWeedEntity extends PVZPlantEntity {
 
-	private static final DataParameter<Integer> SPIKE_NUM = EntityDataManager.defineId(SpikeWeedEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> SPIKE_NUM = SynchedEntityData.defineId(SpikeWeedEntity.class, EntityDataSerializers.INT);
 	public static final int ATTACK_ANIM_CD = 10;
 	
-	public SpikeWeedEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public SpikeWeedEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.setSpikeNum(this.getSpikesCount());
 		this.canBeStealByBungee = false;
@@ -42,9 +42,9 @@ public class SpikeWeedEntity extends PVZPlantEntity {
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
-		if(! level.isClientSide) {
+		if(! level.isClientSide()) {
 			if(this.getSpikeNum() <= 0) {
-				this.remove();
+this.remove(RemovalReason.KILLED);
 			}
 			if(this.getAttackTime() > 0) {
 				this.setAttackTime(this.getAttackTime() - 1);
@@ -151,7 +151,7 @@ public class SpikeWeedEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("spike_num")) {
 			this.setSpikeNum(compound.getInt("spike_num"));
@@ -159,7 +159,7 @@ public class SpikeWeedEntity extends PVZPlantEntity {
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("spike_num", this.getSpikeNum());
 	}
@@ -173,8 +173,8 @@ public class SpikeWeedEntity extends PVZPlantEntity {
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose poseIn) {
-		return new EntitySize(0.95f, 0.4f, false);
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return new EntityDimensions(0.95f, 0.4f, false);
 	}
 
 	@Override

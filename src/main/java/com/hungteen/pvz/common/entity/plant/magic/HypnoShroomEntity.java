@@ -13,13 +13,13 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
-import net.minecraft.entity.*;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {
 
-    public HypnoShroomEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+    public HypnoShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -34,19 +34,19 @@ public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {
         if (target instanceof ICanBeAttracted && !((ICanBeAttracted) target).canBeAttractedBy(this)) {
             return false;
         }
-        if (!this.getSensing().canSee(target)) {
+        if (!this.getSensing().hasLineOfSight(target)) {
             return false;
         }
-        if (target instanceof MobEntity) {
-            return !(((MobEntity) target).getTarget() instanceof HypnoShroomEntity);
+        if (target instanceof Mob) {
+            return !(((Mob) target).getTarget() instanceof HypnoShroomEntity);
         }
         return false;
     }
 
     @Override
     public void attract(LivingEntity target) {
-        if (target instanceof MobEntity) {
-            ((MobEntity) target).setTarget(this);
+        if (target instanceof Mob) {
+            ((Mob) target).setTarget(this);
         }
     }
 
@@ -58,11 +58,11 @@ public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        if (!level.isClientSide && this.canNormalUpdate()) {
+        if (!level.isClientSide() && this.canNormalUpdate()) {
             if (source instanceof PVZEntityDamageSource && ((PVZEntityDamageSource) source).isEatDamage()) {
                 if (this.isPlantInSuperMode()) {
                     if (source.getEntity() != null) {
-                        source.getEntity().remove();
+                        source.getEntity().remove(RemovalReason.DISCARDED);
                         GargantuarEntity gar = EntityRegister.GARGANTUAR.get().create(level);
                         EntityUtil.onEntitySpawn(level, gar, source.getEntity().blockPosition());
                         gar.setZombieType(PVZZombieEntity.VariantType.NORMAL);
@@ -98,8 +98,8 @@ public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {
     }
 
     @Override
-    public EntitySize getDimensions(Pose poseIn) {
-        return EntitySize.scalable(0.7f, 1.9f);
+    public EntityDimensions getDimensions(Pose poseIn) {
+        return EntityDimensions.scalable(0.7f, 1.9f);
     }
 
     @Override

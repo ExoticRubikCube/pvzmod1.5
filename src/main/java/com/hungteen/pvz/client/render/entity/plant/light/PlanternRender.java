@@ -8,16 +8,16 @@ import com.hungteen.pvz.client.render.layer.PlanternLayerRender;
 import com.hungteen.pvz.common.entity.plant.light.PlanternEntity;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PlanternRender extends PVZPlantRender<PlanternEntity> {
 
-	public PlanternRender(EntityRendererManager rendererManager) {
-		super(rendererManager, new PlanternModel(), 0.4f);
+	public PlanternRender(EntityRendererProvider.Context context) {
+		super(context, new PlanternModel(context.bakeLayer(PlanternModel.LAYER)), 0.4f);
 	}
 
 	@Override

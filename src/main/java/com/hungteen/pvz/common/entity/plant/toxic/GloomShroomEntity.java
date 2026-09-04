@@ -9,18 +9,18 @@ import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 
 public class GloomShroomEntity extends PlantShooterEntity {
 
 	private static final float SHOOT_HEIGHT = 0.2F;
 	private static final int SHOOT_NUM = 8;
 	
-	public GloomShroomEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
+	public GloomShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -69,8 +69,8 @@ public class GloomShroomEntity extends PlantShooterEntity {
 	}
     
     @Override
-    public EntitySize getDimensions(Pose poseIn) {
-    	return EntitySize.scalable(0.9F, 0.8F);
+    public EntityDimensions getDimensions(Pose poseIn) {
+    	return EntityDimensions.scalable(0.9F, 0.8F);
     }
     
     @Override

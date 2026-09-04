@@ -4,9 +4,9 @@ import java.util.function.Supplier;
 
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PVZMouseScrollPacket {
 
@@ -16,18 +16,18 @@ public class PVZMouseScrollPacket {
 		this.data = data;
 	}
 	
-	public PVZMouseScrollPacket(PacketBuffer buffer) {
+	public PVZMouseScrollPacket(FriendlyByteBuf buffer) {
 		this.data = buffer.readDouble();
 	}
 
-	public void encode(PacketBuffer buffer) {
+	public void encode(FriendlyByteBuf buffer) {
 		buffer.writeDouble(this.data);
 	}
 
 	public static class Handler {
 		public static void onMessage(PVZMouseScrollPacket message, Supplier<NetworkEvent.Context> ctx) {
 		    ctx.get().enqueueWork(() -> {
-		    	final ServerPlayerEntity player = ctx.get().getSender();
+		    	final ServerPlayer player = ctx.get().getSender();
 		    	player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {
 		    		if(message.data == 0) {
 		    			l.getPlayerData().onSwitchCard();
