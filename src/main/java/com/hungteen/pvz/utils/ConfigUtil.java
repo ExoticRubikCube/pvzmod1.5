@@ -34,17 +34,6 @@ public class ConfigUtil {
 		return PVZConfig.COMMON_CONFIG.EntitySettings.PlayerInitialGroup.get();
 	}
 
-	public static int getGenOriginOreChance() {
-		return PVZConfig.COMMON_CONFIG.WorldSettings.GenOriginOreChance.get();
-	}
-
-	public static int getGenAmethystOreChance() {
-		return PVZConfig.COMMON_CONFIG.WorldSettings.GenAmethystOreChance.get();
-	}
-	public static int getGenLunarStoneChance() {
-		return PVZConfig.COMMON_CONFIG.WorldSettings.GenLunarStoneChance.get();
-	}
-
 	public static int getBaseSun() {
 		return PVZConfig.COMMON_CONFIG.EntitySettings.PlayerBaseSunAmount.get();
 	}

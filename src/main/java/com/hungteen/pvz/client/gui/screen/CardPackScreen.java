@@ -2,6 +2,7 @@ package com.hungteen.pvz.client.gui.screen;
 
 import com.hungteen.pvz.common.container.CardPackContainer;
 import com.hungteen.pvz.utils.StringUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +28,7 @@ public class CardPackScreen extends PVZContainerScreen<CardPackContainer>{
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 //		final PlayerDataManager manager = PlayerUtil.getManager(ClientProxy.MC.player);
 //		if(manager != null){

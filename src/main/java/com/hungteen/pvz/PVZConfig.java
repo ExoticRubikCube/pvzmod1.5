@@ -2,6 +2,11 @@ package com.hungteen.pvz;
 
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.function.Function;
 
 public class PVZConfig {
 
@@ -171,26 +176,6 @@ public class PVZConfig {
                             .translation("config.pvz.world.yeti_house_distance")
                             .comment("the distance value between yeti house.")
                             .defineInRange("YetiHouseDistance", 28, 1, 1000);
-                }
-                builder.pop();
-
-                builder.comment("Settings about the ore gen.").push("Ore Settings");
-                {
-
-                    WorldSettings.GenOriginOreChance = builder
-                            .translation("config.pvz.world.origin_ore_chance")
-                            .comment("the gen chance of origin ore in overworld(the larger the more chance to see it).")
-                            .defineInRange("GenOriginOreChance", 5, 1, 10000);
-
-                    WorldSettings.GenAmethystOreChance = builder
-                            .translation("config.pvz.world.amethyst_ore_chance")
-                            .comment("the gen chance of amethyst ore in the end(the larger the more chance to see it).")
-                            .defineInRange("GenAmethystOreChance", 15, 1, 10000);
-
-                    WorldSettings.GenLunarStoneChance = builder
-                            .translation("config.pvz.world.lunar_stone_chance")
-                            .comment("the gen chance of lunar stone in overworld(the larger the more chance to see it).")
-                            .defineInRange("GenLunarStoneChance", 30, 1, 10000);
                 }
                 builder.pop();
 
@@ -429,9 +414,6 @@ public class PVZConfig {
             public ForgeConfigSpec.IntValue YetiHouseDistance;
 
             /* ore gen */
-            public ForgeConfigSpec.IntValue GenAmethystOreChance;
-            public ForgeConfigSpec.IntValue GenLunarStoneChance;
-            public ForgeConfigSpec.IntValue GenOriginOreChance;
 
             /* entity spawn */
             public ForgeConfigSpec.IntValue SunSpawnWeight;
@@ -571,5 +553,16 @@ public class PVZConfig {
         public static class OtherSettings {
             public ForgeConfigSpec.BooleanValue ShowPVZMainMenu;
         }
+    }
+
+    public static void register(ModLoadingContext context) {
+        COMMON_CONFIG = registerSpec(context, ModConfig.Type.COMMON, Common::new);
+        CLIENT_CONFIG = registerSpec(context, ModConfig.Type.CLIENT, Client::new);
+    }
+
+    private static <T> T registerSpec(ModLoadingContext context, ModConfig.Type type, Function<ForgeConfigSpec.Builder, T> factory) {
+        Pair<T, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(factory);
+        context.registerConfig(type, pair.getRight());
+        return pair.getLeft();
     }
 }

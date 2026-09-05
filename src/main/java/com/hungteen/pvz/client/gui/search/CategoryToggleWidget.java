@@ -46,7 +46,7 @@ public class CategoryToggleWidget extends AbstractWidget {
 	@Override
 	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		stack.pushPose();
-		ClientProxy.MC.getTextureManager().bindForSetup(this.resourceLocation);
+		RenderSystem.setShaderTexture(0, this.resourceLocation);
 		RenderSystem.disableDepthTest();
 		int posX = this.isStateTriggered ? this.x - 2 : this.x;
 		int posY = this.y;

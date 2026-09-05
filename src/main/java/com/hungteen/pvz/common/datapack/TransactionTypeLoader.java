@@ -60,15 +60,11 @@ public class TransactionTypeLoader extends SimpleJsonResourceReloadListener {
             /* amount */
             {
                 JsonObject obj = GsonHelper.getAsJsonObject(jsonObject, "good_count");
-                if (obj != null && !obj.entrySet().isEmpty()) {
+                if (!obj.entrySet().isEmpty()) {
                     for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
                         final IAmountComponent tmp = ChallengeManager.getAmountComponent(entry.getKey());
-                        if (tmp != null) {
-                            tmp.readJson(entry.getValue());
-                            transactionType.setGoodCount(tmp);
-                        } else {
-                            PVZMod.LOGGER.warn("Amount Component : Read Spawn Amount Wrongly");
-                        }
+                        tmp.readJson(entry.getValue());
+                        transactionType.setGoodCount(tmp);
                         break;
                     }
                 }

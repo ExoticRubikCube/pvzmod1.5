@@ -95,10 +95,10 @@ public class SlotMachineTileEntity extends PVZTileEntity implements MenuProvider
 	}
 
 	public void tick() {
-		if (!level.isClientSide) {
-			if (this.getLotteryType() == null) {// wait for data pack sync.
-				return;
-			}
+        if (level != null && !level.isClientSide) {
+            if (this.getLotteryType() == null) {// wait for data pack sync.
+                return;
+            }
 
 //			if(this.rand.nextDouble() < 0.01) {
 //				for(int i = 0; i < 4; ++ i) {
@@ -109,40 +109,40 @@ public class SlotMachineTileEntity extends PVZTileEntity implements MenuProvider
 //				}
 //				System.out.println(this.currentPos);
 //			}
-//			
-			// sync.
-			for (int i = 0; i < 4; ++i) {
-				for (int j = 0; j < 3; ++j) {
-					final int id = i * 3 + j;
-					this.array.set(id, this.getOptionMap().get(this.SlotOptions[i][j]));
-				}
-			}
-			this.array.set(12, this.changeTick);
-			this.array.set(13, this.currentPos);
-			this.array.set(14, this.canRun() ? 1 : 0);
-			this.array.set(15, this.getChangeTick());
+//
+            // sync.
+            for (int i = 0; i < 4; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    final int id = i * 3 + j;
+                    this.array.set(id, this.getOptionMap().get(this.SlotOptions[i][j]));
+                }
+            }
+            this.array.set(12, this.changeTick);
+            this.array.set(13, this.currentPos);
+            this.array.set(14, this.canRun() ? 1 : 0);
+            this.array.set(15, this.getChangeTick());
 
-			// run.
-			if (this.changeTick > 0) {
-				if (this.List.isEmpty()) {
-					this.changeTick = 0;
-					this.changeCnt = 0;
-					return;
-				}
-				--this.changeTick;
-				if (this.changeTick == 0) {
-					--this.changeCnt;
-					if (this.changeCnt == 0) {
-						this.checkResult();
-					} else {
-						this.genNextRow();
-					}
-				}
-				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(),
-						3);
-			}
-		}
-	}
+            // run.
+            if (this.changeTick > 0) {
+                if (this.List.isEmpty()) {
+                    this.changeTick = 0;
+                    this.changeCnt = 0;
+                    return;
+                }
+                --this.changeTick;
+                if (this.changeTick == 0) {
+                    --this.changeCnt;
+                    if (this.changeCnt == 0) {
+                        this.checkResult();
+                    } else {
+                        this.genNextRow();
+                    }
+                }
+                this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(),
+                        3);
+            }
+        }
+    }
 
 	private void onStart(Player player) {
 		if (player == null) {

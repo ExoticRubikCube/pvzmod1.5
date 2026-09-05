@@ -4,6 +4,7 @@ import com.hungteen.pvz.common.block.AbstractFacingBlock;
 import com.hungteen.pvz.common.datapack.LotteryTypeLoader;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
+import com.hungteen.pvz.common.tileentity.TileEntityRegister;
 import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
@@ -42,10 +45,10 @@ public class SlotMachineBlock extends AbstractFacingBlock implements EntityBlock
 			BlockHitResult hit) {
 		if (!worldIn.isClientSide && handIn == InteractionHand.MAIN_HAND) {
 			SlotMachineTileEntity te = (SlotMachineTileEntity) worldIn.getBlockEntity(pos);
-			if (te.getLotteryType() != null) {
-				NetworkHooks.openScreen((ServerPlayer) player, te, pos);
-			}
-		}
+            if (te != null && te.getLotteryType() != null) {
+                NetworkHooks.openScreen((ServerPlayer) player, te, pos);
+            }
+        }
 		return InteractionResult.SUCCESS;
 	}
 
@@ -53,8 +56,8 @@ public class SlotMachineBlock extends AbstractFacingBlock implements EntityBlock
 			ItemStack p_180633_5_) {
 		if (p_180633_5_.hasCustomHoverName()) {
 			BlockEntity tileentity = p_180633_1_.getBlockEntity(p_180633_2_);
-			if (tileentity instanceof SlotMachineTileEntity) {
-				((SlotMachineTileEntity) tileentity).setCustomName(p_180633_5_.getHoverName());
+			if (tileentity instanceof SlotMachineTileEntity slotMachineTile) {
+				slotMachineTile.setCustomName(p_180633_5_.getHoverName());
 			}
 		}
 
@@ -93,19 +96,25 @@ public class SlotMachineBlock extends AbstractFacingBlock implements EntityBlock
 		return new SlotMachineTileEntity(pos, state);
 	}
 
-	public ItemStack getCloneItemStack(BlockGetter p_185473_1_, BlockPos p_185473_2_, BlockState p_185473_3_) {
-		@SuppressWarnings("deprecation")
-		final ItemStack itemstack = super.getCloneItemStack(p_185473_1_, p_185473_2_, p_185473_3_);
-		SlotMachineTileEntity blockEntity = (SlotMachineTileEntity) p_185473_1_.getBlockEntity(p_185473_2_);
-        CompoundTag compoundnbt;
-        if (blockEntity != null) {
-			compoundnbt = blockEntity.saveWithFullMetadata();
-			if (!compoundnbt.isEmpty()) {
-				itemstack.addTagElement(StringUtil.TE_TAG, compoundnbt);
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+		return blockEntityType == TileEntityRegister.SLOT_MACHINE.get()
+				? (levelIn, pos, stateIn, blockEntity) -> {
+			if (blockEntity instanceof SlotMachineTileEntity slotMachine) {
+				slotMachine.tick();
 			}
-		}
-
-		return itemstack;
+		} : null;
 	}
 
+	@Override
+	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+		ItemStack itemStack = super.getCloneItemStack(level, pos, state);
+		if (level.getBlockEntity(pos) instanceof SlotMachineTileEntity blockEntity) {
+			CompoundTag compoundNbt = blockEntity.saveWithoutMetadata();
+			if (!compoundNbt.isEmpty()) {
+				itemStack.addTagElement(StringUtil.TE_TAG, compoundNbt);
+			}
+		}
+		return itemStack;
+	}
 }

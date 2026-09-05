@@ -1,9 +1,9 @@
 package com.hungteen.pvz.common.entity.zombie.grass;
 
+import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.common.impl.zombie.GrassZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.EffectUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;

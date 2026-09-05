@@ -47,48 +47,48 @@ public class SunConverterTileEntity extends BlockEntity implements MenuProvider 
 	
 	@SuppressWarnings("deprecation")
 	private void tickSunSet() {
-		if (! level.isClientSide) {
-			//maintain the set.
-			Set<SunEntity> tmp = new HashSet<>();
-			this.sunSet.forEach((sun) -> {
-				if(sun != null && ! sun.isRemoved() && sun.getDropState() == DropStates.ABSORB) {
-					tmp.add(sun);
-				}
-			});
-			this.sunSet.clear();
-			this.sunSet.addAll(tmp);
-			tmp.clear();
-			//if the set is full, then release the sun.
-			if(! this.checkCanWorkNow()) {
-				this.sunSet.forEach((sun) -> {
-					sun.setDropState(DropStates.NORMAL);
-				});
-				this.sunSet.clear();
-				return ;
-			}
-			//find new sun.
-			if(this.tickExist % this.MaxSearchTick == 0) {
-			    level.getEntitiesOfClass(SunEntity.class, MathUtil.getAABBWithPos(worldPosition, MaxSearchRange), (sun) -> {
-						return sun.getDropState() == DropStates.NORMAL && ! this.sunSet.contains(sun);
-			    }).forEach((sun) -> {
-			    	sun.setDropState(DropStates.ABSORB);
-				    this.sunSet.add(sun);
-			    });
-			}
-			//absorb suns in the set.
-			this.sunSet.forEach((sun) -> {
-				if(! this.checkCanWorkNow()) return ;
-				double speed = 0.15D;
-				Vec3 now = new Vec3(worldPosition.getX() + 0.5D, worldPosition.getY() + 1D, worldPosition.getZ() + 0.5D);
-				Vec3 vec = now.subtract(sun.position());
-				if(vec.length() <= 1) {
-				    this.onCollectSun(sun);
-				} else {
-				    sun.setDeltaMovement(vec.normalize().scale(speed));
-				}
-			});
-		}
-	}
+        if (level != null && !level.isClientSide) {
+            //maintain the set.
+            Set<SunEntity> tmp = new HashSet<>();
+            this.sunSet.forEach((sun) -> {
+                if (sun != null && !sun.isRemoved() && sun.getDropState() == DropStates.ABSORB) {
+                    tmp.add(sun);
+                }
+            });
+            this.sunSet.clear();
+            this.sunSet.addAll(tmp);
+            tmp.clear();
+            //if the set is full, then release the sun.
+            if (!this.checkCanWorkNow()) {
+                this.sunSet.forEach((sun) -> {
+                    sun.setDropState(DropStates.NORMAL);
+                });
+                this.sunSet.clear();
+                return;
+            }
+            //find new sun.
+            if (this.tickExist % this.MaxSearchTick == 0) {
+                level.getEntitiesOfClass(SunEntity.class, MathUtil.getAABBWithPos(worldPosition, MaxSearchRange), (sun) -> {
+                    return sun.getDropState() == DropStates.NORMAL && !this.sunSet.contains(sun);
+                }).forEach((sun) -> {
+                    sun.setDropState(DropStates.ABSORB);
+                    this.sunSet.add(sun);
+                });
+            }
+            //absorb suns in the set.
+            this.sunSet.forEach((sun) -> {
+                if (!this.checkCanWorkNow()) return;
+                double speed = 0.15D;
+                Vec3 now = new Vec3(worldPosition.getX() + 0.5D, worldPosition.getY() + 1D, worldPosition.getZ() + 0.5D);
+                Vec3 vec = now.subtract(sun.position());
+                if (vec.length() <= 1) {
+                    this.onCollectSun(sun);
+                } else {
+                    sun.setDeltaMovement(vec.normalize().scale(speed));
+                }
+            });
+        }
+    }
 	
 	/**
 	 * collect when sun is close.

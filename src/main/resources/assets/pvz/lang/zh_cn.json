@@ -198,10 +198,7 @@
   "_comment4": "--------------------------------------------实体-------------------------------------------",
   "entity.pvz.sun": "阳光",
   "item.pvz.sun_spawn_egg": "阳光刷怪蛋",
-  "entity.pvz.coin": "钱币",
-  "item.pvz.coin_spawn_egg": "钱币刷怪蛋",
   "entity.pvz.jewel": "宝石",
-  "item.pvz.jewel_spawn_egg": "宝石刷怪蛋",
   "entity.pvz.energy": "能量豆",
   "item.pvz.energy_spawn_egg": "能量豆刷怪蛋",
 
@@ -921,6 +918,7 @@
   "key.pvz.show_progress": "展示/隐藏入侵进度",
   "key.pvz.left_toggle": "向左切换资源展示",
   "key.pvz.right_toggle": "向右切换资源展示",
+  "key.pvz.show_overlay": "展示/隐藏覆盖层",
   "_comment16": "--------------------------------------------配置文件-------------------------------------------",
   "config.pvz.invasion.safe_day": "安全日天数",
   "config.pvz.invasion.interval": "入侵间隔天数",

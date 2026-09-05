@@ -4,6 +4,7 @@ import com.hungteen.pvz.client.gui.widget.DisplayField.TipField;
 import com.hungteen.pvz.common.container.SunConverterContainer;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +32,7 @@ public class SunConverterScreen extends PVZContainerScreen<SunConverterContainer
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-		this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		stack.popPose();
 		

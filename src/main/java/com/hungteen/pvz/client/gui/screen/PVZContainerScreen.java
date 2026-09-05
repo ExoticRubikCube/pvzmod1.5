@@ -2,6 +2,7 @@ package com.hungteen.pvz.client.gui.screen;
 
 import com.hungteen.pvz.client.gui.widget.DisplayField;
 import com.hungteen.pvz.utils.StringUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -24,7 +25,7 @@ public abstract class PVZContainerScreen<T extends AbstractContainerMenu> extend
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-		this.minecraft.getTextureManager().bindForSetup(WIDGETS);
+		RenderSystem.setShaderTexture(0, WIDGETS);
 		this.tips.forEach(tip -> {
 			blit(stack, this.leftPos + tip.getX(), this.topPos + tip.getY(), tip.getTexX(), tip.getTexY(), tip.getWidth(), tip.getHeight());
 		});

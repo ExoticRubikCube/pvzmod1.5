@@ -9,6 +9,7 @@ import com.hungteen.pvz.common.tileentity.FragmentSpliceTileEntity;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -60,7 +61,7 @@ public class FragmentSpliceScreen extends PVZContainerScreen<FragmentSpliceConta
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-		this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
 		final int maxLen = 88;

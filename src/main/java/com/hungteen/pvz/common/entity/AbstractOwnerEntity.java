@@ -52,8 +52,8 @@ public abstract class AbstractOwnerEntity extends PVZEntityBase implements IHasG
 
 	@Nullable
 	public Entity getOwner() {
-		if (EntityUtil.isEntityValid(this.owner) && this.ownerId != null && this.level instanceof ServerLevel) {
-			this.owner = ((ServerLevel) this.level).getEntity(this.ownerId);
+		if (EntityUtil.isEntityValid(this.owner) && this.ownerId != null && this.level instanceof ServerLevel serverLevel) {
+			this.owner = serverLevel.getEntity(this.ownerId);
 		}
 		return this.owner;
 	}
@@ -64,7 +64,7 @@ public abstract class AbstractOwnerEntity extends PVZEntityBase implements IHasG
 	
 	@Override
 	public Optional<UUID> getOwnerUUID() {
-		return Optional.ofNullable(this.uuid);
+		return Optional.of(this.uuid);
 	}
 	
 	public PVZGroupType getInitialEntityGroup() {

@@ -15,6 +15,7 @@ import com.hungteen.pvz.utils.enums.Resources;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -233,8 +234,8 @@ public class PVZOverlayHandler {
 	public static void renderFog(PoseStack stack, int w, int h, float dep) {
 		stack.pushPose();
 		RenderSystem.enableBlend();
-		RenderSystem.setShaderColor(1f, 1f, 1f, dep);
 		bindTexture(FOG);
+		RenderSystem.setShaderColor(1f, 1f, 1f, dep);
 
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
@@ -342,7 +343,9 @@ public class PVZOverlayHandler {
 	}
 
 	private static void bindTexture(ResourceLocation texture) {
-		ClientProxy.MC.getTextureManager().bindForSetup(texture);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, texture);
 	}
 
 }

@@ -28,7 +28,6 @@ public class BiomeRegister {
 	 */
 	public static void registerBiomes(final FMLCommonSetupEvent ev) {
 		ev.enqueueWork(() -> {
-			// 1.19.2 中 getKey() 直接返回 ResourceKey<Biome>
 			registerBiome(ZEN_GARDEN.getKey(), BiomeType.WARM, PVZConfig.COMMON_CONFIG.WorldSettings.GenZenGardenChance.get());
 		});
 	}

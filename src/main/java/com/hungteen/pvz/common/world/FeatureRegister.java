@@ -4,7 +4,6 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.world.feature.GenOres;
 import com.hungteen.pvz.common.world.structure.StructureRegister;
-import com.hungteen.pvz.utils.ConfigUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -71,22 +70,22 @@ public class FeatureRegister {
 						BlockRegister.ORIGIN_ORE.get().defaultBlockState())), 4)));
 
 		PLACED_AMETHYST_ORE = placed(amethystCF,
-				CountPlacement.of(ConfigUtil.getGenAmethystOreChance()),
+				CountPlacement.of(15),
 				InSquarePlacement.spread(),
 				HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(128)),
 				BiomeFilter.biome());
 		PLACED_LUNAR_STONE = placed(lunarCF,
-				CountPlacement.of(ConfigUtil.getGenLunarStoneChance()),
+				CountPlacement.of(30),
 				InSquarePlacement.spread(),
 				HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(128)),
 				BiomeFilter.biome());
 		PLACED_ORIGIN_ORE = placed(originCF,
-				CountPlacement.of(ConfigUtil.getGenOriginOreChance()),
+				CountPlacement.of(5),
 				InSquarePlacement.spread(),
 				HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(200)),
 				BiomeFilter.biome());
 		PLACED_DOUBLE_ORIGIN_ORE = placed(originDoubleCF,
-				CountPlacement.of(ConfigUtil.getGenOriginOreChance() * 2),
+				CountPlacement.of(10),
 				InSquarePlacement.spread(),
 				HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(200)),
 				BiomeFilter.biome());

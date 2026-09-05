@@ -9,6 +9,7 @@ import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toserver.ClickButtonPacket;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.components.Button;
@@ -107,7 +108,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
         stack.pushPose();
-        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         blit(stack, this.leftPos, this.topPos, this.getBlitOffset(), 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 512);
 
         final int width = 112;
@@ -137,13 +138,13 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         final int offsetX = posX + 81;
         final int offsetY = posY + 1;
         if(trade.getType().isEnergy()) {
-            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+            RenderSystem.setShaderTexture(0, TEXTURE);
             blit(stack, offsetX, offsetY, this.getBlitOffset(), 112, 195, 16, 16, 256, 512);
         } else if(trade.getType().isSlot()){
-            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+            RenderSystem.setShaderTexture(0, TEXTURE);
             blit(stack, offsetX, offsetY, this.getBlitOffset(), 128, 195, 16, 16, 256, 512);
         } else if(trade.getType().isMoney()){
-            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+            RenderSystem.setShaderTexture(0, TEXTURE);
             blit(stack, offsetX, offsetY, this.getBlitOffset(), 144, 195, 16, 16, 256, 512);
         } else {
             this.itemRenderer.renderGuiItem(trade.getGood(), offsetX, offsetY);
@@ -165,7 +166,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         final int y = (this.height - this.imageHeight) / 2;
         int i = types.size() - TRADE_NUM_PER_PAGE + 1;
         stack.pushPose();
-        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         if (i > 1) {
             final int j = 159 - (27 + (i - 1) * 159 / i);
             final int k = 1 + j / i + 159 / i;

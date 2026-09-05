@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
+import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
@@ -9,7 +10,6 @@ import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
 import net.minecraft.core.particles.ParticleTypes;

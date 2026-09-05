@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.entity.zombie;
 
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.api.enums.BodyType;
+import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.api.paz.IZombieEntity;
 import com.hungteen.pvz.api.types.IPAZType;
@@ -28,7 +29,6 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;

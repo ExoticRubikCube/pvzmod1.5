@@ -5,8 +5,8 @@ import com.hungteen.pvz.common.CommonProxy;
 import com.hungteen.pvz.common.advancement.AdvancementHandler;
 import com.hungteen.pvz.common.block.cubes.OriginBlock;
 import com.hungteen.pvz.common.datapack.PVZDataPackManager;
+import com.hungteen.pvz.common.entity.AbstractPAZEntity;
 import net.minecraft.core.Registry;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -21,7 +21,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,23 +32,13 @@ public class PVZMod {
     // Mod ID.
 	public static final String MOD_ID = "pvz";
 	// Mod Version.
-	public static final String MOD_VERSION = "0.6.5";
+	public static final String MOD_VERSION = "0.6.6";
 	// Proxy of Server and Client.
 	public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
 	@SuppressWarnings("removal")
     public PVZMod() {
-		{
-			final Pair<PVZConfig.Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(PVZConfig.Common::new);
-    		ModLoadingContext.get().registerConfig(Type.COMMON, specPair.getRight());
-    		PVZConfig.COMMON_CONFIG = specPair.getLeft();
-    	}
-    	{
-    		final Pair<PVZConfig.Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(PVZConfig.Client::new);
-    		ModLoadingContext.get().registerConfig(Type.CLIENT, specPair.getRight());
-    		PVZConfig.CLIENT_CONFIG = specPair.getLeft();
-    	}
-
+		PVZConfig.register(ModLoadingContext.get());
     	IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     	RegistryHandler.deferredRegister(modBus);
     	
@@ -87,7 +76,7 @@ public class PVZMod {
 	public static void onCommonConfigLoaded(final ModConfigEvent.Loading event) {
 		if (event.getConfig().getModId().equals(MOD_ID)) {
 			if (event.getConfig().getType() == Type.COMMON && PVZConfig.COMMON_CONFIG != null) {
-				com.hungteen.pvz.common.entity.AbstractPAZEntity.refreshFromConfig();
+				AbstractPAZEntity.refreshFromConfig();
 			}
 		}
 	}
@@ -96,7 +85,7 @@ public class PVZMod {
 	public static void onCommonConfigReloaded(final ModConfigEvent.Reloading event) {
 		if (event.getConfig().getModId().equals(MOD_ID)) {
 			if (event.getConfig().getType() == Type.COMMON && PVZConfig.COMMON_CONFIG != null) {
-				com.hungteen.pvz.common.entity.AbstractPAZEntity.refreshFromConfig();
+				AbstractPAZEntity.refreshFromConfig();
 			}
 		}
 	}

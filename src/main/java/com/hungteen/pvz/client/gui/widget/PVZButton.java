@@ -3,7 +3,6 @@ package com.hungteen.pvz.client.gui.widget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +26,7 @@ public abstract class PVZButton extends Button{
         if (this.visible) {
         	this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getInstance().getTextureManager().bindForSetup(this.WIDGETS);
+            RenderSystem.setShaderTexture(0, this.WIDGETS);
             final Pair<Integer,Integer> xy = this.getButtonUV();
 			final Pair<Integer,Integer> xyOffset = this.getButtonUVOffset();
 			if(this.isHovered){

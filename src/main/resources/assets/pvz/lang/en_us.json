@@ -198,10 +198,7 @@
     "_comment4": "--------------------------------------------Entity-------------------------------------------",
     "entity.pvz.sun":"Sun",
     "item.pvz.sun_spawn_egg":"Sun Spawn Egg",
-    "entity.pvz.coin":"Coin",
-    "item.pvz.coin_spawn_egg":"Coin Spawn Egg",
     "entity.pvz.jewel":"Jewel",
-    "item.pvz.jewel_spawn_egg":"Jewel Spawn Egg",
     "entity.pvz.energy":"Energy",
     "item.pvz.energy_spawn_egg":"Energy Spawn Egg",
     
@@ -921,6 +918,7 @@
     "key.pvz.show_progress":"Turn on/off Invasion Progress",
     "key.pvz.left_toggle":"Left Toggle Resource UI",
     "key.pvz.right_toggle":"Right Toggle Resource UI",
+    "key.pvz.show_overlay":"Show/Hide Overlay",
     "_comment16": "--------------------------------------------Config-------------------------------------------",
     "config.pvz.invasion.safe_day":"Safe Day Amount",
     "config.pvz.invasion.interval":"interval Day Amount",

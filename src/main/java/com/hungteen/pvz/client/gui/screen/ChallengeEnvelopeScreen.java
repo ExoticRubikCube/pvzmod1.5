@@ -2,6 +2,7 @@ package com.hungteen.pvz.client.gui.screen;
 
 import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.utils.StringUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,7 +27,7 @@ public class ChallengeEnvelopeScreen extends Screen{
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(stack);
-        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int cornerX = (this.width - this.xSize) / 2;
         int cornerY = (this.height - this.ySize) / 2;
         this.blit(stack, cornerX, cornerY, 0, 0, this.xSize, this.ySize);

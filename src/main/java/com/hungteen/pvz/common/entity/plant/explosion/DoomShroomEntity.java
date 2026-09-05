@@ -12,10 +12,7 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
-import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.EntityDimensions;
@@ -23,15 +20,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -52,8 +42,10 @@ public class DoomShroomEntity extends PlantBomberEntity {
 		if(! this.level.isClientSide()) {
 			if(this.getAttackTime() == this.getReadyTime() - 2) {
 				DoomFixerEntity fixer = EntityRegister.DOOM_FIXER.get().create(level);
-				EntityUtil.onEntitySpawn(level, fixer, this.blockPosition());
-			}
+                if (fixer != null) {
+                    EntityUtil.onEntitySpawn(level, fixer, this.blockPosition());
+                }
+            }
 		}
 	}
 	
@@ -82,58 +74,37 @@ public class DoomShroomEntity extends PlantBomberEntity {
 			}
 		}
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	protected void destroyBlocks() {
-		ObjectArrayList<Pair<ItemStack, BlockPos>> list = new ObjectArrayList<>();
 		List<BlockPos> posList = new ArrayList<>();
-		//lower block positions.
-		final int len = 2;
-		for(int i = - len;i <= len; ++ i) {
-			for(int j = - len;j <= len; ++ j) {
-				for(int k = - 2; k < 0; ++ k) {
+
+		final int len = 1;
+		for (int i = -len; i <= len; ++i) {
+			for (int j = -len; j <= len; ++j) {
+				for (int k = -2; k < 0; ++k) {
 					posList.add(this.blockPosition().offset(i, k, j));
 				}
 			}
 		}
-		//upper block positions.
+
 		final int range = 10;
-		for(int h = 0; h <= range + 8; ++ h) {
-		    for(int i = - range; i <= range; ++ i) {
-			    for(int j = - range; j <= range; ++ j) {
-			    	if(new Vec3(i, h - 5, j).lengthSqr() <= range * range) {
-			    		posList.add(this.blockPosition().offset(i, h, j));
-			    	}
-			    }
-		    }
+		for (int h = 0; h <= range + 8; ++h) {
+			for (int i = -range; i <= range; ++i) {
+				for (int j = -range; j <= range; ++j) {
+					if (new Vec3(i, h - 5, j).lengthSqr() <= range * range) {
+						posList.add(this.blockPosition().offset(i, h, j));
+					}
+				}
+			}
 		}
+
 		posList.forEach(pos -> {
 			BlockState state = level.getBlockState(pos);
 			if (state.isAir() || state.getBlock().getExplosionResistance() > MAX_EXPLOSION_LEVEL) {
-				return ;
+				return;
 			}
-			BlockEntity tileentity = state.hasBlockEntity() ? this.level.getBlockEntity(pos) : null;
-			LootContext.Builder loot = (new LootContext.Builder((ServerLevel)this.level)).withRandom(this.level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this);
-			loot.withParameter(LootContextParams.EXPLOSION_RADIUS, (float)len);
-			state.getDrops(loot).forEach((stack)->{
-				for(int l = 0; l < list.size(); ++l) {
-                    Pair<ItemStack, BlockPos> pair = list.get(l);
-                    ItemStack itemstack = pair.getFirst();
-                    if (ItemEntity.areMergable(itemstack, stack)) {
-                        ItemStack itemstack1 = ItemEntity.merge(itemstack, stack, 16);
-                        list.set(l, Pair.of(itemstack1, pair.getSecond()));
-                        if (list.isEmpty()) {
-                           return;
-                        }
-                    }
-				}
-				list.add(Pair.of(stack, pos));
-			});
-			level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+			level.destroyBlock(pos, true, this);
 		});
-		for(Pair<ItemStack, BlockPos> pair : list) {
-            Block.popResource(this.level, pair.getSecond(), pair.getFirst());
-        }
 	}
 
 	@Override

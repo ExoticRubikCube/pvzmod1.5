@@ -86,7 +86,7 @@ public class FragmentRecipe implements CraftingRecipe, IShapedRecipe<CraftingCon
 
     @Override
     public ItemStack getResultItem() {
-        return null;
+        return this.result;
     }
 
     public boolean matches(CraftingContainer p_77569_1_, Level p_77569_2_) {

@@ -1,6 +1,7 @@
 package com.hungteen.pvz.common.entity.plant.assist;
 
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZNearestTargetGoal;
@@ -11,7 +12,6 @@ import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
@@ -74,9 +74,7 @@ public class MagnetShroomEntity extends PVZPlantEntity {
 		final float range = this.getAbsorbRange();
 		int cnt = this.getSuperDragCnt();
 		EntityUtil.playSound(this, SoundRegister.MAGNET.get());
-		for(LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, EntityUtil.getEntityAABB(this, range, range), (entity) -> {
-			return this.checkCanPAZTarget(entity);
-		})){
+		for(LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, EntityUtil.getEntityAABB(this, range, range), this::checkCanPAZTarget)){
 			if(! (target instanceof IHasMetal)) continue;
 			((IHasMetal) target).decreaseMetal();
 			MetalItemEntity metal = new MetalItemEntity(level, this, ((IHasMetal) target).getMetalType());

@@ -38,7 +38,7 @@ public class CherryBombEntity extends PlantBomberEntity{
 			EntityUtil.playSound(this, SoundRegister.CHERRY_BOMB.get());
 			//trigger advancement.
 			Player owner = EntityUtil.getEntityOwner(level, this);
-			if(owner != null && owner instanceof ServerPlayer) {
+			if(owner instanceof ServerPlayer) {
 				EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) owner, this, deathCnt);
 			}
 		} else {

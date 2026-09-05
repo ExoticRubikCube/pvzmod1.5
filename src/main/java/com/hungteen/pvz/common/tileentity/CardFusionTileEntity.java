@@ -30,13 +30,13 @@ public class CardFusionTileEntity extends BlockEntity implements MenuProvider {
 	}
 
 	public void tick() {
-		if(! level.isClientSide) {
-			this.absorbSunAmount();
-			this.absorbEssences();
-			this.array.set(0, sunAmount);
-			this.array.set(1, essenceAmount);
-		}
-	}
+        if (level != null && !level.isClientSide) {
+            this.absorbSunAmount();
+            this.absorbEssences();
+            this.array.set(0, sunAmount);
+            this.array.set(1, essenceAmount);
+        }
+    }
 	
 	private void absorbSunAmount() {
     	ItemStack stack = this.handler.getStackInSlot(0);

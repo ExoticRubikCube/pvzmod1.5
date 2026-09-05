@@ -129,7 +129,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 			if(guideBook != ItemStack.EMPTY){
 				this.itemRenderer.renderGuiItem(guideBook, this.leftPos + posX, this.topPos + posY);
 			} else{
-				this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+				RenderSystem.setShaderTexture(0, TEXTURE);
 				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 0, 16, 16);
 			}
 		}
@@ -146,7 +146,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 		}
 		posX += len;
 		{
-			this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+			RenderSystem.setShaderTexture(0, TEXTURE);
 			if(a.type().getSkills().isEmpty()) {
 				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 16, 16, 16);
 			} else {
@@ -203,7 +203,7 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-		this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		if(this.entries.size() <= MAX_ENTRY_COUNT) {
 			blit(stack, this.leftPos + 130, this.topPos + 49, 162, 0, 12, 15);

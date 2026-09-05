@@ -1,9 +1,9 @@
 package com.hungteen.pvz.client.model.entity.plant.assist;
 
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.assist.MagnetShroomEntity;
-import com.hungteen.pvz.remove.MetalTypes;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

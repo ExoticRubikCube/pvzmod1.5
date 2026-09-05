@@ -2,6 +2,7 @@ package com.hungteen.pvz.client.gui.screen;
 
 import com.hungteen.pvz.common.container.ImitaterContainer;
 import com.hungteen.pvz.utils.StringUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class ImitaterScreen extends AbstractContainerScreen<ImitaterContainer>{
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
         if (this.minecraft != null) {
-            this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+            RenderSystem.setShaderTexture(0, TEXTURE);
         }
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         stack.popPose();

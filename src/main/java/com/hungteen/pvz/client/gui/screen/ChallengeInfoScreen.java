@@ -7,6 +7,7 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -64,7 +65,7 @@ public class ChallengeInfoScreen extends Screen{
 		int cornerY = (this.height - this.ySize) / 2;
 
 		{
-			this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+			RenderSystem.setShaderTexture(0, TEXTURE);
 			blit(stack, cornerX, cornerY, 0, 0, this.xSize, this.ySize);
 			if(this.entries.size() <= MAX_ENTRY_COUNT) {
 				blit(stack, cornerX + 130, cornerY + 49, 162, 0, 12, 15);

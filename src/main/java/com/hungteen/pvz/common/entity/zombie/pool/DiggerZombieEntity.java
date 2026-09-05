@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.entity.zombie.pool;
 
+import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZRandomTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
@@ -10,7 +11,6 @@ import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZLoot;
-import com.hungteen.pvz.remove.MetalTypes;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;

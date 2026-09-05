@@ -1,6 +1,5 @@
-package com.hungteen.pvz.client.render.layer;
+package com.hungteen.pvz.client.render.layer.fullskin;
 
-import com.hungteen.pvz.client.render.layer.fullskin.PVZFullSkinLayer;
 import com.hungteen.pvz.common.entity.plant.light.PlanternEntity;
 import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.client.model.EntityModel;

@@ -107,12 +107,12 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 					}
 					case SUN:{
 						RenderSystem.enableBlend();
-						this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+						RenderSystem.setShaderTexture(0, TEXTURE);
 						blit(stack, x, y, 176, 16, 16, 16);
 						break;
 					}
 					case JEWEL:{
-						this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+						RenderSystem.setShaderTexture(0, TEXTURE);
 						blit(stack, x, y, 176, 0, 16, 16);
 						break;
 					}
@@ -123,7 +123,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 //					}
 					case EVENT:{
 						RenderSystem.enableBlend();
-						this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+						RenderSystem.setShaderTexture(0, TEXTURE);
 						blit(stack, x, y, 176, 48, 16, 16);
 					}
 				default:
@@ -136,7 +136,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 
 		stack.pushPose();
 		stack.translate(0, 0, 120);
-		this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		blit(stack, this.leftPos + 61, this.topPos + 74, 61, 74, 54, 21);
 		blit(stack, this.leftPos + 61, this.topPos + 1, 61, 1, 54, 21);
 		
@@ -148,7 +148,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-		this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		stack.popPose();
 		

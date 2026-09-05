@@ -2,6 +2,7 @@ package com.hungteen.pvz.client.gui.search;
 
 import com.hungteen.pvz.client.gui.screen.AbstractOptionScreen;
 import com.hungteen.pvz.utils.StringUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -33,7 +34,7 @@ public class OptionWidget extends AbstractWidget {
 	public void renderButton(PoseStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
 		stack.pushPose();
 		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.getTextureManager().bindForSetup(OptionSearchGui.TEXTURE);
+		RenderSystem.setShaderTexture(0, OptionSearchGui.TEXTURE);
 		int posX = this.isOptionUnLocked() ? 29 : 29 + 25;
 		int posY = 206;
 		this.blit(stack, this.x, this.y, posX, posY, this.width, this.height);

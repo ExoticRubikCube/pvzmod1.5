@@ -5,6 +5,7 @@ import com.hungteen.pvz.client.gui.screen.AbstractOptionScreen;
 import com.hungteen.pvz.common.container.AbstractOptionContainer;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.StringUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -176,7 +177,7 @@ public class OptionSearchGui extends GuiComponent implements GuiEventListener {
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		stack.pushPose();
 		stack.translate(0.0F, 0.0F, 100.0F);
-		this.mc.getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		this.blit(stack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
 		for (CategoryToggleWidget a : this.toggleTabs) {

@@ -1,6 +1,5 @@
-package com.hungteen.pvz.client.render.layer;
+package com.hungteen.pvz.client.render.layer.fullskin;
 
-import com.hungteen.pvz.client.render.layer.fullskin.PVZFullSkinLayer;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity.VariantType;
 import com.hungteen.pvz.utils.StringUtil;

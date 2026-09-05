@@ -14,6 +14,7 @@ import com.hungteen.pvz.common.network.toserver.ClickButtonPacket;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.components.Button;
@@ -69,11 +70,11 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	@Override
 	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		stack.pushPose();
-        this.minecraft.getTextureManager().bindForSetup(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         stack.popPose();
 
-        this.minecraft.getTextureManager().bindForSetup(StringUtil.WIDGETS);
+		RenderSystem.setShaderTexture(0, StringUtil.WIDGETS);
 		final int count = this.menu.getAvailableSkills().size();
 		if(count > MAX_ENTRY_COUNT){
 			final int len = MathUtil.getBarLen(this.currentPos, count - MAX_ENTRY_COUNT, 76 - 15);
@@ -101,7 +102,7 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	}
 
 	private void renderLogo(PoseStack stack, IRankType rank, int posX, int posY){
-		this.minecraft.getTextureManager().bindForSetup(StringUtil.WIDGETS);
+		RenderSystem.setShaderTexture(0, StringUtil.WIDGETS);
 		int x = 239;
 		int y = 74;
 		if(rank == RankTypes.GRAY){

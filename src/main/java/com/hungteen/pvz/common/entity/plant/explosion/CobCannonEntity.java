@@ -92,9 +92,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 			}
 			if (this.getAttackTime() > 0) {
 				this.setAttackTime(this.getAttackTime() - 1);
-				this.getPassengers().forEach((entity) -> {
-					entity.stopRiding();
-				});
+				this.getPassengers().forEach(Entity::stopRiding);
 				if (this.getAttackTime() == this.getAnimCD() / 2) {
 					this.startAttack();
 				}
@@ -120,16 +118,16 @@ public class CobCannonEntity extends PVZPlantEntity {
 		    }
 			EntityHitResult entityRay = this.rayTraceEntities(level, player, range, start, end);
 		    if(entityRay != null && entityRay.getType() == Type.ENTITY) {
-			    if(entityRay.getEntity() instanceof LivingEntity) {//attack entity
+			    if(entityRay.getEntity() instanceof LivingEntity living) {//attack entity
 			    	this.setAttackTime(this.getAnimCD());
 			    	this.setCornNum(this.getCornNum() - 1);
-			    	this.lockTarget = Optional.ofNullable((LivingEntity) entityRay.getEntity());
+			    	this.lockTarget = Optional.of(living);
 			    }
 		    } else if(result.getType() == HitResult.Type.BLOCK) {//attack block.
 		    	this.setAttackTime(this.getAnimCD());
 		    	BlockPos pos = new BlockPos(end.x(), end.y(), end.z());
 		    	this.setCornNum(this.getCornNum() - 1);
-		    	this.lockPos = Optional.ofNullable(pos);
+		    	this.lockPos = Optional.of(pos);
 		    }
 		}
 	}

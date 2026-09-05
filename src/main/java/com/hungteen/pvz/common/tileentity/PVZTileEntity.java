@@ -21,7 +21,7 @@ public abstract class PVZTileEntity extends BlockEntity {
      * used by container.
      */
     public boolean isUsableByPlayer(Player player) {
-        if (this.level.getBlockEntity(this.worldPosition) != this) {
+        if (this.level != null && this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         }
         return player.distanceToSqr((double) this.worldPosition.getX() + 0.5D,

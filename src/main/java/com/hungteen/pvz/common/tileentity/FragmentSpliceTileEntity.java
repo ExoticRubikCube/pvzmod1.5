@@ -27,11 +27,11 @@ public class FragmentSpliceTileEntity extends BlockEntity implements MenuProvide
 	}
 	
 	public void tick() {
-		if(! level.isClientSide) {
-			this.absorbSunAmount();
-			this.array.set(0, sunAmount);
-		}
-	}
+        if (level != null && !level.isClientSide) {
+            this.absorbSunAmount();
+            this.array.set(0, sunAmount);
+        }
+    }
     
     private void absorbSunAmount() {
     	ItemStack stack = this.handler.getStackInSlot(0);
