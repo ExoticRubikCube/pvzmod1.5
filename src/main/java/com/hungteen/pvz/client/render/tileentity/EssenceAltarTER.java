@@ -31,10 +31,12 @@ public class EssenceAltarTER implements BlockEntityRenderer<EssenceAltarTileEnti
 		matrixStackIn.scale(- 1, - 1, 1);
 		float size = 1F;
 		matrixStackIn.scale(size, size, size);
-		matrixStackIn.translate(- 0.5 / size, - 2.3D - 0.15 * Math.sin(tileEntityIn.tick * 0.1), 0.5 / size);
+		final float time = tileEntityIn.getLevel() == null ? tileEntityIn.tick + partialTicks
+				: tileEntityIn.getLevel().getGameTime() + partialTicks;
+		matrixStackIn.translate(- 0.5 / size, - 2.3D - 0.15 * Math.sin(time * 0.1), 0.5 / size);
 		VertexConsumer builder = bufferIn.getBuffer(RenderType.entityTranslucentCull(RES));
+		origin.setupAnim(null, 0, 0, time, 0, 0);
 		origin.renderToBuffer(matrixStackIn, builder, combinedLightIn, OverlayTexture.NO_OVERLAY);
-		origin.setupAnim(null, 0, 0, tileEntityIn.tick + partialTicks, 0, 0);
 		matrixStackIn.popPose();
 	}
 

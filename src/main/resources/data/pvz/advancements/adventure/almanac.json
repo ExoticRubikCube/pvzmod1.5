@@ -19,7 +19,7 @@
       "conditions": {
         "items":[
 		  {
-		    "item":"pvz:almanac"
+		    "items":["pvz:almanac"]
 		  }
 		]
       }

@@ -19,7 +19,7 @@
       "conditions": {
         "items":[
 		  {
-		    "item":"pvz:origin_essence"
+		    "items":["pvz:origin_essence"]
 		  }
 		]
       }

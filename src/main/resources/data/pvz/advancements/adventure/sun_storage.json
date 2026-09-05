@@ -20,7 +20,7 @@
       "conditions": {
         "items":[
 		  {
-		    "item":"pvz:sun_storage_sapling3",
+		    "items":["pvz:sun_storage_sapling3"],
 		    "nbt": "{sun_storage_amount:100000}"
 		  }
 		]

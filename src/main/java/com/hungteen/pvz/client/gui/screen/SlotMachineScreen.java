@@ -84,16 +84,17 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 	@SuppressWarnings("deprecation")
 	private void renderSlotMachine(PoseStack stack) {
 		final int currentPos = this.menu.te.array.get(13);
-		final float percent = Math.min(1F, this.menu.te.array.get(12) * 1.0F / this.menu.te.array.get(15));
+		final int changeTick = this.menu.te.array.get(12);
+		final int changeCd = this.menu.te.array.get(15);
+		final int offset = changeCd > 0 ? (changeCd - changeTick) * 18 / changeCd : 0;
 		stack.pushPose();
-		stack.translate(0, (1 - percent) * 18, 0);
 		
 		for(int i = 0; i < 4; ++ i) {
 			final int row = (currentPos + i - 2 + 4) % 4;
 			for(int j = 0; j < 3; ++ j) {
 				final SlotMachineTileEntity.SlotType type = this.menu.te.getLotteryType().getSlotType(this.menu.te.array.get(3 * row + j));
 				final int x = this.leftPos + 62 + 18 * j;
-				final int y = this.topPos + 58 - 18 * i;
+				final int y = this.topPos + 58 - 18 * i + offset;
 
 				stack.pushPose();
 				switch (type.getSlotTypes()){

@@ -1,6 +1,7 @@
 package com.hungteen.pvz.common.tileentity;
 
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.client.render.tileentity.EssenceAltarTER;
 import com.hungteen.pvz.client.render.tileentity.SunConverterTER;
 import com.hungteen.pvz.common.block.BlockRegister;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -39,6 +40,7 @@ public class TileEntityRegister {
 	public static void bindRenderers(FMLClientSetupEvent ev) {
 		ev.enqueueWork(() -> net.minecraft.client.Minecraft.getInstance().tell(() -> {
 			BlockEntityRenderers.register(TileEntityRegister.SUN_CONVERTER.get(), ctx -> new SunConverterTER(ctx.getBlockEntityRenderDispatcher()));
+			BlockEntityRenderers.register(TileEntityRegister.ESSENCE_ALTAR.get(), EssenceAltarTER::new);
 		}));
 	}
 	
