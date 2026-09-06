@@ -78,10 +78,10 @@ public abstract class PultBulletEntity extends AbstractBulletEntity implements I
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		} else if(! this.checkLive(result)) {
 			this.onHitBlock();
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	

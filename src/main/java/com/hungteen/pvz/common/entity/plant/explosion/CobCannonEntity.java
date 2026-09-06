@@ -223,9 +223,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 	@Nullable
 	protected EntityHitResult rayTraceEntities(Level world, Player player, double range, Vec3 startVec, Vec3 endVec) {
 		return ProjectileUtil.getEntityHitResult(world, player, startVec, endVec, 
-				player.getBoundingBox().inflate(range), entity -> {
-			return EntityUtil.isEntityValid(entity) && entity instanceof LivingEntity && ! entity.is(this);
-		});
+				player.getBoundingBox().inflate(range), entity -> EntityUtil.isEntityValid(entity) && entity instanceof LivingEntity && ! entity.is(this));
 	}
 
 	public boolean isPlayerRiding() {

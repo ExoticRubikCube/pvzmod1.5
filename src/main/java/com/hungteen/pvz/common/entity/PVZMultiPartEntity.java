@@ -68,7 +68,7 @@ public abstract class PVZMultiPartEntity extends Entity {
 				this.markHurt();
 				this.collideWithNearbyEntities();
 			} else {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 		super.tick();

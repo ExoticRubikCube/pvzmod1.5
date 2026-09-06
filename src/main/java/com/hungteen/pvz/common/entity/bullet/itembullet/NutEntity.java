@@ -50,7 +50,7 @@ public class NutEntity extends PVZItemBulletEntity {
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	

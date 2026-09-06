@@ -68,7 +68,7 @@ public class GardenRakeEntity extends AbstractOwnerEntity {
         	target.hurt(PVZEntityDamageSource.normal(this), 180F);
         });
 		EntityUtil.playSound(this, SoundRegister.SWING.get());
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 	
 	protected void onStartAttack() {
@@ -80,7 +80,7 @@ this.remove(RemovalReason.KILLED);
 		if(! this.isStartAttack() && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
 			if(! level.isClientSide()) {
 				player.addItem(new ItemStack(ItemRegister.GARDEN_RAKE.get()));
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 			return InteractionResult.SUCCESS;
 		}

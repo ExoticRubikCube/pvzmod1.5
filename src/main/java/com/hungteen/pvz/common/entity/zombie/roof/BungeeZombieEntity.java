@@ -81,7 +81,7 @@ public class BungeeZombieEntity extends PVZZombieEntity implements ICanPushBack 
 		super.normalZombieTick();
 		if(! level.isClientSide()) {
 			if (tickCount > 1000 && tickCount % 80 == 0 && this.canDespawn && this.getBungeeState() == BungeeStates.WAIT){
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 			//being push back by umbrella leaf.
 			if(this.getBungeeState() == BungeeStates.PUSH_BACK) {
@@ -92,7 +92,7 @@ this.remove(RemovalReason.KILLED);
 					if(this.getBungeeType() == BungeeTypes.SUMMON && EntityUtil.isEntityValid(this.getStealTarget())) {
 						this.getStealTarget().remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
 					}
-this.remove(RemovalReason.KILLED);
+this.discard();
 				}
 				return ;
 			}
@@ -234,7 +234,7 @@ this.remove(RemovalReason.KILLED);
 			this.moveBackToOrigin();
 			this.setAttackTime(this.getAttackTime() - 1);
 			if(this.getAttackTime() < - 60) {
-this.remove(RemovalReason.KILLED);
+this.discard();
             }
 		}
 	}
@@ -298,7 +298,7 @@ this.remove(RemovalReason.KILLED);
 	
 	private void dealDamageAndRemove() {
 //		this.getStealTarget().hurt(PVZEntityDamageSource.causeDeadlyDamage(this, this), EntityUtil.getMaxHealthDamage(this.getStealTarget()));//removed by GrassCarp.
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 	
 	/**

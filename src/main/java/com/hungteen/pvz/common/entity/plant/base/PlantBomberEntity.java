@@ -35,7 +35,7 @@ public abstract class PlantBomberEntity extends PVZPlantEntity {
 		} else {
 		    if(time > this.getReadyTime()) {
 			    this.startBomb(true);
-this.remove(RemovalReason.KILLED);
+this.discard();
 		    } 
 		    this.setAttackTime(time + 1);
 		}

@@ -23,10 +23,7 @@ public class DuckyTubeModel extends EntityModel<DuckyTubeEntity> {
 	private final ModelPart total;
 	private final ModelPart bone;
 
-
-
-
-public DuckyTubeModel(ModelPart root) {
+	public DuckyTubeModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.bone = this.total.getChild("bone");
 	}

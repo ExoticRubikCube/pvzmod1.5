@@ -20,6 +20,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -87,7 +88,7 @@ public class DoomShroomEntity extends PlantBomberEntity {
 			}
 		}
 
-		final int range = 10;
+		final int range = 6;
 		for (int h = 0; h <= range + 8; ++h) {
 			for (int i = -range; i <= range; ++i) {
 				for (int j = -range; j <= range; ++j) {
@@ -98,12 +99,13 @@ public class DoomShroomEntity extends PlantBomberEntity {
 			}
 		}
 
+		final Explosion explosion = new Explosion(this.level, this, this.getX(), this.getY(), this.getZ(), this.getExplodeRange(), false, Explosion.BlockInteraction.DESTROY);
 		posList.forEach(pos -> {
 			BlockState state = level.getBlockState(pos);
 			if (state.isAir() || state.getBlock().getExplosionResistance() > MAX_EXPLOSION_LEVEL) {
 				return;
 			}
-			level.destroyBlock(pos, true, this);
+			state.onBlockExploded(level, pos, explosion);
 		});
 	}
 

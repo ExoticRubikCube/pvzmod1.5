@@ -17,8 +17,10 @@
     "reach": {
       "trigger": "minecraft:location",
       "conditions": {
-        "biome":"pvz:zen_garden",
-        "dimension": "overworld"
+        "location": {
+          "biome": "pvz:zen_garden",
+          "dimension": "minecraft:overworld"
+        }
       }
     }
   },

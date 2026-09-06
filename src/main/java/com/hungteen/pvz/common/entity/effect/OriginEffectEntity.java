@@ -26,7 +26,7 @@ public class OriginEffectEntity extends AbstractEffectEntity {
 	public static void create(Level world, BlockPos pos, int color){
 		OriginEffectEntity effectEntity = EntityRegister.ORIGIN_EFFECT.get().create(world);
 		final boolean exist = EntityUtil.hasNearBy(world, pos, 5, e -> e instanceof OriginEffectEntity);
-		if(! exist) {// avoid overlapped.
+		if(!exist && effectEntity != null) {// avoid overlapped.
 			EntityUtil.onEntitySpawn(world, effectEntity, pos);
 			effectEntity.setColor(color);
 		}

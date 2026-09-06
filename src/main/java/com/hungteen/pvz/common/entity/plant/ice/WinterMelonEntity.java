@@ -29,7 +29,7 @@ public class WinterMelonEntity extends MelonPultEntity implements IIceEffect {
 	
 	@Override
 	public Optional<MobEffectInstance> getColdEffect() {
-		return Optional.ofNullable(new MobEffectInstance(EffectRegister.COLD_EFFECT.get(), this.getColdTick(), this.getColdLvl(), false, false));
+		return Optional.of(new MobEffectInstance(EffectRegister.COLD_EFFECT.get(), this.getColdTick(), this.getColdLvl(), false, false));
 	}
 	
 	@Override

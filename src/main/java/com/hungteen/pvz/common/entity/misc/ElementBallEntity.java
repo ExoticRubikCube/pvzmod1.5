@@ -69,7 +69,7 @@ public class ElementBallEntity extends AbstractOwnerEntity {
 			    }
 		    });
 		} 
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ this.remove(RemovalReason.KILLED);
 		this.tickCollision();
 		if(! level.isClientSide()) {
 			if(this.tickCount >= PVZConfig.COMMON_CONFIG.EntitySettings.EntityLiveTick.ElementBallLiveTick.get()) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 				return ;
 			}
 			if(this.isAutoBall){
@@ -93,7 +93,7 @@ this.remove(RemovalReason.KILLED);
 			if(this.getOwner() == null){
 				++ this.removeTick;
 				if(this.removeTick >= 15){
-this.remove(RemovalReason.KILLED);
+this.discard();
 				}
 			} else{
 				this.removeTick = 0;

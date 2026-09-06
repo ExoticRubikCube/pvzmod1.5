@@ -29,7 +29,7 @@ public class SmallChomperEntity extends AbstractOwnerEntity {
 		} else {
 			if(! this.level.isClientSide()) {
 			    this.performAttack();
-				this.remove(RemovalReason.KILLED);
+				this.discard();
 			}
 		}
 	}

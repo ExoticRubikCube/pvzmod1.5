@@ -51,7 +51,7 @@ public class MetalItemEntity extends PVZItemBulletEntity {
 				// near the thrower
 				if(this.getMetalState() == MetalStates.ABSORB) {
 					thrower.setMetalType(getMetalType());
-this.remove(RemovalReason.KILLED);
+this.discard();
 				} else if(this.getMetalState() == MetalStates.BULLET){
 					this.setMetalState(MetalStates.WAIT);
 				}
@@ -99,7 +99,7 @@ this.remove(RemovalReason.KILLED);
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || ! this.checkLive(result)) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	

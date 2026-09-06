@@ -12,8 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class AbstractEffectEntity extends PVZEntityBase {
 
-	private static final EntityDataAccessor<Integer> EXIST_TICK = SynchedEntityData.defineId(AbstractEffectEntity.class,
-			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> EXIST_TICK = SynchedEntityData.defineId(AbstractEffectEntity.class, EntityDataSerializers.INT);
 	protected int maxEffectTick;
 	
 	public AbstractEffectEntity(EntityType<?> type, Level world) {
@@ -32,7 +31,7 @@ public abstract class AbstractEffectEntity extends PVZEntityBase {
 		if(! this.level.isClientSide()) {
 			this.setExistTick(this.getExistTick() + 1);
 			if(this.getExistTick() > this.maxEffectTick) {
-this.remove(RemovalReason.KILLED);
+				this.discard();
 			}
 		}
 	}

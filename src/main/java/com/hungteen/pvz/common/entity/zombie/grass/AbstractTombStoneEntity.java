@@ -51,7 +51,7 @@ public abstract class AbstractTombStoneEntity extends PVZZombieEntity {
 			BlockPos pos = this.blockPosition();
 			this.setPos(pos.getX() + 0.5, this.getY(), pos.getZ() + 0.5);
 			if (-- lifeRange < 0 && (level.getDayTime() % 24000 < 12000 && random.nextInt(100) == 0) && level.getNearestPlayer(this, 20) == null){
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}//*0.6.4 to avoid tombstones from accumulating.
 		}
 	}

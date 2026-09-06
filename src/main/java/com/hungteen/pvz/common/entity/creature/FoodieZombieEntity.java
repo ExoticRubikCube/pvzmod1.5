@@ -34,10 +34,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class FoodieZombieEntity extends Animal {
 
-	private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(ItemRegister.FAKE_BRAIN.get(),
-			ItemRegister.REAL_BRAIN.get());
-	private static final EntityDataAccessor<Integer> GEN_TICK = SynchedEntityData.defineId(FoodieZombieEntity.class,
-			EntityDataSerializers.INT);
+	private static final Ingredient TEMPTATION_ITEMS = Ingredient.of(ItemRegister.FAKE_BRAIN.get(), ItemRegister.REAL_BRAIN.get());
+	private static final EntityDataAccessor<Integer> GEN_TICK = SynchedEntityData.defineId(FoodieZombieEntity.class, EntityDataSerializers.INT);
 	protected int lvl;
 	protected static final int MAX_LVL = 10;
 

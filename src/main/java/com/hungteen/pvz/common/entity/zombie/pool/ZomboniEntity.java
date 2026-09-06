@@ -68,7 +68,7 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 	@Override
 	public void removeParts() {
 		if(this.part != null) {
-			this.part.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+			this.part.discard();
 			this.part = null;
 		}
 	}

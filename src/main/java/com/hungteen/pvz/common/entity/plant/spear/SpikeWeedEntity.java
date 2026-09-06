@@ -44,7 +44,7 @@ public class SpikeWeedEntity extends PVZPlantEntity {
 		super.normalPlantTick();
 		if(! level.isClientSide()) {
 			if(this.getSpikeNum() <= 0) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 			if(this.getAttackTime() > 0) {
 				this.setAttackTime(this.getAttackTime() - 1);

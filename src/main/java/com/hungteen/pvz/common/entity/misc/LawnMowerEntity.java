@@ -47,7 +47,7 @@ public class LawnMowerEntity extends AbstractOwnerEntity {
 		super.tick();
 		if(! this.level.isClientSide()) {
 			if(this.isInWater() || this.tickCount >= PVZConfig.COMMON_CONFIG.EntitySettings.EntityLiveTick.LawnMowerLiveTick.get()) {
-				this.remove(RemovalReason.KILLED);
+				this.discard();
 				return ;
 			}
 			if(this.isStartRun()) {
@@ -87,7 +87,7 @@ public class LawnMowerEntity extends AbstractOwnerEntity {
 		if(! this.isStartRun() && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
 			if(! level.isClientSide()) {
 				player.addItem(new ItemStack(ItemRegister.LAWN_MOWER.get()));
-				this.remove(RemovalReason.KILLED);
+				this.discard();
 			}
 			return InteractionResult.SUCCESS;
 		}

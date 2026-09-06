@@ -84,7 +84,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 		for(int i = 0; i < 3; ++ i) {
 			EntityUtil.spawnParticle(this, 5);
 		}
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 
 	@Override

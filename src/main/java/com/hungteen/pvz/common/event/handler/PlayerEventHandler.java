@@ -55,7 +55,7 @@ public class PlayerEventHandler {
                     plantEntity.removeOuterPlant();
                 } else if (plantEntity.getPlantInfo().isPresent()) {
                     SunEntity.spawnSunsByAmount(player.level, plantEntity.blockPosition(), EnchantmentUtil.getSunShovelAmount(stack, plantEntity.getPlantInfo().get().getSunCost()));
-                    plantEntity.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+                    plantEntity.discard();
                 }
                 removed = ! (stack.getItem() instanceof OriginShovelItem);
                 EntityUtil.playSound(plantEntity, SoundRegister.PLACE_PLANT_GROUND.get());

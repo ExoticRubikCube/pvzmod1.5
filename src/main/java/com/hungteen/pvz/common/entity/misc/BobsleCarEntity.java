@@ -72,7 +72,7 @@ public class BobsleCarEntity extends Entity {
 		this.status = this.getCarStatus();
 		if (this.status == Status.IN_WATER) {
 			this.ejectPassengers();
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 		if (this.getTimeSinceHit() > 0) {
 			this.setTimeSinceHit(this.getTimeSinceHit() - 1);
@@ -236,7 +236,7 @@ this.remove(RemovalReason.KILLED);
 					if (!flag && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
 						this.spawnAtLocation(ItemRegister.BOBSLE_CAR.get());
 					}
-this.remove(RemovalReason.KILLED);
+this.discard();
 				}
 
 				return true;
@@ -455,7 +455,7 @@ this.remove(RemovalReason.KILLED);
 
 					this.causeFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
 					if (!this.level.isClientSide() && !this.isRemoved()) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 						if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
 							this.spawnAtLocation(ItemRegister.BOBSLE_CAR.get());
 						}

@@ -17,11 +17,11 @@
     "get_almanac": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "items":[
-		  {
-		    "items":["pvz:almanac"]
-		  }
-		]
+        "items": [
+          {
+            "item": "pvz:almanac"
+          }
+        ]
       }
     }
   },

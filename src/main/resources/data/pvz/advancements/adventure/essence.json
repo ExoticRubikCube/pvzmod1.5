@@ -17,11 +17,11 @@
     "get_origin": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "items":[
-		  {
-		    "items":["pvz:origin_essence"]
-		  }
-		]
+        "items": [
+          {
+            "item": "pvz:origin_essence"
+          }
+        ]
       }
     }
   },

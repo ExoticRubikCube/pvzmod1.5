@@ -59,7 +59,7 @@ public class SporeEntity extends PVZItemBulletEntity{
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || !this.checkLive(result)) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	

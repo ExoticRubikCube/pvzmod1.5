@@ -96,7 +96,7 @@ public class RaZombieEntity extends PVZZombieEntity {
 			Vec3 vec = now.subtract(sun.position());
 			if (vec.length() <= 2) {
 				this.sunAmount += sun.getAmount();
-				sun.remove(RemovalReason.KILLED);
+				sun.discard();
 			} else {
 				sun.setDeltaMovement(vec.normalize().scale(speed));
 			}

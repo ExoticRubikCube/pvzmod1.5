@@ -37,7 +37,7 @@ public class TangleKelpEntity extends PlantCloserEntity{
 	@Override
 	public void performAttack(LivingEntity target) {
 		target.hurt(PVZEntityDamageSource.normal(this), this.getAttackDamage());
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 
 	@Override

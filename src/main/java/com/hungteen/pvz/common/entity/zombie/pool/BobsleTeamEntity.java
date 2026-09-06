@@ -54,7 +54,7 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 			if(this.parts[i] == null) {
 				continue;
 			}
-			this.parts[i].remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+			this.parts[i].discard();
 			this.parts[i] = null;
 		}
 	}

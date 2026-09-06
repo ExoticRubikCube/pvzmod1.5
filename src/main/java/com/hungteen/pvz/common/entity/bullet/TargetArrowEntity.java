@@ -32,14 +32,14 @@ public class TargetArrowEntity extends AbstractArrow {
 	public void tick() {
 		if(! level.isClientSide()) {
 			if(! EntityUtil.isEntityValid(this.getOwner())) { // shooter died
-				this.remove(RemovalReason.KILLED);
+				this.discard();
 				return ;
 			} else {
 				if(this.getOwner() instanceof BungeeZombieEntity bungee) {
                     if(EntityUtil.isEntityValid(bungee.getStealTarget())) {
 						this.shoot(bungee.getStealTarget());
 					} else {
-						this.remove(RemovalReason.KILLED);
+						this.discard();
 						return ;
 					}
 				}
@@ -61,7 +61,7 @@ public class TargetArrowEntity extends AbstractArrow {
 			zombie.setStealTarget((LivingEntity) result.getEntity());
 			EntityUtil.onEntitySpawn(level, zombie, blockPosition().above(20));
 			super.onHitEntity(result);
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	

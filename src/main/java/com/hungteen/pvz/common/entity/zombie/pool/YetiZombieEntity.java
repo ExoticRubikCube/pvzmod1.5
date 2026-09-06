@@ -55,7 +55,7 @@ public class YetiZombieEntity extends PVZZombieEntity{
 				}
 				this.heal(0.5f);
 			} else if(this.live_tick >= this.getYetiMaxLiveTick()) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 	}

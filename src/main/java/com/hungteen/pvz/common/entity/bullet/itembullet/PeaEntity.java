@@ -57,7 +57,7 @@ public class PeaEntity extends AbstractShootBulletEntity implements ItemSupplier
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag || !this.checkLive(result)) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	

@@ -36,7 +36,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 	@Override
 	public void removeParts() {
 		if(EntityUtil.isEntityValid(this.part)) {
-			this.part.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+			this.part.discard();
 			this.part = null;
 		}
 	}

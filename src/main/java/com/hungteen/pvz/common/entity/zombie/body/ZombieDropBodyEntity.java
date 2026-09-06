@@ -64,7 +64,7 @@ public class ZombieDropBodyEntity extends PVZEntityBase implements IBodyEntity {
 		this.tickMove();
 		if (!this.level.isClientSide()) {
 			if (this.getAnimTime() >= this.max_exist_tick) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			} else {
 				this.setAnimTime(this.getAnimTime() + 1);
 			}

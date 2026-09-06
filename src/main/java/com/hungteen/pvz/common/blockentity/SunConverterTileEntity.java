@@ -117,7 +117,7 @@ public class SunConverterTileEntity extends BlockEntity implements MenuProvider 
 		if(amount > 0) {
 			sun.setAmount(amount);
 		} else {
-			sun.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+			sun.discard();
 		}
 	}
 	

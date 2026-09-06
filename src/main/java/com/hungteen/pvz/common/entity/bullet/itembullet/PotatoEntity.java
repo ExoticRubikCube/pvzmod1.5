@@ -46,7 +46,7 @@ public class PotatoEntity extends PVZItemBulletEntity{
             mine.setPos(this.getX(), this.getY(), this.getZ());
             mine.setRisingFromDirt();
             this.level.addFreshEntity(mine);
-this.remove(RemovalReason.KILLED);
+this.discard();
         }
 	}
 

@@ -48,7 +48,7 @@ public class GraveBusterEntity extends PVZPlantEntity{
 			    this.setExistTick(0);
 			}
 			if(this.getExistTick() > MAX_LIVE_TICK) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 	}

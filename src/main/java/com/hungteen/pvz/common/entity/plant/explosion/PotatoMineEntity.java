@@ -74,7 +74,7 @@ public class PotatoMineEntity extends PlantCloserEntity{
 				EntityUtil.spawnParticle(this, 3);
 				EntityUtil.spawnParticle(this, 4);
 			}
-this.remove(RemovalReason.KILLED);
+			this.discard();
 		}
 	}
 	

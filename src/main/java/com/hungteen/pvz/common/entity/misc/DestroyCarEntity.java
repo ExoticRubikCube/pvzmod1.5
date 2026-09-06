@@ -24,7 +24,7 @@ public class DestroyCarEntity extends AbstractOwnerEntity {
 		super.tick();
 		if(! level.isClientSide()) {
 			if(this.tickCount >= 100 || this.isOnGround()) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 		this.tickMove();

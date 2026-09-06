@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,12 +51,11 @@ public class SnailEntity extends Animal {
 		@Override
 		public boolean canUse() {
 			if(this.owner.getRandom().nextInt(this.targetChance) != 0) return false;
-			List<Entity> list = this.world.getEntitiesOfClass(Entity.class, EntityUtil.getEntityAABB(this.owner, this.range, this.range), (entity) -> {
-				return true;
-			});
-			if(list.isEmpty()) return false;
-			Collections.sort(list, this.sorter);
-			this.owner.targetEntity = Optional.of(list.get(0));
+			List<Entity> list = this.world.getEntitiesOfClass(Entity.class, EntityUtil.getEntityAABB(this.owner, this.range, this.range), (entity) -> true);
+			if(!list.isEmpty()) {
+				list.sort(this.sorter);
+				this.owner.targetEntity = Optional.of(list.get(0));
+			}
 			return true;
 		}
 		

@@ -79,7 +79,7 @@ public class ThornEntity extends AbstractBulletEntity {
 				}
 			}
 			if(this.getThrower() == null) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 	}
@@ -157,7 +157,7 @@ this.remove(RemovalReason.KILLED);
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if ((! (this.getThornType() == ThornTypes.AUTO) && this.extraHitCount == 0)) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 

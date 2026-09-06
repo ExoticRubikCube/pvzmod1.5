@@ -39,7 +39,7 @@ public class FireCrackersEntity extends AbstractOwnerEntity {
 				this.setFuse(this.getFuse() - 1);
 				if(this.getFuse() <= 0) {
 					this.explode();
-this.remove(RemovalReason.KILLED);
+this.discard();
 				}
 			}
 		}

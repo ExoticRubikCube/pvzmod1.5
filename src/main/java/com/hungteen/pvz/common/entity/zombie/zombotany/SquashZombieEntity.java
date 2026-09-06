@@ -35,7 +35,7 @@ public class SquashZombieEntity extends AbstractZombotanyEntity {
 				squash.setCharmed(! this.isCharmed());
 				squash.setTarget(target);
 				EntityUtil.onEntitySpawn(level, squash, blockPosition().above(2));
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 	}

@@ -17,7 +17,11 @@
     "get_origin": {
       "trigger": "minecraft:placed_block",
       "conditions": {
-        "block": "pvz:origin_block"
+        "location": {
+          "block": {
+            "blocks": ["pvz:origin_block"]
+          }
+        }
       }
     }
   },

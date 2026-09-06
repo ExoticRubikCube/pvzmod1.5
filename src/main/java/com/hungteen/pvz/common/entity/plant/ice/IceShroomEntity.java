@@ -42,8 +42,8 @@ public class IceShroomEntity extends PlantBomberEntity implements IIceEffect{
 			int cnt = 0;
 			for(LivingEntity entity : EntityUtil.getTargetableLivings(this, aabb)) {
 				 PVZEntityDamageSource source = PVZEntityDamageSource.causeIceDamage(this, this);
-				 this.getColdEffect().ifPresent(e -> source.addEffect(e));
-				 this.getFrozenEffect().ifPresent(e -> source.addEffect(e));
+				 this.getColdEffect().ifPresent(source::addEffect);
+				 this.getFrozenEffect().ifPresent(source::addEffect);
 				 entity.hurt(source, this.getExplodeDamage());
 				 if(EntityUtil.isEntityCold(entity)) {
 					 ++ cnt;
@@ -52,7 +52,7 @@ public class IceShroomEntity extends PlantBomberEntity implements IIceEffect{
 			EntityUtil.playSound(this, SoundRegister.FROZEN.get());
 			//trigger advancement.
 			final Player player = EntityUtil.getEntityOwner(level, this);
-			if(player != null && player instanceof ServerPlayer) {
+			if(player instanceof ServerPlayer) {
 				EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) player, this, cnt);
 			}
 			//kill flame ball.

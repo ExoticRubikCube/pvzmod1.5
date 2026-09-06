@@ -61,7 +61,7 @@ public abstract class AbstractBowlingEntity extends AbstractOwnerEntity {
 				this.playSpawnSound = true;
 			}
 			if(this.tickCount >= this.getMaxLiveTick()) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 			}
 		}
 		this.yRotO = this.getYRot();
@@ -79,7 +79,7 @@ this.remove(RemovalReason.KILLED);
 			if(this.wallTick > 0) -- this.wallTick;
 			if(this.bowlingTick == 0 && this.horizontalCollision) {// collide with wall
 				if(this.wallTick > 0) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 				} else {
 					this.wallTick = 15;
 					this.changeDiretion();

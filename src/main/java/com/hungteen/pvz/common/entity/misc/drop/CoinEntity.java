@@ -52,8 +52,10 @@ public class CoinEntity extends DropEntity {
 	 */
 	public static void spawnCoin(Level world, BlockPos pos, CoinType type) {
 		final CoinEntity coin = EntityRegister.COIN.get().create(world);
-		coin.setAmount(type.money);
-		EntityUtil.onEntitySpawn(world, coin, pos);
+        if (coin != null) {
+			coin.setAmount(type.money);
+			EntityUtil.onEntitySpawn(world, coin, pos);
+		}
 	}
 
 	public void setAmountByType(CoinType type) {

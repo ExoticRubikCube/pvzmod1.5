@@ -50,7 +50,7 @@ public class SquashEntity extends PVZPlantEntity{
 						-- this.extraChance;
 					}else {
 						if(this.getRandom().nextFloat() > this.getAgainChance()) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 						}
 					}
 				}

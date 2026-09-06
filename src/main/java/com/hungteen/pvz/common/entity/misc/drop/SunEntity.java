@@ -71,7 +71,7 @@ public class SunEntity extends DropEntity {
 			if (following instanceof SunEntity){
 				if (this.distanceTo(following) < 0.5F){
 					((SunEntity) following).setAmount(((SunEntity) following).getAmount()+this.getAmount());
-this.remove(RemovalReason.KILLED);
+this.discard();
 				}
 			}
 			Vec3 vec3 = new Vec3(this.following.getX() - this.getX(), this.following.getY() + (double)this.following.getEyeHeight() / 2.0D - this.getY(), this.following.getZ() - this.getZ());
@@ -107,7 +107,7 @@ this.remove(RemovalReason.KILLED);
 			PlayerUtil.addResource(living, Resources.SUN_NUM, this.getAmount());
 			PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
 		}
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 
 	@Override

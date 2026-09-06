@@ -32,7 +32,7 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
 		}
 		EntityUtil.playSound(this, SoundRegister.FROZEN.get());
 		this.dealDamageTo(target);
-this.remove(RemovalReason.KILLED);
+		this.discard();
 	}
 	
 	@Override

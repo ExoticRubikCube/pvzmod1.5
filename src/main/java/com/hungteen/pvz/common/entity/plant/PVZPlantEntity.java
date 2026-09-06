@@ -143,6 +143,7 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 		}
 		super.tick();
 	}
+
 	@Override
 	public void pazTick() {
 		super.pazTick();
@@ -552,7 +553,7 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 		// keep sleep of plant
 		plantEntity.sleepTime = this.sleepTime;
 		// remove old plant itself
-this.remove(RemovalReason.KILLED);
+this.discard();
 	}
 	
 	@Override

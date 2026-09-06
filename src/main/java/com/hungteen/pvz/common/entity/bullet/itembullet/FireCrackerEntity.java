@@ -57,10 +57,10 @@ public class FireCrackerEntity extends PVZItemBulletEntity{
 		}
 		this.level.broadcastEntityEvent(this, (byte) 3);
 		if (flag) {
-this.remove(RemovalReason.KILLED);
+this.discard();
 		} else if(! this.checkLive(result)) {
 			this.dealDamage(null);
-this.remove(RemovalReason.KILLED);
+this.discard();
 		}
 	}
 	
