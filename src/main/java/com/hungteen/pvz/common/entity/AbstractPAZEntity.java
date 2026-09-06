@@ -594,7 +594,7 @@ this.remove(RemovalReason.KILLED);
 
     /**
      * how many health does zombie has.
-     * {@link EntityUtil#getCurrentHealth(net.minecraft.entity.LivingEntity)}
+     *
      */
     public double getCurrentHealth() {
         return this.getInnerDefenceLife() + this.getHealth();
@@ -602,7 +602,7 @@ this.remove(RemovalReason.KILLED);
 
     /**
      * how many max health does zombie have currently.
-     * {@link EntityUtil#getCurrentMaxHealth(net.minecraft.entity.LivingEntity)}
+     *
      */
     public double getCurrentMaxHealth() {
         return this.getInnerLife() + this.getMaxHealth();

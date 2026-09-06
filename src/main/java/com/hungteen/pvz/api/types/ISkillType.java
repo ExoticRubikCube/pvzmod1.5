@@ -32,7 +32,7 @@ public interface ISkillType extends IIDType {
     /**
      * if summon card got this skill, it will raise cost.
      */
-    default int getExtraSun(){
+    default int getExtraSun() {
         return 0;
     }
 

@@ -278,7 +278,7 @@ public class FragmentRecipe implements CraftingRecipe, IShapedRecipe<CraftingCon
 
     public static ItemStack itemFromJson(JsonObject p_199798_0_) {
         String s = GsonHelper.getAsString(p_199798_0_, "item");
-        Item item = Registry.ITEM.getOptional(ResourceLocation.parse(s)).orElseThrow(() -> {
+        Item item = Registry.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
             return new JsonSyntaxException("Unknown item '" + s + "'");
         });
         if (p_199798_0_.has("data")) {

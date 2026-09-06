@@ -7,11 +7,11 @@ import com.hungteen.pvz.utils.interfaces.ICanAttract;
  */
 public interface ICanBeAttracted {
 
-	/**
-	 * can be attracted by the specific defender.
-	 */
-	boolean canBeAttractedBy(ICanAttract defender);
-	
-	void attractBy(ICanAttract defender);
-	
+    /**
+     * can be attracted by the specific defender.
+     */
+    boolean canBeAttractedBy(ICanAttract defender);
+
+    void attractBy(ICanAttract defender);
+
 }

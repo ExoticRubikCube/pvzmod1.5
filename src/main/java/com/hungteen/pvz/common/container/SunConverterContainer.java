@@ -1,7 +1,7 @@
 package com.hungteen.pvz.common.container;
 
 import com.hungteen.pvz.common.block.special.SunConverterBlock;
-import com.hungteen.pvz.common.tileentity.SunConverterTileEntity;
+import com.hungteen.pvz.common.blockentity.SunConverterTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

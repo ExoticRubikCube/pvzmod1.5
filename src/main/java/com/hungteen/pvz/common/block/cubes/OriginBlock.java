@@ -38,11 +38,9 @@ public class OriginBlock extends Block {
         BLOCK_TO_ESSENCE.clear();
 
         EssenceTypes.getEssences().forEach(e -> {
-            e.getRadiationBlockTag().ifPresent(tagKey -> {
-                blockRegistry.getTag(tagKey).ifPresent(holders -> {
-                    holders.forEach(holder -> {
-                        BLOCK_TO_ESSENCE.put(holder.value(), e);
-                    });
+            e.getRadiationBlockTag().flatMap(blockRegistry::getTag).ifPresent(holders -> {
+                holders.forEach(holder -> {
+                    BLOCK_TO_ESSENCE.put(holder.value(), e);
                 });
             });
         });

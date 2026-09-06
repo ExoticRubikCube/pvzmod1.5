@@ -42,7 +42,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -307,8 +306,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	/**
 	 * trigger when zombie be mini state.
 	 * change max health to 60% and give speed effect and damage boost.
-	 * {@link #finalizeSpawn(ServerLevelAccessor, DifficultyInstance, MobSpawnType, SpawnGroupData, CompoundTag)}
-	 */
+	 *
+     */
 	public void onZombieBeMini() {
 		this.setMiniZombie(true);
 		final float healthDec = 0.6F;

@@ -55,7 +55,7 @@ public class FusionRecipeBuilder {
     }
 
     public FusionRecipeBuilder requires(ItemLike itemProvider, int count) {
-        for(int i = 0; i < count; ++i) {
+        for (int i = 0; i < count; ++i) {
             this.requires(Ingredient.of(itemProvider));
         }
 
@@ -67,7 +67,7 @@ public class FusionRecipeBuilder {
     }
 
     public FusionRecipeBuilder requires(Ingredient ingredient, int ingredientCount) {
-        for(int i = 0; i < ingredientCount; ++i) {
+        for (int i = 0; i < ingredientCount; ++i) {
             this.ingredients.add(ingredient);
         }
 
@@ -90,17 +90,17 @@ public class FusionRecipeBuilder {
 
     public void save(Consumer<FinishedRecipe> consumer, String name) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
-        if ((ResourceLocation.parse(name)).equals(resourcelocation)) {
+        if ((new ResourceLocation(name)).equals(resourcelocation)) {
             throw new IllegalStateException("Shapeless Recipe " + name + " should remove its 'save' argument");
         } else {
-            this.save(consumer, ResourceLocation.parse(name));
+            this.save(consumer, new ResourceLocation(name));
         }
     }
 
     public void save(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
         this.ensureValid(recipeId);
-        this.advancement.parent(ResourceLocation.parse("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
-        consumer.accept(new FusionRecipeBuilder.Result(recipeId, this.result, this.count, this.group == null ? "" : this.group, this.ingredients, ResourceLocation.fromNamespaceAndPath(recipeId.getNamespace(), "recipes/" + recipeId.getPath())));
+        this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
+        consumer.accept(new FusionRecipeBuilder.Result(recipeId, this.result, this.count, this.group == null ? "" : this.group, this.ingredients, new ResourceLocation(recipeId.getNamespace(), "recipes/" + recipeId.getPath())));
     }
 
     private void ensureValid(ResourceLocation recipeId) {
@@ -130,7 +130,7 @@ public class FusionRecipeBuilder {
 
             JsonArray jsonarray = new JsonArray();
 
-            for(Ingredient ingredient : this.ingredients) {
+            for (Ingredient ingredient : this.ingredients) {
                 jsonarray.add(ingredient.toJson());
             }
 

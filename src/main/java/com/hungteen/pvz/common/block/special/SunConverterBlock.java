@@ -1,8 +1,8 @@
 package com.hungteen.pvz.common.block.special;
 
+import com.hungteen.pvz.common.blockentity.SunConverterTileEntity;
 import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
 import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
-import com.hungteen.pvz.common.tileentity.SunConverterTileEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

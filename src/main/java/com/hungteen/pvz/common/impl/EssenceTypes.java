@@ -171,9 +171,6 @@ public class EssenceTypes {
 			ESSENCE_TYPES.add(this);
 		}
 
-		/**
-		 * {@link CoreRegister#register()}
-		 */
 		public static void register(){
 			PVZAPI.get().registerEssenceTypes(ESSENCE_TYPES);
 		}

@@ -68,7 +68,6 @@ public class SpawnType{
     }
 
     public enum PlaceType{
-
         LAND,
         WATER,
         SNOW,

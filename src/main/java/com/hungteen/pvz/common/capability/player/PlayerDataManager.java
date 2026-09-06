@@ -76,7 +76,7 @@ public class PlayerDataManager {
 	}
 	
 	/**
-	 * read {@link PlayerDataStorage#readNBT(net.minecraftforge.common.capabilities.Capability, IPlayerDataCapability, net.minecraft.util.Direction, net.minecraft.nbt.Tag)}.
+	 * read .
 	 */
 	public void loadFromNBT(CompoundTag baseTag) {
 		{// load player resources.
@@ -170,7 +170,7 @@ public class PlayerDataManager {
 	}
 	
 	/**
-	 * write {@link PlayerDataStorage#writeNBT(net.minecraftforge.common.capabilities.Capability, IPlayerDataCapability, net.minecraft.util.Direction)}.
+	 * write .
 	 */
 	public CompoundTag saveToNBT() {
 		CompoundTag baseTag = new CompoundTag();

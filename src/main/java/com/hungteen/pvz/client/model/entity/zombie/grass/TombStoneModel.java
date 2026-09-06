@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15 - 1.16
 // Paste this class into your mod and generate all required imports
 public class TombStoneModel<T extends AbstractTombStoneEntity> extends EntityModel<T> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "tomb_stone"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "tomb_stone"), "main");
 
 	private final ModelPart total;
 	private final ModelPart logo;

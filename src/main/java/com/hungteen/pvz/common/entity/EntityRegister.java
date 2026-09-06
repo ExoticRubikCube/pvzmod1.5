@@ -281,11 +281,12 @@ public class EntityRegister {
 		}
 		Arrays.asList(
 				SUN.get(), COIN.get(), JEWEL.get(), ENERGY.get(),
-				CRAZY_DAVE.get(), SUN_DAVE.get(), PANNEY.get(),
+				CRAZY_DAVE.get(), SUN_DAVE.get(),
 				FOODIE_ZOMBIE.get()
 		).forEach(obj -> {
 			ev.put(obj, PathfinderMob.createMobAttributes().build());
 		});
+		ev.put(PANNEY.get(),PennyEntity.createPennyAttributes());
 	}
 
 	private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(EntityFactory<T> factory, String name, MobCategory classification){

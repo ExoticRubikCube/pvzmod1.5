@@ -2,11 +2,11 @@ package com.hungteen.pvz.common.container;
 
 import com.hungteen.pvz.api.types.IPAZType;
 import com.hungteen.pvz.api.types.ISkillType;
+import com.hungteen.pvz.common.blockentity.EssenceAltarTileEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.item.material.EssenceItem;
 import com.hungteen.pvz.common.item.spawn.card.ImitaterCardItem;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
-import com.hungteen.pvz.common.tileentity.EssenceAltarTileEntity;
 import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;

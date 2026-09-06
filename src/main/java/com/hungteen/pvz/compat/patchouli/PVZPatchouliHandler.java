@@ -11,7 +11,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 public class PVZPatchouliHandler {
 
 	public static final String PATCHOULI = "patchouli";
-	public static final ResourceLocation GUIDE_BOOK = ResourceLocation.fromNamespaceAndPath(PATCHOULI, "guide_book");
+	public static final ResourceLocation GUIDE_BOOK = new ResourceLocation(PATCHOULI, "guide_book");
 	public static final ResourceLocation PVZ_GUIDE = StringUtil.prefix("pvz_guide");
 
 	public static void giveInitialGuideBook(Player player) {
@@ -35,7 +35,7 @@ public class PVZPatchouliHandler {
 	}
 
 	public static ResourceLocation prefix(String res) {
-		return ResourceLocation.fromNamespaceAndPath(PATCHOULI, res);
+		return new ResourceLocation(PATCHOULI, res);
 	}
 
 	public static boolean isPatchouliLoaded() {

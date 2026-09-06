@@ -23,7 +23,7 @@ import net.minecraft.util.Mth;
 
 public class SunRender extends EntityRenderer<SunEntity> {
 
-	private static final ResourceLocation SUN_LOCATION = ResourceLocation.fromNamespaceAndPath("pvz", "textures/entity/drop/sun.png");
+	private static final ResourceLocation SUN_LOCATION = new ResourceLocation("pvz", "textures/entity/drop/sun.png");
 	private static final RenderType RENDER_TYPE = RenderType.itemEntityTranslucentCull(SUN_LOCATION);
 
 	public SunRender(EntityRendererProvider.Context context) {

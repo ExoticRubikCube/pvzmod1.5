@@ -1,10 +1,10 @@
 package com.hungteen.pvz.common.block.special;
 
 import com.hungteen.pvz.common.block.AbstractFacingBlock;
+import com.hungteen.pvz.common.blockentity.SlotMachineTileEntity;
+import com.hungteen.pvz.common.blockentity.TileEntityRegister;
 import com.hungteen.pvz.common.datapack.LotteryTypeLoader;
 import com.hungteen.pvz.common.item.PVZItemGroups;
-import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
-import com.hungteen.pvz.common.tileentity.TileEntityRegister;
 import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -88,7 +88,7 @@ public class SlotMachineBlock extends AbstractFacingBlock implements EntityBlock
 	}
 
 	public static ResourceLocation getResourceTag(ItemStack stack) {
-		return ResourceLocation.parse(stack.getOrCreateTagElement(StringUtil.TE_TAG).getString("lottery_type"));
+		return new ResourceLocation(stack.getOrCreateTagElement(StringUtil.TE_TAG).getString("lottery_type"));
 	}
 
 	@Override

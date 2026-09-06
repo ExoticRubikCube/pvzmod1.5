@@ -5,14 +5,14 @@ import com.hungteen.pvz.api.types.IZombieType;
 
 public interface IBodyEntity {
 
-	IZombieType getZombieType();
+    IZombieType getZombieType();
 
-	BodyType getBodyType();
+    BodyType getBodyType();
 
-	boolean hasHandDefence();
-	
-	boolean isMini();
+    boolean hasHandDefence();
 
-	int getAnimTime();
+    boolean isMini();
+
+    int getAnimTime();
 
 }

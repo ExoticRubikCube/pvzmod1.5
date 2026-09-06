@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public interface IHasOwner {
 
-	Optional<UUID> getOwnerUUID();
+    Optional<UUID> getOwnerUUID();
 }

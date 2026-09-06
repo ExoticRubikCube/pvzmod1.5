@@ -65,7 +65,7 @@ public class GardenCompassItem extends Item {
 
 	private BlockPos getPointPosition(LivingEntity player) {
 		BlockPos blockpos = new BlockPos(player.position());
-		ResourceKey<Biome> targetKey = ResourceKey.create(Registry.BIOME_REGISTRY, ResourceLocation.fromNamespaceAndPath("pvz", "zen_garden"));
+		ResourceKey<Biome> targetKey = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation("pvz", "zen_garden"));
 		Registry<Biome> biomeReg = player.getServer().registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
 		Biome targetBiome = biomeReg.get(targetKey);
 		if (targetBiome == null) {

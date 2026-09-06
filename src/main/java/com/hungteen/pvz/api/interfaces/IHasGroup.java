@@ -4,8 +4,8 @@ import com.hungteen.pvz.api.enums.PVZGroupType;
 
 public interface IHasGroup {
 
-	/**
-	 * which group the entity in.
-	 */
-	PVZGroupType getEntityGroupType();
+    /**
+     * which group the entity in.
+     */
+    PVZGroupType getEntityGroupType();
 }

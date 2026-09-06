@@ -30,9 +30,7 @@ public class ChallengeTrigger extends SimpleCriterionTrigger<ChallengeTrigger.In
     }
 
     public void trigger(ServerPlayer player, String s) {
-        this.trigger(player, (instance) -> {
-            return instance.test(player, s);
-        });
+        this.trigger(player, (instance) -> instance.test(player, s));
     }
 
     public static class Instance extends AbstractCriterionTriggerInstance {

@@ -2,10 +2,11 @@ modLoader="javafml"
 license="GNU LESSER GENERAL PUBLIC LICENSE" 
 loaderVersion="[43,)" 
 issueTrackerURL="https://github.com/ExoticRubikCube/pvzmod1.5"
+mixinConfigs="pvz.mixins.json"
 
 [[mods]]
 modId="pvz"
-version="0.6.5"
+version="0.6.6-fix.1"
 displayName="Plants vs Zombies"
 authors="SuSen36, _HungTeen_, Wolf__Crystal, Grass_Carp"
 logoFile="logo.png"
@@ -16,7 +17,7 @@ configBackground="pvz:textures/block/amethyst_block.png"
 [[dependencies.pvz]]
     modId="forge"
     mandatory=true
-    versionRange="[43.0.0,)"
+    versionRange="[43.2.0,)"
     
 [[dependencies.pvz]]
     modId="minecraft"

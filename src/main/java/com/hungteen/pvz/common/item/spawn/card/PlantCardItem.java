@@ -390,8 +390,8 @@ public class PlantCardItem extends SummonCardItem {
 	
 	/**
 	 * check sunCost and heal defender plantEntity.
-	 * {@link PVZPlantEntity#interactAt(Player, net.minecraft.util.math.vector.Vec3, InteractionHand)}
-	 */
+	 *
+     */
 	public static boolean checkSunAndHealPlant(Player player, PVZPlantEntity plantEntity, PlantCardItem cardItem,
 			ItemStack heldStack) {
 		/* check held stack */
@@ -415,8 +415,8 @@ public class PlantCardItem extends SummonCardItem {
 	
 	/**
 	 * check sunCost and heal defender plantEntity.
-	 * {@link PVZPlantEntity#interactAt(Player, net.minecraft.util.math.vector.Vec3, InteractionHand)}
-	 */
+	 *
+     */
 	public static boolean checkSunAndUpgradePlant(Player player, PVZPlantEntity plantEntity, PlantCardItem cardItem,
 			ItemStack heldStack) {
 		/* check held stack */
@@ -440,8 +440,8 @@ public class PlantCardItem extends SummonCardItem {
 	
 	/**
 	 * check sunCost and heal defender plantEntity.
-	 * {@link PVZPlantEntity#interactAt(Player, net.minecraft.util.math.vector.Vec3, InteractionHand)}
-	 */
+	 *
+     */
 	public static boolean checkSunAndInteractEntity(Player player, Entity entity, PlantCardItem cardItem,
 			ItemStack heldStack, Predicate<IPlantType> pre, Consumer<PVZPlantEntity> con) {
 		/* check held stack */

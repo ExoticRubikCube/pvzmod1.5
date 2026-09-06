@@ -7,15 +7,15 @@ import com.hungteen.pvz.common.entity.PVZMultiPartEntity;
  */
 public interface IHasMultiPart {
 
-	void resetParts();
-	
-	void removeParts();
-	
-	void updateParts();
-	
-	/**
-	 * get all part entities the zombie own.
-	 */
-	PVZMultiPartEntity[] getMultiParts();
-	
+    void resetParts();
+
+    void removeParts();
+
+    void updateParts();
+
+    /**
+     * get all part entities the zombie own.
+     */
+    PVZMultiPartEntity[] getMultiParts();
+
 }

@@ -76,11 +76,15 @@ public class PVZInvasionData extends SavedData {
 	}
 
 	public static PVZInvasionData getOverWorldInvasionData(Level worldIn) {
-		if (!(worldIn instanceof ServerLevel)) {
+		if (!(worldIn instanceof ServerLevel serverLevel)) {
 			throw new RuntimeException("Attempted to get the data from a client world. This is wrong.");
 		}
-		final ServerLevel world = worldIn.getServer().getLevel(Level.OVERWORLD);
-		DimensionDataStorage storage = world.getDataStorage();
+		ServerLevel overworld = serverLevel.getServer().getLevel(Level.OVERWORLD);
+
+		if (overworld == null) {
+			throw new IllegalStateException("Cannot access Overworld data: Overworld dimension is null.");
+		}
+		DimensionDataStorage storage = overworld.getDataStorage();
 		return storage.computeIfAbsent(PVZInvasionData::deserialize, PVZInvasionData::new, DATA_NAME);
 	}
 

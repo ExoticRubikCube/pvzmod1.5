@@ -1,7 +1,7 @@
 package com.hungteen.pvz.client.render.tileentity;
 
 import com.hungteen.pvz.client.model.entity.te.OriginModel;
-import com.hungteen.pvz.common.tileentity.EssenceAltarTileEntity;
+import com.hungteen.pvz.common.blockentity.EssenceAltarTileEntity;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,7 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class EssenceAltarTER implements BlockEntityRenderer<EssenceAltarTileEntity> {
 
-	private static final ResourceLocation RES = StringUtil.prefix("textures/tileentity/origin.png");
+	private static final ResourceLocation RES = StringUtil.prefix("textures/blockentity/origin.png");
 	private final OriginModel origin;
 
 	public EssenceAltarTER(BlockEntityRendererProvider.Context context) {

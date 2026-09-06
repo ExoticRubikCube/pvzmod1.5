@@ -46,7 +46,7 @@ public class InvasionTypeLoader extends SimpleJsonResourceReloadListener {
                 invasionType.setTriggerChance(chance);
 
                 if(jsonObject.has("bonus")){
-                    final ResourceLocation bonus = ResourceLocation.parse(GsonHelper.getAsString(jsonObject, "bonus"));
+                    final ResourceLocation bonus = new ResourceLocation(GsonHelper.getAsString(jsonObject, "bonus"));
                     invasionType.setBonusResource(bonus);
                 }
 
@@ -59,7 +59,7 @@ public class InvasionTypeLoader extends SimpleJsonResourceReloadListener {
                         final JsonObject obj  = e.getAsJsonObject();
 
                         /* entity type */
-                        final EntityType<? extends Mob> entityType = (EntityType<? extends Mob>) ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, StringUtil.ENTITY_TYPE, "")));
+                        final EntityType<? extends Mob> entityType = (EntityType<? extends Mob>) ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(GsonHelper.getAsString(obj, StringUtil.ENTITY_TYPE, "")));
                         if(entityType == null) {
                             throw new JsonSyntaxException("entity type cannot be empty or wrong format");
                         }

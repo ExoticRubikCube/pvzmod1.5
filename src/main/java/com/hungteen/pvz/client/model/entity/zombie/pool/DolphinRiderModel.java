@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 public class DolphinRiderModel extends EntityModel<DolphinRiderEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "dolphin_rider"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "dolphin_rider"), "main");
 
 	private final ModelPart total;
 	private final ModelPart zombie;

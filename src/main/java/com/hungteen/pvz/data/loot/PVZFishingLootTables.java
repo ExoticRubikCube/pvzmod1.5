@@ -8,9 +8,9 @@ import java.util.function.Consumer;
 
 public class PVZFishingLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
 
-	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> t) {
-		
-	}
+    @Override
+    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> t) {
+
+    }
 
 }

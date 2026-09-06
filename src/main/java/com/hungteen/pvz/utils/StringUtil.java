@@ -58,7 +58,7 @@ public class StringUtil {
 	
 	
 	public static ResourceLocation prefix(String a) {
-		return ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, a);
+		return new ResourceLocation(PVZMod.MOD_ID, a);
 	}
 
 	public static String identify(String modId, String name){
@@ -74,7 +74,7 @@ public class StringUtil {
 	
 	public static void drawCenteredString(PoseStack stack, Font render, String string, int x, int y, int color) {
 		final int width = render.width(string);
-		render.draw(stack, string, x - width / 2, y, color);
+		render.draw(stack, string, x - (float) width / 2, y, color);
 	}
 
 	public static void drawCenteredScaledString(PoseStack stack, Font render, String string, int x, int y, int color,
@@ -82,7 +82,7 @@ public class StringUtil {
 		int width = render.width(string);
 		stack.pushPose();
 		stack.scale(scale, scale, scale);
-		render.draw(stack, string, (x - width / 2 * scale) / scale, y / scale, color);
+		render.draw(stack, string, (x - (float) width / 2 * scale) / scale, y / scale, color);
 		stack.popPose();
 	}
 	

@@ -8,11 +8,11 @@ import com.hungteen.pvz.common.impl.plant.PlantType;
  */
 public interface ICoolDown {
 
-	/**
-	 * get cool down by max level.
-	 */
-	int getCD(int lvl);
-	
-	String getTranslateKey();
-	
+    /**
+     * get cool down by max level.
+     */
+    int getCD(int lvl);
+
+    String getTranslateKey();
+
 }

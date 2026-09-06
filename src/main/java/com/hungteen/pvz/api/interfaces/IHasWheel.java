@@ -4,6 +4,6 @@ import net.minecraft.world.entity.LivingEntity;
 
 public interface IHasWheel {
 
-	void spikeWheelBy(LivingEntity entity);
-	
+    void spikeWheelBy(LivingEntity entity);
+
 }

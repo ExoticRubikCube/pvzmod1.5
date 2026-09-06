@@ -15,7 +15,7 @@ import java.util.Optional;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 public class LadderZombieModel extends PVZZombieModel<LadderZombieEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "ladder_zombie"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "ladder_zombie"), "main");
 
 	private final ModelPart total;
 	private final ModelPart right_leg;

@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 public class BloverModel extends PVZPlantModel<BloverEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "blover"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "blover"), "main");
 
 	private final ModelPart total;
 	private final ModelPart head;

@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
 public class PumpkinModel extends PVZPlantModel<PumpkinEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "pumpkin"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "pumpkin"), "main");
 
 
 	private final ModelPart total;

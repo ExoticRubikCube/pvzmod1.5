@@ -5,9 +5,9 @@ import net.minecraft.world.level.block.Block;
 
 public interface ICardPlacement {
 
-	/**
-	 * {@link PVZPlantEntity#shouldWilt()}
-	 */
-	boolean canPlaceOnBlock(Block block);
-	
+    /**
+     * {@link PVZPlantEntity#shouldWilt()}
+     */
+    boolean canPlaceOnBlock(Block block);
+
 }

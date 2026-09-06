@@ -3,7 +3,7 @@ package com.hungteen.pvz.client.render.tileentity;
 import com.hungteen.pvz.client.model.entity.plant.light.SunFlowerModel;
 import com.hungteen.pvz.common.block.AbstractFacingBlock;
 import com.hungteen.pvz.common.block.special.SunFlowerTrophyBlock;
-import com.hungteen.pvz.common.tileentity.SunFlowerTrophyTileEntity;
+import com.hungteen.pvz.common.blockentity.SunFlowerTrophyTileEntity;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

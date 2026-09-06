@@ -11,19 +11,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IZombieModel<T extends LivingEntity & IZombieEntity> {
 
-	/**
-	 * use for drop part entity to render.
-	 * not for current entity.
-	 * {link @ZombieBodyRender}
-	 */
-	void tickPartAnim(IBodyEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
+    /**
+     * use for drop part entity to render.
+     * not for current entity.
+     * {link @ZombieBodyRender}
+     */
+    void tickPartAnim(IBodyEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
 
-	/**
-	 * render drop body part.
-	 * {link @ZombieBodyRender}
-	 */
-	void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay);
+    /**
+     * render drop body part.
+     * {link @ZombieBodyRender}
+     */
+    void renderBody(IBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay);
 
-	@OnlyIn(Dist.CLIENT)
-	EntityModel<T> getZombieModel();
+    @OnlyIn(Dist.CLIENT)
+    EntityModel<T> getZombieModel();
 }

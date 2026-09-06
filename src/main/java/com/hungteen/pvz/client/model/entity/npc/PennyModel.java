@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 public class PennyModel extends EntityModel<PennyEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "panney"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "panney"), "main");
 
 	private final ModelPart car;
 	private final ModelPart head;

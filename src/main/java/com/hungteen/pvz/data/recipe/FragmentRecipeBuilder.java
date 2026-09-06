@@ -94,17 +94,17 @@ public class FragmentRecipeBuilder {
 
     public void save(Consumer<FinishedRecipe> consumer, String name) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
-        if ((ResourceLocation.parse(name)).equals(resourcelocation)) {
+        if ((new ResourceLocation(name)).equals(resourcelocation)) {
             throw new IllegalStateException("Shaped Recipe " + name + " should remove its 'save' argument");
         } else {
-            this.save(consumer, ResourceLocation.parse(name));
+            this.save(consumer, new ResourceLocation(name));
         }
     }
 
     public void save(Consumer<FinishedRecipe> consumer, ResourceLocation recipeId) {
         this.ensureValid(recipeId);
-        this.advancement.parent(ResourceLocation.parse("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
-        consumer.accept(new FragmentRecipeBuilder.Result(recipeId, this.result, this.count, this.group == null ? "" : this.group, this.rows, this.key, ResourceLocation.fromNamespaceAndPath(recipeId.getNamespace(), "recipes/" + recipeId.getPath())));
+        this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
+        consumer.accept(new FragmentRecipeBuilder.Result(recipeId, this.result, this.count, this.group == null ? "" : this.group, this.rows, this.key, new ResourceLocation(recipeId.getNamespace(), "recipes/" + recipeId.getPath())));
     }
 
     private void ensureValid(ResourceLocation recipeId) {
@@ -114,8 +114,8 @@ public class FragmentRecipeBuilder {
             Set<Character> set = Sets.newHashSet(this.key.keySet());
             set.remove(' ');
 
-            for(String s : this.rows) {
-                for(int i = 0; i < s.length(); ++i) {
+            for (String s : this.rows) {
+                for (int i = 0; i < s.length(); ++i) {
                     char c0 = s.charAt(i);
                     if (!this.key.containsKey(c0) && c0 != ' ') {
                         throw new IllegalStateException("Pattern in recipe " + recipeId + " uses undefined symbol '" + c0 + "'");
@@ -159,14 +159,14 @@ public class FragmentRecipeBuilder {
 
             JsonArray jsonarray = new JsonArray();
 
-            for(String s : this.pattern) {
+            for (String s : this.pattern) {
                 jsonarray.add(s);
             }
 
             json.add("pattern", jsonarray);
             JsonObject keyObj = new JsonObject();
 
-            for(Map.Entry<Character, Ingredient> entry : this.key.entrySet()) {
+            for (Map.Entry<Character, Ingredient> entry : this.key.entrySet()) {
                 keyObj.add(String.valueOf(entry.getKey()), entry.getValue().toJson());
             }
 

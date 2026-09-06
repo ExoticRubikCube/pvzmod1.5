@@ -6,13 +6,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 public interface IRewardComponent {
 
-	void reward(ServerPlayer player);
+    void reward(ServerPlayer player);
 
-	void rewardGlobally(IChallenge challenge);
-	
-	/**
-	 * make sure constructer has no argument, 
-	 * and use this method to initiate instance.
-	 */
-	void readJson(JsonElement json);
+    void rewardGlobally(IChallenge challenge);
+
+    /**
+     * make sure constructer has no argument,
+     * and use this method to initiate instance.
+     */
+    void readJson(JsonElement json);
 }

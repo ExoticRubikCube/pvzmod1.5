@@ -9,13 +9,13 @@ import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.block.special.SlotMachineBlock;
+import com.hungteen.pvz.common.blockentity.SlotMachineTileEntity;
 import com.hungteen.pvz.common.datapack.LotteryTypeLoader;
 import com.hungteen.pvz.common.datapack.TransactionTypeLoader;
 import com.hungteen.pvz.common.impl.challenge.amount.ConstantAmount;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.display.ChallengeEnvelopeItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
@@ -194,11 +194,11 @@ public abstract class AbstractDaveEntity extends PathfinderMob implements IHasGr
 		final WeightList<Pair<ResourceLocation, IChallengeComponent>> list = new WeightList<>();
 		final int chance = 6;
 
-		ChallengeManager.getChallengeTypes().entrySet().forEach(entry -> {
-			if(entry.getValue().canTrade()){
-				list.addItem(Pair.of(entry.getKey(), entry.getValue()), entry.getValue().getTradeWeight());
-			}
-		});
+		ChallengeManager.getChallengeTypes().forEach((key, value) -> {
+            if (value.canTrade()) {
+                list.addItem(Pair.of(key, value), value.getTradeWeight());
+            }
+        });
 
 		for(int i = 0; i < chance; ++ i){
 			final Pair<ResourceLocation, IChallengeComponent> pair = list.getRandomItem(this.getRandom()).get();
@@ -212,9 +212,7 @@ public abstract class AbstractDaveEntity extends PathfinderMob implements IHasGr
 		final WeightList<Pair<ResourceLocation, SlotMachineTileEntity.LotteryType>> list = new WeightList<>();
 		final int chance = 2;
 
-		LotteryTypeLoader.getLotteries().entrySet().forEach(entry -> {
-			list.addItem(Pair.of(entry.getKey(), entry.getValue()), entry.getValue().getTradeWeight());
-		});
+		LotteryTypeLoader.getLotteries().forEach((key, value) -> list.addItem(Pair.of(key, value), value.getTradeWeight()));
 
 		for(int i = 0; i < chance; ++ i){
 			final Pair<ResourceLocation, SlotMachineTileEntity.LotteryType> pair = list.getRandomItem(this.getRandom()).get();
@@ -325,7 +323,7 @@ public abstract class AbstractDaveEntity extends PathfinderMob implements IHasGr
 			this.setExistTick(compoundNBT.getInt("exist_tick"));
 		}
 		if(compoundNBT.contains("transaction_res")){
-			this.transactionResource = ResourceLocation.parse(compoundNBT.getString("transaction_res"));
+			this.transactionResource = new ResourceLocation(compoundNBT.getString("transaction_res"));
 		}
 	}
 

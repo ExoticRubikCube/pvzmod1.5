@@ -133,25 +133,25 @@ public class ChallengeComponent implements IChallengeComponent {
 			JsonObject obj = GsonHelper.getAsJsonObject(json, "sounds", null);
 			if(obj != null) {
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "pre_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(obj, "pre_sound", "")));
 					if(sound != null){
 						this.preSound = sound;
 					}
 				}
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "wave_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(obj, "wave_sound", "")));
 					if(sound != null){
 						this.waveSound = sound;
 					}
 				}
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "win_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(obj, "win_sound", "")));
 					if(sound != null){
 						this.winSound = sound;
 					}
 				}
 				{
-					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(GsonHelper.getAsString(obj, "loss_sound", "")));
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(obj, "loss_sound", "")));
 					if(sound != null){
 						this.lossSound = sound;
 					}

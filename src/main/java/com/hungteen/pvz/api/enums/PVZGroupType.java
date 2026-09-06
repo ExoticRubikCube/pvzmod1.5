@@ -10,14 +10,14 @@ package com.hungteen.pvz.api.enums;
  */
 public enum PVZGroupType {
 
-	OTHER_MONSTERS,//other monsters except pvz zombies.
-	ZOMBIES,//zombies.
-	NEUTRALS,//neutral creatures.
-	PLANTS,//plants.
-	OTHER_GUARDIANS//iron golems, snow golems, wolves and so on.
+    OTHER_MONSTERS,//other monsters except pvz zombies.
+    ZOMBIES,//zombies.
+    NEUTRALS,//neutral creatures.
+    PLANTS,//plants.
+    OTHER_GUARDIANS//iron golems, snow golems, wolves and so on.
 
 //	public static PVZGroupType oppsite(PVZGroupType type) {
 //		return PVZGroupType.values()[4 - type.ordinal()];
 //	}
-	
+
 }

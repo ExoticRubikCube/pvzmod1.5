@@ -25,11 +25,11 @@ public class PVZEntityTypeTags {
 	public static final TagKey<EntityType<?>> BUNGEE_SPAWNS = pvzTag("bungee_spawns");
 		
 	private static TagKey<EntityType<?>> pvzTag(String name){
-		return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, name));
+		return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(PVZMod.MOD_ID, name));
     }
 	
 	private static TagKey<EntityType<?>> forgeTag(String name){
-        return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, ResourceLocation.fromNamespaceAndPath("forge", name));
+        return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", name));
     }
 	
 }

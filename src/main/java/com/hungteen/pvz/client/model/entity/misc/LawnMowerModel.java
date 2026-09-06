@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 public class LawnMowerModel extends EntityModel<LawnMowerEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "lawn_mower"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "lawn_mower"), "main");
 
 	private final ModelPart total;
 	private final ModelPart cube_r1;

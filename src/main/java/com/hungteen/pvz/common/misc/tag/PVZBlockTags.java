@@ -36,10 +36,10 @@ public class PVZBlockTags {
 	public static final TagKey<Block> GOLD_TILES = pvzTag("gold_tile");
 
 	private static TagKey<Block> pvzTag(String name){
-        return TagKey.create(Registry.BLOCK_REGISTRY, ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, name));
+        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(PVZMod.MOD_ID, name));
     }
 	
 	private static TagKey<Block> forgeTag(String name){
-        return TagKey.create(Registry.BLOCK_REGISTRY, ResourceLocation.fromNamespaceAndPath("forge", name));
+        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("forge", name));
     }
 }

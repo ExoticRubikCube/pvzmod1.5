@@ -1,6 +1,6 @@
 package com.hungteen.pvz.common.block.special;
 
-import com.hungteen.pvz.common.tileentity.FragmentSpliceTileEntity;
+import com.hungteen.pvz.common.blockentity.FragmentSpliceTileEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

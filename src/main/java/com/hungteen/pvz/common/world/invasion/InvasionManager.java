@@ -3,23 +3,24 @@ package com.hungteen.pvz.common.world.invasion;
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.common.advancement.trigger.InvasionTrigger;
 import com.hungteen.pvz.common.datapack.InvasionTypeLoader;
-import com.hungteen.pvz.common.event.PVZServerEvents;
 import com.hungteen.pvz.common.event.events.InvasionEvent;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.others.WeightList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
@@ -31,6 +32,8 @@ import java.util.stream.Stream;
 
 public class InvasionManager {
 
+    private static final ResourceKey<Biome> ZEN_GARDEN = ResourceKey.create(
+            Registry.BIOME_REGISTRY, new ResourceLocation("pvz", "zen_garden"));
     private static final Component START = Component.translatable("invasion.pvz.start")
             .withStyle(ChatFormatting.DARK_RED);
     private static final Component END = Component.translatable("invasion.pvz.end")
@@ -46,14 +49,14 @@ public class InvasionManager {
 
     /**
      * only run when world server start.
-     * {@link PVZServerEvents#serverInit(net.minecraftforge.fml.event.server.FMLServerStartingEvent)}
+     *
      */
     public static void syncStartInvasionCache(ServerLevel world) {
     }
 
     /**
      * only run when world server shut down.
-     * {@link PVZServerEvents#serverShutDown(net.minecraftforge.fml.event.server.FMLServerStoppingEvent)}
+     *
      */
     public static void syncEndInvasionCache(ServerLevel world) {
     }
@@ -74,7 +77,7 @@ public class InvasionManager {
 
     /**
      * tick for overworld invasion events.
-     * {@link com.hungteen.pvz.common.event.PVZWorldEvents#onWorldTick(TickEvent.WorldTickEvent)}
+     *
      */
     public static void tick(TickEvent.LevelTickEvent ev) {
         final long dayTime = ev.level.getDayTime() % 24000;
@@ -120,7 +123,7 @@ public class InvasionManager {
 
     /**
      * check and activate attack event, do not activate in peaceful mode.
-     * {@link #tick(TickEvent.WorldTickEvent)}
+     *
      */
     public static void activateInvasionEvents(Level world, int count) {
         if (world.getDifficulty() != Difficulty.PEACEFUL && !MinecraftForge.EVENT_BUS.post(new InvasionEvent.InvasionStartEvent(world))) {
@@ -152,7 +155,7 @@ public class InvasionManager {
 
     /**
      * deactivate all invasion events.
-     * {@link #tick(TickEvent.WorldTickEvent)}
+     *
      */
     public static void deactivateInvasion(Level world, boolean isNatural) {
         disableInvasion(PlayerUtil.getServerPlayers(world), isNatural);
@@ -252,7 +255,7 @@ public class InvasionManager {
      * get players out zen garden. TODO Plant Invasion.
      */
     public static boolean suitableInvasionPos(Level world, BlockPos pos){
-        return ! world.getBiomeManager().getBiome(pos).is(BiomeRegister.ZEN_GARDEN.getKey());
+        return ! world.getBiomeManager().getBiome(pos).is(ZEN_GARDEN);
     }
 
     public static boolean enableSkills(Level world){

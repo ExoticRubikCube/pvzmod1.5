@@ -1,10 +1,10 @@
 package com.hungteen.pvz.common.item.tool.zombie;
 
 import com.hungteen.pvz.PVZConfig;
+import com.hungteen.pvz.common.blockentity.SlotMachineTileEntity;
 import com.hungteen.pvz.common.datapack.LotteryTypeLoader;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
 import com.hungteen.pvz.utils.PlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

@@ -54,7 +54,7 @@ public abstract class DropEntity extends Mob implements ICollectible {
 				++ this.liveTime;
 			}
 		    if(this.liveTime >= this.getMaxLiveTick()) {
-this.remove(RemovalReason.KILLED);
+				this.remove(RemovalReason.KILLED);
 		    }
 		}
 	}

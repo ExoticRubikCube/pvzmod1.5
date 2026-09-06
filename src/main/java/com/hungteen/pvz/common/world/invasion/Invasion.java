@@ -31,7 +31,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.TriPredicate;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -91,7 +90,7 @@ public class Invasion {
     }
 
     /**
-     * {@link InvasionManager#tick(TickEvent.WorldTickEvent)}
+     *
      */
     public void tick() {
         // wait for data pack or peaceful mode.
@@ -106,7 +105,6 @@ public class Invasion {
             world.getProfiler().push("Invasion Wave Tick");
             final int time = (int)world.getDayTime()%24000;
             if (time == this.getWaveTime(this.currentWave) && this.currentWave < this.getTotalWaveCount() && this.getWaveTime(this.currentWave) > 0) {
-                this.spawnWaveInvaders();
                 this.setWaveTriggered(this.currentWave ++, this.spawnWaveInvaders());//wave spawn.
             }
             world.getProfiler().pop();
@@ -288,12 +286,12 @@ public class Invasion {
             if (list != null) {
                 for (Tag tag : list) {
                     final CompoundTag tmp = (CompoundTag) tag;
-                    this.activeResources.add(ResourceLocation.parse(tmp.getString("type")));
+                    this.activeResources.add(new ResourceLocation(tmp.getString("type")));
                 }
             }
         }
         if (baseTag.contains("spawn_resource")) {
-            this.spawnResource = ResourceLocation.parse(baseTag.getString("spawn_resource"));
+            this.spawnResource = new ResourceLocation(baseTag.getString("spawn_resource"));
         }
     }
 

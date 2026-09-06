@@ -12,21 +12,21 @@ import java.util.Optional;
  */
 public interface IZombieType extends IPAZType {
 
-	/**
-	 * get (zombie type, zombie entity interface) pair.
-	 */
+    /**
+     * get (zombie type, zombie entity interface) pair.
+     */
 //	Optional<Pair<Mob, IZombieEntity>> getZombieEntityType();
 
-	/**
-	 * get the entity model of plant (Client Side). 
-	 */
-	@OnlyIn(Dist.CLIENT)
-	Optional<IZombieModel<? extends IZombieEntity>> getZombieModel1();
-	
-	/**
-	 * get the entity model of plant (Client Side). 
-	 */
-	@OnlyIn(Dist.CLIENT)
-	Optional<IZombieModel<? extends IZombieEntity>> getZombieModel2();
-	
+    /**
+     * get the entity model of plant (Client Side).
+     */
+    @OnlyIn(Dist.CLIENT)
+    Optional<IZombieModel<? extends IZombieEntity>> getZombieModel1();
+
+    /**
+     * get the entity model of plant (Client Side).
+     */
+    @OnlyIn(Dist.CLIENT)
+    Optional<IZombieModel<? extends IZombieEntity>> getZombieModel2();
+
 }

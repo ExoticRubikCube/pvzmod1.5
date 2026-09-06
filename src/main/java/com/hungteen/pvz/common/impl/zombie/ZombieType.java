@@ -84,7 +84,7 @@ public abstract class ZombieType extends PAZType implements IZombieType {
 	 * the resource to save entity render picture.
 	 */
 	protected ResourceLocation getEntityResource() {
-		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/zombie/" + this.getCategoryName() + "/" + this + ".png");
+		return new ResourceLocation(this.getModID(), "textures/entity/zombie/" + this.getCategoryName() + "/" + this + ".png");
 	}
 	
 	@Override

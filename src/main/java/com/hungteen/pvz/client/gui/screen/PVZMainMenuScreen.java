@@ -25,7 +25,7 @@ import java.util.Random;
 public class PVZMainMenuScreen extends TitleScreen {
 
     private static final CubeMap PANORAMA_RESOURCES = new CubeMap(StringUtil.prefix("textures/gui/mainmenu/panorama"));
-    private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/title/minecraft.png");
+    private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("minecraft", "textures/gui/title/minecraft.png");
     private String splashText;
     private final PanoramaRenderer panorama = new PanoramaRenderer(PANORAMA_RESOURCES);
     private final Random rand = new Random();

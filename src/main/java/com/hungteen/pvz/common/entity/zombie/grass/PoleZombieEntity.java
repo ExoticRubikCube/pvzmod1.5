@@ -143,8 +143,8 @@ public class PoleZombieEntity extends PVZZombieEntity{
 	
 	/**
 	 * Common plants can not target jumping PoleZombie.
-	 * {@link PVZPlantEntity#checkCanPAZTarget(net.minecraft.entity.Entity)}
-	 */
+	 *
+     */
 	public boolean isPoleJumping() {
 		return this.getAttackTime() > 0;
 	}

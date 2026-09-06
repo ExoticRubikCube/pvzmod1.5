@@ -7,8 +7,8 @@ import net.minecraft.world.entity.LivingEntity;
  */
 public interface ICollectible {
 
-	boolean canCollectBy(LivingEntity living);
-	
-	void onCollect(LivingEntity living);
-	
+    boolean canCollectBy(LivingEntity living);
+
+    void onCollect(LivingEntity living);
+
 }

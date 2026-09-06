@@ -38,9 +38,9 @@ public class CapabilityHandler {
 		public static void attachCapability(AttachCapabilitiesEvent<Entity> event){
 			Entity entity = event.getObject();
 			if (entity instanceof Player){
-				event.addCapability(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "player_data"), new PlayerDataProvider((Player) entity));
+				event.addCapability(new ResourceLocation(PVZMod.MOD_ID, "player_data"), new PlayerDataProvider((Player) entity));
 			}
-			event.addCapability(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "challenge_data"), new RaiderDataProvider(0));
+			event.addCapability(new ResourceLocation(PVZMod.MOD_ID, "challenge_data"), new RaiderDataProvider(0));
 		}
 	}
 }

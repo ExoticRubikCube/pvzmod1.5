@@ -41,7 +41,7 @@ public class PVZMod {
 		PVZConfig.register(ModLoadingContext.get());
     	IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     	RegistryHandler.deferredRegister(modBus);
-    	
+
     	IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 		//BiomeLoadingEvent已废弃，若需修改 Biome 建议改用 JSON Biome Modifiers
 		// forgeBus.addListener(EventPriority.HIGH, BiomeRegister::biomeModification);

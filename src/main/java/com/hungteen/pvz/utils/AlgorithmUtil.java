@@ -56,7 +56,7 @@ public class AlgorithmUtil {
 
 		@Override
 		public int compare(Pair<T, Integer> pair1, Pair<T, Integer> pair2) {
-			return pair1.getSecond() > pair2.getSecond() ? -1 : pair1.getSecond() == pair2.getSecond() ? 0 : 1;
+			return pair2.getSecond().compareTo(pair1.getSecond());
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class AlgorithmUtil {
 			int[] matchTable = new int[patternLen];
 
 			int i = 0;
-			int matchValue = 0;
+			int matchValue;
 			while (i < patternLen) {
 				if (i == 0) {
 					matchValue = 0;

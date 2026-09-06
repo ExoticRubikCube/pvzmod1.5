@@ -48,15 +48,15 @@ public class PVZItemTags {
 	public static final TagKey<Item> BLACK_CARDS = pvzTag("card/black_cards");
 		
 	private static TagKey<Item> pvzTag(String name){
-		return TagKey.create(Registry.ITEM_REGISTRY, ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, name));
+		return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(PVZMod.MOD_ID, name));
     }
 	
 	private static TagKey<Item> forgeTag(String name){
-        return TagKey.create(Registry.ITEM_REGISTRY, ResourceLocation.fromNamespaceAndPath("forge", name));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", name));
     }
 	
 	private static TagKey<Item> mcTag(String name){
-        return TagKey.create(Registry.ITEM_REGISTRY, ResourceLocation.parse(name));
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(name));
     }
 	
 }

@@ -4,6 +4,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 public interface ILightEffect {
 
-	MobEffectInstance getLightEyeEffect();
+    MobEffectInstance getLightEyeEffect();
 
 }

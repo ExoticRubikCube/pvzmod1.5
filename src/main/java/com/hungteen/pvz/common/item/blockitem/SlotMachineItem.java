@@ -2,8 +2,8 @@ package com.hungteen.pvz.common.item.blockitem;
 
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.block.special.SlotMachineBlock;
+import com.hungteen.pvz.common.blockentity.SlotMachineTileEntity;
 import com.hungteen.pvz.common.item.PVZItemGroups;
-import com.hungteen.pvz.common.tileentity.SlotMachineTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

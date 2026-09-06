@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
  */
 public interface ICanBeCharmed {
 
-	boolean isCharmed();
-	
-	void onCharmedBy(@Nullable LivingEntity entity);
+    boolean isCharmed();
+
+    void onCharmedBy(@Nullable LivingEntity entity);
 }

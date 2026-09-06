@@ -3,6 +3,7 @@ package com.hungteen.pvz;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.CommonRegister;
 import com.hungteen.pvz.common.block.BlockRegister;
+import com.hungteen.pvz.common.blockentity.TileEntityRegister;
 import com.hungteen.pvz.common.container.ContainerRegister;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
@@ -23,9 +24,8 @@ import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.common.potion.PotionRecipeHandler;
 import com.hungteen.pvz.common.potion.PotionRegister;
 import com.hungteen.pvz.common.recipe.RecipeRegister;
-import com.hungteen.pvz.common.tileentity.TileEntityRegister;
+import com.hungteen.pvz.common.register.PVZBiomes;
 import com.hungteen.pvz.common.world.FeatureRegister;
-import com.hungteen.pvz.common.world.biome.BiomeRegister;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.common.world.structure.StructureRegister;
 import com.hungteen.pvz.utils.BiomeUtil;
@@ -50,7 +50,6 @@ public class RegistryHandler {
 		EntityRegister.ENTITY_TYPES.register(bus);
 		ParticleRegister.PARTICLE_TYPES.register(bus);
 		EffectRegister.EFFECTS.register(bus);
-		BiomeRegister.BIOMES.register(bus);
 		FeatureRegister.FEATURES.register(bus);
 		FeatureRegister.STRUCTURE_SETS.register(bus);
 		FeatureRegister.STRUCTURE_TYPES.register(bus);
@@ -63,6 +62,7 @@ public class RegistryHandler {
 		RecipeRegister.RECIPE_TYPES.register(bus);
 		RecipeRegister.RECIPE_SERIALIZERS.register(bus);
 		PVZAttributes.ATTRIBUTES.register(bus);
+		PVZBiomes.BIOMES.register(bus);
 	}
 
 	/**
@@ -96,10 +96,9 @@ public class RegistryHandler {
 	 */
     public static void setUp(FMLCommonSetupEvent ev){
     	PVZPacketHandler.init();
-    	BiomeRegister.registerBiomes(ev);
-    	PotionRecipeHandler.registerPotionRecipes();
-    	CommonRegister.registerCompostable();
-    	BiomeUtil.initBiomeSet();
+		PotionRecipeHandler.registerPotionRecipes();
+		CommonRegister.registerCompostable();
+		BiomeUtil.initBiomeSet();
     }
 	
 	/**

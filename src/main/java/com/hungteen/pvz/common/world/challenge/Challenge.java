@@ -69,7 +69,7 @@ public class Challenge implements IChallenge {
 		this.world = world;
 		this.id = nbt.getInt("challenge_id");
 		this.status = Status.values()[nbt.getInt("challenge_status")];
-		this.resource = ResourceLocation.parse(nbt.getString("challenge_resource"));
+		this.resource = new ResourceLocation(nbt.getString("challenge_resource"));
 		this.tick = nbt.getInt("challenge_tick");
 		this.stopTick = nbt.getInt("stop_tick");
 		this.currentWave = nbt.getInt("current_wave");

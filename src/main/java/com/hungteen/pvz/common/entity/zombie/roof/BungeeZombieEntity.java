@@ -428,7 +428,7 @@ this.remove(RemovalReason.KILLED);
 			this.stealTarget = (LivingEntity) level.getEntity(compound.getInt("steal_target"));
 		}
 		if(compound.contains("summon_type")){
-			this.entityType = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.parse(compound.getString("summon_type")));
+			this.entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(compound.getString("summon_type")));
 		}
 		if(compound.contains("steal_pos")) {
 			CompoundTag nbt = compound.getCompound("steal_pos");

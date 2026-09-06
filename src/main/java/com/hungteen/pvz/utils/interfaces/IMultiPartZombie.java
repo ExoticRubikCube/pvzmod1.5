@@ -5,5 +5,5 @@ package com.hungteen.pvz.utils.interfaces;
  */
 public interface IMultiPartZombie extends IHasMultiPart {
 
-	boolean canPartsExist();
+    boolean canPartsExist();
 }

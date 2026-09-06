@@ -13,6 +13,8 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -67,6 +69,14 @@ public class PennyEntity extends AbstractDaveEntity {
 	@Nullable
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.GENERIC_DEATH;
+	}
+
+  	public static AttributeSupplier createPennyAttributes() {
+		return PathfinderMob.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 75D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75D)
+				.add(Attributes.ARMOR, 5D)
+				.build();
 	}
 
 }

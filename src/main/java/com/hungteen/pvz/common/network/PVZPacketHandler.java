@@ -16,7 +16,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PVZPacketHandler {
 
-	private static final ResourceLocation CHANNEL_NAME = ResourceLocation.parse(PVZMod.MOD_ID + ":networking");
+	private static final ResourceLocation CHANNEL_NAME = new ResourceLocation(PVZMod.MOD_ID + ":networking");
 	private static final String PROTOCOL_VERSION = "1.0";
 	private static int id = 0;
 

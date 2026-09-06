@@ -44,7 +44,7 @@ public class GiftBoxEntity extends PVZEntityBase {
                 }
                 EntityUtil.playSound(this, SoundRegister.PRIZE_DROP.get());
         	}
-this.remove(RemovalReason.KILLED);
+            this.remove(RemovalReason.KILLED);
         }
         return InteractionResult.SUCCESS;
     }
@@ -67,7 +67,6 @@ this.remove(RemovalReason.KILLED);
             this.handler = new ItemStackHandler();
             this.handler.deserializeNBT(tmp);
         }
-
     }
 
     @Override

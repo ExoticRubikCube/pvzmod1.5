@@ -7,28 +7,28 @@ public interface IRankType {
 
     int getWeight();
 
-	int getValue();
+    int getValue();
 
-	String getName();
+    String getName();
 
-	/**
-	 * get corresponding template card.
-	 */
-	Item getTemplateCard();
+    /**
+     * get corresponding template card.
+     */
+    Item getTemplateCard();
 
-	/**
-	 * get corresponding template card tag.
-	 */
-	TagKey<Item> getCardTag();
-	
-	/**
-	 * get corresponding material item.
-	 */
-	TagKey<Item> getMaterial();
-	
-	/**
-	 * enchant point.
-	 */
-	int getEnchantPoint();
-	
+    /**
+     * get corresponding template card tag.
+     */
+    TagKey<Item> getCardTag();
+
+    /**
+     * get corresponding material item.
+     */
+    TagKey<Item> getMaterial();
+
+    /**
+     * enchant point.
+     */
+    int getEnchantPoint();
+
 }

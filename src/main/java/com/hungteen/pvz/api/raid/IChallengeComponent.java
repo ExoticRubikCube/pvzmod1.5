@@ -13,91 +13,91 @@ import java.util.List;
 
 public interface IChallengeComponent {
 
-	/**
-	 * make sure constructer has no argument, 
-	 * and use this method to initiate instance.
-	 */
-	boolean readJson(JsonObject json);
-	
-	/**
-	 * get how many ticks needed for players to prepare the wave.
-	 */
-	int getPrepareCD(int wavePos);
-	
-	/**
-	 * get how many ticks will this wave last.
-	 */
-	int getLastDuration(int wavePos);
-	
-	/**
-	 * how many waves is there.
-	 */
-	int getTotalWaveCount();
-	
-	/**
-	 * how long will win state last.
-	 */
-	int getWinTick();
-	
-	/**
-	 * how long will loss state last.
-	 */
-	int getLossTick();
+    /**
+     * make sure constructer has no argument,
+     * and use this method to initiate instance.
+     */
+    boolean readJson(JsonObject json);
 
-	/**
-	 * the recommended level to defeat the challenge.
-	 */
-	int getRecommendLevel();
+    /**
+     * get how many ticks needed for players to prepare the wave.
+     */
+    int getPrepareCD(int wavePos);
 
-	boolean canTrade();
+    /**
+     * get how many ticks will this wave last.
+     */
+    int getLastDuration(int wavePos);
 
-	int getTradeWeight();
+    /**
+     * how many waves is there.
+     */
+    int getTotalWaveCount();
 
-	int getTradePrice();
+    /**
+     * how long will win state last.
+     */
+    int getWinTick();
+
+    /**
+     * how long will loss state last.
+     */
+    int getLossTick();
+
+    /**
+     * the recommended level to defeat the challenge.
+     */
+    int getRecommendLevel();
+
+    boolean canTrade();
+
+    int getTradeWeight();
+
+    int getTradePrice();
 
 
-	boolean isWaveFinish(int wavePos, int spawnPos);
-	
-	boolean hasTag(String tag);
+    boolean isWaveFinish(int wavePos, int spawnPos);
 
-	boolean isSuitableDimension(ResourceKey<Level> type);
+    boolean hasTag(String tag);
 
-	boolean showRoundTitle();
+    boolean isSuitableDimension(ResourceKey<Level> type);
 
-	boolean shouldCloseToCenter();
+    boolean showRoundTitle();
 
-	void setMessages(List<Pair<MutableComponent, Integer>> list);
+    boolean shouldCloseToCenter();
 
-	MutableComponent getChallengeName();
+    MutableComponent getChallengeName();
 
-	List<String> getAuthors();
-	
-	/**
-	 * get spawn list of current wave.
-	 */
-	List<ISpawnComponent> getSpawns(int wavePos);
+    List<String> getAuthors();
 
-	List<IWaveComponent> getWaves();
-	
-	List<IRewardComponent> getRewards();
-	
-	IPlacementComponent getPlacement(int wavePos);
-	
-	Component getTitle();
-	
-	Component getWinTitle();
-	
-	Component getLossTitle();
-	
-	BossEvent.BossBarColor getBarColor();
-	
-	SoundEvent getPrepareSound();
-	
-	SoundEvent getStartWaveSound();
-	
-	SoundEvent getWinSound();
-	
-	SoundEvent getLossSound();
+    /**
+     * get spawn list of current wave.
+     */
+    List<ISpawnComponent> getSpawns(int wavePos);
 
-	List<Pair<MutableComponent, Integer>> getMessages();
+    List<IWaveComponent> getWaves();
+
+    List<IRewardComponent> getRewards();
+
+    IPlacementComponent getPlacement(int wavePos);
+
+    Component getTitle();
+
+    Component getWinTitle();
+
+    Component getLossTitle();
+
+    BossEvent.BossBarColor getBarColor();
+
+    SoundEvent getPrepareSound();
+
+    SoundEvent getStartWaveSound();
+
+    SoundEvent getWinSound();
+
+    SoundEvent getLossSound();
+
+    List<Pair<MutableComponent, Integer>> getMessages();
+
+    void setMessages(List<Pair<MutableComponent, Integer>> list);
 }

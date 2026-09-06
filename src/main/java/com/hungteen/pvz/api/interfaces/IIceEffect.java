@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface IIceEffect {
 
-	Optional<MobEffectInstance> getColdEffect();
-	
-	Optional<MobEffectInstance> getFrozenEffect();
+    Optional<MobEffectInstance> getColdEffect();
+
+    Optional<MobEffectInstance> getFrozenEffect();
 }

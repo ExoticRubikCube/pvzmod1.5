@@ -7,25 +7,25 @@ import net.minecraft.network.chat.MutableComponent;
  */
 public interface IIDType {
 
-	/**
-	 * get type name, such as pea_shooter.
-	 */
-	String toString();
-	
-	/**
-	 * used to specify store information (nbt) of type. <br>
-	 * [mod id]:[type name], such as pvz:pea_shooter.
-	 */
-	String getIdentity();
-	
-	/**
-	 * get translation text.
-	 */
-	MutableComponent getText();
-	
-	/**
-	 * specific mod id.
-	 */
-	String getModID();
-	
+    /**
+     * get type name, such as pea_shooter.
+     */
+    String toString();
+
+    /**
+     * used to specify store information (nbt) of type. <br>
+     * [mod id]:[type name], such as pvz:pea_shooter.
+     */
+    String getIdentity();
+
+    /**
+     * get translation text.
+     */
+    MutableComponent getText();
+
+    /**
+     * specific mod id.
+     */
+    String getModID();
+
 }

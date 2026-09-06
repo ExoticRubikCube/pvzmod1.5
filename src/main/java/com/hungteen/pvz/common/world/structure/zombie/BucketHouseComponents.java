@@ -44,22 +44,14 @@ public class BucketHouseComponents {
 		@Override
 		public void postProcess(WorldGenLevel worldIn, StructureManager p_226900_, ChunkGenerator chunkGeneratorIn, RandomSource randomIn,
 				BoundingBox mutableBoundingBoxIn, ChunkPos chunkPosIn, BlockPos blockPos) {
-			BlockPos mid = BlockPos.ZERO;
+			BlockPos mid;
 			int dx = 6, dz = 5;
-			switch (rotation) {
-			case CLOCKWISE_90:
-				mid = this.templatePosition.offset(-dz, 0, dx);
-				break;
-			case CLOCKWISE_180:
-				mid = this.templatePosition.offset(-dx, 0, -dz);
-				break;
-			case COUNTERCLOCKWISE_90:
-				mid = this.templatePosition.offset(dz, 0, -dx);
-				break;
-			default:
-				mid = this.templatePosition.offset(dx, 0, dz);
-				break;
-			}
+            mid = switch (rotation) {
+                case CLOCKWISE_90 -> this.templatePosition.offset(-dz, 0, dx);
+                case CLOCKWISE_180 -> this.templatePosition.offset(-dx, 0, -dz);
+                case COUNTERCLOCKWISE_90 -> this.templatePosition.offset(dz, 0, -dx);
+                default -> this.templatePosition.offset(dx, 0, dz);
+            };
 			int height = worldIn.getHeight(Heightmap.Types.WORLD_SURFACE_WG, mid.getX(), mid.getZ());
 			this.templatePosition = new BlockPos(this.templatePosition.getX(), height + 1, this.templatePosition.getZ());
 			super.postProcess(worldIn, p_226900_, chunkGeneratorIn, randomIn, mutableBoundingBoxIn, chunkPosIn, blockPos);

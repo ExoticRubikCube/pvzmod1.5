@@ -4,7 +4,6 @@ import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.common.entity.AbstractOwnerEntity;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.other.CoffinEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.WorldUtil;
@@ -30,14 +29,14 @@ public class ZombieHandEntity extends AbstractOwnerEntity {
 		} else {
 			if(! this.level.isClientSide()) {
 			    this.performAttack();
-this.remove(RemovalReason.KILLED);
+				this.remove(RemovalReason.KILLED);
 			}
 		}
 	}
 	
 	/**
-	 * {@link CoffinEntity#finalizeSpawn(net.minecraft.world.ServerLevelAccessor, net.minecraft.world.DifficultyInstance, net.minecraft.entity.MobSpawnType, net.minecraft.entity.SpawnGroupData, net.minecraft.nbt.CompoundTag)}
-	 */
+	 *
+     */
 	public static void spawnRangeZombieHands(Level world, PVZZombieEntity zombie, int range) {
 		for(int i = - range; i <= range; ++ i) {
 			for(int j = - range; j <= range; ++ j) {

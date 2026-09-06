@@ -28,7 +28,7 @@ public class PlaySoundPacket {
 	public static class Handler {
 		public static void onMessage(PlaySoundPacket message, Supplier<NetworkEvent.Context> ctx) {
 		    ctx.get().enqueueWork(()->{
-		    	SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.parse(message.type));
+		    	SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(message.type));
 		    	if(sound != null && PVZMod.PROXY.getPlayer() != null) {
 		    		PVZMod.PROXY.getPlayer().playSound(sound, 1F, 1F);
 		    	}

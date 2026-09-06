@@ -11,11 +11,11 @@ import net.minecraft.world.effect.MobEffectInstance;
  **/
 public class EffectUtil {
 
-    public static MobEffectInstance effect(MobEffect effect, int time, int lvl){
+    public static MobEffectInstance effect(MobEffect effect, int time, int lvl) {
         return new MobEffectInstance(effect, time, lvl, false, false);
     }
 
-    public static MobEffectInstance viewEffect(MobEffect effect, int time, int lvl){
+    public static MobEffectInstance viewEffect(MobEffect effect, int time, int lvl) {
         return new MobEffectInstance(effect, time, lvl, true, true);
     }
 

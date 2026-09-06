@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -60,8 +61,8 @@ public class CardPackItem extends Item {
 				NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
 					
 					@Override
-					public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
-							Player p_createMenu_3_) {
+					public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
+                                                            Player p_createMenu_3_) {
 						return new CardPackContainer(p_createMenu_1_, p_createMenu_3_);
 					}
 

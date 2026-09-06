@@ -8,17 +8,17 @@ import net.minecraft.world.item.Items;
 
 public enum MetalTypes {
 
-	EMPTY,
-	BUCKET_HEAD,
-	SCREEN_DOOR,
-	FOOTBALL_HELMET,
-	GIGA_HELMET,
-	JACK_BOX,
-	IRON_PICKAXE,
-	POGO,
-	LADDER;
-	
-	public static Item getMetalItem(MetalTypes type) {
+    EMPTY,
+    BUCKET_HEAD,
+    SCREEN_DOOR,
+    FOOTBALL_HELMET,
+    GIGA_HELMET,
+    JACK_BOX,
+    IRON_PICKAXE,
+    POGO,
+    LADDER;
+
+    public static Item getMetalItem(MetalTypes type) {
         return switch (type) {
             case BUCKET_HEAD -> ItemRegister.BUCKET_HEAD.get();
             case SCREEN_DOOR -> ItemRegister.SCREEN_DOOR.get();
@@ -29,5 +29,5 @@ public enum MetalTypes {
             case LADDER -> BlockRegister.STEEL_LADDER.get().asItem();
             default -> Items.IRON_INGOT;
         };
-	}
+    }
 }

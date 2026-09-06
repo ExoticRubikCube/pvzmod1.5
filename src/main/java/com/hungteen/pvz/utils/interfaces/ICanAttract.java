@@ -9,20 +9,20 @@ import net.minecraft.world.entity.LivingEntity;
  */
 public interface ICanAttract {
 
-	/**
-	 * check can attract specific target.
-	 * 
-	 */
+    /**
+     * check can attract specific target.
+     *
+     */
     boolean canAttract(LivingEntity target);
-	
-	/**
-	 * attract the attacker's target
-	 */
-	void attract(LivingEntity target);
-	
-	/**
-	 * how far can it attract.
-	 */
-	float getAttractRange();
-	
+
+    /**
+     * attract the attacker's target
+     */
+    void attract(LivingEntity target);
+
+    /**
+     * how far can it attract.
+     */
+    float getAttractRange();
+
 }

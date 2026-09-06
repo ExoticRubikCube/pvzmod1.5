@@ -19,7 +19,7 @@ import net.minecraft.util.Mth;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 public class CoffinModel extends EntityModel<CoffinEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "coffin"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "coffin"), "main");
 
 
 	private final ModelPart total;

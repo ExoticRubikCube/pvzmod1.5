@@ -159,7 +159,7 @@ public class PVZAPIImpl implements IPVZAPI{
 	public Optional<IPAZType> getTypeByID(String id) {
 		final Optional<IPlantType> opt1 = getPlantTypeByID(id);
 		final Optional<IZombieType> opt2 = getZombieTypeByID(id);
-		return opt1.isPresent() ? Optional.ofNullable(opt1.get()) : Optional.ofNullable(opt2.get());
+		return opt1.isPresent() ? Optional.of(opt1.get()) : Optional.of(opt2.get());
 	}
 
 	@Override

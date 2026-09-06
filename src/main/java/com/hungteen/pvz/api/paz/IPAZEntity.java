@@ -45,7 +45,7 @@ public interface IPAZEntity extends IHasOwner, IHasGroup, ICanBeCharmed, ICanBeA
      * players can not see it when invisible invasion is coming.
      */
     boolean canBeInvisible();
-    
+
     boolean canBeStealByBungee();
 
     /**
@@ -53,12 +53,12 @@ public interface IPAZEntity extends IHasOwner, IHasGroup, ICanBeCharmed, ICanBeA
      */
     void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list);
 
-    void setOuterDefenceLife(double life);
-
-    void setInnerDefenceLife(double life);
-
     double getOuterDefenceLife();
 
+    void setOuterDefenceLife(double life);
+
     double getInnerDefenceLife();
+
+    void setInnerDefenceLife(double life);
 
 }

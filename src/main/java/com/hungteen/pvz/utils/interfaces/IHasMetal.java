@@ -4,12 +4,12 @@ import com.hungteen.pvz.api.enums.MetalTypes;
 
 public interface IHasMetal {
 
-	boolean hasMetal();
-	
-	void decreaseMetal();
-	
-	void increaseMetal();
-	
-	MetalTypes getMetalType();
-	
+    boolean hasMetal();
+
+    void decreaseMetal();
+
+    void increaseMetal();
+
+    MetalTypes getMetalType();
+
 }

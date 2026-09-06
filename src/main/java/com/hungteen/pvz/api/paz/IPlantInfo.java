@@ -33,12 +33,12 @@ public interface IPlantInfo {
      */
     void onHeal(IPlantEntity plantEntity, float percent);
 
-    void setType(IPlantType type);
-
     IPlantType getType();
 
-    void setSunCost(int cost);
+    void setType(IPlantType type);
 
     int getSunCost();
+
+    void setSunCost(int cost);
 
 }

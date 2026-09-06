@@ -135,8 +135,8 @@ public class PlayerUtil {
 	
 	/**
 	 * get player's group.
-	 * {@link EntityUtil#getEntityGroup(net.minecraft.entity.Entity)}
-	 */
+	 *
+     */
 	public static PVZGroupType getPlayerGroupType(ServerPlayer player) {
 		return EntityGroupHander.getPlayerGroup(player);
 	}

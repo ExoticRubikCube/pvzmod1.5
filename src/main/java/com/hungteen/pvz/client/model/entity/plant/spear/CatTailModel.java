@@ -18,7 +18,7 @@ import net.minecraft.util.Mth;
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
 public class CatTailModel extends PVZPlantModel<CatTailEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "cat_tail"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "cat_tail"), "main");
 
 	private final ModelPart bone;
 	private final ModelPart buttom;

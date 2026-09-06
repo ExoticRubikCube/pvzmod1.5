@@ -141,7 +141,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	 */
 	protected ResourceLocation genEntityResource() {
 		final String sep = this.getEssence().toString();
-		return ResourceLocation.fromNamespaceAndPath(this.getModID(), "textures/entity/plant/" + sep + "/" + this + ".png");
+		return new ResourceLocation(this.getModID(), "textures/entity/plant/" + sep + "/" + this + ".png");
 	}
 	
 	@Override

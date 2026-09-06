@@ -26,3 +26,6 @@ forge*changelog.txt
 *.png~
 
 /ref/
+
+# Datagenerated resources from Gradle `runData`
+/src/generated/

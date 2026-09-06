@@ -85,7 +85,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         if(goods.isEmpty()){
             this.buyButton.visible = false;
         } else{
-        	final AbstractDaveEntity.GoodType goodType = goods.get(this.selectedPos);
+            final AbstractDaveEntity.GoodType goodType = goods.get(this.selectedPos);
             this.buyButton.visible = (goodType != null && this.menu.canClickBuyButton() && this.getCurrentMoney() >= goodType.getGoodPrice());
             //update good details.
             this.renderDetails(stack, goodType);
@@ -109,12 +109,12 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
         stack.pushPose();
         RenderSystem.setShaderTexture(0, TEXTURE);
-        blit(stack, this.leftPos, this.topPos, this.getBlitOffset(), 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 512);
+        blit(stack, this.leftPos, this.topPos, this.getBlitOffset(), 0.0F, 0.0F, this.imageWidth, this.imageHeight, 512, 256);
 
         final int width = 112;
         final int height = 22;
         final Pair<Integer, Integer> pair = this.getMoneyBarPos();
-        blit(stack, this.leftPos + 3, this.topPos + 3, this.getBlitOffset(), pair.getFirst(), pair.getSecond(), width, height, 256, 512);
+        blit(stack, this.leftPos + 3, this.topPos + 3, this.getBlitOffset(), pair.getFirst(), pair.getSecond(), width, height, 512, 256);
 
         StringUtil.drawCenteredScaledString(stack, font, this.getCurrentMoney() + "", this.leftPos + 25 + 44, this.topPos + 9, Colors.WHITE, 1.4f);
         StringUtil.drawCenteredScaledString(stack, font, getShopTitle().getString(), this.leftPos + 115 + 82, this.topPos + 6, Colors.BLACK, 1.4f);
@@ -139,13 +139,13 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         final int offsetY = posY + 1;
         if(trade.getType().isEnergy()) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-            blit(stack, offsetX, offsetY, this.getBlitOffset(), 112, 195, 16, 16, 256, 512);
+            blit(stack, offsetX, offsetY, this.getBlitOffset(), 112, 195, 16, 16, 512, 256);
         } else if(trade.getType().isSlot()){
             RenderSystem.setShaderTexture(0, TEXTURE);
-            blit(stack, offsetX, offsetY, this.getBlitOffset(), 128, 195, 16, 16, 256, 512);
+            blit(stack, offsetX, offsetY, this.getBlitOffset(), 128, 195, 16, 16, 512, 256);
         } else if(trade.getType().isMoney()){
             RenderSystem.setShaderTexture(0, TEXTURE);
-            blit(stack, offsetX, offsetY, this.getBlitOffset(), 144, 195, 16, 16, 256, 512);
+            blit(stack, offsetX, offsetY, this.getBlitOffset(), 144, 195, 16, 16, 512, 256);
         } else {
             this.itemRenderer.renderGuiItem(trade.getGood(), offsetX, offsetY);
         }
@@ -175,9 +175,9 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
             if (this.downHeight == i - 1) {
                 i1 = 133;
             }
-            blit(stack, x + 106, y + 27 + i1, this.getBlitOffset(), 0.0F, 195.0F, 6, 27, 256, 512);
+            blit(stack, x + 106, y + 27 + i1, this.getBlitOffset(), 0.0F, 195.0F, 6, 27, 512, 256);
         } else {
-            blit(stack, x + 106, y + 27, this.getBlitOffset(), 6.0F, 195.0F, 6, 27, 256, 512);
+            blit(stack, x + 106, y + 27, this.getBlitOffset(), 6.0F, 195.0F, 6, 27, 512, 256);
         }
         stack.popPose();
     }
@@ -212,17 +212,17 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
         }
 
         public void renderToolTip(PoseStack stack, List<AbstractDaveEntity.GoodType> goods, int mouseX, int mouseY) {
-        	final int pos = downHeight + this.getId();
-        	if(pos >= 0 && pos < goods.size()) {
-        		final AbstractDaveEntity.GoodType goodType = goods.get(pos);
-        		if(goodType != null) {
+            final int pos = downHeight + this.getId();
+            if(pos >= 0 && pos < goods.size()) {
+                final AbstractDaveEntity.GoodType goodType = goods.get(pos);
+                if(goodType != null) {
                     if (goodType.getType().isItem()) {
                         AbstractDaveShopScreen.this.renderComponentTooltip(stack, AbstractDaveShopScreen.this.getTooltipFromItem(goodType.getGood()), mouseX, mouseY);
                     } else {
                         AbstractDaveShopScreen.this.renderComponentTooltip(stack, Collections.singletonList(goodType.getGoodDescription()), mouseX, mouseY);
                     }
                 }
-        	}
+            }
         }
     }
 

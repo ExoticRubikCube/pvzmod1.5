@@ -9,23 +9,25 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
  */
 public class PlayerLevelChangeEvent extends PlayerEvent {
 
-	private final int oldLevel;
-	private final int newLevel;
-	
-	public PlayerLevelChangeEvent(Player player, int oldlevel, int newLevel) {
-		super(player);
-		this.oldLevel = oldlevel;
-		this.newLevel = newLevel;
-	}
-	
-	public int getCurrentLevel() {
-		return this.newLevel;
-	}
+    private final int oldLevel;
+    private final int newLevel;
 
-	public int getOldLevel(){return this.oldLevel;}
+    public PlayerLevelChangeEvent(Player player, int oldlevel, int newLevel) {
+        super(player);
+        this.oldLevel = oldlevel;
+        this.newLevel = newLevel;
+    }
 
-	public boolean isLevelUp(){
-		return this.getCurrentLevel() > this.getOldLevel();
-	}
+    public int getCurrentLevel() {
+        return this.newLevel;
+    }
+
+    public int getOldLevel() {
+        return this.oldLevel;
+    }
+
+    public boolean isLevelUp() {
+        return this.getCurrentLevel() > this.getOldLevel();
+    }
 
 }

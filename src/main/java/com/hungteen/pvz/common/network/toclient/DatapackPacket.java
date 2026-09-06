@@ -38,7 +38,7 @@ public class DatapackPacket {
 	public static class Handler {
 		public static void onMessage(DatapackPacket message, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				final ResourceLocation resourceLocation = ResourceLocation.parse(message.res);
+				final ResourceLocation resourceLocation = new ResourceLocation(message.res);
 				final JsonElement jsonElement = new JsonParser().parse(message.data);
 
 				if(message.type.equals(LotteryTypeLoader.NAME)){

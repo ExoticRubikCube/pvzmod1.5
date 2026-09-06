@@ -47,15 +47,13 @@ public class LawnMowerEntity extends AbstractOwnerEntity {
 		super.tick();
 		if(! this.level.isClientSide()) {
 			if(this.isInWater() || this.tickCount >= PVZConfig.COMMON_CONFIG.EntitySettings.EntityLiveTick.LawnMowerLiveTick.get()) {
-this.remove(RemovalReason.KILLED);
+				this.remove(RemovalReason.KILLED);
 				return ;
 			}
 			if(this.isStartRun()) {
 				this.level.getEntitiesOfClass(Entity.class, this.getBoundingBox().inflate(0.5D), entity -> {
 			        return EntityUtil.canTargetEntity(this.getOwnerOrSelf(), entity);
-		        }).forEach(target -> {
-		        	this.checkAndRemoveEntity(target);
-		        });
+		        }).forEach(this::checkAndRemoveEntity);
 				double angle = this.getYRot() * Math.PI / 180;
 				double dx = - Math.sin(angle);
 				double dz = Math.cos(angle);
@@ -89,7 +87,7 @@ this.remove(RemovalReason.KILLED);
 		if(! this.isStartRun() && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
 			if(! level.isClientSide()) {
 				player.addItem(new ItemStack(ItemRegister.LAWN_MOWER.get()));
-this.remove(RemovalReason.KILLED);
+				this.remove(RemovalReason.KILLED);
 			}
 			return InteractionResult.SUCCESS;
 		}

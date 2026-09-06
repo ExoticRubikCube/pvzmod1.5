@@ -106,13 +106,10 @@ public class ZombieMoveController extends MoveControl {
 
 	private boolean isWalkable(float p_234024_1_, float p_234024_2_) {
 		PathNavigation pathnavigator = this.mob.getNavigation();
-		if (pathnavigator != null) {
-			NodeEvaluator nodeprocessor = pathnavigator.getNodeEvaluator();
-            return nodeprocessor == null || nodeprocessor.getBlockPathType(this.mob.level,
-                    Mth.floor(this.mob.getX() + (double) p_234024_1_), Mth.floor(this.mob.getY()),
-                    Mth.floor(this.mob.getZ() + (double) p_234024_2_)) == BlockPathTypes.WALKABLE;
-		}
-		return true;
-	}
+        NodeEvaluator nodeprocessor = pathnavigator.getNodeEvaluator();
+        return nodeprocessor.getBlockPathType(this.mob.level,
+                Mth.floor(this.mob.getX() + (double) p_234024_1_), Mth.floor(this.mob.getY()),
+                Mth.floor(this.mob.getZ() + (double) p_234024_2_)) == BlockPathTypes.WALKABLE;
+    }
 
 }

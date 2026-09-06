@@ -17,7 +17,7 @@ import java.util.Arrays;
 @OnlyIn(Dist.CLIENT)
 public class SunConverterScreen extends PVZContainerScreen<SunConverterContainer> {
 
-	private static final ResourceLocation TEXTURE = ResourceLocation.parse("textures/gui/container/dispenser.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
 
 	public SunConverterScreen(SunConverterContainer screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);

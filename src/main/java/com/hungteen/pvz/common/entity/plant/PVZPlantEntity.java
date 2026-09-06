@@ -503,8 +503,8 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 	}
 	
 	/**
-	 * {@link PlantCardItem#checkSunAndOuterPlant(Player, PVZPlantEntity, PlantCardItem, net.minecraft.item.ItemStack)}
-	 */
+	 *
+     */
 	public void onPlaceOuterPlant(IPlantType type, int sunCost) {
 		if(type.isOuterPlant()) {
 			this.outerPlant = type.getOuterPlant().get();

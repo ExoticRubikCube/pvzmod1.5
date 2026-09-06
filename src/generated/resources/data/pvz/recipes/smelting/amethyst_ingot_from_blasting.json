@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 250,
-  "experience": 1.4,
-  "ingredient": {
-    "item": "pvz:amethyst_ore"
-  },
-  "result": "pvz:amethyst_ingot"
-}

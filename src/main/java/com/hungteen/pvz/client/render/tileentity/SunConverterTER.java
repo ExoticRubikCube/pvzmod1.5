@@ -1,7 +1,7 @@
 package com.hungteen.pvz.client.render.tileentity;
 
+import com.hungteen.pvz.common.blockentity.SunConverterTileEntity;
 import com.hungteen.pvz.common.item.ItemRegister;
-import com.hungteen.pvz.common.tileentity.SunConverterTileEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;

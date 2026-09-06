@@ -17,32 +17,32 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class LootTableGenerator extends LootTableProvider{
+public class LootTableGenerator extends LootTableProvider {
 
-	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables = ImmutableList.of(
-			Pair.of(PVZChestLootTables::new, LootContextParamSets.CHEST),
-			Pair.of(PVZEntityLootTables::new, LootContextParamSets.ENTITY),
-			Pair.of(PVZBlockLootTables::new, LootContextParamSets.BLOCK),
-			Pair.of(PVZFishingLootTables::new, LootContextParamSets.FISHING)
-			);
-	
-	public LootTableGenerator(DataGenerator dataGeneratorIn) {
-		super(dataGeneratorIn);
-	}
-	
-	@Override
-	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-		return this.tables;
-	}
-	
-	@Override
-	protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationContext) {
-		map.forEach((id, builder) -> LootTables.validate(validationContext, id, builder));
-	}
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables = ImmutableList.of(
+            Pair.of(PVZChestLootTables::new, LootContextParamSets.CHEST),
+            Pair.of(PVZEntityLootTables::new, LootContextParamSets.ENTITY),
+            Pair.of(PVZBlockLootTables::new, LootContextParamSets.BLOCK),
+            Pair.of(PVZFishingLootTables::new, LootContextParamSets.FISHING)
+    );
 
-	@Override
-	public String getName() {
-		return "Plants vs Zombies loot tables";
-	}
-	
+    public LootTableGenerator(DataGenerator dataGeneratorIn) {
+        super(dataGeneratorIn);
+    }
+
+    @Override
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
+        return this.tables;
+    }
+
+    @Override
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationContext) {
+        map.forEach((id, builder) -> LootTables.validate(validationContext, id, builder));
+    }
+
+    @Override
+    public String getName() {
+        return "Plants vs Zombies loot tables";
+    }
+
 }

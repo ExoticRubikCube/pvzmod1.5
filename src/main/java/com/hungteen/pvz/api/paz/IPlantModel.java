@@ -21,6 +21,6 @@ public interface IPlantModel<T extends PVZPlantEntity> {
 //	 */
 //	void renderBody(ZombieDropBodyEntity entity, PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay, BodyType type);
 
-	@OnlyIn(Dist.CLIENT)
-	EntityModel<T> getPlantModel();
+    @OnlyIn(Dist.CLIENT)
+    EntityModel<T> getPlantModel();
 }

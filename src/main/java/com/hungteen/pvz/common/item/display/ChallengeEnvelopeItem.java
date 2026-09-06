@@ -41,7 +41,7 @@ public class ChallengeEnvelopeItem extends Item {
     }
 
     public static ResourceLocation getChallengeType(ItemStack stack) {
-        return ResourceLocation.parse(stack.getOrCreateTag().getString(CHALLENGE_TYPE));
+        return new ResourceLocation(stack.getOrCreateTag().getString(CHALLENGE_TYPE));
     }
 
     public static Optional<IChallengeComponent> getRaidComponent(ItemStack stack) {

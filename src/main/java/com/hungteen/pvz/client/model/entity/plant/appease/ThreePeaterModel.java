@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
 public class ThreePeaterModel extends PlantShooterModel<ThreePeaterEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "three_peater"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "three_peater"), "main");
 
 	private final ModelPart total;
 	private final ModelPart leaves;

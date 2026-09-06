@@ -146,8 +146,8 @@ this.remove(RemovalReason.KILLED);
 	}
 	
 	/**
-	 * {@link PotatoEntity#onImpact(net.minecraft.util.math.HitResult)}
-	 */
+	 *
+     */
 	public void setRisingFromDirt() {
 		this.setExistTick(this.getPrepareCD() - RISING_ANIM_CD - 2);
 	}

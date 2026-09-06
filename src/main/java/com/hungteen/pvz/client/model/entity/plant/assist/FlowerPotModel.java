@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
 public class FlowerPotModel extends PVZPlantModel<FlowerPotEntity> {
-	public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(PVZMod.MOD_ID, "flower_pot"), "main");
+	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "flower_pot"), "main");
 
 	private final ModelPart total;
 	private final ModelPart body;

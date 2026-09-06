@@ -104,61 +104,61 @@ public class DummyAPI implements IPVZAPI {
         return Optional.empty();
     }
 
-	@Override
-	public void registerPeaGunMode(IPlantType type) {
-	}
+    @Override
+    public void registerPeaGunMode(IPlantType type) {
+    }
 
-	@Override
-	public void registerBowlingMode(IPlantType type, Supplier<EntityType<? extends Entity>> supplier, float size) {
-	}
+    @Override
+    public void registerBowlingMode(IPlantType type, Supplier<EntityType<? extends Entity>> supplier, float size) {
+    }
 
-	@Override
-	public void registerSpawnAmount(String name, Class<? extends IAmountComponent> c) {
-	}
+    @Override
+    public void registerSpawnAmount(String name, Class<? extends IAmountComponent> c) {
+    }
 
-	@Override
-	public void registerSpawnPlacement(String name, Class<? extends IPlacementComponent> c) {
-	}
+    @Override
+    public void registerSpawnPlacement(String name, Class<? extends IPlacementComponent> c) {
+    }
 
-	@Override
-	public void registerRaidType(String name, Class<? extends IChallengeComponent> c) {
-	}
+    @Override
+    public void registerRaidType(String name, Class<? extends IChallengeComponent> c) {
+    }
 
-	@Override
-	public void registerWaveType(String name, Class<? extends IWaveComponent> c) {
-	}
+    @Override
+    public void registerWaveType(String name, Class<? extends IWaveComponent> c) {
+    }
 
-	@Override
-	public void registerSpawnType(String name, Class<? extends ISpawnComponent> c) {
-	}
+    @Override
+    public void registerSpawnType(String name, Class<? extends ISpawnComponent> c) {
+    }
 
-	@Override
-	public void registerReward(String name, Class<? extends IRewardComponent> c) {
-	}
+    @Override
+    public void registerReward(String name, Class<? extends IRewardComponent> c) {
+    }
 
-	@Override
-	public boolean createRaid(ServerLevel world, ResourceLocation res, BlockPos pos) {
-		return false;
-	}
+    @Override
+    public boolean createRaid(ServerLevel world, ResourceLocation res, BlockPos pos) {
+        return false;
+    }
 
-	@Override
-	public boolean isRaider(ServerLevel world, Entity entity) {
-		return false;
-	}
+    @Override
+    public boolean isRaider(ServerLevel world, Entity entity) {
+        return false;
+    }
 
     @Override
     public Challenge getEntityChallenge(ServerLevel world, Entity entity) {
         return null;
     }
 
-	@Override
-	public Optional<Challenge> getNearByRaid(ServerLevel world, BlockPos pos) {
-		return Optional.empty();
-	}
+    @Override
+    public Optional<Challenge> getNearByRaid(ServerLevel world, BlockPos pos) {
+        return Optional.empty();
+    }
 
-	@Override
-	public Map<ResourceLocation, IChallengeComponent> getRaidTypes() {
-		return new HashMap<>();
-	}
+    @Override
+    public Map<ResourceLocation, IChallengeComponent> getRaidTypes() {
+        return new HashMap<>();
+    }
 
 }

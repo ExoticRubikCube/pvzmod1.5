@@ -14,7 +14,7 @@ public class OriginEffectEvent extends Event {
     private final Level world;
     private final BlockPos pos;
 
-    public OriginEffectEvent(Level world, BlockPos pos){
+    public OriginEffectEvent(Level world, BlockPos pos) {
         this.world = world;
         this.pos = pos;
     }

@@ -1,7 +1,7 @@
 package com.hungteen.pvz.common.block.special;
 
 import com.hungteen.pvz.common.block.AbstractFacingBlock;
-import com.hungteen.pvz.common.tileentity.CardFusionTileEntity;
+import com.hungteen.pvz.common.blockentity.CardFusionTileEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
