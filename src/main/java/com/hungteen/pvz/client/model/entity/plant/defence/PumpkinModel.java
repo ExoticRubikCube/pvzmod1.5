@@ -20,13 +20,9 @@ import net.minecraft.resources.ResourceLocation;
 public class PumpkinModel extends PVZPlantModel<PumpkinEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "pumpkin"), "main");
 
-
 	private final ModelPart total;
 
-
-
-
-public PumpkinModel(ModelPart root) {
+	public PumpkinModel(ModelPart root) {
 		this.total = root.getChild("total");
 	}
 
@@ -34,7 +30,7 @@ public PumpkinModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-8.5F, -10.0F, -8.5F, 17.0F, 10.0F, 17.0F)
 				.texOffs(2, 27).addBox(8.0F, -6.0F, -8.5F, 1.0F, 6.0F, 17.0F),

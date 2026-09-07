@@ -18,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class PotatoMineModel extends PVZPlantModel<PotatoMineEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "potato_mine"), "main");
-
 	private final ModelPart total;
 	private final ModelPart dirt;
 	private final ModelPart ne;
@@ -30,9 +29,7 @@ public class PotatoMineModel extends PVZPlantModel<PotatoMineEntity> {
 	private final ModelPart white;
 
 
-
-
-public PotatoMineModel(ModelPart root) {
+	public PotatoMineModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.dirt = this.total.getChild("dirt");
 		this.ne = this.dirt.getChild("ne");
@@ -48,49 +45,49 @@ public PotatoMineModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 25.0F, 0.0F));
-		PartDefinition dirt_pd = total_pd.addOrReplaceChild("dirt",
+		PartDefinition dirt = total.addOrReplaceChild("dirt",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition ne_pd = dirt_pd.addOrReplaceChild("ne",
+		PartDefinition ne = dirt.addOrReplaceChild("ne",
 			CubeListBuilder.create()
 				.texOffs(5, 56).mirror().addBox(-6.5F, -4.0F, -6.5F, 2.0F, 3.0F, 2.0F)
 				.texOffs(4, 55).mirror().addBox(-4.5F, -2.0F, -6.5F, 1.0F, 1.0F, 2.0F)
 				.texOffs(5, 57).mirror().addBox(-2.5F, -2.0F, -6.5F, 2.0F, 1.0F, 2.0F)
 				.texOffs(0, 58).mirror().addBox(-6.5F, -3.0F, -4.5F, 2.0F, 2.0F, 3.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition sw_pd = dirt_pd.addOrReplaceChild("sw",
+		PartDefinition sw = dirt.addOrReplaceChild("sw",
 			CubeListBuilder.create()
 				.texOffs(2, 51).mirror().addBox(0.5F, -2.0F, 4.5F, 3.0F, 1.0F, 2.0F)
 				.texOffs(2, 59).mirror().addBox(3.5F, -3.0F, 3.5F, 3.0F, 2.0F, 3.0F)
 				.texOffs(5, 55).mirror().addBox(4.5F, -2.0F, 0.5F, 2.0F, 1.0F, 3.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition se_pd = dirt_pd.addOrReplaceChild("se",
+		PartDefinition se = dirt.addOrReplaceChild("se",
 			CubeListBuilder.create()
 				.texOffs(1, 55).mirror().addBox(-6.5F, -4.0F, 3.5F, 4.0F, 3.0F, 3.0F)
 				.texOffs(0, 58).mirror().addBox(-6.5F, -2.0F, -0.5F, 3.0F, 1.0F, 4.0F)
 				.texOffs(4, 52).mirror().addBox(-2.5F, -2.0F, 4.5F, 1.0F, 1.0F, 2.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition nw_pd = dirt_pd.addOrReplaceChild("nw",
+		PartDefinition nw = dirt.addOrReplaceChild("nw",
 			CubeListBuilder.create()
 				.texOffs(1, 55).mirror().addBox(4.5F, -3.0F, -6.5F, 2.0F, 2.0F, 3.0F)
 				.texOffs(0, 53).mirror().addBox(1.5F, -2.0F, -6.5F, 3.0F, 1.0F, 2.0F)
 				.texOffs(2, 58).mirror().addBox(5.5F, -2.0F, -3.5F, 1.0F, 1.0F, 2.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-6.0F, -7.0038F, -5.9128F, 12.0F, 8.0F, 12.0F)
 				.texOffs(0, 25).addBox(0.0F, -10.0038F, -0.9128F, 0.0F, 3.0F, 2.0F)
 				.texOffs(40, 25).addBox(-3.0F, -7.5038F, -2.9128F, 6.0F, 1.0F, 6.0F)
 				.texOffs(14, 27).addBox(-1.0F, -10.0038F, 0.0872F, 2.0F, 3.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
-		PartDefinition red_pd = body_pd.addOrReplaceChild("red",
+		PartDefinition red = body.addOrReplaceChild("red",
 			CubeListBuilder.create()
 				.texOffs(48, 8).addBox(-2.0F, -14.0F, -2.0F, 4.0F, 4.0F, 4.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition white_pd = body_pd.addOrReplaceChild("white",
+		PartDefinition white = body.addOrReplaceChild("white",
 			CubeListBuilder.create()
 				.texOffs(48, 0).addBox(-2.0F, -14.0038F, -1.9128F, 4.0F, 4.0F, 4.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));

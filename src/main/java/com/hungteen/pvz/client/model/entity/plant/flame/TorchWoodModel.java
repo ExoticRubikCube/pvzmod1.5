@@ -18,13 +18,10 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class TorchWoodModel extends PVZPlantModel<TorchWoodEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "torch_wood"), "main");
-
 	private final ModelPart total;
 
 
-
-
-public TorchWoodModel(ModelPart root) {
+	public TorchWoodModel(ModelPart root) {
 		this.total = root.getChild("total");
 	}
 
@@ -32,7 +29,7 @@ public TorchWoodModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(48, 11).addBox(-7.0F, -9.0F, -7.0F, 14.0F, 2.0F, 14.0F)
 				.texOffs(0, 25).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F)

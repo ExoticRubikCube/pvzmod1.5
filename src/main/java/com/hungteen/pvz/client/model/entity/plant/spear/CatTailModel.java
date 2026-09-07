@@ -19,7 +19,6 @@ import net.minecraft.util.Mth;
 // Paste this class into your mod and generate all required imports
 public class CatTailModel extends PVZPlantModel<CatTailEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "cat_tail"), "main");
-
 	private final ModelPart bone;
 	private final ModelPart buttom;
 	private final ModelPart head;
@@ -36,9 +35,7 @@ public class CatTailModel extends PVZPlantModel<CatTailEntity> {
 	private final ModelPart fir_r1;
 
 
-
-
-public CatTailModel(ModelPart root) {
+	public CatTailModel(ModelPart root) {
 		this.bone = root.getChild("bone");
 		this.buttom = this.bone.getChild("buttom");
 		this.head = this.bone.getChild("head");
@@ -59,63 +56,63 @@ public CatTailModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition bone_pd = partdefinition.addOrReplaceChild("bone",
+		PartDefinition bone = partdefinition.addOrReplaceChild("bone",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition buttom_pd = bone_pd.addOrReplaceChild("buttom",
+		PartDefinition buttom = bone.addOrReplaceChild("buttom",
 			CubeListBuilder.create()
 				.texOffs(24, 12).addBox(-6.0F, -2.0F, -8.0F, 6.0F, 2.0F, 6.0F)
 				.texOffs(26, 29).addBox(0.0F, -2.0F, 1.0F, 5.0F, 2.0F, 5.0F)
 				.texOffs(0, 28).addBox(1.0F, -1.0F, -7.0F, 6.0F, 1.0F, 6.0F)
 				.texOffs(26, 22).addBox(-7.0F, -1.0F, 0.0F, 6.0F, 1.0F, 6.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition head_pd = bone_pd.addOrReplaceChild("head",
+		PartDefinition head = bone.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(0, 12).addBox(-4.0F, -9.0F, -5.0F, 8.0F, 8.0F, 8.0F)
 				.texOffs(32, 0).addBox(-2.0F, -3.0F, -5.5F, 4.0F, 2.0F, 1.0F)
 				.texOffs(0, 7).addBox(-1.0F, -3.05F, -5.7F, 2.0F, 1.0F, 2.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition hat_r1_pd = head_pd.addOrReplaceChild("hat_r1",
+		PartDefinition hat_r1 = head.addOrReplaceChild("hat_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-5.0F, -1.0F, -5.0F, 10.0F, 2.0F, 10.0F),
 			PartPose.offsetAndRotation(0.0F, -6.0F, -1.0F, -0.2618F, 0.0F, 0.0F));
-		PartDefinition left_ear_pd = head_pd.addOrReplaceChild("left_ear",
+		PartDefinition left_ear = head.addOrReplaceChild("left_ear",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, -6.0F, -1.0F));
-		PartDefinition in_r1_pd = left_ear_pd.addOrReplaceChild("in_r1",
+		PartDefinition in_r1 = left_ear.addOrReplaceChild("in_r1",
 			CubeListBuilder.create()
 				.texOffs(44, 18).addBox(-1.4F, -1.9F, -6.6F, 3.0F, 3.0F, 3.0F)
 				.texOffs(43, 6).addBox(-1.3F, -1.9F, -6.5F, 3.0F, 3.0F, 3.0F),
 			PartPose.offsetAndRotation(2.5F, -4.5F, 2.5F, 0.1745F, 0.0F, 0.1745F));
-		PartDefinition lear_r1_pd = left_ear_pd.addOrReplaceChild("lear_r1",
+		PartDefinition lear_r1 = left_ear.addOrReplaceChild("lear_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(3.0F, -5.0F, -2.0F, 2.0F, 4.0F, 3.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2618F, 0.5236F, 0.0F));
-		PartDefinition right_ear_pd = head_pd.addOrReplaceChild("right_ear",
+		PartDefinition right_ear = head.addOrReplaceChild("right_ear",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, -6.0F, -1.0F));
-		PartDefinition in_r2_pd = right_ear_pd.addOrReplaceChild("in_r2",
+		PartDefinition in_r2 = right_ear.addOrReplaceChild("in_r2",
 			CubeListBuilder.create()
 				.texOffs(42, 12).addBox(-1.6F, -1.9F, -6.6F, 3.0F, 3.0F, 3.0F)
 				.texOffs(42, 0).addBox(-1.7F, -1.9F, -6.5F, 3.0F, 3.0F, 3.0F),
 			PartPose.offsetAndRotation(-2.5F, -4.5F, 2.5F, 0.1745F, 0.0F, -0.1745F));
-		PartDefinition rear_r1_pd = right_ear_pd.addOrReplaceChild("rear_r1",
+		PartDefinition rear_r1 = right_ear.addOrReplaceChild("rear_r1",
 			CubeListBuilder.create()
 				.texOffs(32, 36).addBox(-5.0F, -5.0F, -2.0F, 2.0F, 4.0F, 3.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2618F, -0.5236F, 0.0F));
-		PartDefinition tail_pd = bone_pd.addOrReplaceChild("tail",
+		PartDefinition tail = bone.addOrReplaceChild("tail",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, -1.5F, 3.0F));
-		PartDefinition spike_r1_pd = tail_pd.addOrReplaceChild("spike_r1",
+		PartDefinition spike_r1 = tail.addOrReplaceChild("spike_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 35).addBox(-1.0F, 1.18F, 6.05F, 2.0F, 2.0F, 5.0F)
 				.texOffs(15, 28).addBox(-0.5F, 1.68F, 3.05F, 1.0F, 1.0F, 9.0F),
 			PartPose.offsetAndRotation(0.0F, -2.18F, 3.95F, 2.2253F, 0.0F, 0.0F));
-		PartDefinition sec_r1_pd = tail_pd.addOrReplaceChild("sec_r1",
+		PartDefinition sec_r1 = tail.addOrReplaceChild("sec_r1",
 			CubeListBuilder.create()
 				.texOffs(30, 4).addBox(-0.5F, 0.39F, 0.95F, 1.0F, 1.0F, 5.0F),
 			PartPose.offsetAndRotation(0.0F, -0.59F, 2.05F, 1.4399F, 0.0F, 0.0F));
-		PartDefinition fir_r1_pd = tail_pd.addOrReplaceChild("fir_r1",
+		PartDefinition fir_r1 = tail.addOrReplaceChild("fir_r1",
 			CubeListBuilder.create()
 				.texOffs(9, 35).addBox(-0.5F, -2.0F, 3.0F, 1.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, 1.5F, -3.0F, 0.2618F, 0.0F, 0.0F));

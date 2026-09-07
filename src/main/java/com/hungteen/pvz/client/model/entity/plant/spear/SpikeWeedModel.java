@@ -15,14 +15,11 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class SpikeWeedModel extends PVZPlantModel<SpikeWeedEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "spike_weed"), "main");
-
 	private final ModelPart total;
 	private final ModelPart bone;
 
 
-
-
-public SpikeWeedModel(ModelPart root) {
+	public SpikeWeedModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.bone = this.total.getChild("bone");
 	}
@@ -31,12 +28,12 @@ public SpikeWeedModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(0, 19).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F)
 				.texOffs(0, 0).addBox(-8.0F, -3.2F, -8.0F, 16.0F, 3.0F, 16.0F, new CubeDeformation(0.3F)),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition bone_pd = total_pd.addOrReplaceChild("bone",
+		PartDefinition bone = total.addOrReplaceChild("bone",
 			CubeListBuilder.create()
 				.texOffs(32, 38).addBox(-8.0F, -6.0F, -4.0F, 16.0F, 4.0F, 0.0F)
 				.texOffs(32, 42).addBox(-8.0F, -6.0F, 4.0F, 16.0F, 4.0F, 0.0F)

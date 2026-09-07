@@ -16,7 +16,7 @@ public class PVZAttributes {
 
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, PVZMod.MOD_ID);
 
-    public static final RegistryObject<Attribute> INNER_DEFENCE_HP = ATTRIBUTES.register("inner_defence_hp", () -> new RangedAttribute("attribute.name.pvz.inner_defence_hp", 0D, 0D, 1000000D).setSyncable(true));
-    public static final RegistryObject<Attribute> OUTER_DEFENCE_HP = ATTRIBUTES.register("outer_defence_hp", () -> new RangedAttribute("attribute.name.pvz.outer_defence_hp", 0D, 0D, 1000000D).setSyncable(true));
+    public static final RegistryObject<Attribute> INNER_DEFENCE_HP = ATTRIBUTES.register("inner_defence_hp", () -> new RangedAttribute("attribute.name.pvz.inner_defence_hp", 0D, 0D, 10000D).setSyncable(true));
+    public static final RegistryObject<Attribute> OUTER_DEFENCE_HP = ATTRIBUTES.register("outer_defence_hp", () -> new RangedAttribute("attribute.name.pvz.outer_defence_hp", 0D, 0D, 10000D).setSyncable(true));
 
 }

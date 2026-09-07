@@ -105,6 +105,7 @@ public class ItemRegister {
   	public static final RegistryObject<PVZSpawnEggItem> SUN_SPAWN_EGG = registerSpawnEgg("sun", EntityRegister.SUN, Colors.YELLOW, Colors.WHITE);
   	public static final RegistryObject<PVZSpawnEggItem> ENERGY_SPAWN_EGG = registerSpawnEgg("energy", EntityRegister.ENERGY, Colors.GREEN, Colors.DARK_GREEN);
   	public static final RegistryObject<PVZSpawnEggItem> FOODIE_ZOMBIE_SPAWN_EGG = registerSpawnEgg("foodie_zombie", EntityRegister.FOODIE_ZOMBIE, Colors.ZOMBIE_SKIN, Colors.WHITE);
+  	public static final RegistryObject<PVZSpawnEggItem> MOOBLOOM_SPAWN_EGG = registerSpawnEgg("moo_bloom", EntityRegister.MOOBLOOM, Colors.YELLOW, Colors.WHITE);
   	public static final RegistryObject<PVZSpawnEggItem> CRAZY_DAVE_SPAWN_EGG = registerSpawnEgg("crazy_dave", EntityRegister.CRAZY_DAVE, Colors.BROWN, Colors.SILVER);
   	public static final RegistryObject<PVZSpawnEggItem> PANNEY_SPAWN_EGG = registerSpawnEgg("panney", EntityRegister.PANNEY, Colors.BLUE, Colors.RED);
   	public static final RegistryObject<PVZSpawnEggItem> SUN_DAVE_SPAWN_EGG = registerSpawnEgg("sun_dave", EntityRegister.SUN_DAVE, Colors.BROWN, Colors.SILVER);
@@ -222,15 +223,10 @@ public class ItemRegister {
 
     /* music disc */
     public static final RegistryObject<Item> ZOMBIE_ON_YOUR_LAWN = ITEMS.register("zombie_on_your_lawn", () -> {return
-            new RecordItem(0, () -> {
-                return SoundRegister.ZOMBIE_ON_YOUR_LAWN.get();
-            }, new Item.Properties().stacksTo(1).tab(PVZItemGroups.PVZ_USEFUL).rarity(Rarity.RARE), 160);
+            new RecordItem(0, SoundRegister.ZOMBIE_ON_YOUR_LAWN::get, new Item.Properties().stacksTo(1).tab(PVZItemGroups.PVZ_USEFUL).rarity(Rarity.RARE), 160);
     });
-
     public static final RegistryObject<Item> ZEN_GARDEN = ITEMS.register("zen_garden", () -> {return
-            new RecordItem(0, () -> {
-                return SoundRegister.ZEN_GARDEN.get();
-            }, new Item.Properties().stacksTo(1).tab(PVZItemGroups.PVZ_USEFUL).rarity(Rarity.RARE), 61);
+            new RecordItem(0, SoundRegister.ZEN_GARDEN::get, new Item.Properties().stacksTo(1).tab(PVZItemGroups.PVZ_USEFUL).rarity(Rarity.RARE), 61);
     });
 
   	/*

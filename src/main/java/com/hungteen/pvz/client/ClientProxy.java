@@ -72,7 +72,7 @@ public class ClientProxy extends CommonProxy {
                         pLevel = (ClientLevel) entity.level;
                     }
 
-                    pos = this.getPointPosition(pStack);
+                    pos = this.getPointPosition(pStack, pLevel, pEntity);
                     long i = pLevel.getGameTime();
                     if (pos != null && !(entity.position().distanceToSqr((double) pos.getX() + 0.5D, entity.position().y(), (double) pos.getZ() + 0.5D) < (double) 1.0E-5F)) {
                         boolean flag = pEntity instanceof Player && ((Player) pEntity).isLocalPlayer();
@@ -113,8 +113,16 @@ public class ClientProxy extends CommonProxy {
             }
 
             @Nullable
-            private BlockPos getPointPosition(ItemStack itemstack) {
-                return GardenCompassItem.getPos(itemstack);
+            private BlockPos getPointPosition(ItemStack itemstack, @Nullable ClientLevel level, @Nullable LivingEntity entity) {
+                BlockPos p = GardenCompassItem.getPos(itemstack);
+                if (p != null || level == null || entity == null) {
+                    return p;
+                }
+                BlockPos found = GardenCompassItem.getGardenPoint(level, new BlockPos(entity.position()));
+                if (found != null) {
+                    GardenCompassItem.setPos(itemstack, found);
+                }
+                return found;
             }
 
             private double getFrameRotation(ItemFrame p_239441_1_) {

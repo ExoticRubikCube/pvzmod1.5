@@ -24,7 +24,7 @@ public class ExplosionBowlingEntity extends AbstractBowlingEntity {
 	protected void tickCollision() {
 		if(this.getBowlingFacing() == BowlingFacings.BOMB) {
 			this.bomb();
-this.discard();
+			this.discard();
 		} else {
 			super.tickCollision();
 		}

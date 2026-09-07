@@ -16,6 +16,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 	}
 
 	@Override
-	public void focusOnTarget(LivingEntity target1) {
+	public void focusOnTarget(@NotNull LivingEntity target1) {
 		super.focusOnTarget(target1);
 		if(this.getAttackTime() == 1) {//fly together.
 			final float range = 2F;

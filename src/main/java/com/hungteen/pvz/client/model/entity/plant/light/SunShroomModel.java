@@ -18,14 +18,11 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class SunShroomModel extends PVZPlantModel<SunShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "sun_shroom"), "main");
-
 	private final ModelPart body;
 	private final ModelPart hat;
 
 
-
-
-public SunShroomModel(ModelPart root) {
+	public SunShroomModel(ModelPart root) {
 		this.body = root.getChild("body");
 		this.hat = this.body.getChild("hat");
 	}
@@ -34,11 +31,11 @@ public SunShroomModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition body_pd = partdefinition.addOrReplaceChild("body",
+		PartDefinition body = partdefinition.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(1, 1).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 14.0F, 14.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition hat_pd = body_pd.addOrReplaceChild("hat",
+		PartDefinition hat = body.addOrReplaceChild("hat",
 			CubeListBuilder.create()
 				.texOffs(2, 97).addBox(-11.0F, -7.0F, -11.0F, 22.0F, 7.0F, 22.0F)
 				.texOffs(1, 32).addBox(-10.0F, -12.0F, -10.0F, 20.0F, 5.0F, 20.0F)

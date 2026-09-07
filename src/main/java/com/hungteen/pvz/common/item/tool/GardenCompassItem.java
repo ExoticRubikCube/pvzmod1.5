@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +40,7 @@ public class GardenCompassItem extends Item {
 		if(playerIn.level.isClientSide) {
 			return InteractionResultHolder.success(stack);
 		}
-		BlockPos pos = this.getPointPosition(playerIn);
+		BlockPos pos = getGardenPoint(playerIn.level, new BlockPos(playerIn.position()));
 		setPos(stack, pos);
 		return InteractionResultHolder.consume(stack);
 	}
@@ -63,10 +62,9 @@ public class GardenCompassItem extends Item {
 		return new BlockPos(stack.getTag().getInt("pos_x"), stack.getTag().getInt("pos_y"), stack.getTag().getInt("pos_z"));
 	}
 
-	private BlockPos getPointPosition(LivingEntity player) {
-		BlockPos blockpos = new BlockPos(player.position());
+	public static BlockPos getGardenPoint(Level world, BlockPos center) {
 		ResourceKey<Biome> targetKey = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation("pvz", "zen_garden"));
-		Registry<Biome> biomeReg = player.getServer().registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+		Registry<Biome> biomeReg = world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
 		Biome targetBiome = biomeReg.get(targetKey);
 		if (targetBiome == null) {
 			return null;
@@ -84,8 +82,8 @@ public class GardenCompassItem extends Item {
 			for(int dx = -r; dx <= r; dx += step) {
 				for(int dz = -r; dz <= r; dz += step) {
 					if(Math.abs(dx) == r || Math.abs(dz) == r) {
-						mbp.set(blockpos.getX() + dx, blockpos.getY(), blockpos.getZ() + dz);
-						if(player.level.getBiome(mbp).is(presentKey.get())) {
+						mbp.set(center.getX() + dx, center.getY(), center.getZ() + dz);
+						if(world.getBiome(mbp).is(presentKey.get())) {
 							blockpos1 = mbp.immutable();
 							break search;
 						}

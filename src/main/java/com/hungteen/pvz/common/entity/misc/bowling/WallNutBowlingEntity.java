@@ -27,13 +27,15 @@ public class WallNutBowlingEntity extends AbstractBowlingEntity {
 		++ this.hitCount;
 		for(int i = 1; i < this.hitCount; ++ i) {
 			CoinEntity coin = EntityRegister.COIN.get().create(level);
-			coin.setAmount(1);
-			EntityUtil.onEntityRandomPosSpawn(level, coin, this.blockPosition(), 1);
+            if (coin != null) {
+                coin.setAmount(1);
+            }
+            EntityUtil.onEntityRandomPosSpawn(level, coin, this.blockPosition(), 1);
 		}
 		entity.hurt(PVZEntityDamageSource.normal(this, this.getOwner()).setCount(hitCount), 30);
 		EntityUtil.playSound(this, SoundRegister.BOWLING_HIT.get());
 		Player player = (Player) this.getOwner();
-		if(player != null && player instanceof ServerPlayer) {
+		if(player instanceof ServerPlayer) {
 			EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) player, this, hitCount);
 		}
 	}

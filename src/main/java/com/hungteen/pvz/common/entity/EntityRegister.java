@@ -6,6 +6,7 @@ import com.hungteen.pvz.api.types.IZombieType;
 import com.hungteen.pvz.common.entity.bullet.*;
 import com.hungteen.pvz.common.entity.bullet.itembullet.*;
 import com.hungteen.pvz.common.entity.creature.FoodieZombieEntity;
+import com.hungteen.pvz.common.entity.creature.MooBloom;
 import com.hungteen.pvz.common.entity.effect.OriginEffectEntity;
 import com.hungteen.pvz.common.entity.misc.*;
 import com.hungteen.pvz.common.entity.misc.bowling.ExplosionBowlingEntity;
@@ -132,6 +133,7 @@ public class EntityRegister {
 	 * animals
 	 */
 	public static final RegistryObject<EntityType<FoodieZombieEntity>> FOODIE_ZOMBIE = registerEntityType(FoodieZombieEntity::new, "foodie_zombie", MobCategory.WATER_CREATURE);
+	public static final RegistryObject<EntityType<MooBloom>> MOOBLOOM = registerEntityType(MooBloom::new, "moo_bloom", MobCategory.CREATURE, 0.9f, 1.4f);
 
 	/**
 	 * npc
@@ -287,6 +289,7 @@ public class EntityRegister {
 			ev.put(obj, PathfinderMob.createMobAttributes().build());
 		});
 		ev.put(PANNEY.get(),PennyEntity.createPennyAttributes());
+		ev.put(MOOBLOOM.get(),MooBloom.createAttributes().build());
 	}
 
 	private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(EntityFactory<T> factory, String name, MobCategory classification){

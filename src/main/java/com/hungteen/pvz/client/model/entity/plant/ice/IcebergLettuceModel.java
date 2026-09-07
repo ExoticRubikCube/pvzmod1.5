@@ -18,14 +18,11 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class IcebergLettuceModel extends PVZPlantModel<IcebergLettuceEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "iceberg_lettuce"), "main");
-
 	private final ModelPart total;
 	private final ModelPart berg;
 
 
-
-
-public IcebergLettuceModel(ModelPart root) {
+	public IcebergLettuceModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.berg = this.total.getChild("berg");
 	}
@@ -34,11 +31,11 @@ public IcebergLettuceModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(0, 23).addBox(-4.0F, -1.0F, -4.0F, 8.0F, 1.0F, 8.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition berg_pd = total_pd.addOrReplaceChild("berg",
+		PartDefinition berg = total.addOrReplaceChild("berg",
 			CubeListBuilder.create()
 				.texOffs(0, 0).mirror().addBox(-3.0F, -5.5F, -3.0F, 6.0F, 6.0F, 6.0F)
 				.texOffs(0, 13).addBox(-2.5F, -5.0F, -2.5F, 5.0F, 5.0F, 5.0F),

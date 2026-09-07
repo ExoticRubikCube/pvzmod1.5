@@ -15,12 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class IceShroomModel extends PVZPlantModel<IceShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "ice_shroom"), "main");
-
 	private final ModelPart total;
 	private final ModelPart hat;
-
-
-
 
 
 	public IceShroomModel(ModelPart root) {
@@ -32,13 +28,13 @@ public class IceShroomModel extends PVZPlantModel<IceShroomEntity> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(72, 64).addBox(-7.0F, -9.0F, -7.0F, 14.0F, 9.0F, 14.0F)
 				.texOffs(72, 87).addBox(-7.0F, -6.0F, -7.0F, 14.0F, 6.0F, 14.0F, new CubeDeformation(0.4F))
 				.texOffs(0, 105).addBox(-8.0F, -3.0F, -8.0F, 16.0F, 3.0F, 16.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition hat_pd = total_pd.addOrReplaceChild("hat",
+		PartDefinition hat = total.addOrReplaceChild("hat",
 			CubeListBuilder.create()
 				.texOffs(0, 51).addBox(-9.0F, -15.0F, -9.0F, 18.0F, 6.0F, 18.0F)
 				.texOffs(0, 25).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 1.0F, 16.0F)

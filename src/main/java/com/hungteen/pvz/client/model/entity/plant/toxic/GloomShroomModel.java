@@ -15,43 +15,36 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class GloomShroomModel extends PVZPlantModel<GloomShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "gloom_shroom"), "main");
-
 	private final ModelPart total;
 	private final ModelPart head;
 	private final ModelPart face;
 	private final ModelPart shoot;
 	private final ModelPart shoot1;
-	private final ModelPart shoot2;
-	private final ModelPart cube_r1;
-	private final ModelPart shoot3;
-	private final ModelPart cube_r2;
-	private final ModelPart shoot4;
 	private final ModelPart shoot5;
+	private final ModelPart shoot2;
+	private final ModelPart shoot4;
+	private final ModelPart shoot3_r1;
 	private final ModelPart shoot6;
-	private final ModelPart cube_r3;
+	private final ModelPart shoot4_r1;
+	private final ModelPart shoot3;
 	private final ModelPart shoot7;
-	private final ModelPart cube_r4;
 	private final ModelPart shoot8;
 
 
-
-
-public GloomShroomModel(ModelPart root) {
+	public GloomShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.head = this.total.getChild("head");
 		this.face = this.head.getChild("face");
 		this.shoot = this.head.getChild("shoot");
 		this.shoot1 = this.shoot.getChild("shoot1");
-		this.shoot2 = this.shoot.getChild("shoot2");
-		this.cube_r1 = this.shoot2.getChild("cube_r1");
-		this.shoot3 = this.shoot.getChild("shoot3");
-		this.cube_r2 = this.shoot3.getChild("cube_r2");
-		this.shoot4 = this.shoot.getChild("shoot4");
 		this.shoot5 = this.shoot.getChild("shoot5");
+		this.shoot2 = this.shoot.getChild("shoot2");
+		this.shoot4 = this.shoot.getChild("shoot4");
+		this.shoot3_r1 = this.shoot4.getChild("shoot3_r1");
 		this.shoot6 = this.shoot.getChild("shoot6");
-		this.cube_r3 = this.shoot6.getChild("cube_r3");
+		this.shoot4_r1 = this.shoot6.getChild("shoot4_r1");
+		this.shoot3 = this.shoot.getChild("shoot3");
 		this.shoot7 = this.shoot.getChild("shoot7");
-		this.cube_r4 = this.shoot7.getChild("cube_r4");
 		this.shoot8 = this.shoot.getChild("shoot8");
 	}
 
@@ -59,79 +52,70 @@ public GloomShroomModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
-				.texOffs(46, 28).addBox(-6.0F, -5.0F, -6.0F, 12.0F, 5.0F, 12.0F)
-				.texOffs(42, 48).addBox(-6.0F, -3.0F, -6.0F, 12.0F, 3.0F, 12.0F, new CubeDeformation(0.1F)),
+				.texOffs(0, 22).addBox(-6.0F, -5.0F, -6.0F, 12.0F, 5.0F, 12.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition head_pd = total_pd.addOrReplaceChild("head",
+		PartDefinition head = total.addOrReplaceChild("head",
 			CubeListBuilder.create()
-				.texOffs(0, 40).addBox(-6.5F, -12.0F, -6.5F, 13.0F, 7.0F, 13.0F, new CubeDeformation(-0.3F))
-				.texOffs(45, 8).addBox(-6.5F, -11.0F, -6.5F, 13.0F, 6.0F, 13.0F)
-				.texOffs(0, 0).addBox(-5.5F, -11.0F, -7.5F, 11.0F, 6.0F, 15.0F, new CubeDeformation(-0.2F))
-				.texOffs(0, 21).addBox(-7.5F, -11.0F, -5.5F, 15.0F, 6.0F, 11.0F, new CubeDeformation(-0.2F)),
-			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition face_pd = head_pd.addOrReplaceChild("face",
+				.texOffs(0, 40).addBox(-6.5F, -8.0F, -6.5F, 13.0F, 7.0F, 13.0F, new CubeDeformation(-0.3F))
+				.texOffs(0, 0).addBox(-7.5F, -7.75F, -7.5F, 15.0F, 7.0F, 15.0F),
+			PartPose.offsetAndRotation(0.0F, -3.0F, 0.5F, 0.2182F, 0.0F, 0.0F));
+		PartDefinition face = head.addOrReplaceChild("face",
 			CubeListBuilder.create()
-				.texOffs(0, 4).addBox(-5.0F, -12.0F, 0.0F, 3.0F, 1.0F, 3.0F)
-				.texOffs(0, 0).addBox(2.0F, -12.0F, 0.0F, 3.0F, 1.0F, 3.0F),
-			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition shoot_pd = head_pd.addOrReplaceChild("shoot",
+				.texOffs(36, 22).addBox(-6.0F, -12.0F, 0.0F, 4.0F, 1.0F, 4.0F)
+				.texOffs(36, 22).mirror().addBox(2.0F, -12.0F, 0.0F, 4.0F, 1.0F, 4.0F),
+			PartPose.offset(0.0F, 4.0F, 0.0F));
+		PartDefinition shoot = head.addOrReplaceChild("shoot",
 			CubeListBuilder.create(),
-			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition shoot1_pd = shoot_pd.addOrReplaceChild("shoot1",
+			PartPose.offset(0.0F, 4.0F, 0.0F));
+		PartDefinition shoot1 = shoot.addOrReplaceChild("shoot1",
 			CubeListBuilder.create()
-				.texOffs(50, 28).addBox(-0.5F, -0.5F, -1.75F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F))
-				.texOffs(41, 45).addBox(-1.5F, -1.5F, -3.25F, 3.0F, 3.0F, 2.0F),
+				.texOffs(0, 7).addBox(-1.5F, -1.5F, -1.75F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F))
+				.texOffs(0, 0).addBox(-2.5F, -2.5F, -3.25F, 5.0F, 5.0F, 2.0F),
 			PartPose.offset(0.0F, -8.5F, -7.25F));
-		PartDefinition shoot2_pd = shoot_pd.addOrReplaceChild("shoot2",
+		PartDefinition shoot5 = shoot.addOrReplaceChild("shoot5",
 			CubeListBuilder.create()
-				.texOffs(0, 8).addBox(-3.25F, -1.5F, -1.5F, 2.0F, 3.0F, 3.0F),
-			PartPose.offsetAndRotation(-6.25F, -8.5F, -6.25F, 0.0F, -0.7854F, 0.0F));
-		PartDefinition cube_r1_pd = shoot2_pd.addOrReplaceChild("cube_r1",
-			CubeListBuilder.create()
-				.texOffs(5, 47).addBox(-1.0F, -1.0F, -2.0F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F)),
-			PartPose.offsetAndRotation(0.25F, 0.5F, -0.5F, 0.0F, 1.5708F, 0.0F));
-		PartDefinition shoot3_pd = shoot_pd.addOrReplaceChild("shoot3",
-			CubeListBuilder.create()
-				.texOffs(0, 40).addBox(-3.25F, -1.5F, -1.5F, 2.0F, 3.0F, 3.0F),
-			PartPose.offset(-7.25F, -8.5F, 0.0F));
-		PartDefinition cube_r2_pd = shoot3_pd.addOrReplaceChild("cube_r2",
-			CubeListBuilder.create()
-				.texOffs(0, 46).addBox(-1.0F, -1.0F, -2.0F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F)),
-			PartPose.offsetAndRotation(0.25F, 0.5F, -0.5F, 0.0F, 1.5708F, 0.0F));
-		PartDefinition shoot4_pd = shoot_pd.addOrReplaceChild("shoot4",
-			CubeListBuilder.create()
-				.texOffs(56, 4).addBox(-0.5F, -0.5F, -1.25F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F))
-				.texOffs(43, 0).addBox(-1.5F, -1.5F, 1.25F, 3.0F, 3.0F, 2.0F),
-			PartPose.offsetAndRotation(-6.25F, -8.5F, 6.25F, 0.0F, -0.7854F, 0.0F));
-		PartDefinition shoot5_pd = shoot_pd.addOrReplaceChild("shoot5",
-			CubeListBuilder.create()
-				.texOffs(56, 0).addBox(-0.5F, -0.5F, -1.25F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F))
-				.texOffs(43, 5).addBox(-1.5F, -1.5F, 1.25F, 3.0F, 3.0F, 2.0F),
+				.texOffs(0, 7).addBox(-1.5F, -1.5F, -1.25F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F))
+				.texOffs(0, 0).addBox(-2.5F, -2.5F, 1.25F, 5.0F, 5.0F, 2.0F),
 			PartPose.offset(0.0F, -8.5F, 7.25F));
-		PartDefinition shoot6_pd = shoot_pd.addOrReplaceChild("shoot6",
+		PartDefinition shoot2 = shoot.addOrReplaceChild("shoot2",
 			CubeListBuilder.create()
-				.texOffs(0, 27).addBox(1.25F, -1.5F, -1.5F, 2.0F, 3.0F, 3.0F),
-			PartPose.offsetAndRotation(6.25F, -8.5F, 6.25F, 0.0F, -0.7854F, 0.0F));
-		PartDefinition cube_r3_pd = shoot6_pd.addOrReplaceChild("cube_r3",
+				.texOffs(0, 7).addBox(-1.5F, -1.5F, -1.75F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F))
+				.texOffs(0, 0).addBox(-2.5F, -2.5F, -3.25F, 5.0F, 5.0F, 2.0F),
+			PartPose.offsetAndRotation(-6.0F, -8.5F, -6.25F, 0.0F, 0.7854F, 0.0F));
+		PartDefinition shoot4 = shoot.addOrReplaceChild("shoot4",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(-6.0F, -8.5F, -6.25F, 0.0F, 0.7854F, 0.0F));
+		PartDefinition shoot3_r1 = shoot4.addOrReplaceChild("shoot3_r1",
 			CubeListBuilder.create()
-				.texOffs(45, 27).addBox(-1.0F, -1.0F, -2.0F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F)),
-			PartPose.offsetAndRotation(0.75F, 0.5F, -0.5F, 0.0F, 1.5708F, 0.0F));
-		PartDefinition shoot7_pd = shoot_pd.addOrReplaceChild("shoot7",
+				.texOffs(0, 0).addBox(-4.0F, -11.0F, -12.0F, 5.0F, 5.0F, 2.0F)
+				.texOffs(0, 7).addBox(-3.0F, -10.0F, -10.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F)),
+			PartPose.offsetAndRotation(0.0F, 8.5F, 7.25F, 0.0F, 1.5708F, 0.0F));
+		PartDefinition shoot6 = shoot.addOrReplaceChild("shoot6",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(6.0F, -8.5F, -6.25F, 0.0F, -0.7854F, 0.0F));
+		PartDefinition shoot4_r1 = shoot6.addOrReplaceChild("shoot4_r1",
 			CubeListBuilder.create()
-				.texOffs(0, 21).addBox(1.25F, -1.5F, -1.5F, 2.0F, 3.0F, 3.0F),
-			PartPose.offset(7.25F, -8.5F, 0.0F));
-		PartDefinition cube_r4_pd = shoot7_pd.addOrReplaceChild("cube_r4",
+				.texOffs(0, 0).mirror().addBox(-1.0F, -11.0F, -12.0F, 5.0F, 5.0F, 2.0F)
+				.texOffs(0, 7).mirror().addBox(0.0F, -10.0F, -10.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F)),
+			PartPose.offsetAndRotation(0.0F, 8.5F, 7.25F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition shoot3 = shoot.addOrReplaceChild("shoot3",
 			CubeListBuilder.create()
-				.texOffs(7, 11).addBox(-1.0F, -1.0F, -2.0F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F)),
-			PartPose.offsetAndRotation(0.75F, 0.5F, -0.5F, 0.0F, 1.5708F, 0.0F));
-		PartDefinition shoot8_pd = shoot_pd.addOrReplaceChild("shoot8",
+				.texOffs(0, 7).addBox(-1.5F, -1.5F, -1.75F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F))
+				.texOffs(0, 0).addBox(-2.5F, -2.5F, -3.25F, 5.0F, 5.0F, 2.0F),
+			PartPose.offsetAndRotation(-7.5F, -8.5F, -0.25F, 0.0F, 1.5708F, 0.0F));
+		PartDefinition shoot7 = shoot.addOrReplaceChild("shoot7",
 			CubeListBuilder.create()
-				.texOffs(51, 2).addBox(-0.5F, -0.5F, -1.75F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.2F))
-				.texOffs(43, 10).addBox(-1.5F, -1.5F, -3.25F, 3.0F, 3.0F, 2.0F),
-			PartPose.offsetAndRotation(6.25F, -8.5F, -6.25F, 0.0F, -0.7854F, 0.0F));
-		return LayerDefinition.create(meshdefinition, 128, 128);
+				.texOffs(0, 7).mirror().addBox(-1.5F, -1.5F, -1.75F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F))
+				.texOffs(0, 0).mirror().addBox(-2.5F, -2.5F, -3.25F, 5.0F, 5.0F, 2.0F),
+			PartPose.offsetAndRotation(7.5F, -8.5F, -0.25F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition shoot8 = shoot.addOrReplaceChild("shoot8",
+			CubeListBuilder.create()
+				.texOffs(0, 7).mirror().addBox(-1.5F, -1.5F, -1.75F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.2F))
+				.texOffs(0, 0).mirror().addBox(-2.5F, -2.5F, -3.25F, 5.0F, 5.0F, 2.0F),
+			PartPose.offsetAndRotation(6.0F, -8.5F, -6.25F, 0.0F, -0.7854F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
 

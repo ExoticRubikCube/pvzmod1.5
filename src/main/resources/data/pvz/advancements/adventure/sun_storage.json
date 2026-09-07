@@ -18,12 +18,12 @@
     "get_almanac": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "items": [
-          {
-            "item": "pvz:sun_storage_sapling3",
-            "nbt": "{sun_storage_amount:100000}"
-          }
-        ]
+        "items":[
+		  {
+		    "items":["pvz:sun_storage_sapling3"],
+		    "nbt": "{sun_storage_amount:100000}"
+		  }
+		]
       }
     }
   },

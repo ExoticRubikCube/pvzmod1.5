@@ -15,6 +15,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class TangleKelpEntity extends PlantCloserEntity{
 	}
 	
 	@Override
-	public void focusOnTarget(LivingEntity target) {
+	public void focusOnTarget(@NotNull LivingEntity target) {
 		super.focusOnTarget(target);
 		if(target.getVehicle() == null) {
 			EntityUtil.playSound(this, SoundRegister.DRAG.get());

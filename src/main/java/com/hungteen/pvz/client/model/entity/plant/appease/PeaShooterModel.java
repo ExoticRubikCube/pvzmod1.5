@@ -19,7 +19,6 @@ import java.util.Optional;
 // Paste this class into your mod and generate all required imports
 public class PeaShooterModel extends PlantShooterModel<PeaShooterEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "pea_shooter"), "main");
-
 	private final ModelPart total;
 	private final ModelPart body;
 	private final ModelPart stick_r1;
@@ -33,9 +32,7 @@ public class PeaShooterModel extends PlantShooterModel<PeaShooterEntity> {
 	private final ModelPart s_r1;
 
 
-
-
-public PeaShooterModel(ModelPart root) {
+	public PeaShooterModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.body = this.total.getChild("body");
 		this.stick_r1 = this.body.getChild("stick_r1");
@@ -53,47 +50,47 @@ public PeaShooterModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick_r1_pd = body_pd.addOrReplaceChild("stick_r1",
+		PartDefinition stick_r1 = body.addOrReplaceChild("stick_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 31).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 10.0F, 2.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
-		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+		PartDefinition head = body.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(30, 0).addBox(-1.0F, -16.0F, -7.0F, 4.0F, 4.0F, 3.0F)
 				.texOffs(44, 0).addBox(-2.0F, -17.0F, -8.0F, 6.0F, 6.0F, 2.0F)
 				.texOffs(0, 0).addBox(-4.0F, -21.0F, -4.0F, 10.0F, 10.0F, 10.0F)
 				.texOffs(40, 8).addBox(-1.0F, -11.0F, -1.0F, 4.0F, 3.0F, 4.0F),
 			PartPose.offset(-1.0F, -1.0F, 0.0F));
-		PartDefinition hair_pd = head_pd.addOrReplaceChild("hair",
+		PartDefinition hair = head.addOrReplaceChild("hair",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, -16.5F, 12.0F));
-		PartDefinition leafl_r1_pd = hair_pd.addOrReplaceChild("leafl_r1",
+		PartDefinition leafl_r1 = hair.addOrReplaceChild("leafl_r1",
 			CubeListBuilder.create()
 				.texOffs(42, 19).addBox(-1.0F, -0.1F, -4.0F, 4.0F, 6.0F, 1.0F)
 				.texOffs(0, 0).addBox(0.0F, -0.5F, -6.0F, 2.0F, 1.0F, 3.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.1745F, 0.0F, 0.0F));
-		PartDefinition down_pd = total_pd.addOrReplaceChild("down",
+		PartDefinition down = total.addOrReplaceChild("down",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition n_r1_pd = down_pd.addOrReplaceChild("n_r1",
+		PartDefinition n_r1 = down.addOrReplaceChild("n_r1",
 			CubeListBuilder.create()
 				.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.0F));
-		PartDefinition w_r1_pd = down_pd.addOrReplaceChild("w_r1",
+		PartDefinition w_r1 = down.addOrReplaceChild("w_r1",
 			CubeListBuilder.create()
 				.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, -0.1745F));
-		PartDefinition e_r1_pd = down_pd.addOrReplaceChild("e_r1",
+		PartDefinition e_r1 = down.addOrReplaceChild("e_r1",
 			CubeListBuilder.create()
 				.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.1745F));
-		PartDefinition s_r1_pd = down_pd.addOrReplaceChild("s_r1",
+		PartDefinition s_r1 = down.addOrReplaceChild("s_r1",
 			CubeListBuilder.create()
 				.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, 0.0F));

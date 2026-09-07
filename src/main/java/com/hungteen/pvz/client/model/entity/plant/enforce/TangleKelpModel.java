@@ -18,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class TangleKelpModel extends PVZPlantModel<TangleKelpEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "tangle_kelp"), "main");
-
 	private final ModelPart total;
 	private final ModelPart c1;
 	private final ModelPart c2;
@@ -36,9 +35,7 @@ public class TangleKelpModel extends PVZPlantModel<TangleKelpEntity> {
 	private final ModelPart s_r4;
 
 
-
-
-public TangleKelpModel(ModelPart root) {
+	public TangleKelpModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.c1 = this.total.getChild("c1");
 		this.c2 = this.total.getChild("c2");
@@ -60,64 +57,64 @@ public TangleKelpModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(94, 0).addBox(-4.5F, -8.0F, -4.0F, 9.0F, 8.0F, 8.0F)
 				.texOffs(104, 16).addBox(-3.0F, -2.0F, -3.0F, 6.0F, 8.0F, 6.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition c1_pd = total_pd.addOrReplaceChild("c1",
+		PartDefinition c1 = total.addOrReplaceChild("c1",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-5.5F, -18.0F, -5.0F, 11.0F, 19.0F, 10.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition c2_pd = total_pd.addOrReplaceChild("c2",
+		PartDefinition c2 = total.addOrReplaceChild("c2",
 			CubeListBuilder.create()
 				.texOffs(0, 29).addBox(-5.5F, -18.0F, -5.0F, 11.0F, 19.0F, 10.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition f1_pd = total_pd.addOrReplaceChild("f1",
+		PartDefinition f1 = total.addOrReplaceChild("f1",
 			CubeListBuilder.create()
 				.texOffs(54, -10).addBox(0.0F, -22.0F, -5.0F, 0.0F, 16.0F, 10.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition n_r1_pd = f1_pd.addOrReplaceChild("n_r1",
+		PartDefinition n_r1 = f1.addOrReplaceChild("n_r1",
 			CubeListBuilder.create()
 				.texOffs(48, 0).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, -0.4363F, 0.0F, 0.0F));
-		PartDefinition s_r1_pd = f1_pd.addOrReplaceChild("s_r1",
+		PartDefinition s_r1 = f1.addOrReplaceChild("s_r1",
 			CubeListBuilder.create()
 				.texOffs(48, 44).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, 0.4363F, 0.0F, 0.0F));
-		PartDefinition f2_pd = total_pd.addOrReplaceChild("f2",
+		PartDefinition f2 = total.addOrReplaceChild("f2",
 			CubeListBuilder.create()
 				.texOffs(54, 12).addBox(0.0F, -22.0F, -5.0F, 0.0F, 16.0F, 10.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition n_r2_pd = f2_pd.addOrReplaceChild("n_r2",
+		PartDefinition n_r2 = f2.addOrReplaceChild("n_r2",
 			CubeListBuilder.create()
 				.texOffs(48, 22).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, -0.4363F, 0.0F, 0.0F));
-		PartDefinition s_r2_pd = f2_pd.addOrReplaceChild("s_r2",
+		PartDefinition s_r2 = f2.addOrReplaceChild("s_r2",
 			CubeListBuilder.create()
 				.texOffs(48, 66).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, 0.4363F, 0.0F, 0.0F));
-		PartDefinition f3_pd = total_pd.addOrReplaceChild("f3",
+		PartDefinition f3 = total.addOrReplaceChild("f3",
 			CubeListBuilder.create()
 				.texOffs(54, 34).addBox(0.0F, -22.0F, -5.0F, 0.0F, 16.0F, 10.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition n_r3_pd = f3_pd.addOrReplaceChild("n_r3",
+		PartDefinition n_r3 = f3.addOrReplaceChild("n_r3",
 			CubeListBuilder.create()
 				.texOffs(48, 44).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, -0.4363F, 0.0F, 0.0F));
-		PartDefinition s_r3_pd = f3_pd.addOrReplaceChild("s_r3",
+		PartDefinition s_r3 = f3.addOrReplaceChild("s_r3",
 			CubeListBuilder.create()
 				.texOffs(48, 0).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, 0.4363F, 0.0F, 0.0F));
-		PartDefinition f4_pd = total_pd.addOrReplaceChild("f4",
+		PartDefinition f4 = total.addOrReplaceChild("f4",
 			CubeListBuilder.create()
 				.texOffs(54, 56).addBox(0.0F, -22.0F, -5.0F, 0.0F, 16.0F, 10.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition n_r4_pd = f4_pd.addOrReplaceChild("n_r4",
+		PartDefinition n_r4 = f4.addOrReplaceChild("n_r4",
 			CubeListBuilder.create()
 				.texOffs(48, 66).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, -0.4363F, 0.0F, 0.0F));
-		PartDefinition s_r4_pd = f4_pd.addOrReplaceChild("s_r4",
+		PartDefinition s_r4 = f4.addOrReplaceChild("s_r4",
 			CubeListBuilder.create()
 				.texOffs(48, 22).addBox(-8.0F, -11.0F, 0.0F, 16.0F, 22.0F, 0.0F),
 			PartPose.offsetAndRotation(0.0F, -11.0F, 0.0F, 0.4363F, 0.0F, 0.0F));

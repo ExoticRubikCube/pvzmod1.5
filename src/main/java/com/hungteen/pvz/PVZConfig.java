@@ -525,19 +525,9 @@ public class PVZConfig {
 
             }
             builder.pop();
-
-            builder.comment("Other Render Settings").push("Other Render Settings");
-            {
-                OtherSettings.ShowPVZMainMenu = builder
-                        .translation("config.pvz.client.pvz_menu")
-                        .comment("show pvz main menu")
-                        .define("ShowPVZMainMenu", true);
-            }
-            builder.pop();
         }
 
         public OverlaySettings OverlaySettings = new OverlaySettings();
-        public OtherSettings OtherSettings = new OtherSettings();
 
         public static class OverlaySettings {
             public ForgeConfigSpec.BooleanValue RenderSunBar;
@@ -548,10 +538,6 @@ public class PVZConfig {
             public ForgeConfigSpec.BooleanValue RenderInvasionProgress;
             public ForgeConfigSpec.BooleanValue RenderFog;
             public ForgeConfigSpec.BooleanValue RenderCardSlots;
-        }
-
-        public static class OtherSettings {
-            public ForgeConfigSpec.BooleanValue ShowPVZMainMenu;
         }
     }
 

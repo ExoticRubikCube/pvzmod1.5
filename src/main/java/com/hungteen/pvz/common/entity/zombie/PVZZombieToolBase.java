@@ -25,7 +25,7 @@ public abstract class PVZZombieToolBase extends Mob{
 				this.liveTick=0;
 			}
 			if(this.liveTick>=this.maxLiveTick) {
-this.discard();
+				this.discard();
 			}
 		}
 	}

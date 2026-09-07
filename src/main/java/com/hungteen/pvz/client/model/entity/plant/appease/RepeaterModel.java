@@ -19,7 +19,6 @@ import java.util.Optional;
 // Paste this class into your mod and generate all required imports
 public class RepeaterModel extends PlantShooterModel<RepeaterEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "repeater"), "main");
-
 	private final ModelPart total;
 	private final ModelPart body;
 	private final ModelPart head;
@@ -36,9 +35,7 @@ public class RepeaterModel extends PlantShooterModel<RepeaterEntity> {
 	private final ModelPart s_r1;
 
 
-
-
-public RepeaterModel(ModelPart root) {
+	public RepeaterModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.body = this.total.getChild("body");
 		this.head = this.body.getChild("head");
@@ -59,60 +56,60 @@ public RepeaterModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(0, 31).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 12.0F, 2.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
-		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+		PartDefinition head = body.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(30, 0).addBox(-2.0F, -5.0F, -8.0F, 4.0F, 4.0F, 3.0F)
 				.texOffs(44, 0).addBox(-3.0F, -6.0F, -9.0F, 6.0F, 6.0F, 2.0F)
 				.texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F)
 				.texOffs(40, 8).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
-		PartDefinition eyebrow_pd = head_pd.addOrReplaceChild("eyebrow",
+		PartDefinition eyebrow = head.addOrReplaceChild("eyebrow",
 			CubeListBuilder.create()
 				.texOffs(39, 30).addBox(-5.0F, -22.25F, -4.2F, 10.0F, 10.0F, 1.0F),
 			PartPose.offset(0.0F, 12.0F, -1.0F));
-		PartDefinition hair_pd = head_pd.addOrReplaceChild("hair",
+		PartDefinition hair = head.addOrReplaceChild("hair",
 			CubeListBuilder.create()
 				.texOffs(44, 45).addBox(-2.0F, -2.0F, 0.2F, 4.0F, 4.0F, 5.0F),
 			PartPose.offset(0.0F, -4.5F, 5.0F));
-		PartDefinition cube_r1_pd = hair_pd.addOrReplaceChild("cube_r1",
+		PartDefinition cube_r1 = hair.addOrReplaceChild("cube_r1",
 			CubeListBuilder.create()
 				.texOffs(26, 47).addBox(-6.0F, -3.0F, -2.0F, 4.0F, 6.0F, 1.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.5236F, 0.0F));
-		PartDefinition cube_r2_pd = hair_pd.addOrReplaceChild("cube_r2",
+		PartDefinition cube_r2 = hair.addOrReplaceChild("cube_r2",
 			CubeListBuilder.create()
 				.texOffs(10, 47).addBox(2.0F, -3.0F, -2.0F, 4.0F, 6.0F, 1.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.5236F, 0.0F));
-		PartDefinition cube_r3_pd = hair_pd.addOrReplaceChild("cube_r3",
+		PartDefinition cube_r3 = hair.addOrReplaceChild("cube_r3",
 			CubeListBuilder.create()
 				.texOffs(24, 39).addBox(-3.0F, -6.0F, -2.0F, 6.0F, 4.0F, 1.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
-		PartDefinition cube_r4_pd = hair_pd.addOrReplaceChild("cube_r4",
+		PartDefinition cube_r4 = hair.addOrReplaceChild("cube_r4",
 			CubeListBuilder.create()
 				.texOffs(8, 39).addBox(-3.0F, 2.0F, -2.0F, 6.0F, 4.0F, 1.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.5236F, 0.0F, 0.0F));
-		PartDefinition down_pd = total_pd.addOrReplaceChild("down",
+		PartDefinition down = total.addOrReplaceChild("down",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition n_r1_pd = down_pd.addOrReplaceChild("n_r1",
+		PartDefinition n_r1 = down.addOrReplaceChild("n_r1",
 			CubeListBuilder.create()
 				.texOffs(4, 20).addBox(-2.0F, -1.0F, -7.0F, 4.0F, 1.0F, 6.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.0F));
-		PartDefinition w_r1_pd = down_pd.addOrReplaceChild("w_r1",
+		PartDefinition w_r1 = down.addOrReplaceChild("w_r1",
 			CubeListBuilder.create()
 				.texOffs(6, 27).addBox(1.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, -0.1745F));
-		PartDefinition e_r1_pd = down_pd.addOrReplaceChild("e_r1",
+		PartDefinition e_r1 = down.addOrReplaceChild("e_r1",
 			CubeListBuilder.create()
 				.texOffs(26, 27).addBox(-7.0F, -1.0F, -2.0F, 6.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, -0.1745F, -0.7854F, 0.1745F));
-		PartDefinition s_r1_pd = down_pd.addOrReplaceChild("s_r1",
+		PartDefinition s_r1 = down.addOrReplaceChild("s_r1",
 			CubeListBuilder.create()
 				.texOffs(24, 20).addBox(-2.0F, -1.0F, 1.0F, 4.0F, 1.0F, 6.0F),
 			PartPose.offsetAndRotation(0.0F, 0.8F, 0.0F, 0.1745F, -0.7854F, 0.0F));

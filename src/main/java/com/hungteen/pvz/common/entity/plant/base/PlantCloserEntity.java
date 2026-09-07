@@ -54,8 +54,10 @@ public abstract class PlantCloserEntity extends PVZPlantEntity{
 	 * {@link #normalPlantTick()}
 	 */
 	public void focusOnTarget(@Nonnull LivingEntity target) {
-		this.getLookControl().setLookAt(this.getTarget(), 30f, 30f);
-	}
+        if (this.getTarget() != null) {
+            this.getLookControl().setLookAt(this.getTarget(), 30f, 30f);
+        }
+    }
 	
 	/**
 	 * whether plants can check distance and perform attack.

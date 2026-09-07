@@ -24,6 +24,7 @@ import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.common.potion.PotionRecipeHandler;
 import com.hungteen.pvz.common.potion.PotionRegister;
 import com.hungteen.pvz.common.recipe.RecipeRegister;
+import com.hungteen.pvz.common.register.PVZBiomeModifier;
 import com.hungteen.pvz.common.register.PVZBiomes;
 import com.hungteen.pvz.common.world.FeatureRegister;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
@@ -63,6 +64,7 @@ public class RegistryHandler {
 		RecipeRegister.RECIPE_SERIALIZERS.register(bus);
 		PVZAttributes.ATTRIBUTES.register(bus);
 		PVZBiomes.BIOMES.register(bus);
+		PVZBiomeModifier.BIOME_MODIFIER.register(bus);
 	}
 
 	/**

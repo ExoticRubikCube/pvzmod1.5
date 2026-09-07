@@ -18,13 +18,10 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class PuffShroomModel extends PVZPlantModel<PuffShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "puff_shroom"), "main");
-
 	private final ModelPart total;
 
 
-
-
-public PuffShroomModel(ModelPart root) {
+	public PuffShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
 	}
 
@@ -32,7 +29,7 @@ public PuffShroomModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(31, 47).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F)
 				.texOffs(0, 0).addBox(-6.0F, -12.0F, -6.0F, 12.0F, 4.0F, 12.0F)

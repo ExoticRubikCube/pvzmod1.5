@@ -17,13 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class LilyPadModel extends PVZPlantModel<LilyPadEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "lily_pad"), "main");
-
 	private final ModelPart total;
 
 
-
-
-public LilyPadModel(ModelPart root) {
+	public LilyPadModel(ModelPart root) {
 		this.total = root.getChild("total");
 	}
 
@@ -31,7 +28,7 @@ public LilyPadModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(23, 46).addBox(6.0F, 7.0F, -16.0F, 4.0F, 1.0F, 16.0F)
 				.texOffs(31, 30).addBox(10.0F, 7.0F, -15.0F, 2.0F, 1.0F, 14.0F)

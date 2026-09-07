@@ -17,9 +17,7 @@
     "in_world": {
       "trigger": "minecraft:location",
       "conditions": {
-        "location": {
-          "dimension": "minecraft:overworld"
-        }
+        "dimension": "overworld"
       }
     }
   },

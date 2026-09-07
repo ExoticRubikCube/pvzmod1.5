@@ -34,7 +34,7 @@ public class ChomperBlock extends BushBlock{
 	private static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
 	
 	public ChomperBlock() {
-		super(Block.Properties.copy(Blocks.PUMPKIN).noCollission().noOcclusion());
+		super(Block.Properties.copy(Blocks.PUMPKIN).noOcclusion());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 	

@@ -7,10 +7,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
 // Made with Blockbench 3.6.6
@@ -18,32 +15,50 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class FumeShroomModel extends PVZPlantModel<FumeShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "fume_shroom"), "main");
-
 	private final ModelPart total;
+	private final ModelPart total_r1;
+	private final ModelPart total_r2;
+	private final ModelPart total_r3;
+	private final ModelPart total_r4;
 
 
-
-
-public FumeShroomModel(ModelPart root) {
+	public FumeShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
+		this.total_r1 = this.total.getChild("total_r1");
+		this.total_r2 = this.total.getChild("total_r2");
+		this.total_r3 = this.total.getChild("total_r3");
+		this.total_r4 = this.total.getChild("total_r4");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
-				.texOffs(1, 105).addBox(-6.0F, -10.0F, -6.0F, 12.0F, 10.0F, 12.0F)
-				.texOffs(51, 101).addBox(-8.0F, -21.0F, -8.0F, 16.0F, 10.0F, 16.0F)
-				.texOffs(1, 88).addBox(-7.0F, -11.0F, -7.0F, 14.0F, 1.0F, 14.0F)
-				.texOffs(1, 70).addBox(-7.0F, -22.0F, -7.0F, 14.0F, 1.0F, 14.0F)
-				.texOffs(4, 63).addBox(-1.0F, -17.0F, -10.0F, 2.0F, 2.0F, 2.0F)
-				.texOffs(16, 60).addBox(-2.0F, -18.0F, -13.0F, 4.0F, 4.0F, 3.0F),
+				.texOffs(0, 26).addBox(-6.5F, -9.0F, -6.5F, 13.0F, 9.0F, 13.0F)
+				.texOffs(0, 0).addBox(-8.0F, -18.0F, -8.0F, 16.0F, 10.0F, 16.0F)
+				.texOffs(0, 8).addBox(-2.0F, -15.0F, -11.0F, 4.0F, 4.0F, 3.0F)
+				.texOffs(0, 0).addBox(-3.0F, -16.0F, -13.0F, 6.0F, 6.0F, 2.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		return LayerDefinition.create(meshdefinition, 128, 128);
+		PartDefinition total_r1 = total.addOrReplaceChild("total_r1",
+			CubeListBuilder.create()
+				.texOffs(0, 28).addBox(-1.0F, -1.0F, -0.375F, 2.0F, 2.0F, 1.0F, new CubeDeformation(-0.3F)),
+			PartPose.offsetAndRotation(-3.0562F, -1.3175F, -6.525F, 0.0F, 0.0F, -0.0436F));
+		PartDefinition total_r2 = total.addOrReplaceChild("total_r2",
+			CubeListBuilder.create()
+				.texOffs(39, 26).addBox(-3.25F, -1.0F, -0.85F, 6.0F, 3.0F, 1.0F, new CubeDeformation(-0.3F)),
+			PartPose.offsetAndRotation(0.1379F, -2.0988F, -6.025F, 0.0F, 0.0F, -0.0873F));
+		PartDefinition total_r3 = total.addOrReplaceChild("total_r3",
+			CubeListBuilder.create()
+				.texOffs(0, 26).addBox(-1.5F, -0.5F, -0.5F, 4.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(-3.5F, -6.5F, -6.25F, 0.0F, 0.0F, 0.2618F));
+		PartDefinition total_r4 = total.addOrReplaceChild("total_r4",
+			CubeListBuilder.create()
+				.texOffs(0, 26).mirror().addBox(-2.5F, -0.5F, -0.5F, 4.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(3.5F, -6.5F, -6.25F, 0.0F, 0.0F, -0.2618F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
-
 
 	@Override
 	public void setupAnim(FumeShroomEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){

@@ -19,7 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class SunFlowerModel extends PVZPlantModel<SunFlowerEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "sun_flower"), "main");
-
 	private final ModelPart total;
 	private final ModelPart leaves;
 	private final ModelPart w_r1;
@@ -35,9 +34,7 @@ public class SunFlowerModel extends PVZPlantModel<SunFlowerEntity> {
 	private final ModelPart leafe_r1;
 
 
-
-
-public SunFlowerModel(ModelPart root) {
+	public SunFlowerModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.leaves = this.total.getChild("leaves");
 		this.w_r1 = this.leaves.getChild("w_r1");
@@ -57,53 +54,53 @@ public SunFlowerModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
 			PartPose.offset(8.0F, 24.0F, -8.0F));
-		PartDefinition leaves_pd = total_pd.addOrReplaceChild("leaves",
+		PartDefinition leaves = total.addOrReplaceChild("leaves",
 			CubeListBuilder.create(),
 			PartPose.offset(-8.0F, 1.0F, 8.0F));
-		PartDefinition w_r1_pd = leaves_pd.addOrReplaceChild("w_r1",
+		PartDefinition w_r1 = leaves.addOrReplaceChild("w_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 24).addBox(-2.0F, -0.5F, 0.0F, 4.0F, 1.0F, 6.0F),
 			PartPose.offsetAndRotation(0.0F, -0.5F, 0.0F, 0.1745F, 0.0F, 0.0F));
-		PartDefinition w_r2_pd = leaves_pd.addOrReplaceChild("w_r2",
+		PartDefinition w_r2 = leaves.addOrReplaceChild("w_r2",
 			CubeListBuilder.create()
 				.texOffs(24, 7).addBox(-2.0F, -0.5F, -7.0F, 4.0F, 1.0F, 6.0F),
 			PartPose.offsetAndRotation(0.0F, -0.5F, 0.0F, -0.1745F, 0.0F, 0.0F));
-		PartDefinition e_r1_pd = leaves_pd.addOrReplaceChild("e_r1",
+		PartDefinition e_r1 = leaves.addOrReplaceChild("e_r1",
 			CubeListBuilder.create()
 				.texOffs(26, 14).addBox(1.0F, -0.5F, -2.0F, 6.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, -0.5F, -1.0F, 0.0F, 0.0F, -0.1745F));
-		PartDefinition e_r2_pd = leaves_pd.addOrReplaceChild("e_r2",
+		PartDefinition e_r2 = leaves.addOrReplaceChild("e_r2",
 			CubeListBuilder.create()
 				.texOffs(30, 0).addBox(-7.0F, -0.5F, -2.0F, 6.0F, 1.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, -0.5F, -1.0F, 0.0F, 0.0F, 0.1745F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(26, 30).addBox(-1.0F, -14.0F, 1.0F, 2.0F, 7.0F, 2.0F),
 			PartPose.offset(-8.0F, 0.0F, 7.0F));
-		PartDefinition stickd_r1_pd = body_pd.addOrReplaceChild("stickd_r1",
+		PartDefinition stickd_r1 = body.addOrReplaceChild("stickd_r1",
 			CubeListBuilder.create()
 				.texOffs(18, 30).addBox(-1.0F, -8.0F, -1.0F, 2.0F, 8.0F, 2.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2618F, 0.0F, 0.0F));
-		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+		PartDefinition head = body.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(22, 20).addBox(-3.0F, -3.0F, 0.0F, 6.0F, 6.0F, 4.0F)
 				.texOffs(0, 13).addBox(-5.0F, -5.0F, -3.0F, 10.0F, 8.0F, 3.0F)
 				.texOffs(0, 0).addBox(-7.0F, -7.0F, -2.0F, 14.0F, 12.0F, 1.0F),
 			PartPose.offset(0.0F, -13.0F, 1.0F));
-		PartDefinition right_hand_pd = body_pd.addOrReplaceChild("right_hand",
+		PartDefinition right_hand = body.addOrReplaceChild("right_hand",
 			CubeListBuilder.create(),
 			PartPose.offset(-0.5F, -3.5F, 1.0F));
-		PartDefinition leafw_r1_pd = right_hand_pd.addOrReplaceChild("leafw_r1",
+		PartDefinition leafw_r1 = right_hand.addOrReplaceChild("leafw_r1",
 			CubeListBuilder.create()
 				.texOffs(8, 32).addBox(-3.5F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.1745F, 0.0F, 0.1745F));
-		PartDefinition left_hand_pd = body_pd.addOrReplaceChild("left_hand",
+		PartDefinition left_hand = body.addOrReplaceChild("left_hand",
 			CubeListBuilder.create(),
 			PartPose.offset(0.5F, -4.5F, 1.0F));
-		PartDefinition leafe_r1_pd = left_hand_pd.addOrReplaceChild("leafe_r1",
+		PartDefinition leafe_r1 = left_hand.addOrReplaceChild("leafe_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 31).addBox(0.5F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F),
 			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.1745F, 0.0F, -0.1745F));

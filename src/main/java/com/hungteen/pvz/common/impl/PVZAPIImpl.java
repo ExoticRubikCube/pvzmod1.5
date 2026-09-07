@@ -47,7 +47,7 @@ public class PVZAPIImpl implements IPVZAPI{
 
 	@Override
 	public void registerEssenceTypes(Collection<IEssenceType> types) {
-		types.forEach(type -> EssenceTypes.registerEssence(type));
+		types.forEach(EssenceTypes::registerEssence);
 	}
 
 	@Override

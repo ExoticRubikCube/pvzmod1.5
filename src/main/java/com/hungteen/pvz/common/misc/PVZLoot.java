@@ -46,6 +46,7 @@ public class PVZLoot {
 	public static final ResourceLocation JALAPENO_ZOMBIE = getEntityLootTable("jalapeno_zombie");
 	public static final ResourceLocation RA_ZOMBIE = getEntityLootTable("ra_zombie");
 	public static final ResourceLocation COFFIN = getEntityLootTable("coffin");
+	public static final ResourceLocation MOOBLOOM = getEntityLootTable("moo_bloom");
 	
 	public static ResourceLocation getChestLootTable(String name) {
 		return StringUtil.prefix("chests/" + name);

@@ -167,6 +167,7 @@ public class PlayerEventHandler {
      * {@link PVZPlayerEvents#onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone)}
      */
     public static void clonePlayerData(Player oldPlayer, Player newPlayer, boolean died) {
+        oldPlayer.reviveCaps();//死亡重生时旧玩家实体已被移除，capability 随之失效，需先恢复才能读取数据
         oldPlayer.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {
         	newPlayer.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(r -> {
         		r.getPlayerData().cloneFromExistingPlayerData(l.getPlayerData(), died);

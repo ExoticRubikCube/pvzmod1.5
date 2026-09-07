@@ -88,6 +88,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 		final int changeCd = this.menu.te.array.get(15);
 		final int offset = changeCd > 0 ? (changeCd - changeTick) * 18 / changeCd : 0;
 		stack.pushPose();
+		enableScissor(this.leftPos + 62, this.topPos + 22, this.leftPos + 114, this.topPos + 74);
 		
 		for(int i = 0; i < 4; ++ i) {
 			final int row = (currentPos + i - 2 + 4) % 4;
@@ -133,6 +134,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 				stack.popPose();
 			}
 		}
+		disableScissor();
 		stack.popPose();
 
 		stack.pushPose();

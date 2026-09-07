@@ -18,33 +18,39 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class DoomShroomModel extends PVZPlantModel<DoomShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "doom_shroom"), "main");
-
 	private final ModelPart total;
 	private final ModelPart head;
+	private final ModelPart head_r1;
+	private final ModelPart head_r2;
 
 
-
-
-public DoomShroomModel(ModelPart root) {
+	public DoomShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.head = this.total.getChild("head");
+		this.head_r1 = this.head.getChild("head_r1");
+		this.head_r2 = this.head.getChild("head_r2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
-				.texOffs(69, 89).addBox(-5.0F, -12.0F, -5.0F, 10.0F, 12.0F, 10.0F),
+				.texOffs(0, 28).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition head_pd = total_pd.addOrReplaceChild("head",
+		PartDefinition head = total.addOrReplaceChild("head",
 			CubeListBuilder.create()
-				.texOffs(4, 70).addBox(-6.0F, -8.0F, -5.0F, 12.0F, 2.0F, 10.0F)
-				.texOffs(3, 88).addBox(-7.0F, -6.0F, -6.0F, 14.0F, 3.0F, 12.0F)
-				.texOffs(1, 108).addBox(-8.0F, -3.0F, -7.0F, 16.0F, 3.0F, 14.0F)
-				.texOffs(69, 118).addBox(-4.0F, -9.0F, -3.0F, 8.0F, 1.0F, 6.0F),
-			PartPose.offset(0.0F, -12.0F, 0.0F));
+				.texOffs(0, 0).addBox(-9.0F, -10.0F, -9.0F, 18.0F, 10.0F, 18.0F),
+			PartPose.offset(0.0F, -9.0F, 0.0F));
+		PartDefinition head_r1 = head.addOrReplaceChild("head_r1",
+			CubeListBuilder.create()
+				.texOffs(0, 0).mirror().addBox(-5.25F, 0.0F, -0.5F, 8.0F, 3.0F, 1.0F),
+			PartPose.offsetAndRotation(5.0F, -7.5F, -8.5F, -0.2559F, -0.056F, -0.211F));
+		PartDefinition head_r2 = head.addOrReplaceChild("head_r2",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-2.75F, 0.0F, -0.5F, 8.0F, 3.0F, 1.0F),
+			PartPose.offsetAndRotation(-5.0F, -7.5F, -8.5F, -0.2559F, 0.056F, 0.211F));
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 

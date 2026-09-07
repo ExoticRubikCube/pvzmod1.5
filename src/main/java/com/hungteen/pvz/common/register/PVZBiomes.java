@@ -3,21 +3,21 @@ package com.hungteen.pvz.common.register;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.world.feature.PVZFeatures;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -36,14 +36,15 @@ public class PVZBiomes {
 		if (features) {
 			return;
 		}
-		Holder<PlacedFeature> chomper = PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-				new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegister.CHOMPER.get().defaultBlockState())));
+		Holder<PlacedFeature> chomper = PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK,
+				new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegister.CHOMPER.get().defaultBlockState())),
+				BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), Blocks.GRASS_BLOCK)));
 		CHOMPER_PATCH_PF = PlacementUtils.register("pvz:chomper_patch",
 				FeatureUtils.register("pvz:chomper_patch", Feature.RANDOM_PATCH,
-						new RandomPatchConfiguration(64, 7, 0, chomper)),
+						new RandomPatchConfiguration(64, 7, 3, chomper)),
 				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome(), RarityFilter.onAverageOnceEvery(32));
 		NUT_TREE_PF = PlacementUtils.register("pvz:nut_tree", PVZFeatures.NUT_TREE,
-				VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.05F, 1)));
+				VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.05F, 1), BlockRegister.NUT_SAPLING.get()));
 		features = true;
 	}
 

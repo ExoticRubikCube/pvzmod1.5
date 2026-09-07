@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class GoldLeafModel extends PVZPlantModel<GoldLeafEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "gold_leaf"), "main");
-
 	private final ModelPart total;
 	private final ModelPart cube_r1;
 	private final ModelPart cube_r2;
@@ -36,9 +35,7 @@ public class GoldLeafModel extends PVZPlantModel<GoldLeafEntity> {
 	private final ModelPart right;
 
 
-
-
-public GoldLeafModel(ModelPart root) {
+	public GoldLeafModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.cube_r1 = this.total.getChild("cube_r1");
 		this.cube_r2 = this.total.getChild("cube_r2");
@@ -63,27 +60,27 @@ public GoldLeafModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(40, 41).addBox(-5.0F, -10.0F, -1.0F, 10.0F, 10.0F, 2.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition cube_r1_pd = total_pd.addOrReplaceChild("cube_r1",
+		PartDefinition cube_r1 = total.addOrReplaceChild("cube_r1",
 			CubeListBuilder.create()
 				.texOffs(24, 45).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(-0.05F)),
 			PartPose.offsetAndRotation(6.132F, -7.6264F, 0.0F, 0.0F, 0.0F, -0.5236F));
-		PartDefinition cube_r2_pd = total_pd.addOrReplaceChild("cube_r2",
+		PartDefinition cube_r2 = total.addOrReplaceChild("cube_r2",
 			CubeListBuilder.create()
 				.texOffs(24, 45).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(-0.05F)),
 			PartPose.offsetAndRotation(-6.1439F, -7.7346F, 0.0F, 0.0F, 0.0F, 0.5236F));
-		PartDefinition cube_r3_pd = total_pd.addOrReplaceChild("cube_r3",
+		PartDefinition cube_r3 = total.addOrReplaceChild("cube_r3",
 			CubeListBuilder.create()
 				.texOffs(24, 45).addBox(-2.0F, -6.0F, -1.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(-0.05F)),
 			PartPose.offsetAndRotation(-4.25F, -2.0F, 0.0F, 0.0F, 0.0F, -0.2182F));
-		PartDefinition cube_r4_pd = total_pd.addOrReplaceChild("cube_r4",
+		PartDefinition cube_r4 = total.addOrReplaceChild("cube_r4",
 			CubeListBuilder.create()
 				.texOffs(32, 47).addBox(0.5F, -6.0F, -1.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(-0.05F)),
 			PartPose.offsetAndRotation(3.75F, -2.0F, 0.0F, 0.0F, 0.0F, 0.2182F));
-		PartDefinition hair_pd = total_pd.addOrReplaceChild("hair",
+		PartDefinition hair = total.addOrReplaceChild("hair",
 			CubeListBuilder.create()
 				.texOffs(0, 58).addBox(-2.0F, -3.0F, -1.0F, 6.0F, 4.0F, 2.0F)
 				.texOffs(16, 60).addBox(0.0F, -4.75F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(-0.05F))
@@ -92,52 +89,52 @@ public GoldLeafModel(ModelPart root) {
 				.texOffs(58, 56).addBox(0.5052F, -5.4466F, -1.15F, 1.0F, 1.0F, 2.0F, new CubeDeformation(-0.15F))
 				.texOffs(54, 55).addBox(0.5052F, -5.4466F, -0.85F, 1.0F, 1.0F, 2.0F, new CubeDeformation(-0.15F)),
 			PartPose.offset(-1.0F, -11.0F, 0.0F));
-		PartDefinition outer_pd = hair_pd.addOrReplaceChild("outer",
+		PartDefinition outer = hair.addOrReplaceChild("outer",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition bone_pd = outer_pd.addOrReplaceChild("bone",
+		PartDefinition bone = outer.addOrReplaceChild("bone",
 			CubeListBuilder.create()
 				.texOffs(24, 56).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 6.0F, 2.0F),
 			PartPose.offsetAndRotation(6.0F, 5.75F, 0.0F, 0.0F, 0.0F, -0.1745F));
-		PartDefinition bone2_pd = outer_pd.addOrReplaceChild("bone2",
+		PartDefinition bone2 = outer.addOrReplaceChild("bone2",
 			CubeListBuilder.create()
 				.texOffs(32, 56).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 6.0F, 2.0F),
 			PartPose.offsetAndRotation(-4.0F, 5.75F, 0.0F, 0.0F, 0.0F, 0.1745F));
-		PartDefinition bone3_pd = outer_pd.addOrReplaceChild("bone3",
+		PartDefinition bone3 = outer.addOrReplaceChild("bone3",
 			CubeListBuilder.create()
 				.texOffs(40, 58).addBox(-2.3489F, -4.1825F, -1.0F, 2.0F, 4.0F, 2.0F),
 			PartPose.offsetAndRotation(-2.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.5236F));
-		PartDefinition bone4_pd = outer_pd.addOrReplaceChild("bone4",
+		PartDefinition bone4 = outer.addOrReplaceChild("bone4",
 			CubeListBuilder.create()
 				.texOffs(48, 58).addBox(0.3489F, -4.1825F, -1.0F, 2.0F, 4.0F, 2.0F),
 			PartPose.offsetAndRotation(4.0F, 1.0F, 0.0F, 0.0F, 0.0F, -0.5236F));
-		PartDefinition bone5_pd = outer_pd.addOrReplaceChild("bone5",
+		PartDefinition bone5 = outer.addOrReplaceChild("bone5",
 			CubeListBuilder.create()
 				.texOffs(56, 59).addBox(-1.5274F, -3.9477F, -1.0F, 2.0F, 3.0F, 2.0F),
 			PartPose.offsetAndRotation(-2.0F, -2.0F, 0.0F, 0.0F, 0.0F, 1.0472F));
-		PartDefinition bone6_pd = outer_pd.addOrReplaceChild("bone6",
+		PartDefinition bone6 = outer.addOrReplaceChild("bone6",
 			CubeListBuilder.create()
 				.texOffs(0, 53).addBox(-0.4726F, -3.9477F, -1.0F, 2.0F, 3.0F, 2.0F),
 			PartPose.offsetAndRotation(4.0F, -2.0F, 0.0F, 0.0F, 0.0F, -1.0472F));
-		PartDefinition face_pd = total_pd.addOrReplaceChild("face",
+		PartDefinition face = total.addOrReplaceChild("face",
 			CubeListBuilder.create()
 				.texOffs(18, 48).addBox(-3.0F, -5.75F, -1.5F, 2.0F, 3.0F, 1.0F, new CubeDeformation(-0.4F))
 				.texOffs(0, 49).addBox(1.0F, -5.75F, -1.5F, 2.0F, 3.0F, 1.0F, new CubeDeformation(-0.4F))
 				.texOffs(10, 50).addBox(-1.0F, -1.75F, -1.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(-0.4F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition cube_r5_pd = face_pd.addOrReplaceChild("cube_r5",
+		PartDefinition cube_r5 = face.addOrReplaceChild("cube_r5",
 			CubeListBuilder.create()
 				.texOffs(8, 56).addBox(-0.5F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(-0.4F)),
 			PartPose.offsetAndRotation(0.6707F, -1.2725F, -1.0F, 0.0F, 0.0F, -0.2618F));
-		PartDefinition cube_r6_pd = face_pd.addOrReplaceChild("cube_r6",
+		PartDefinition cube_r6 = face.addOrReplaceChild("cube_r6",
 			CubeListBuilder.create()
 				.texOffs(26, 54).addBox(-0.5F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(-0.4F)),
 			PartPose.offsetAndRotation(-1.6366F, -1.5313F, -1.0F, 0.0F, 0.0F, 0.2618F));
-		PartDefinition left_pd = total_pd.addOrReplaceChild("left",
+		PartDefinition left = total.addOrReplaceChild("left",
 			CubeListBuilder.create()
 				.texOffs(40, 53).addBox(-0.7071F, -2.7071F, -1.0F, 5.0F, 2.0F, 2.0F, new CubeDeformation(-0.05F)),
 			PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
-		PartDefinition right_pd = total_pd.addOrReplaceChild("right",
+		PartDefinition right = total.addOrReplaceChild("right",
 			CubeListBuilder.create()
 				.texOffs(9, 52).addBox(-3.5858F, -2.0F, -1.0F, 5.0F, 2.0F, 2.0F, new CubeDeformation(-0.05F)),
 			PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.7854F));

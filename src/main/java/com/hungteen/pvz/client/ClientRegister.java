@@ -4,6 +4,7 @@ import com.hungteen.pvz.client.model.baked.ImitaterCardBakedModel;
 import com.hungteen.pvz.client.model.baked.PVZBakedModel;
 import com.hungteen.pvz.client.model.entity.bullet.*;
 import com.hungteen.pvz.client.model.entity.creature.FoodieZombieModel;
+import com.hungteen.pvz.client.model.entity.creature.MooBloomModel;
 import com.hungteen.pvz.client.model.entity.misc.*;
 import com.hungteen.pvz.client.model.entity.npc.CrazyDaveModel;
 import com.hungteen.pvz.client.model.entity.npc.PennyModel;
@@ -40,6 +41,7 @@ import com.hungteen.pvz.client.particle.bomb.CherryBombParticle;
 import com.hungteen.pvz.client.particle.bomb.PotatoMineParticle;
 import com.hungteen.pvz.client.render.entity.bullet.*;
 import com.hungteen.pvz.client.render.entity.creature.FoodieZombieRender;
+import com.hungteen.pvz.client.render.entity.creature.MooBloomRender;
 import com.hungteen.pvz.client.render.entity.effects.DoomFixerRender;
 import com.hungteen.pvz.client.render.entity.effects.OriginEffectRender;
 import com.hungteen.pvz.client.render.entity.misc.*;
@@ -212,6 +214,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(GARDEN_RAKE.get(), ctx -> new GardenRakeRender(ctx));
 		ev.registerEntityRenderer(ZOMBIE_DROP_BODY.get(), ctx -> new ZombieBodyRender(ctx));
 		ev.registerEntityRenderer(FOODIE_ZOMBIE.get(), ctx -> new FoodieZombieRender(ctx));
+		ev.registerEntityRenderer(MOOBLOOM.get(), ctx -> new MooBloomRender(ctx));
 		ev.registerEntityRenderer(CRAZY_DAVE.get(), ctx -> new CrazyDaveRender(ctx));
 		ev.registerEntityRenderer(PANNEY.get(), ctx -> new PennyRender(ctx));
 		ev.registerEntityRenderer(SUN_DAVE.get(), ctx -> new SunDaveRender(ctx));
@@ -341,6 +344,8 @@ public class ClientRegister {
 			ThornModel::createBodyLayer);
 		ev.registerLayerDefinition(FoodieZombieModel.LAYER,
 			FoodieZombieModel::createBodyLayer);
+		ev.registerLayerDefinition(MooBloomModel.LAYER,
+			MooBloomModel::createBodyLayer);
 		ev.registerLayerDefinition(BobsleCarModel.LAYER,
 			BobsleCarModel::createBodyLayer);
 		ev.registerLayerDefinition(DropModel.LAYER,

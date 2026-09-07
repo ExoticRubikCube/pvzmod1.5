@@ -36,6 +36,8 @@ public class BlockTagGenerator extends BlockTagsProvider {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(e.getEssenceOre());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(e.getEssenceOre());
         });
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BlockRegister.LUNAR_STONE.get());
+        this.tag(BlockTags.NEEDS_IRON_TOOL).add(BlockRegister.LUNAR_STONE.get());
         this.tag(PVZBlockTags.AMETHYST_ORES).add(BlockRegister.AMETHYST_ORE.get());
         this.tag(BlockTags.CLIMBABLE).add(BlockRegister.STEEL_LADDER.get());
         this.tag(PVZBlockTags.GOLD_TILES).add(BlockRegister.GOLD_TILE1.get(), BlockRegister.GOLD_TILE2.get(),

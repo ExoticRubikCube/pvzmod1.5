@@ -16,16 +16,13 @@ import java.util.Optional;
 // Paste this class into your mod and generate all required imports
 public class ScaredyShroomModel extends PlantShooterModel<ScaredyShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "scaredy_shroom"), "main");
-
 	private final ModelPart total;
 	private final ModelPart body;
 	private final ModelPart head;
 	private final ModelPart hat;
 
 
-
-
-public ScaredyShroomModel(ModelPart root) {
+	public ScaredyShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.body = this.total.getChild("body");
 		this.head = this.body.getChild("head");
@@ -36,22 +33,22 @@ public ScaredyShroomModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(17, 55).addBox(-3.0F, -2.0F, -3.0F, 6.0F, 2.0F, 6.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(0, 40).addBox(-2.0F, -17.25F, -2.0F, 4.0F, 18.0F, 4.0F, new CubeDeformation(-0.1F)),
 			PartPose.offset(0.0F, -1.0F, 0.0F));
-		PartDefinition head_pd = body_pd.addOrReplaceChild("head",
+		PartDefinition head = body.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(52, 2).addBox(-1.0F, -4.0F, -5.0F, 2.0F, 2.0F, 1.0F)
 				.texOffs(1, 3).addBox(-2.0F, -5.0F, -7.0F, 4.0F, 4.0F, 2.0F)
 				.texOffs(31, 33).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 8.0F, 8.0F)
 				.texOffs(17, 55).addBox(-3.0F, -1.0F, -3.0F, 6.0F, 1.0F, 6.0F),
 			PartPose.offset(0.0F, -16.0F, 0.0F));
-		PartDefinition hat_pd = head_pd.addOrReplaceChild("hat",
+		PartDefinition hat = head.addOrReplaceChild("hat",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-6.0F, -10.1161F, -3.4601F, 12.0F, 12.0F, 13.0F),
 			PartPose.offsetAndRotation(0.0F, -9.0F, -1.0F, -0.6109F, 0.0F, 0.0F));

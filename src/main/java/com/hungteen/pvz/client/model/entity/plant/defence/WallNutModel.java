@@ -19,13 +19,10 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class WallNutModel<T extends WallNutEntity> extends PVZPlantModel<T> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "wall_nut"), "main");
-
 	private final ModelPart body;
 
 
-
-
-public WallNutModel(ModelPart root) {
+	public WallNutModel(ModelPart root) {
 		this.body = root.getChild("body");
 	}
 
@@ -33,7 +30,7 @@ public WallNutModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition body_pd = partdefinition.addOrReplaceChild("body",
+		PartDefinition body = partdefinition.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(0, 42).addBox(-5.0F, -1.0F, -5.0F, 10.0F, 1.0F, 10.0F)
 				.texOffs(0, 0).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 13.0F, 14.0F)

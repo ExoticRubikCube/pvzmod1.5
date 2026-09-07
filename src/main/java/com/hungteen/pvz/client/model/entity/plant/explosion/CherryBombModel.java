@@ -18,66 +18,80 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class CherryBombModel extends PVZPlantModel<CherryBombEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "cherry_bomb"), "main");
-
 	private final ModelPart body;
 	private final ModelPart bone;
 	private final ModelPart bone3;
 	private final ModelPart bone2;
 	private final ModelPart head1;
+	private final ModelPart head3_r1;
+	private final ModelPart head2_r1;
+	private final ModelPart head1_r1;
 	private final ModelPart head2;
+	private final ModelPart head4_r1;
+	private final ModelPart head3_r2;
 
 
-
-
-public CherryBombModel(ModelPart root) {
+	public CherryBombModel(ModelPart root) {
 		this.body = root.getChild("body");
 		this.bone = this.body.getChild("bone");
 		this.bone3 = this.bone.getChild("bone3");
 		this.bone2 = this.body.getChild("bone2");
 		this.head1 = this.body.getChild("head1");
+		this.head3_r1 = this.head1.getChild("head3_r1");
+		this.head2_r1 = this.head1.getChild("head2_r1");
+		this.head1_r1 = this.head1.getChild("head1_r1");
 		this.head2 = this.body.getChild("head2");
+		this.head4_r1 = this.head2.getChild("head4_r1");
+		this.head3_r2 = this.head2.getChild("head3_r2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition body_pd = partdefinition.addOrReplaceChild("body",
+		PartDefinition body = partdefinition.addOrReplaceChild("body",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition bone_pd = body_pd.addOrReplaceChild("bone",
+		PartDefinition bone = body.addOrReplaceChild("bone",
 			CubeListBuilder.create()
-				.texOffs(52, 105).addBox(-2.0F, -17.0F, -1.0F, 2.0F, 20.0F, 2.0F),
-			PartPose.offsetAndRotation(-9.0F, -18.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
-		PartDefinition bone3_pd = bone_pd.addOrReplaceChild("bone3",
+				.texOffs(40, 24).addBox(-2.0F, -13.0F, -1.0F, 16.0F, 16.0F, 0.0F),
+			PartPose.offset(-9.0F, -11.0F, 0.0F));
+		PartDefinition bone3 = bone.addOrReplaceChild("bone3",
 			CubeListBuilder.create()
-				.texOffs(36, 113).addBox(-1.0F, -8.0F, -3.0F, 1.0F, 8.0F, 6.0F),
-			PartPose.offsetAndRotation(0.0F, -16.0F, 0.0F, 0.0F, -0.3491F, 0.6981F));
-		PartDefinition bone2_pd = body_pd.addOrReplaceChild("bone2",
+				.texOffs(10, 38).addBox(-1.0F, -8.0F, -3.0F, 0.0F, 8.0F, 6.0F),
+			PartPose.offsetAndRotation(7.0F, -12.0F, 0.0F, 0.2182F, -0.3491F, 0.6981F));
+		PartDefinition bone2 = body.addOrReplaceChild("bone2",
 			CubeListBuilder.create()
-				.texOffs(23, 108).addBox(0.0F, -13.0F, -1.0F, 2.0F, 16.0F, 2.0F),
-			PartPose.offsetAndRotation(9.0F, -18.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
-		PartDefinition head1_pd = body_pd.addOrReplaceChild("head1",
+				.texOffs(40, 40).addBox(-11.0F, -6.0F, -1.0F, 12.0F, 16.0F, 0.0F),
+			PartPose.offset(9.0F, -18.0F, 0.0F));
+		PartDefinition head1 = body.addOrReplaceChild("head1",
+			CubeListBuilder.create(),
+			PartPose.offsetAndRotation(-10.491F, -6.5F, 1.4165F, 0.0F, 0.2618F, 0.0F));
+		PartDefinition head3_r1 = head1.addOrReplaceChild("head3_r1",
 			CubeListBuilder.create()
-				.texOffs(63, 61).addBox(-8.0F, 1.0F, -8.0F, 16.0F, 16.0F, 16.0F)
-				.texOffs(97, 30).addBox(8.0F, 2.0F, -7.0F, 1.0F, 14.0F, 14.0F)
-				.texOffs(64, 31).addBox(-9.0F, 2.0F, -7.0F, 1.0F, 14.0F, 14.0F)
-				.texOffs(97, 14).addBox(-7.0F, 2.0F, -9.0F, 14.0F, 14.0F, 1.0F)
-				.texOffs(64, 13).addBox(-7.0F, 2.0F, 8.0F, 14.0F, 14.0F, 1.0F)
-				.texOffs(0, 85).addBox(-7.0F, 0.0F, -7.0F, 14.0F, 1.0F, 14.0F)
-				.texOffs(1, 68).addBox(-7.0F, 17.0F, -7.0F, 14.0F, 1.0F, 14.0F),
-			PartPose.offsetAndRotation(-11.0F, -18.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
-		PartDefinition head2_pd = body_pd.addOrReplaceChild("head2",
+				.texOffs(0, 44).addBox(-0.5F, -5.25F, -5.5F, 1.0F, 6.0F, 8.0F),
+			PartPose.offsetAndRotation(6.8032F, 1.7679F, -7.25F, 0.0F, -1.5708F, -0.4363F));
+		PartDefinition head2_r1 = head1.addOrReplaceChild("head2_r1",
 			CubeListBuilder.create()
-				.texOffs(63, 95).addBox(-8.0F, 1.0F, -8.0F, 16.0F, 16.0F, 16.0F)
-				.texOffs(29, 37).addBox(8.0F, 2.0F, -7.0F, 1.0F, 14.0F, 14.0F)
-				.texOffs(3, 7).addBox(-9.0F, 2.0F, -7.0F, 1.0F, 14.0F, 14.0F)
-				.texOffs(4, 140).addBox(-7.0F, 2.0F, -9.0F, 14.0F, 14.0F, 1.0F)
-				.texOffs(44, 139).addBox(-7.0F, 2.0F, 8.0F, 14.0F, 14.0F, 1.0F)
-				.texOffs(84, 138).addBox(-7.0F, 0.0F, -7.0F, 14.0F, 1.0F, 14.0F)
-				.texOffs(8, 163).addBox(-7.0F, 17.0F, -7.0F, 14.0F, 1.0F, 14.0F),
-			PartPose.offsetAndRotation(11.0F, -18.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
-		return LayerDefinition.create(meshdefinition, 256, 256);
+				.texOffs(36, 0).addBox(-0.5F, -3.25F, -2.75F, 1.0F, 4.0F, 6.0F),
+			PartPose.offsetAndRotation(-1.125F, -0.5F, -7.25F, 0.0F, -1.5708F, 0.5236F));
+		PartDefinition head1_r1 = head1.addOrReplaceChild("head1_r1",
+			CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-6.0F, -6.0F, -6.0F, 12.0F, 12.0F, 12.0F),
+			PartPose.offsetAndRotation(2.875F, 0.5F, -1.5F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition head2 = body.addOrReplaceChild("head2",
+			CubeListBuilder.create()
+				.texOffs(0, 24).addBox(-9.0F, 8.0F, -5.0F, 10.0F, 10.0F, 10.0F),
+			PartPose.offsetAndRotation(11.0F, -19.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+		PartDefinition head4_r1 = head2.addOrReplaceChild("head4_r1",
+			CubeListBuilder.create()
+				.texOffs(22, 44).addBox(-3.0F, -1.25F, -0.5F, 6.0F, 3.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, 11.5F, -4.75F, 0.0F, 0.0F, -0.5672F));
+		PartDefinition head3_r2 = head2.addOrReplaceChild("head3_r2",
+			CubeListBuilder.create()
+				.texOffs(44, 0).addBox(-3.0F, -1.5F, -0.5F, 6.0F, 4.0F, 1.0F),
+			PartPose.offsetAndRotation(-6.0F, 11.0F, -4.75F, 0.0F, 0.0F, 0.48F));
+		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
 

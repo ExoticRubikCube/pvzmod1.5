@@ -213,6 +213,8 @@
 
   "entity.pvz.foodie_zombie": "吃货僵尸",
   "item.pvz.foodie_zombie_spawn_egg": "吃货僵尸刷怪蛋",
+  "entity.pvz.moo_bloom": "哞葵",
+  "item.pvz.moo_bloom_spawn_egg": "哞葵刷怪蛋",
   "entity.pvz.crazy_dave": "疯狂戴夫",
   "item.pvz.crazy_dave_spawn_egg": "疯狂戴夫刷怪蛋",
   "entity.pvz.panney": "潘妮",

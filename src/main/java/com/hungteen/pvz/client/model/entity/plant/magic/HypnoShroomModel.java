@@ -18,16 +18,13 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class HypnoShroomModel extends PVZPlantModel<HypnoShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "hypno_shroom"), "main");
-
 	private final ModelPart total;
 	private final ModelPart reye;
 	private final ModelPart leye;
 	private final ModelPart hat;
 
 
-
-
-public HypnoShroomModel(ModelPart root) {
+	public HypnoShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.reye = this.total.getChild("reye");
 		this.leye = this.total.getChild("leye");
@@ -38,19 +35,19 @@ public HypnoShroomModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create()
 				.texOffs(0, 32).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 7.0F, 8.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition reye_pd = total_pd.addOrReplaceChild("reye",
+		PartDefinition reye = total.addOrReplaceChild("reye",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-2.0F, -2.0F, 0.0F, 4.0F, 4.0F, 0.0F),
 			PartPose.offset(-3.0F, -4.0F, -4.25F));
-		PartDefinition leye_pd = total_pd.addOrReplaceChild("leye",
+		PartDefinition leye = total.addOrReplaceChild("leye",
 			CubeListBuilder.create()
 				.texOffs(0, 4).addBox(-2.0F, -2.0F, 0.0F, 4.0F, 4.0F, 0.0F),
 			PartPose.offset(3.0F, -4.0F, -4.25F));
-		PartDefinition hat_pd = total_pd.addOrReplaceChild("hat",
+		PartDefinition hat = total.addOrReplaceChild("hat",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-6.0F, -1.0F, -6.0F, 12.0F, 5.0F, 12.0F)
 				.texOffs(0, 17).addBox(-5.0F, -6.0F, -5.0F, 10.0F, 5.0F, 10.0F)

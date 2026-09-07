@@ -53,11 +53,11 @@ public abstract class PlantDefenderEntity extends PVZPlantEntity implements ICan
 	
 	@Override
 	public void attract(LivingEntity target) {
-		if(target instanceof Mob && (! (((Mob) target).getTarget() instanceof ICanAttract))) {
-			((Mob) target).setTarget(this);
+		if(target instanceof Mob mob && (!(mob.getTarget() instanceof ICanAttract))) {
+			mob.setTarget(this);
 		}
-		if(target instanceof ICanBeAttracted) {
-			((ICanBeAttracted) target).attractBy(this);
+		if(target instanceof ICanBeAttracted canBeAttracted) {
+			canBeAttracted.attractBy(this);
 		}
 	}
 	

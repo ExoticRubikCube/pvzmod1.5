@@ -84,7 +84,11 @@ public class PlayerDataManager {
 				CompoundTag statsTag = baseTag.getCompound("player_stats");
 			    for(Resources res : Resources.values()) {
 			    	if(statsTag.contains("player_" + res.toString())) {
-				        this.resources.put(res, statsTag.getInt("player_" + res));
+				        int num = statsTag.getInt("player_" + res);
+				        if(res == Resources.TREE_LVL) {
+				        	num = Mth.clamp(num, res.min, res.max);
+				        }
+				        this.resources.put(res, num);
 			    	}
 			    }
 			}
@@ -92,7 +96,11 @@ public class PlayerDataManager {
 				CompoundTag statsTag = baseTag.getCompound("player_resources");
 			    for(Resources res : Resources.values()) {
 			    	if(statsTag.contains(res.toString().toLowerCase())) {
-				        this.resources.put(res, statsTag.getInt(res.toString().toLowerCase()));
+				        int num = statsTag.getInt(res.toString().toLowerCase());
+				        if(res == Resources.TREE_LVL) {
+				        	num = Mth.clamp(num, res.min, res.max);
+				        }
+				        this.resources.put(res, num);
 			    	}
 			    }
 			}
@@ -350,6 +358,7 @@ public class PlayerDataManager {
 			int req = PlayerUtil.getPlayerLevelUpXp(lvl);
 			while(lvl < Resources.TREE_LVL.max && num + now >= req) {
 				num -= req - now;
+				++ lvl;
 				this.addResource(Resources.TREE_LVL, 1);
 				now = 0;
 				req = PlayerUtil.getPlayerLevelUpXp(lvl);

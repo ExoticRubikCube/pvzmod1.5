@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class PlanternModel extends PVZPlantModel<PlanternEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "plantern"), "main");
-
 	private final ModelPart total;
 	private final ModelPart head;
 	private final ModelPart bottom;
@@ -27,9 +26,7 @@ public class PlanternModel extends PVZPlantModel<PlanternEntity> {
 	private final ModelPart stick6;
 
 
-
-
-public PlanternModel(ModelPart root) {
+	public PlanternModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.head = this.total.getChild("head");
 		this.bottom = this.total.getChild("bottom");
@@ -45,10 +42,10 @@ public PlanternModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition head_pd = total_pd.addOrReplaceChild("head",
+		PartDefinition head = total.addOrReplaceChild("head",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-2.0F, -33.0F, -2.0F, 4.0F, 4.0F, 4.0F)
 				.texOffs(42, 47).addBox(-6.0F, -29.0F, 0.0F, 12.0F, 3.0F, 0.0F)
@@ -60,33 +57,33 @@ public PlanternModel(ModelPart root) {
 				.texOffs(0, 44).addBox(-7.0F, -14.0F, -7.0F, 14.0F, 6.0F, 14.0F)
 				.texOffs(89, 0).addBox(-2.0F, -14.0F, -2.0F, 4.0F, 8.0F, 4.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition bottom_pd = total_pd.addOrReplaceChild("bottom",
+		PartDefinition bottom = total.addOrReplaceChild("bottom",
 			CubeListBuilder.create()
 				.texOffs(42, 50).addBox(-5.0F, -3.0F, 0.0F, 10.0F, 3.0F, 0.0F)
 				.texOffs(0, 0).addBox(0.0F, -3.0F, -5.0F, 0.0F, 3.0F, 10.0F)
 				.texOffs(89, 12).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 6.0F, 4.0F),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick1_pd = total_pd.addOrReplaceChild("stick1",
+		PartDefinition stick1 = total.addOrReplaceChild("stick1",
 			CubeListBuilder.create()
 				.texOffs(106, 0).addBox(-2.0F, -9.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(-0.01F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick2_pd = total_pd.addOrReplaceChild("stick2",
+		PartDefinition stick2 = total.addOrReplaceChild("stick2",
 			CubeListBuilder.create()
 				.texOffs(106, 0).addBox(-2.0F, -9.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(-0.01F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick3_pd = total_pd.addOrReplaceChild("stick3",
+		PartDefinition stick3 = total.addOrReplaceChild("stick3",
 			CubeListBuilder.create()
 				.texOffs(106, 0).addBox(-2.0F, -9.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(-0.01F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick4_pd = total_pd.addOrReplaceChild("stick4",
+		PartDefinition stick4 = total.addOrReplaceChild("stick4",
 			CubeListBuilder.create()
 				.texOffs(106, 0).addBox(-2.0F, -9.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(-0.01F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick5_pd = total_pd.addOrReplaceChild("stick5",
+		PartDefinition stick5 = total.addOrReplaceChild("stick5",
 			CubeListBuilder.create()
 				.texOffs(106, 0).addBox(-2.0F, -9.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(-0.01F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));
-		PartDefinition stick6_pd = total_pd.addOrReplaceChild("stick6",
+		PartDefinition stick6 = total.addOrReplaceChild("stick6",
 			CubeListBuilder.create()
 				.texOffs(106, 0).addBox(-2.0F, -9.0F, -2.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(-0.01F)),
 			PartPose.offset(0.0F, 0.0F, 0.0F));

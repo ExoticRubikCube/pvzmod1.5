@@ -37,9 +37,7 @@ public class SunFlowerEntity extends PlantProducerEntity{
 	@Override
 	public void addAlmanacEntries(List<Pair<IAlmanacEntry, Number>> list) {
 		super.addAlmanacEntries(list);
-		list.add(
-                Pair.of(PAZAlmanacs.GEN_SUN_AMOUNT, this.getSunAmount())
-        );
+		list.add(Pair.of(PAZAlmanacs.GEN_SUN_AMOUNT, this.getSunAmount()));
 	}
 
 	/**

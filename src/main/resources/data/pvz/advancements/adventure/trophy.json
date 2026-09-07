@@ -17,11 +17,11 @@
     "get_origin": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "items": [
-          {
-            "item": "pvz:diamond_sunflower_trophy"
-          }
-        ]
+        "items":[
+		  {
+		    "items":["pvz:diamond_sunflower_trophy"]
+		  }
+		]
       }
     }
   },

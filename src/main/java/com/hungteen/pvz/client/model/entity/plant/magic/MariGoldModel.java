@@ -7,7 +7,10 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 
 // Made with Blockbench 3.7.4
@@ -15,138 +18,160 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class MariGoldModel<T extends MariGoldEntity> extends PVZPlantModel<T> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "marigold"), "main");
-
 	private final ModelPart total;
-	private final ModelPart head;
-	private final ModelPart cube_r1;
-	private final ModelPart cube_r2;
-	private final ModelPart HUABAN;
-	private final ModelPart HUABAN2;
-	private final ModelPart HUABAN3;
-	private final ModelPart HUABAN4;
-	private final ModelPart HUABAN5;
-	private final ModelPart HUABAN6;
-	private final ModelPart body;
-	private final ModelPart cube_r3;
-	private final ModelPart YEZI_4;
+	private final ModelPart leaves;
+	private final ModelPart YEZI_2;
 	private final ModelPart YEZI_3;
 	private final ModelPart YEZI_1;
-	private final ModelPart YEZI_2;
+	private final ModelPart YEZI_4;
+	private final ModelPart body;
+	private final ModelPart stickd_r1;
+	private final ModelPart head;
+	private final ModelPart head_r1;
+	private final ModelPart head_r2;
+	private final ModelPart petals;
+	private final ModelPart petal12;
+	private final ModelPart petal2;
+	private final ModelPart petal3;
+	private final ModelPart petal4;
+	private final ModelPart petal5;
+	private final ModelPart petal6;
+	private final ModelPart petal7;
+	private final ModelPart petal8;
+	private final ModelPart petal10;
+	private final ModelPart petal9;
+	private final ModelPart petal11;
 
 
-
-
-public MariGoldModel(ModelPart root) {
+	public MariGoldModel(ModelPart root) {
 		this.total = root.getChild("total");
-		this.head = this.total.getChild("head");
-		this.cube_r1 = this.head.getChild("cube_r1");
-		this.cube_r2 = this.head.getChild("cube_r2");
-		this.HUABAN = this.head.getChild("HUABAN");
-		this.HUABAN2 = this.HUABAN.getChild("HUABAN2");
-		this.HUABAN3 = this.HUABAN2.getChild("HUABAN3");
-		this.HUABAN4 = this.head.getChild("HUABAN4");
-		this.HUABAN5 = this.HUABAN4.getChild("HUABAN5");
-		this.HUABAN6 = this.HUABAN5.getChild("HUABAN6");
+		this.leaves = this.total.getChild("leaves");
+		this.YEZI_2 = this.leaves.getChild("YEZI_2");
+		this.YEZI_3 = this.leaves.getChild("YEZI_3");
+		this.YEZI_1 = this.leaves.getChild("YEZI_1");
+		this.YEZI_4 = this.leaves.getChild("YEZI_4");
 		this.body = this.total.getChild("body");
-		this.cube_r3 = this.body.getChild("cube_r3");
-		this.YEZI_4 = this.total.getChild("YEZI_4");
-		this.YEZI_3 = this.total.getChild("YEZI_3");
-		this.YEZI_1 = this.total.getChild("YEZI_1");
-		this.YEZI_2 = this.total.getChild("YEZI_2");
+		this.stickd_r1 = this.body.getChild("stickd_r1");
+		this.head = this.body.getChild("head");
+		this.head_r1 = this.head.getChild("head_r1");
+		this.head_r2 = this.head.getChild("head_r2");
+		this.petals = this.head.getChild("petals");
+		this.petal12 = this.petals.getChild("petal12");
+		this.petal2 = this.petals.getChild("petal2");
+		this.petal3 = this.petals.getChild("petal3");
+		this.petal4 = this.petals.getChild("petal4");
+		this.petal5 = this.petals.getChild("petal5");
+		this.petal6 = this.petals.getChild("petal6");
+		this.petal7 = this.petals.getChild("petal7");
+		this.petal8 = this.petals.getChild("petal8");
+		this.petal10 = this.petals.getChild("petal10");
+		this.petal9 = this.petals.getChild("petal9");
+		this.petal11 = this.petals.getChild("petal11");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
-			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition head_pd = total_pd.addOrReplaceChild("head",
+			PartPose.offset(8.0F, 24.0F, -8.0F));
+		PartDefinition leaves = total.addOrReplaceChild("leaves",
+			CubeListBuilder.create(),
+			PartPose.offset(-8.0F, 1.0F, 8.0F));
+		PartDefinition YEZI_2 = leaves.addOrReplaceChild("YEZI_2",
 			CubeListBuilder.create()
-				.texOffs(73, 100).addBox(-11.0F, -15.0F, -5.99F, 22.0F, 21.0F, 4.0F, new CubeDeformation(-0.02F))
-				.texOffs(0, 123).addBox(-5.0F, 5.95F, -5.99F, 10.0F, 1.0F, 4.0F, new CubeDeformation(-0.02F))
-				.texOffs(85, 100).addBox(-1.5F, -0.25F, -6.25F, 3.0F, 2.0F, 1.0F, new CubeDeformation(-0.25F)),
-			PartPose.offset(0.0F, -32.0F, 0.0F));
-		PartDefinition cube_r1_pd = head_pd.addOrReplaceChild("cube_r1",
+				.texOffs(18, 6).addBox(-2.0F, -0.5F, 0.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -0.5F, 0.0F, 0.1745F, 0.0F, 0.0F));
+		PartDefinition YEZI_3 = leaves.addOrReplaceChild("YEZI_3",
 			CubeListBuilder.create()
-				.texOffs(107, 88).addBox(-3.5F, -1.0F, -0.5F, 7.0F, 2.0F, 1.0F, new CubeDeformation(-0.25F)),
-			PartPose.offsetAndRotation(-4.2776F, -11.4466F, -5.75F, 0.0F, 0.0F, -0.3054F));
-		PartDefinition cube_r2_pd = head_pd.addOrReplaceChild("cube_r2",
+				.texOffs(14, 16).addBox(-2.0F, -0.5F, -7.0F, 4.0F, 1.0F, 6.0F),
+			PartPose.offsetAndRotation(0.0F, -0.5F, 0.0F, -0.1745F, 0.0F, 0.0F));
+		PartDefinition YEZI_1 = leaves.addOrReplaceChild("YEZI_1",
 			CubeListBuilder.create()
-				.texOffs(106, 94).addBox(-4.0F, 0.0F, 0.0F, 7.0F, 2.0F, 1.0F, new CubeDeformation(-0.25F)),
-			PartPose.offsetAndRotation(5.5F, -12.25F, -6.25F, 0.0F, 0.0F, 0.3054F));
-		PartDefinition HUABAN_pd = head_pd.addOrReplaceChild("HUABAN",
+				.texOffs(20, 23).addBox(1.0F, -0.5F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -0.5F, -1.0F, 0.0F, 0.0F, -0.1745F));
+		PartDefinition YEZI_4 = leaves.addOrReplaceChild("YEZI_4",
 			CubeListBuilder.create()
-				.texOffs(0, 62).addBox(-3.0F, -18.0F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(29, 63).addBox(-3.0F, 9.8564F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(42, 36).addBox(10.9282F, -4.0718F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(73, 73).addBox(-16.9282F, -4.0718F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F)),
-			PartPose.offsetAndRotation(0.0F, -3.0F, 1.0F, 0.0F, 0.0F, -0.2618F));
-		PartDefinition HUABAN2_pd = HUABAN_pd.addOrReplaceChild("HUABAN2",
+				.texOffs(0, 23).addBox(-7.0F, -0.5F, -2.0F, 6.0F, 1.0F, 4.0F),
+			PartPose.offsetAndRotation(0.0F, -0.5F, -1.0F, 0.0F, 0.0F, 0.1745F));
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create()
-				.texOffs(0, 62).addBox(-2.4641F, -17.8564F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(29, 63).addBox(-2.4641F, 10.0F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(42, 36).addBox(11.4641F, -3.9282F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(73, 73).addBox(-16.3923F, -3.9282F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F)),
-			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.5236F));
-		PartDefinition HUABAN3_pd = HUABAN2_pd.addOrReplaceChild("HUABAN3",
+				.texOffs(8, 28).addBox(-1.0F, -13.5939F, 0.7078F, 2.0F, 6.0F, 2.0F),
+			PartPose.offset(-8.0F, 0.0F, 7.0F));
+		PartDefinition stickd_r1 = body.addOrReplaceChild("stickd_r1",
 			CubeListBuilder.create()
-				.texOffs(0, 62).addBox(-2.0718F, -17.4641F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(29, 63).addBox(-2.0718F, 10.3923F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(42, 36).addBox(11.8564F, -3.5359F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F))
-				.texOffs(73, 73).addBox(-16.0F, -3.5359F, -7.1F, 6.0F, 6.0F, 4.0F, new CubeDeformation(-0.5F)),
-			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.5236F));
-		PartDefinition HUABAN4_pd = head_pd.addOrReplaceChild("HUABAN4",
+				.texOffs(0, 28).addBox(-1.0F, -8.0F, -1.0F, 2.0F, 8.0F, 2.0F),
+			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2182F, 0.0F, 0.0F));
+		PartDefinition head = body.addOrReplaceChild("head",
 			CubeListBuilder.create()
-				.texOffs(0, 62).addBox(-4.0F, -16.0F, -6.0F, 8.0F, 4.0F, 4.0F)
-				.texOffs(29, 63).addBox(-4.0F, 9.8564F, -6.0F, 8.0F, 4.0F, 4.0F)
-				.texOffs(42, 36).addBox(10.9282F, -5.0718F, -6.0F, 4.0F, 8.0F, 4.0F)
-				.texOffs(73, 73).addBox(-14.9282F, -5.0718F, -6.0F, 4.0F, 8.0F, 4.0F),
-			PartPose.offset(0.0F, -3.0F, 0.0F));
-		PartDefinition HUABAN5_pd = HUABAN4_pd.addOrReplaceChild("HUABAN5",
+				.texOffs(0, 12).addBox(-3.0F, -3.0F, 0.0F, 6.0F, 6.0F, 4.0F)
+				.texOffs(0, 0).addBox(-4.5F, -6.0F, -3.0F, 9.0F, 9.0F, 3.0F),
+			PartPose.offset(0.0F, -12.0F, 1.0F));
+		PartDefinition head_r1 = head.addOrReplaceChild("head_r1",
 			CubeListBuilder.create()
-				.texOffs(0, 62).addBox(-3.4641F, -15.8564F, -6.0F, 8.0F, 4.0F, 4.0F)
-				.texOffs(29, 63).addBox(-3.4641F, 10.0F, -6.0F, 8.0F, 4.0F, 4.0F)
-				.texOffs(42, 36).addBox(11.4641F, -4.9282F, -6.0F, 4.0F, 8.0F, 4.0F)
-				.texOffs(73, 73).addBox(-14.3923F, -4.9282F, -6.0F, 4.0F, 8.0F, 4.0F),
-			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.5236F));
-		PartDefinition HUABAN6_pd = HUABAN5_pd.addOrReplaceChild("HUABAN6",
+				.texOffs(16, 13).mirror().addBox(-1.75F, -2.25F, 0.375F, 4.0F, 2.0F, 1.0F),
+			PartPose.offsetAndRotation(-2.0F, -4.0F, -3.5F, 0.0F, 0.0F, -0.4363F));
+		PartDefinition head_r2 = head.addOrReplaceChild("head_r2",
 			CubeListBuilder.create()
-				.texOffs(0, 62).addBox(-3.0718F, -15.4641F, -6.0F, 8.0F, 4.0F, 4.0F)
-				.texOffs(29, 63).addBox(-3.0718F, 10.3923F, -6.0F, 8.0F, 4.0F, 4.0F)
-				.texOffs(42, 36).addBox(11.8564F, -4.5359F, -6.0F, 4.0F, 8.0F, 4.0F)
-				.texOffs(73, 73).addBox(-14.0F, -4.5359F, -6.0F, 4.0F, 8.0F, 4.0F),
-			PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.5236F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+				.texOffs(16, 13).addBox(-2.25F, -2.25F, 0.375F, 4.0F, 2.0F, 1.0F),
+			PartPose.offsetAndRotation(2.0F, -4.0F, -3.5F, 0.0F, 0.0F, 0.4363F));
+		PartDefinition petals = head.addOrReplaceChild("petals",
+			CubeListBuilder.create(),
+			PartPose.offset(0.0F, -1.275F, 0.75F));
+		PartDefinition petal12 = petals.addOrReplaceChild("petal12",
 			CubeListBuilder.create()
-				.texOffs(112, 43).addBox(-2.0F, -34.0F, -2.0F, 4.0F, 35.0F, 4.0F),
-			PartPose.offset(0.0F, -1.0F, 0.0F));
-		PartDefinition cube_r3_pd = body_pd.addOrReplaceChild("cube_r3",
+				.texOffs(54, 0).addBox(-0.7831F, -4.0272F, -0.0819F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).addBox(-0.2831F, -5.0272F, -0.0819F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(0.425F, -3.0F, -1.5F, 0.0852F, 0.0189F, 0.1317F));
+		PartDefinition petal2 = petals.addOrReplaceChild("petal2",
 			CubeListBuilder.create()
-				.texOffs(23, 0).addBox(-2.0F, -4.0F, -3.0F, 4.0F, 6.0F, 4.0F),
-			PartPose.offsetAndRotation(0.0F, -34.7071F, -0.1213F, 0.7854F, 0.0F, 0.0F));
-		PartDefinition YEZI_4_pd = total_pd.addOrReplaceChild("YEZI_4",
+				.texOffs(54, 0).mirror().addBox(-3.2169F, -4.0272F, -0.0819F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).mirror().addBox(-2.7169F, -5.0272F, -0.0819F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(-0.425F, -3.0F, -1.5F, 0.0852F, -0.0189F, -0.1317F));
+		PartDefinition petal3 = petals.addOrReplaceChild("petal3",
 			CubeListBuilder.create()
-				.texOffs(78, 26).addBox(-11.0F, -1.0F, -4.0F, 8.0F, 2.0F, 8.0F)
-				.texOffs(114, 28).addBox(-3.0F, 0.0F, -2.0F, 3.0F, 1.0F, 4.0F),
-			PartPose.offset(-2.0F, -1.0F, 0.0F));
-		PartDefinition YEZI_3_pd = total_pd.addOrReplaceChild("YEZI_3",
+				.texOffs(54, 0).mirror().addBox(-1.7077F, -4.2941F, -0.0298F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).addBox(-1.2077F, -5.2941F, -0.0298F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(2.75F, -2.0F, -1.75F, 0.0791F, -0.0368F, 0.7839F));
+		PartDefinition petal4 = petals.addOrReplaceChild("petal4",
 			CubeListBuilder.create()
-				.texOffs(114, 19).addBox(-2.0F, -1.0F, -3.0F, 4.0F, 1.0F, 3.0F)
-				.texOffs(0, 36).addBox(-4.0F, -2.0F, -11.0F, 8.0F, 2.0F, 8.0F),
-			PartPose.offset(0.0F, 0.0F, -2.0F));
-		PartDefinition YEZI_1_pd = total_pd.addOrReplaceChild("YEZI_1",
+				.texOffs(54, 0).addBox(-2.2923F, -4.2941F, -0.0298F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).mirror().addBox(-1.7923F, -5.2941F, -0.0298F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(-2.75F, -2.0F, -1.75F, 0.0791F, 0.0368F, -0.7839F));
+		PartDefinition petal5 = petals.addOrReplaceChild("petal5",
 			CubeListBuilder.create()
-				.texOffs(114, 0).addBox(0.0F, -1.0F, -2.0F, 3.0F, 1.0F, 4.0F)
-				.texOffs(79, 0).addBox(3.0F, -2.0F, -4.0F, 8.0F, 2.0F, 8.0F),
-			PartPose.offset(2.0F, 0.0F, 0.0F));
-		PartDefinition YEZI_2_pd = total_pd.addOrReplaceChild("YEZI_2",
+				.texOffs(54, 0).addBox(-0.9576F, -4.0013F, -0.0298F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).addBox(-0.4576F, -5.0013F, -0.0298F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(3.5F, -2.0F, -1.5F, 0.0263F, -0.0832F, 1.6133F));
+		PartDefinition petal6 = petals.addOrReplaceChild("petal6",
 			CubeListBuilder.create()
-				.texOffs(78, 12).addBox(-4.0F, -2.0F, 3.0F, 8.0F, 2.0F, 8.0F)
-				.texOffs(114, 9).addBox(-2.0F, -1.0F, 0.0F, 4.0F, 1.0F, 3.0F),
-			PartPose.offset(0.0F, 0.0F, 2.0F));
-		return LayerDefinition.create(meshdefinition, 128, 128);
+				.texOffs(54, 0).mirror().addBox(-3.0424F, -4.0013F, -0.0298F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).mirror().addBox(-2.5424F, -5.0013F, -0.0298F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(-3.5F, -2.0F, -1.5F, 0.0263F, 0.0832F, -1.6133F));
+		PartDefinition petal7 = petals.addOrReplaceChild("petal7",
+			CubeListBuilder.create()
+				.texOffs(54, 0).addBox(-0.3584F, -4.2335F, -0.0298F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).addBox(0.1416F, -5.2335F, -0.0298F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(3.95F, -0.475F, -2.0F, -0.027F, -0.083F, 2.2351F));
+		PartDefinition petal8 = petals.addOrReplaceChild("petal8",
+			CubeListBuilder.create()
+				.texOffs(54, 0).mirror().addBox(-3.6416F, -4.2335F, -0.0298F, 4.0F, 5.0F, 1.0F)
+				.texOffs(56, 62).mirror().addBox(-3.1416F, -5.2335F, -0.0298F, 3.0F, 1.0F, 1.0F),
+			PartPose.offsetAndRotation(-3.95F, -0.475F, -2.0F, -0.027F, 0.083F, -2.2351F));
+		PartDefinition petal10 = petals.addOrReplaceChild("petal10",
+			CubeListBuilder.create()
+				.texOffs(15, 22).mirror().addBox(-1.6993F, -0.9501F, -0.0831F, 3.0F, 4.0F, 1.0F),
+			PartPose.offsetAndRotation(2.55F, 3.25F, -1.5F, -0.087F, -0.0072F, -0.388F));
+		PartDefinition petal9 = petals.addOrReplaceChild("petal9",
+			CubeListBuilder.create()
+				.texOffs(15, 22).addBox(-1.3007F, -0.9501F, -0.0831F, 3.0F, 4.0F, 1.0F),
+			PartPose.offsetAndRotation(-2.55F, 3.25F, -1.5F, -0.087F, 0.0072F, 0.388F));
+		PartDefinition petal11 = petals.addOrReplaceChild("petal11",
+			CubeListBuilder.create()
+				.texOffs(15, 22).mirror().addBox(-1.5F, -0.9914F, -0.1305F, 3.0F, 4.0F, 1.0F),
+			PartPose.offsetAndRotation(0.0F, 3.85F, -1.75F, -0.1309F, 0.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
 

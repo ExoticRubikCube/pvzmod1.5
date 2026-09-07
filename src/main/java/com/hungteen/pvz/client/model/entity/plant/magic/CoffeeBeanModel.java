@@ -19,7 +19,6 @@ import net.minecraft.util.Mth;
 // Paste this class into your mod and generate all required imports
 public class CoffeeBeanModel extends PVZPlantModel<CoffeeBeanEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "coffee_bean"), "main");
-
 	private final ModelPart total;
 	private final ModelPart body;
 	private final ModelPart cube_r1;
@@ -28,9 +27,7 @@ public class CoffeeBeanModel extends PVZPlantModel<CoffeeBeanEntity> {
 	private final ModelPart left_wing;
 
 
-
-
-public CoffeeBeanModel(ModelPart root) {
+	public CoffeeBeanModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.body = this.total.getChild("body");
 		this.cube_r1 = this.body.getChild("cube_r1");
@@ -43,24 +40,24 @@ public CoffeeBeanModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition total_pd = partdefinition.addOrReplaceChild("total",
+		PartDefinition total = partdefinition.addOrReplaceChild("total",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 20.0F, 0.0F));
-		PartDefinition body_pd = total_pd.addOrReplaceChild("body",
+		PartDefinition body = total.addOrReplaceChild("body",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 10.0F, 0.0F));
-		PartDefinition cube_r1_pd = body_pd.addOrReplaceChild("cube_r1",
+		PartDefinition cube_r1 = body.addOrReplaceChild("cube_r1",
 			CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-2.0F, -2.5F, -2.0F, 4.0F, 5.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, -13.5F, 0.0F, -0.2618F, 0.0F, 0.0F));
-		PartDefinition cube_r2_pd = body_pd.addOrReplaceChild("cube_r2",
+		PartDefinition cube_r2 = body.addOrReplaceChild("cube_r2",
 			CubeListBuilder.create()
 				.texOffs(0, 9).addBox(-3.0F, -7.0F, 0.5F, 6.0F, 7.0F, 1.0F),
 			PartPose.offsetAndRotation(0.0F, -16.0F, 0.0F, -0.6981F, 0.0F, 0.0F));
-		PartDefinition right_wing_pd = total_pd.addOrReplaceChild("right_wing",
+		PartDefinition right_wing = total.addOrReplaceChild("right_wing",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 10.0F, 0.0F));
-		PartDefinition left_wing_pd = total_pd.addOrReplaceChild("left_wing",
+		PartDefinition left_wing = total.addOrReplaceChild("left_wing",
 			CubeListBuilder.create(),
 			PartPose.offset(0.0F, 10.0F, 0.0F));
 		return LayerDefinition.create(meshdefinition, 32, 32);

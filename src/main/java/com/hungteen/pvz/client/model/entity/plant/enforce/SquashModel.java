@@ -18,11 +18,11 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class SquashModel extends PVZPlantModel<SquashEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "squash"), "main");
-
 	private final ModelPart body;
 	private final ModelPart bone;
 
-public SquashModel(ModelPart root) {
+
+	public SquashModel(ModelPart root) {
 		this.body = root.getChild("body");
 		this.bone = this.body.getChild("bone");
 	}
@@ -31,13 +31,13 @@ public SquashModel(ModelPart root) {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 	
-		PartDefinition body_pd = partdefinition.addOrReplaceChild("body",
+		PartDefinition body = partdefinition.addOrReplaceChild("body",
 			CubeListBuilder.create()
 				.texOffs(125, 202).addBox(-16.0F, -16.0F, -16.0F, 32.0F, 16.0F, 32.0F)
 				.texOffs(138, 153).addBox(-14.0F, -32.0F, -14.0F, 28.0F, 16.0F, 28.0F)
 				.texOffs(40, 148).addBox(-11.0F, -44.0F, -11.0F, 22.0F, 12.0F, 22.0F),
 			PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition bone_pd = body_pd.addOrReplaceChild("bone",
+		PartDefinition bone = body.addOrReplaceChild("bone",
 			CubeListBuilder.create()
 				.texOffs(235, 130).addBox(1.0F, -1.8038F, -2.0F, 4.0F, 9.0F, 4.0F),
 			PartPose.offsetAndRotation(0.0F, -50.0F, 0.0F, 0.0F, 0.0F, 0.5236F));
