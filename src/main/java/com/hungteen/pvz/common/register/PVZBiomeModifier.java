@@ -25,7 +25,7 @@ public class PVZBiomeModifier implements BiomeModifier {
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD) {
             if (!biome.is(PVZBiomeTags.UNABLE_MOOBLOOM_SPAWNING)) {
-                if (biome.is(PVZBiomes.ZEN_GARDEN.getKey())) {
+                if (PVZBiomes.ZEN_GARDEN.getKey() != null && biome.is(PVZBiomes.ZEN_GARDEN.getKey())) {
                     addMooBloomSpawn(builder, 5);
                 } else if (biome.is(Biomes.SUNFLOWER_PLAINS)) {
                     addMooBloomSpawn(builder, 50);

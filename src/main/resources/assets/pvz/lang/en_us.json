@@ -761,8 +761,12 @@
     "command.pvz.invasion.spawn": "It's a spawn invasion, can not be add",
     "command.pvz.invasion.invalid": "can not find the invasion",
     "command.pvz.invasion.difficulty": "Current difficulty is %d",
+    "command.pvz.invasion.out_of_bound": "wave number is out of bound",
     "command.pvz.challenge.exist": "There already exist a challenge nearby",
     "command.pvz.challenge.no": "Can not find challenge resource : %s",
+    "command.pvz.screenshot.start":"Starting export of %s entities",
+    "command.pvz.screenshot.empty":"No entities to export",
+    "command.pvz.screenshot.finish":"All export complete",
 
     "resource.pvz.tree_lvl":"Tree Level",
     "resource.pvz.tree_xp":"Tree Xp",

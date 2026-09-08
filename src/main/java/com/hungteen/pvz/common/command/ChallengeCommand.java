@@ -47,10 +47,10 @@ public class ChallengeCommand {
             if (!ChallengeManager.hasChallengeNearby(source.getLevel(), pos)) {
                 ChallengeManager.createChallenge(source.getLevel(), res, pos);
             } else {
-                source.sendFailure(Component.translatable("command.pvz.exist"));
+                source.sendFailure(Component.translatable("command.pvz.challenge.exist"));
             }
         } else {
-            source.sendFailure(Component.translatable("command.pvz.no", res.toString()));
+            source.sendFailure(Component.translatable("command.pvz.challenge.no", res.toString()));
         }
         return 1;
     }

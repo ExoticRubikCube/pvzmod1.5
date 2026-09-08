@@ -274,7 +274,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.JALAPENO.get())
 			.summonCard(() -> ItemRegister.JALAPENO_CARD.get())
 			.enjoyCard(() -> ItemRegister.JALAPENO_ENJOY_CARD.get())
-			.plantModel(() -> () -> new JalapenoModel(JalapenoModel.createBodyLayer().bakeRoot())).scale(1.0F)
+			.plantModel(() -> () -> new JalapenoModel(JalapenoModel.createBodyLayer().bakeRoot())).scale(1F)
 			.cdSkill(List.of(SkillTypes.NORMAL_BOMB_DAMAGE))
 	);
 	
@@ -306,7 +306,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TALL_NUT.get())
 			.summonCard(() -> ItemRegister.TALL_NUT_CARD.get())
 			.enjoyCard(() -> ItemRegister.TALL_NUT_ENJOY_CARD.get())
-			.plantModel(() -> () -> new TallNutModel(TallNutModel.createBodyLayer().bakeRoot())).scale(0.4F)
+			.plantModel(() -> () -> new TallNutModel(TallNutModel.createBodyLayer().bakeRoot())).scale(1F)
 			.cdSkill(List.of(SkillTypes.NUT_MORE_LIFE))
 	);
 	

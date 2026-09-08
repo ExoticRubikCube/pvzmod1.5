@@ -763,8 +763,12 @@
   "command.pvz.invasion.spawn": "此入侵类型为生成型入侵，不能被添加",
   "command.pvz.invasion.invalid": "找不到此入侵",
   "command.pvz.invasion.difficulty": "当前入侵难度为%d",
+  "command.pvz.invasion.out_of_bound": "波次数超出范围",
   "command.pvz.challenge.exist": "附近已经存在其他挑战",
   "command.pvz.challenge.no": "找不到当前挑战 : %s",
+  "command.pvz.screenshot.start": "开始导出 %s 个实体",
+  "command.pvz.screenshot.empty": "没有可导出的实体",
+  "command.pvz.screenshot.finish": "全部导出完成",
 
   "resource.pvz.tree_lvl": "智慧树等级",
   "resource.pvz.tree_xp": "智慧树经验",

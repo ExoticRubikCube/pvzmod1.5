@@ -1,9 +1,11 @@
 package com.hungteen.pvz.common.command;
 
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.common.command.client.PlantScreenshotCommand;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,5 +21,10 @@ public class PVZCommandHandler {
         InvasionCommand.register(dispatcher);
         ChallengeCommand.register(dispatcher);
     }
-    
+
+    @SubscribeEvent
+    public static void clientInit(RegisterClientCommandsEvent event) {
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        PlantScreenshotCommand.register(dispatcher);
+    }
 }
