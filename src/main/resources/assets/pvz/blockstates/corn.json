@@ -1,13 +1,21 @@
 {
     "variants":
     {
-    "age=0":{"model": "pvz:block/corn_0"},
-    "age=1":{"model": "pvz:block/corn_0"},
-    "age=2":{"model": "pvz:block/corn_1"},
-    "age=3":{"model": "pvz:block/corn_2"},
-    "age=4":{"model": "pvz:block/corn_3"},
-    "age=5":{"model": "pvz:block/corn_4"},
-    "age=6":{"model": "pvz:block/corn_5"},
-    "age=7":{"model": "pvz:block/corn_6"}
+    "age=0,half=lower":{"model": "pvz:block/maize_0"},
+    "age=1,half=lower":{"model": "pvz:block/maize_0"},
+    "age=2,half=lower":{"model": "pvz:block/maize_1"},
+    "age=3,half=lower":{"model": "pvz:block/maize_1"},
+    "age=4,half=lower":{"model": "pvz:block/maize_2"},
+    "age=5,half=lower":{"model": "pvz:block/maize_2"},
+    "age=6,half=lower":{"model": "pvz:block/maize_2"},
+    "age=7,half=lower":{"model": "pvz:block/maize_3"},
+    "age=0,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=1,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=2,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=3,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=4,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=5,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=6,half=upper":{"model": "pvz:block/maize_top_0"},
+    "age=7,half=upper":{"model": "pvz:block/maize_top_1"}
     }
 }

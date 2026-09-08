@@ -2,6 +2,7 @@ package com.hungteen.pvz.data.loot;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
+import com.hungteen.pvz.common.block.plants.CornBlock;
 import com.hungteen.pvz.common.item.ItemRegister;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -15,13 +16,16 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -50,6 +54,22 @@ public class PVZBlockLootTables implements Consumer<BiConsumer<ResourceLocation,
                                 .otherwise(LootItem.lootTableItem(seeds)))
                         .apply(ApplyExplosionDecay.explosionDecay()))
                 .withPool(LootPool.lootPool().when(matureCondition)
+                        .add(LootItem.lootTableItem(seeds).apply(
+                                ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))));
+    }
+
+    private static LootTable.Builder createDoubleCropDrops(Block block, Item crops, Item seeds,
+                                                           LootItemCondition.Builder matureCondition) {
+        LootItemCondition.Builder lowerCondition = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CornBlock.HALF, DoubleBlockHalf.LOWER));
+        return LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(crops).when(matureCondition)
+                                .when(lowerCondition)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 3.0F)))
+                                .otherwise(LootItem.lootTableItem(seeds).when(lowerCondition)))
+                        .apply(ApplyExplosionDecay.explosionDecay()))
+                .withPool(LootPool.lootPool().when(matureCondition).when(lowerCondition)
                         .add(LootItem.lootTableItem(seeds).apply(
                                 ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 0.5714286F, 3))));
     }
@@ -89,9 +109,11 @@ public class PVZBlockLootTables implements Consumer<BiConsumer<ResourceLocation,
         this.tmpBuilder = getAgeBuilder(BlockRegister.CABBAGE.get(), 3);
         this.add(BlockRegister.CABBAGE.get(),
                 createCropDrops(BlockRegister.CABBAGE.get(), ItemRegister.CABBAGE.get(), this.tmpBuilder));
+        this.tmpBuilder = getAgeBuilder(BlockRegister.PEA_PLANT.get(), 7);
+        this.add(BlockRegister.PEA_PLANT.get(),
+                createCropDrops(BlockRegister.PEA_PLANT.get(), ItemRegister.PEA.get(), ItemRegister.PEA.get(), this.tmpBuilder));
         this.tmpBuilder = getAgeBuilder(BlockRegister.CORN.get(), 7);
-        this.add(BlockRegister.CORN.get(),
-                createCropDrops(BlockRegister.CORN.get(), ItemRegister.CORN.get(), this.tmpBuilder));
+        this.add(BlockRegister.CORN.get(), createDoubleCropDrops(BlockRegister.CORN.get(), ItemRegister.CORN.get(), ItemRegister.CORN_SEEDS.get(), this.tmpBuilder));
 
         // leaves
         this.add(BlockRegister.NUT_LEAVES.get(), (block) -> {

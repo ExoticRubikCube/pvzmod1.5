@@ -45,10 +45,10 @@ public class PeaBlock extends CropBlock{
 			InteractionHand handIn, BlockHitResult hit) {
 		if(! worldIn.isClientSide) {
 			if(this.isMaxAge(state)) {
-				worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegister.PEA.get(), 1)));
-				worldIn.setBlockAndUpdate(pos, this.getStateForAge(0));
-				return InteractionResult.SUCCESS;
-			}
+					worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegister.PEA.get(), 2)));
+					worldIn.setBlockAndUpdate(pos, this.getStateForAge(0));
+					return InteractionResult.SUCCESS;
+				}
 		}
 		return super.use(state, worldIn, pos, player, handIn, hit);
 	}

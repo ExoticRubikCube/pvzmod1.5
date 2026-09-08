@@ -219,7 +219,7 @@ public class PlantScreenshotCommand {
 		}
 	}
 
-	/** 计测缓冲源：拦截实体渲染提交的顶点，记录变换到世界坐标后的范围，反映实际渲染大小，不依赖碰撞箱。思路参考 AlmostReliable/summoningrituals 的 MeasuringBufferSource */
+	//计测缓冲源：拦截实体渲染提交的顶点，记录变换到世界坐标后的范
 	private static final class MeasuringBufferSource implements MultiBufferSource {
 		private final MeasuringVertexConsumer instance = new MeasuringVertexConsumer();
 
