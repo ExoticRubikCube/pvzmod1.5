@@ -23,8 +23,7 @@ public class OverworldBiomeBuilderMixin {
 			Registry.BIOME_REGISTRY, new ResourceLocation("pvz", "zen_garden"));
 
 	@Inject(method = "addBiomes", at = @At("TAIL"))
-	@SuppressWarnings("unchecked")
-	private void pvz_addZenGarden(Consumer consumer, CallbackInfo ci) {
+    private void pvz_addZenGarden(Consumer<Pair<?,?>> consumer, CallbackInfo ci) {
 		Climate.Parameter temperature = Climate.Parameter.span(0.0F, 1.0F);
 		Climate.Parameter humidity = Climate.Parameter.span(-0.35F, 0.35F);
 		Climate.Parameter continentalness = Climate.Parameter.span(-0.11F, 1.0F);

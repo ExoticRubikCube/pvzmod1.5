@@ -272,7 +272,7 @@ public class PVZConfig {
                     EntitySettings.PlantSetting.PlantMinimumLiveTick = builder
                             .translation("config.pvz.plant.plant_minimum_live_tick")
                             .comment("plants won't despawn before living for this long.")
-                            .defineInRange("PlantMinimumLiveTick", 2000, 0, 10000000);
+                            .defineInRange("PlantMinimumLiveTick", 216000, 0, 10000000);
 
                 }
                 builder.pop();

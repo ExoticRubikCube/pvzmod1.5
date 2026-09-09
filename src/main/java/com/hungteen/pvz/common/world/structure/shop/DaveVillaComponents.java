@@ -93,51 +93,53 @@ public class DaveVillaComponents {
 		protected void handleDataMarker(String function, BlockPos pos, ServerLevelAccessor worldIn, RandomSource rand,
 				BoundingBox sbb) {
 			if (function.equals("dave")) {
-				if (worldIn instanceof ServerLevel serverLevel) {
-					CrazyDaveEntity dave = EntityRegister.CRAZY_DAVE.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, dave, pos);
-				}
+				ServerLevel serverLevel = worldIn.getLevel();
+				CrazyDaveEntity dave = EntityRegister.CRAZY_DAVE.get().create(serverLevel);
+				EntityUtil.onEntitySpawn(serverLevel, dave, pos);
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("panney")) {
-				if (worldIn instanceof ServerLevel serverLevel) {
-					PennyEntity panney = EntityRegister.PANNEY.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, panney, pos);
-				}
+				ServerLevel serverLevel = worldIn.getLevel();
+				PennyEntity panney = EntityRegister.PANNEY.get().create(serverLevel);
+				EntityUtil.onEntitySpawn(serverLevel, panney, pos);
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("plant_pos1")) {
-				if (rand.nextInt(3) == 0 && worldIn instanceof ServerLevel serverLevel) {
+				if (rand.nextInt(3) == 0) {
+					ServerLevel serverLevel = worldIn.getLevel();
 					PeaShooterEntity nut = EntityRegister.PEA_SHOOTER.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, nut, pos);
+					EntityUtil.onEntitySpawn(serverLevel, nut, pos);
 				}
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("plant_pos2")) {
-				if (rand.nextInt(3) == 0 && worldIn instanceof ServerLevel serverLevel) {
+				if (rand.nextInt(3) == 0) {
+					ServerLevel serverLevel = worldIn.getLevel();
 					SunFlowerEntity nut = EntityRegister.SUN_FLOWER.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, nut, pos);
+					EntityUtil.onEntitySpawn(serverLevel, nut, pos);
 				}
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("plant_pos3")) {
-				if (rand.nextInt(3) == 0 && worldIn instanceof ServerLevel serverLevel) {
+				if (rand.nextInt(3) == 0) {
+					ServerLevel serverLevel = worldIn.getLevel();
 					PeaShooterEntity nut = EntityRegister.PEA_SHOOTER.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, nut, pos);
+					EntityUtil.onEntitySpawn(serverLevel, nut, pos);
 				}
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("plant_pos4")) {
-				if (rand.nextInt(2) == 0 && worldIn instanceof ServerLevel serverLevel) {
+				if (rand.nextInt(2) == 0) {
+					ServerLevel serverLevel = worldIn.getLevel();
 					WallNutEntity nut = EntityRegister.WALL_NUT.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, nut, pos);
+					EntityUtil.onEntitySpawn(serverLevel, nut, pos);
 				}
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("plant_pos5")) {
-				if (worldIn instanceof ServerLevel serverLevel) {
-					SunFlowerEntity nut = EntityRegister.SUN_FLOWER.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, nut, pos);
-				}
+				ServerLevel serverLevel = worldIn.getLevel();
+				SunFlowerEntity nut = EntityRegister.SUN_FLOWER.get().create(serverLevel);
+				EntityUtil.onEntitySpawn(serverLevel, nut, pos);
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("plant_pos6")) {
-				if (rand.nextInt(2) == 0 && worldIn instanceof ServerLevel serverLevel) {
+				if (rand.nextInt(2) == 0) {
+					ServerLevel serverLevel = worldIn.getLevel();
 					PeaShooterEntity nut = EntityRegister.PEA_SHOOTER.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, nut, pos);
+					EntityUtil.onEntitySpawn(serverLevel, nut, pos);
 				}
 				worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			} else if (function.equals("bonus_chest1")) {
@@ -163,8 +165,12 @@ public class DaveVillaComponents {
 			BlockPos min = new BlockPos(Math.min(pos.getX(), to.getX()), Math.min(pos.getY(), to.getY()), Math.min(pos.getZ(), to.getZ()));
 			BlockPos max = new BlockPos(Math.max(pos.getX(), to.getX()), Math.max(pos.getY(), to.getY()), Math.max(pos.getZ(), to.getZ()));
 			super.postProcess(worldIn, manager, chunkGeneratorIn, randomIn, mutableBoundingBoxIn, chunkPosIn, blockPos);
-			for (int i = min.getX(); i <= max.getX(); ++i) {
-				for (int j = min.getZ(); j <= max.getZ(); ++j) {
+			int fillMinX = Math.max(min.getX(), mutableBoundingBoxIn.minX());
+			int fillMaxX = Math.min(max.getX(), mutableBoundingBoxIn.maxX());
+			int fillMinZ = Math.max(min.getZ(), mutableBoundingBoxIn.minZ());
+			int fillMaxZ = Math.min(max.getZ(), mutableBoundingBoxIn.maxZ());
+			for (int i = fillMinX; i <= fillMaxX; ++i) {
+				for (int j = fillMinZ; j <= fillMaxZ; ++j) {
 					int y = min.getY() - 1;
 					while (y >= 50) {
 						BlockPos tmp = new BlockPos(i, y, j);

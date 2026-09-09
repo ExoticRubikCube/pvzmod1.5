@@ -6,6 +6,8 @@ import com.hungteen.pvz.api.paz.IZombieModel;
 import com.hungteen.pvz.api.types.IZombieType;
 import com.hungteen.pvz.client.ClientProxy;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
+import com.hungteen.pvz.common.impl.zombie.PoolZombies;
+import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.utils.ClientUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -21,7 +23,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
@@ -40,8 +41,10 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
     public Vec3 originalScale = new Vec3(1, 1, 1);
     public Vec3 aRotation = Vec3.ZERO;
     public IZombieModel<?> bodyDropModel = null;
+    public BodyType bodyDropType = BodyType.BODY;
     public boolean bodyHasHandDefence = false;
     public float bodyYRot = 0;
+    public float headRot = 0;
 
     public ModelPartParticle(LivingEntity entity, List<ModelPart> models, ResourceLocation texture, Vec3 offset) {
         this((ClientLevel) entity.level, models.get(0), texture, entity.position().add(offset));
@@ -112,15 +115,30 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
     }
 
     /**
-     * 镜像实体 ZombieDropBodyEntity：按肢体类型设置出生位置与初始速度。
+     * 镜像ZombieDropBodyEntity.updateInfo：统一设置部位、纹理、朝向、缩放、防御、随机落角与掉落模型。
+     */
+    public void updateInfo(PVZZombieEntity zombie, BodyType type) {
+        this.bodyDropType = type;
+        this.texture = zombie.getZombieType().getRenderResource();
+        this.bodyYRot = -zombie.getYRot();
+        this.bodyHasHandDefence = zombie.shouldShowBodyDropDefence();
+        this.headRot = zombie.getRandom().nextInt(60) - 30;
+        (type == BodyType.BODY ? zombie.getZombieType().getZombieModel2() : zombie.getZombieType().getZombieModel1())
+                .ifPresent(iz -> this.bodyDropModel = iz);
+    }
+
+    /**
+     * 镜像ZombieDropBodyEntity.droppedByOwner：updateInfo后按肢体类型设置出生位置与初始速度。
      */
     public void droppedByOwner(PVZZombieEntity zombie, BodyType type, Optional<Vec3> damageSourcePos) {
+        this.updateInfo(zombie, type);
         switch(type) {
         case HAND:
         case LEFT_HAND: {
-            float j = 2 * 3.14159f * zombie.getYRot() / 360;
+            //ref htpvz2 ZombieDropBodyEntity.droppedByOwner(HAND)：掉落体初始yRot为0(不继承僵尸朝向)，
+            //故手部固定落于僵尸中心偏+Z 0.6、眼高处(cos0=1,sin0=0)，与死亡时面向无关。
             final float dis = 0.6F;
-            this.setPos(zombie.position().x - Mth.sin(j) * dis, zombie.position().y + zombie.getEyeHeight(), zombie.position().z + Mth.cos(j) * dis);
+            this.setPos(zombie.position().x, zombie.position().y + zombie.getEyeHeight(), zombie.position().z + dis);
             this.speed(Vec3.ZERO);
             break;
         }
@@ -131,11 +149,21 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
         case BODY: {
             this.setPos(zombie.position().x, zombie.position().y, zombie.position().z);
             this.speed(zombie.getDeltaMovement());
-            this.setMaxLiveTick(40);
             break;
         }
         default:
             break;
+        }
+    }
+
+    /**
+     * 镜像1.16.5的specialDropBody：仅冰车/弹射器对整体做更强劲的0.5三轴扩散上抛。
+     */
+    public void specialDropBody(PVZZombieEntity zombie, BodyType type, Optional<Vec3> damageSourcePos) {
+        this.updateInfo(zombie, type);
+        final IZombieType zombieType = zombie.getZombieType();
+        if(zombieType == PoolZombies.ZOMBONI || zombieType == RoofZombies.CATAPULT_ZOMBIE) {
+            this.hitUp(zombie, damageSourcePos, 0.5D);
         }
     }
 
@@ -168,8 +196,12 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
     @Override
     public void move(double x, double y, double z) {
         super.move(x, y, z);
+        //ref ZombieDropBodyEntity：落地点急剧减速(×0.3)并停住姿态，避免尸体贴着地面滑走。
         if (this.onGround) {
             this.aRotation = Vec3.ZERO;
+            this.xd *= 0.3F;
+            this.yd *= 0.3F;
+            this.zd *= 0.3F;
         }
     }
 
@@ -226,8 +258,20 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
         poseStack.pushPose();
         poseStack.mulPose(Vector3f.YP.rotationDegrees(this.bodyYRot + 180.0F));
         poseStack.scale(-1, -1, 1);
+        Vec3 rotVec = this.rotation.add(this.aRotation.multiply(partialTick, partialTick, partialTick));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees((float) rotVec.y));
+        if(this.bodyDropType != BodyType.BODY) {
+            //ref ZombieBodyRender：非躯干部位空中绕X负向翻转，落地后头部随机偏角、其余静止躺平。
+            if(this.onGround) {
+                poseStack.mulPose(Vector3f.XN.rotationDegrees(this.bodyDropType == BodyType.HEAD ? this.headRot : 90));
+            } else {
+                poseStack.mulPose(Vector3f.XN.rotationDegrees(- this.age * 15));
+            }
+        }
+        poseStack.mulPose(Vector3f.XP.rotationDegrees((float) rotVec.x));
+        poseStack.mulPose(Vector3f.ZP.rotationDegrees((float) rotVec.z));
         poseStack.scale((float) this.originalScale.x, (float) this.originalScale.y, (float) this.originalScale.z);
-        poseStack.translate(0.0, -1.7, 0.0);
+        poseStack.translate(0.0, (this.bodyDropType != BodyType.BODY ? -1.501 : -1.7), 0.0);
         this.bodyDropModel.tickPartAnim(this, 0, 0, this.getAnimTime() + partialTick, 0, 0);
         final VertexConsumer buffer = bufferSource.getBuffer(this.bodyDropModel.getZombieModel().renderType(this.texture));
         this.bodyDropModel.renderBody(this, poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
@@ -243,7 +287,7 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
 
     @Override
     public BodyType getBodyType() {
-        return BodyType.BODY;
+        return this.bodyDropType;
     }
 
     @Override

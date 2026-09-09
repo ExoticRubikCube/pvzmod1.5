@@ -59,7 +59,7 @@ public class PlayerUtil {
 	 * {@link PlayerDataManager#addResource(Resources, int)}
 	 */
 	public static int getPlayerLevelUpXp(int lvl){
-		return (int) round(80+400*log10(lvl)+lvl*30);
+		return (int) round((80 + 400*log10(lvl) + lvl*30) * 2.0 / 3.0);
 	}
 
 	public static @NotNull Optional<PlayerDataManager> getOptManager(Player player) {

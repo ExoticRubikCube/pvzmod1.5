@@ -1,12 +1,17 @@
 package com.hungteen.pvz.client.render.entity.zombie.roof;
 
+import com.hungteen.pvz.api.enums.BodyType;
 import com.hungteen.pvz.client.model.entity.zombie.roof.CatapultZombieModel;
+import com.hungteen.pvz.client.particle.ModelPartParticle;
 import com.hungteen.pvz.client.render.entity.zombie.PVZZombieRender;
 import com.hungteen.pvz.common.entity.zombie.roof.CatapultZombieEntity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class CatapultZombieRender extends PVZZombieRender<CatapultZombieEntity> {
@@ -18,5 +23,12 @@ public class CatapultZombieRender extends PVZZombieRender<CatapultZombieEntity> 
 	@Override
 	protected boolean isShaking(CatapultZombieEntity zombie) {
 		return zombie.isCarShaking();
+	}
+
+	@Override
+	protected void onFallBody(ModelPartParticle body, CatapultZombieEntity zombie, BodyType type, Optional<Vec3> damageSourcePos) {
+		body.scale(this.getScaleByEntity(zombie));
+		//ref CarZombieEntity.onFallBody→specialDropBody：整车整车以0.5三轴抛飞，存活默认60。
+		body.specialDropBody(zombie, type, damageSourcePos);
 	}
 }

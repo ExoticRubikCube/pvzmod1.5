@@ -6,7 +6,7 @@ mixinConfigs="pvz.mixins.json"
 
 [[mods]]
 modId="pvz"
-version="0.6.6-fix.4"
+version="0.6.6-fix.5"
 displayName="Plants vs Zombies"
 authors="SuSen36, _HungTeen_, Wolf__Crystal, Grass_Carp"
 logoFile="logo.png"
