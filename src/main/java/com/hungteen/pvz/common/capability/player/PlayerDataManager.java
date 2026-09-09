@@ -46,7 +46,7 @@ public class PlayerDataManager {
 	/* plant & zombie lock */
 	private final Map<IPAZType, Boolean> pazLocked = new HashMap<>();
 	/* misc data */
-	private final Invasion invasion;
+	private Invasion invasion;
 	public String lastVersion = StringUtil.INIT_VERSION;
 	private final OtherStats otherStats;
 	
@@ -70,7 +70,6 @@ public class PlayerDataManager {
 			});
 		}
 		{// init misc data.
-			this.invasion = new Invasion(player);
 			this.otherStats = new OtherStats(this);
 		}
 	}
@@ -168,7 +167,7 @@ public class PlayerDataManager {
 		}
 		{// load misc data.
 			if(baseTag.contains("invasion_data")){
-				this.invasion.load(baseTag.getCompound("invasion_data"));
+				this.getInvasion().load(baseTag.getCompound("invasion_data"));
 			}
 			if(baseTag.contains("last_join_version")) {
 				this.lastVersion = baseTag.getString("last_join_version");
@@ -211,7 +210,7 @@ public class PlayerDataManager {
 		{// load misc data.
 			{
 				final CompoundTag nbt = new CompoundTag();
-				this.invasion.save(nbt);
+				this.getInvasion().save(nbt);
 				baseTag.put("invasion_data", nbt);
 			}
 			baseTag.putString("last_join_version", this.lastVersion);
@@ -280,7 +279,7 @@ public class PlayerDataManager {
 			});
 		}
 		{//wave.
-			this.invasion.sendAllWavePacket(player);
+			this.getInvasion().sendAllWavePacket(player);
 		}
 	}
 
@@ -337,7 +336,7 @@ public class PlayerDataManager {
 				}
 			} else if(res == Resources.MISSION_VALUE){
 				if(num > 0 && this.getResource(Resources.MISSION_TYPE) == MissionManager.MissionType.INSTANT_KILL.ordinal()){
-					++ this.invasion.killInSecond;
+					++ this.getInvasion().killInSecond;
 				}
 			} else if(res == Resources.MISSION_FINISH_TIME){
 				if(player instanceof ServerPlayer){
@@ -538,6 +537,9 @@ public class PlayerDataManager {
 	}
 
 	public Invasion getInvasion(){
+		if (this.invasion == null) {
+			this.invasion = new Invasion(this.player);
+		}
 		return this.invasion;
 	}
 

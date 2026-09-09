@@ -4,7 +4,6 @@ import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
@@ -128,12 +127,6 @@ this.remove(RemovalReason.KILLED);
 		return super.canLostHand() && ! this.hasBox();
 	}
 	
-	@Override
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		super.setBodyStates(body);
-		body.setHandDefence(this.hasBox());
-	}
-	
 	/**
 	 * can explode if time is enough.
 	 * {@link #normalZombieTick()}
@@ -215,6 +208,11 @@ this.remove(RemovalReason.KILLED);
 	
 	public boolean hasBox() {
 		return this.entityData.get(HAS_BOX);
+	}
+	
+	@Override
+	public boolean shouldShowBodyDropDefence() {
+		return this.hasBox();
 	}
 	
 	@Override

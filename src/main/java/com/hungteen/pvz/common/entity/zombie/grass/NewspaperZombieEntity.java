@@ -1,7 +1,6 @@
 package com.hungteen.pvz.common.entity.zombie.grass;
 
 import com.hungteen.pvz.common.entity.zombie.base.DefenceZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.entity.zombie.part.PVZHealthPartEntity;
 import com.hungteen.pvz.common.impl.zombie.GrassZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
@@ -56,12 +55,6 @@ public class NewspaperZombieEntity extends DefenceZombieEntity {
 	}
 	
 	@Override
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		super.setBodyStates(body);
-		body.setHandDefence(! this.isAngry());
-	}
-	
-	@Override
 	public SoundEvent getPartDeathSound() {
 		return SoundRegister.PAPER_BROKEN.get();
 	}
@@ -87,6 +80,11 @@ public class NewspaperZombieEntity extends DefenceZombieEntity {
 	
 	public boolean isAngry() {
 		return ! this.canPartsExist();
+	}
+	
+	@Override
+	public boolean shouldShowBodyDropDefence() {
+		return ! this.isAngry();
 	}
 	
 	@Override

@@ -41,6 +41,7 @@ public class PVZPacketHandler {
 		CHANNEL.registerMessage(id++, CardInventoryPacket.class, CardInventoryPacket::encode, CardInventoryPacket::new, CardInventoryPacket.Handler::onMessage);
 		CHANNEL.registerMessage(id++, PAZStatsPacket.class, PAZStatsPacket::encode, PAZStatsPacket::new, PAZStatsPacket.Handler::onMessage);
 		CHANNEL.registerMessage(id++, DatapackPacket.class, DatapackPacket::encode, DatapackPacket::new, DatapackPacket.Handler::onMessage);
+		CHANNEL.registerMessage(id++, SpawnBodyPartPacket.class, SpawnBodyPartPacket::encode, SpawnBodyPartPacket::new, SpawnBodyPartPacket.Handler::onMessage);
 	}
 
 	public static <MSG> void sendToServer(MSG msg) {

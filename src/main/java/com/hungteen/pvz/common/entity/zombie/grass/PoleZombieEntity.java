@@ -4,7 +4,6 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZRandomTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.entity.zombie.pool.DiggerZombieEntity;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.impl.zombie.GrassZombies;
@@ -97,12 +96,6 @@ public class PoleZombieEntity extends PVZZombieEntity{
 		return super.isZombieInvulnerableTo(source) || this.isPoleJumping();
 	}
 	
-	@Override
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		super.setBodyStates(body);
-		body.setHandDefence(this.hasPole());
-	}
-	
 	/**
 	 * set jump and motion.
 	 * {@link PoleJumpGoal#tick()}
@@ -182,6 +175,11 @@ public class PoleZombieEntity extends PVZZombieEntity{
 	
 	public boolean hasPole() {
 		return this.entityData.get(HAS_POLE);
+	}
+	
+	@Override
+	public boolean shouldShowBodyDropDefence() {
+		return this.hasPole();
 	}
 	
 	@Override

@@ -4,7 +4,6 @@ import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.base.PlantDefenderEntity;
 import com.hungteen.pvz.common.entity.zombie.base.DefenceZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.entity.zombie.part.PVZHealthPartEntity;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
@@ -81,9 +80,8 @@ public class LadderZombieEntity extends DefenceZombieEntity implements IHasMetal
 	}
 	
 	@Override
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		super.setBodyStates(body);
-		body.setHandDefence(this.hasMetal());
+	public boolean shouldShowBodyDropDefence() {
+		return this.hasMetal();
 	}
 
 	@Override

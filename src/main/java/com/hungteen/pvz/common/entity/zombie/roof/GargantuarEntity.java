@@ -4,7 +4,6 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.attack.PVZZombieAttackGoal;
 import com.hungteen.pvz.common.entity.plant.spear.SpikeRockEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
@@ -76,13 +75,6 @@ public class GargantuarEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		super.setBodyStates(body);
-		body.setMaxLiveTick(DEATH_ANIM_CD);
-		body.setHandDefence(this.isSad);
-	}
-	
-	@Override
 	public boolean canPAZTarget(Entity target) {
 		if(target instanceof SpikeRockEntity) {
 			return true;
@@ -112,6 +104,11 @@ public class GargantuarEntity extends PVZZombieEntity {
 			return EntityUtil.getMaxHealthDamage(((LivingEntity) entity), 2);
 		}
 		return f;
+	}
+
+	@Override
+	public boolean shouldShowBodyDropDefence() {
+		return this.isSad;
 	}
 	
 	@Override

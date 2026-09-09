@@ -77,7 +77,6 @@ import com.hungteen.pvz.client.render.entity.plant.spear.CatTailRender;
 import com.hungteen.pvz.client.render.entity.plant.spear.SpikeRockRender;
 import com.hungteen.pvz.client.render.entity.plant.spear.SpikeWeedRender;
 import com.hungteen.pvz.client.render.entity.plant.toxic.*;
-import com.hungteen.pvz.client.render.entity.zombie.body.ZombieBodyRender;
 import com.hungteen.pvz.client.render.entity.zombie.grass.*;
 import com.hungteen.pvz.client.render.entity.zombie.other.*;
 import com.hungteen.pvz.client.render.entity.zombie.pool.*;
@@ -212,7 +211,6 @@ public class ClientRegister {
 		ev.registerEntityRenderer(ELEMENT_BALL.get(), ctx -> new ElementBallRender(ctx));
 		ev.registerEntityRenderer(DESTROY_CAR.get(), ctx -> new DestroyCarRender(ctx));
 		ev.registerEntityRenderer(GARDEN_RAKE.get(), ctx -> new GardenRakeRender(ctx));
-		ev.registerEntityRenderer(ZOMBIE_DROP_BODY.get(), ctx -> new ZombieBodyRender(ctx));
 		ev.registerEntityRenderer(FOODIE_ZOMBIE.get(), ctx -> new FoodieZombieRender(ctx));
 		ev.registerEntityRenderer(MOOBLOOM.get(), ctx -> new MooBloomRender(ctx));
 		ev.registerEntityRenderer(CRAZY_DAVE.get(), ctx -> new CrazyDaveRender(ctx));

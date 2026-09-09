@@ -51,15 +51,15 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
 			}
 		}
         Player player = EntityUtil.getEntityOwner(level, this);
-		if(player != null && player instanceof ServerPlayer) {
+		if(player instanceof ServerPlayer) {
 			EntityEffectAmountTrigger.INSTANCE.trigger((ServerPlayer) player, this, cnt);
 		}
 	}
 	
 	private void dealDamageTo(Entity target) {
 		PVZEntityDamageSource source = PVZEntityDamageSource.causeIceDamage(this, this);
-		this.getColdEffect().ifPresent(e -> source.addEffect(e));
-		this.getFrozenEffect().ifPresent(e -> source.addEffect(e));
+		this.getColdEffect().ifPresent(source::addEffect);
+		this.getFrozenEffect().ifPresent(source::addEffect);
 		target.hurt(source, 0.001F);
 	}
 	
@@ -70,7 +70,7 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
     
     @Override
 	public Optional<MobEffectInstance> getFrozenEffect() {
-    	return Optional.ofNullable(new MobEffectInstance(EffectRegister.FROZEN_EFFECT.get(), FROZEN_TICK, 1, false, false));
+    	return Optional.of(new MobEffectInstance(EffectRegister.FROZEN_EFFECT.get(), FROZEN_TICK, 1, false, false));
 	}
     
     public int getColdLevel() {

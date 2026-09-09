@@ -7,10 +7,11 @@ import com.hungteen.pvz.common.entity.ai.goal.target.PVZNearestTargetGoal;
 import com.hungteen.pvz.common.entity.misc.DestroyCarEntity;
 import com.hungteen.pvz.common.entity.misc.ElementBallEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.*;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.network.PVZPacketHandler;
+import com.hungteen.pvz.common.network.toclient.SpawnBodyPartPacket;
 import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.others.WeightList;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -199,20 +200,10 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
 
     @Override
     protected void onFallBody(DamageSource source) {
-        Arrays.asList(BodyType.HEAD, BodyType.BODY, BodyType.LEFT_HAND,
-                        BodyType.RIGHT_HAND, BodyType.LEFT_LEG, BodyType.RIGHT_LEG)
-                .forEach(type -> {
-                    ZombieDropBodyEntity body = EntityRegister.ZOMBIE_DROP_BODY.get().create(level);
-                    body.updateInfo(this, type);
-                    body.setMaxLiveTick(60);
-                    this.setBodyStates(body);
-                    final float dx = MathUtil.getRandomFloat(getRandom());
-                    final float dy = this.getRandom().nextFloat();
-                    final float dz = MathUtil.getRandomFloat(getRandom());
-                    body.setDeltaMovement(dx, dy, dz);
-                    body.setPos(position().x, position().y + this.getBbHeight() / 2, position().z);
-                    level.addFreshEntity(body);
-                });
+        Arrays.asList(BodyType.HEAD, BodyType.BODY, BodyType.LEFT_HAND, BodyType.RIGHT_HAND,
+                        BodyType.LEFT_LEG, BodyType.RIGHT_LEG)
+                .forEach(type -> PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
+                        new SpawnBodyPartPacket(type.ordinal(), this.getId(), type == BodyType.HEAD ? source.getSourcePosition() : null)));
     }
 
     /**

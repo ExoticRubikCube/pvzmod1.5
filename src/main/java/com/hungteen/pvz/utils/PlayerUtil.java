@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,8 +62,7 @@ public class PlayerUtil {
 		return (int) round(80+400*log10(lvl)+lvl*30);
 	}
 
-	@Nullable
-	public static Optional<PlayerDataManager> getOptManager(Player player) {
+	public static @NotNull Optional<PlayerDataManager> getOptManager(Player player) {
 		return Optional.ofNullable(getManager(player));
 	}
 
@@ -70,7 +70,7 @@ public class PlayerUtil {
 	public static PlayerDataManager getManager(Player player) {
 		if(isValidPlayer(player)) {
 			final IPlayerDataCapability cap = player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).orElse(null);
-		    return cap != null ? cap.getPlayerData() : null;
+		    return cap.getPlayerData();
 		}
 		return null;
 	}

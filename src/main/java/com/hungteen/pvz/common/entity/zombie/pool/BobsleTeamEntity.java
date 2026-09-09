@@ -3,7 +3,6 @@ package com.hungteen.pvz.common.entity.zombie.pool;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.PVZMultiPartEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.entity.zombie.part.PVZZombiePartEntity;
 import com.hungteen.pvz.common.impl.zombie.PoolZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
@@ -123,12 +122,6 @@ this.remove(RemovalReason.KILLED);
 				EntityUtil.onEntityRandomPosSpawn(level, zombie, this.blockPosition(), 2);
 			}
 		}
-	}
-	
-	@Override
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		super.setBodyStates(body);
-		body.setFriction(0.95F);
 	}
 	
 	@Override

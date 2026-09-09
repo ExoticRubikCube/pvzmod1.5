@@ -245,8 +245,10 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 			if (this.getGoldTime() >= GoldLeafEntity.GOLD_GEN_CD) {
 				this.setGoldTime(0);
 				SunEntity sun = EntityRegister.SUN.get().create(level);
-				sun.setAmount(GoldLeafEntity.getGoldGenAmount(lvl));
-				EntityUtil.onEntityRandomPosSpawn(level, sun, blockPosition(), 2);
+                if (sun != null) {
+                    sun.setAmount(GoldLeafEntity.getGoldGenAmount(lvl));
+                }
+                EntityUtil.onEntityRandomPosSpawn(level, sun, blockPosition(), 2);
 				EntityUtil.playSound(this, SoundEvents.EXPERIENCE_ORB_PICKUP);
 			}
 		}
@@ -376,8 +378,6 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 					d1 = d1 * d3;
 					d0 = d0 * 0.05000000074505806D;
 					d1 = d1 * 0.05000000074505806D;
-					d0 = d0;
-					d1 = d1;
 					if (!entityIn.isVehicle()) {
 						entityIn.push(d0, 0.0D, d1);
 					}
@@ -400,21 +400,20 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 			int i = this.level.getGameRules().getInt(GameRules.RULE_MAX_ENTITY_CRAMMING);
 			if (i > 0 && list.size() > i - 1 && this.random.nextInt(4) == 0) {
 				int j = 0;
-				for (int k = 0; k < list.size(); ++k) {
-					if (!list.get(k).isPassenger()) {
-						++j;
-					}
-				}
+                for (LivingEntity living : list) {
+                    if (!living.isPassenger()) {
+                        ++j;
+                    }
+                }
 				if (j > i - 1) {
 					this.hurt(DamageSource.CRAMMING, 6.0F);
 				}
 			}
-			for (int l = 0; l < list.size(); ++l) {
-				LivingEntity target = list.get(l);
-				if (! this.is(target) && shouldCollideWithEntity(target)) {// can collide with
-					this.doPush(target);
-				}
-			}
+            for (LivingEntity target : list) {
+                if (!this.is(target) && shouldCollideWithEntity(target)) {// can collide with
+                    this.doPush(target);
+                }
+            }
 		}
 	}
 

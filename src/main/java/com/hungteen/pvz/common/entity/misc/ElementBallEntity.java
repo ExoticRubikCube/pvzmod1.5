@@ -68,8 +68,8 @@ public class ElementBallEntity extends AbstractOwnerEntity {
 					PlayerUtil.setItemStackCD(player, new ItemStack(item), 160);
 			    }
 		    });
-		} 
-this.discard();
+		}
+		this.discard();
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ this.discard();
 		this.tickCollision();
 		if(! level.isClientSide()) {
 			if(this.tickCount >= PVZConfig.COMMON_CONFIG.EntitySettings.EntityLiveTick.ElementBallLiveTick.get()) {
-this.discard();
+				this.discard();
 				return ;
 			}
 			if(this.isAutoBall){
@@ -93,7 +93,7 @@ this.discard();
 			if(this.getOwner() == null){
 				++ this.removeTick;
 				if(this.removeTick >= 15){
-this.discard();
+					this.discard();
 				}
 			} else{
 				this.removeTick = 0;

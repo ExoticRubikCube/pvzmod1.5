@@ -23,11 +23,12 @@ import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
 import com.hungteen.pvz.common.entity.plant.spear.SpikeWeedEntity;
-import com.hungteen.pvz.common.entity.zombie.body.ZombieDropBodyEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.network.PVZPacketHandler;
+import com.hungteen.pvz.common.network.toclient.SpawnBodyPartPacket;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.ConfigUtil;
@@ -87,9 +88,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	protected boolean canLostHead = true;
 	protected int climbUpTick = 0;
 	protected int maxClimbUpTick = 5;
-	/** 1.19 兼容性：Entity 中 pushthrough 字段已移除，保留兼容字段供旧碰撞逻辑使用 */
-	@SuppressWarnings("deprecation")
-	protected float pushthrough = 0.5F;
 
 	public PVZZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
@@ -110,21 +108,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 		entityData.define(ATTACK_TIME, 0);
 		entityData.define(ANIM_TIME, 0);
 	}
-	
-	/**
-	 * create zombie attributes.
-	 * {@link EntityRegister#addEntityAttributes(net.minecraftforge.event.entity.EntityAttributeCreationEvent)}
-	 */
-	public static AttributeSupplier createZombieAttributes() {
-		return AbstractPAZEntity.createPAZAttributes()
-				.add(Attributes.ATTACK_DAMAGE, ZombieUtil.VERY_LOW)
-	    	    .add(Attributes.MAX_HEALTH, 20)
-	     	    .add(Attributes.FOLLOW_RANGE, ZombieUtil.CLOSE_TARGET_RANGE)
-	    		.add(Attributes.KNOCKBACK_RESISTANCE, 0.9)
-	    		.add(Attributes.MOVEMENT_SPEED, ZombieUtil.WALK_NORMAL)
-	    		.add(Attributes.FLYING_SPEED, 0)
-	    		.build();
-	}
+
 
 	@Override
 	protected void registerGoals() {
@@ -268,9 +252,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 */
 	private void onLostHand(DamageSource source) {
 		this.lostHand(true);
-		ZombieDropBodyEntity body = EntityRegister.ZOMBIE_DROP_BODY.get().create(level);
-		body.droppedByOwner(this, source, BodyType.HAND);
-		level.addFreshEntity(body);
+				PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
+								new SpawnBodyPartPacket(BodyType.HAND.ordinal(), this.getId(), null));
 	}
 	
 	/**
@@ -278,29 +261,23 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 */
 	private void onLostHead(DamageSource source) {
 		this.lostHead(true);
-		ZombieDropBodyEntity body = EntityRegister.ZOMBIE_DROP_BODY.get().create(level);
-		body.droppedByOwner(this, source, BodyType.HEAD);
-		level.addFreshEntity(body);
+		PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
+				new SpawnBodyPartPacket(BodyType.HEAD.ordinal(), this.getId(), source.getSourcePosition()));
 	}
 	
 	/**
 	 * trigger at {@link #die(DamageSource)}
 	 */
 	protected void onFallBody(DamageSource source) {
-		ZombieDropBodyEntity body = EntityRegister.ZOMBIE_DROP_BODY.get().create(level);
-		body.droppedByOwner(this, source, BodyType.BODY);
-		body.setMaxLiveTick(40);
-		this.setBodyStates(body);
-		level.addFreshEntity(body);
+		PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
+				new SpawnBodyPartPacket(BodyType.BODY.ordinal(), this.getId(), null));
 	}
 	
 	/**
-	 * set states to body.
-	 * such as has paper or not.
-	 * {@link #onFallBody(DamageSource)}
+	 * 尸体掉落粒子是否携带防御部件(梯/门/杆/报纸/盒/侏儒)，由子类判定，原setBodyStates迁移。
 	 */
-	protected void setBodyStates(ZombieDropBodyEntity body) {
-		body.setMini(this.isMiniZombie());
+	public boolean shouldShowBodyDropDefence() {
+		return false;
 	}
 	
 	/**
@@ -923,7 +900,23 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 			this.setAnimTime(compound.getInt("zombie_anim_time"));
 		}
 	}
-	
+
+
+	/**
+	 * create zombie attributes.
+	 * {@link EntityRegister#addEntityAttributes(net.minecraftforge.event.entity.EntityAttributeCreationEvent)}
+	 */
+	public static AttributeSupplier createZombieAttributes() {
+		return AbstractPAZEntity.createPAZAttributes()
+				.add(Attributes.ATTACK_DAMAGE, ZombieUtil.VERY_LOW)
+				.add(Attributes.MAX_HEALTH, 20)
+				.add(Attributes.FOLLOW_RANGE, ZombieUtil.CLOSE_TARGET_RANGE)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
+				.add(Attributes.MOVEMENT_SPEED, ZombieUtil.WALK_NORMAL)
+				.add(Attributes.FLYING_SPEED, 0)
+				.build();
+	}
+
 	/* getter setter */
 	
 	public int getAttackTime() {
@@ -986,7 +979,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
     private void setStateByFlag(boolean is, int flag) {
 		this.setPAZState(AlgorithmUtil.BitOperator.setBit(this.getPAZState(), flag, is));
 	}
-    
+
 	/**
 	 * Zombie Variant Types.
 	 */
