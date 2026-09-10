@@ -937,7 +937,8 @@
     "config.pvz.rule.plant_count" :"Plant Limit Base Count",
     "config.pvz.rule.keep_sun" :"Keep Sun When Die",
     "config.pvz.rule.max_damage": "Max damage to other entity",
-    
+    "config.pvz.rule.sun_mending": "Sun Mending Trigger Sun",
+
     "config.pvz.world.zen_garden_chance":"Weight of Zen Garden",
     
     "config.pvz.world.dave_villa_distance":"Distance Between Dave Villa",

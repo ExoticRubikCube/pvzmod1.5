@@ -563,7 +563,7 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 		if(this.getPlantType().isShroomPlant()) {
 			return this.isPlantSleeping() && type == PVZPlants.COFFEE_BEAN;
 		}
-		return type != this.getPlantType();
+		return type != this.getPlantType() && type != PVZPlants.COFFEE_BEAN;
 	}
 
 	/* misc get */

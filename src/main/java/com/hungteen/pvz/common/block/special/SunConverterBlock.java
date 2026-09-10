@@ -1,7 +1,7 @@
 package com.hungteen.pvz.common.block.special;
 
 import com.hungteen.pvz.common.blockentity.SunConverterTileEntity;
-import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
+import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -77,7 +78,7 @@ public class SunConverterBlock extends Block implements EntityBlock {
 	 * check can place in slots or not.
 	 */
 	public static boolean isValidItem(ItemStack stack) {
-		return SunStorageSaplingItem.isNotOnceSapling(stack) || SunMendingEnchantment.getLevel(stack) > 0;
+		return SunStorageSaplingItem.isNotOnceSapling(stack) || EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.SUN_MENDING.get(), stack) > 0;
 	}
 	
 	@Override

@@ -16,6 +16,7 @@ import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -39,19 +40,15 @@ public class PlayerUtil {
 	private static int CACHE_MAX_SUN = 0;
 	
 	/**
-	 * a1 = 1000, d = 500, inc = 20. <br> 
-	 * an = n * a1 + (n - 1) * n / 2.<br>
+	 * 1级200阳光，随等级线性增长，100级达到上限1000。<br>
 	 * {@link PlayerDataManager#addResource(Resources, int)}
 	 */
 	public static int getPlayerMaxSunNum(int lvl) {
 		if(lvl == OLD_PLAYER_LEVEL) {
 			return CACHE_MAX_SUN;
 		} else {
-			final int len = 20;
-		    final int n = lvl / len;
-		    final int sum = 1000 * n + n * (n - 1) / 2 * 500 + (lvl - len * n) * (50 + n * 25);
-		    OLD_PLAYER_LEVEL = lvl;
-		    return (CACHE_MAX_SUN = ConfigUtil.getBaseSun() + sum);
+			OLD_PLAYER_LEVEL = lvl;
+			return (CACHE_MAX_SUN = Mth.clamp(200 + (lvl - 1) * 800 / 99, 200, 1000));
 		}
 	}
 	

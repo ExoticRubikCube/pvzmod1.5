@@ -272,7 +272,7 @@ public class PVZConfig {
                     EntitySettings.PlantSetting.PlantMinimumLiveTick = builder
                             .translation("config.pvz.plant.plant_minimum_live_tick")
                             .comment("plants won't despawn before living for this long.")
-                            .defineInRange("PlantMinimumLiveTick", 216000, 0, 10000000);
+                            .defineInRange("PlantMinimumLiveTick", 54000, 0, 10000000);
 
                 }
                 builder.pop();
@@ -282,7 +282,7 @@ public class PVZConfig {
                     EntitySettings.EntityLiveTick.SunLiveTick = builder
                             .translation("config.pvz.entity.sun_live_tick")
                             .comment("how many ticks can the sun entity live.")
-                            .defineInRange("SunLiveTick", 500, 1, 1200);
+                            .defineInRange("SunLiveTick", 600, 1, 1200);
 
                     EntitySettings.EntityLiveTick.CoinLiveTick = builder
                             .translation("config.pvz.entity.coin_live_tick")
@@ -398,6 +398,7 @@ public class PVZConfig {
             public ForgeConfigSpec.BooleanValue NeedUnlockToPlant;
             public ForgeConfigSpec.BooleanValue KeepSunWhenDie;
             public ForgeConfigSpec.IntValue MaxDamageLimit;
+            public ForgeConfigSpec.IntValue SunMendingLimit;
         }
 
         public static class WorldSettings {

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SunShroomEntity extends PlantProducerEntity {
 	
-	public static final int GROW_CD = 24000;
+	public static final int GROW_CD = 2400;
 	public static final int GROW_ANIM_CD = 10;
 	
 	public SunShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
@@ -75,16 +75,15 @@ public class SunShroomEntity extends PlantProducerEntity {
 	 * get current sun gen num;
 	 */
 	protected int getCurrentSunAmount() {
-		return this.isInGrowStage(3) ? this.getSunAmountInStage(3):
-				this.isInGrowStage(2) ? this.getSunAmountInStage(2) :
-						this.getSunAmountInStage(1);
+		return this.isInGrowStage(2) ? this.getSunAmountInStage(2) :
+				this.getSunAmountInStage(1);
 	}
-	
+
 	/**
 	 * get sun amount when grow up.
 	 */
 	public int getSunAmountInStage(int stage){
-		return stage == 3 ? 35 : stage == 2 ? 25 : 15;
+		return stage == 2 ? 25 : 15;
 	}
 	
 	/**
@@ -96,13 +95,12 @@ public class SunShroomEntity extends PlantProducerEntity {
 
 	@Override
 	public int getGenCD() {
-		return 600;
+		return 480;
 	}
 	
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
-		return this.isInGrowStage(3) ? EntityDimensions.scalable(0.8f, 1.2f): 
-			   this.isInGrowStage(2) ? EntityDimensions.scalable(0.6f, 1f) :
+		return this.isInGrowStage(2) ? EntityDimensions.scalable(0.8f, 1.2f):
 			   EntityDimensions.scalable(0.4f, 0.4f);
 	}
 	

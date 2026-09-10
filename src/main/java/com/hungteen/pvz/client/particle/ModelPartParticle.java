@@ -215,29 +215,31 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
             this.renderBodyDrop(camera, partialTick);
             return;
         }
-        PoseStack poseStack = new PoseStack();
-        MultiBufferSource.BufferSource bufferSource = ClientProxy.MC.renderBuffers().bufferSource();
-        BlockPos blockpos = new BlockPos(x, y, z);
-        Vec3 camPos = camera.getPosition();
-        int light = LightTexture.pack(this.level.getBrightness(LightLayer.BLOCK, blockpos), this.level.getBrightness(LightLayer.SKY, blockpos));
-        poseStack.pushPose();
-        poseStack.translate(
-                x * partialTick + xo * (1 - partialTick) - camPos.x(),
-                y * partialTick + yo * (1 - partialTick) - camPos.y(),
-                z * partialTick + zo * (1 - partialTick) - camPos.z());
-        poseStack.scale((float) (-1 * this.originalScale.x), (float) (-1 * this.originalScale.y), (float) (1 * this.originalScale.z));
-        if (disappearSize < 1) {
-            poseStack.scale(disappearSize, disappearSize, disappearSize);
+        if (this.model != null) {
+            PoseStack poseStack = new PoseStack();
+            MultiBufferSource.BufferSource bufferSource = ClientProxy.MC.renderBuffers().bufferSource();
+            BlockPos blockpos = new BlockPos(x, y, z);
+            Vec3 camPos = camera.getPosition();
+            int light = LightTexture.pack(this.level.getBrightness(LightLayer.BLOCK, blockpos), this.level.getBrightness(LightLayer.SKY, blockpos));
+            poseStack.pushPose();
+            poseStack.translate(
+                    x * partialTick + xo * (1 - partialTick) - camPos.x(),
+                    y * partialTick + yo * (1 - partialTick) - camPos.y(),
+                    z * partialTick + zo * (1 - partialTick) - camPos.z());
+            poseStack.scale((float) (-1 * this.originalScale.x), (float) (-1 * this.originalScale.y), (float) (1 * this.originalScale.z));
+            if (disappearSize < 1) {
+                poseStack.scale(disappearSize, disappearSize, disappearSize);
+            }
+            Vec3 rotation = this.rotation.add(aRotation.multiply(partialTick, partialTick, partialTick));
+            VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(texture));
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees((float) rotation.z));
+            poseStack.mulPose(Vector3f.YP.rotationDegrees((float) rotation.y));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees((float) rotation.x));
+            poseStack.translate(offset.x, offset.y, offset.z);
+            model.render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
+            poseStack.popPose();
+            bufferSource.endBatch();
         }
-        Vec3 rotation = this.rotation.add(aRotation.multiply(partialTick, partialTick, partialTick));
-        VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(texture));
-        poseStack.mulPose(Vector3f.ZP.rotationDegrees((float) rotation.z));
-        poseStack.mulPose(Vector3f.YP.rotationDegrees((float) rotation.y));
-        poseStack.mulPose(Vector3f.XP.rotationDegrees((float) rotation.x));
-        poseStack.translate(offset.x, offset.y, offset.z);
-        model.render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
-        bufferSource.endBatch();
     }
 
     /**

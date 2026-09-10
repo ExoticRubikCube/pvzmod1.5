@@ -25,9 +25,6 @@ public class SunShroomRender extends PVZPlantRender<SunShroomEntity>{
 		if(tick <= 20) {
 			return smallSize;
 		}
-		if(entity.isInGrowStage(3)) {
-			
-		}
 		if(entity.isInGrowStage(2)) {
 			return bigSize;
 		}

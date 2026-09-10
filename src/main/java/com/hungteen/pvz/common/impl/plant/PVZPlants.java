@@ -67,7 +67,7 @@ public final class PVZPlants extends PlantType {
 	
 	public static final IPlantType SUN_FLOWER = new PVZPlants("sun_flower", new PlantFeatures()
 			.cost(50).requiredLevel(1)
-			.cd(CoolDowns.NORMAL).rank(RankTypes.WHITE).essence(EssenceTypes.LIGHT)
+			.cd(CoolDowns.HUGE_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.SUN_FLOWER.get())
 			.summonCard(() -> ItemRegister.SUN_FLOWER_CARD.get())
 			.enjoyCard(() -> ItemRegister.SUN_FLOWER_ENJOY_CARD.get())
@@ -154,7 +154,7 @@ public final class PVZPlants extends PlantType {
 	
 	public static final IPlantType SUN_SHROOM = new PVZPlants("sun_shroom", new PlantFeatures().isShroomPlant()
 			.cost(25).requiredLevel(21)
-			.cd(CoolDowns.FAST).rank(RankTypes.GOLD).essence(EssenceTypes.LIGHT)
+			.cd(CoolDowns.HUGE_FAST).rank(RankTypes.GOLD).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.SUN_SHROOM.get())
 			.summonCard(() -> ItemRegister.SUN_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.SUN_SHROOM_ENJOY_CARD.get())
@@ -437,7 +437,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.COFFEE_BEAN.get())
 			.summonCard(() -> ItemRegister.COFFEE_BEAN_CARD.get())
 			.enjoyCard(() -> ItemRegister.COFFEE_BEAN_ENJOY_CARD.get())
-			.canNotBeHold()
+			.placement(Placements.NONE)
 			.plantModel(() -> () -> new CoffeeBeanModel(CoffeeBeanModel.createBodyLayer().bakeRoot())).scale(1F)
 			.cdSkill(List.of())
 	);
@@ -499,7 +499,7 @@ public final class PVZPlants extends PlantType {
 	
 	public static final IPlantType TWIN_SUNFLOWER = new PVZPlants("twin_sunflower", new PlantFeatures()
 			.cost(200).requiredLevel(25)
-			.cd(CoolDowns.VERY_SLOW).rank(RankTypes.BLUE).essence(EssenceTypes.LIGHT)
+			.cd(CoolDowns.NORMAL).rank(RankTypes.BLUE).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.TWIN_SUNFLOWER.get())
 			.summonCard(() -> ItemRegister.TWIN_SUNFLOWER_CARD.get())
 			.enjoyCard(() -> ItemRegister.TWIN_SUNFLOWER_ENJOY_CARD.get())

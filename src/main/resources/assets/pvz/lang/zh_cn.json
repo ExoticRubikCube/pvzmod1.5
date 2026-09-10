@@ -948,6 +948,7 @@
   "config.pvz.rule.unlock_plant": "种植植物需要解锁",
   "config.pvz.rule.keep_sun": "死亡不掉落阳光",
   "config.pvz.rule.max_damage": "植物和僵尸对其他生物的最大伤害",
+  "config.pvz.rule.sun_mending": "阳光修补触发阳光量",
 
   "config.pvz.world.zen_garden_chance": "禅境花园权重",
 

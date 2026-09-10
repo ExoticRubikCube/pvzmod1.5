@@ -1,7 +1,9 @@
 package com.hungteen.pvz.common.entity.misc.drop;
 
 import com.hungteen.pvz.PVZConfig;
+import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
+import com.hungteen.pvz.common.event.events.PlayerCollectDropEvent;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
@@ -12,12 +14,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: pvzmod-1.18.x
@@ -27,7 +33,6 @@ import java.util.List;
 public class SunEntity extends DropEntity {
 
 	private static final float SUN_FALL_SPEED = 0.03F;
-	public LivingEntity controller = null;
 	public Vec3 ColorBase = new Vec3(255,230,15);
 	public Vec3 ColorChange = new Vec3(0,25,15);
 	private Entity following;
@@ -43,13 +48,7 @@ public class SunEntity extends DropEntity {
 		super.tick();
 
 		if(! this.onGround && ! this.isInWater()) {
-			double speedY = this.getDeltaMovement().y;
-			if(speedY > - SUN_FALL_SPEED){
-				speedY -= SUN_FALL_SPEED / 2;
-			} else{
-				speedY = -SUN_FALL_SPEED;
-			}
-			this.setDeltaMovement(this.getDeltaMovement().x * 0.94, speedY, this.getDeltaMovement().z * 0.94);
+			this.setDeltaMovement(this.getDeltaMovement().x, - SUN_FALL_SPEED, this.getDeltaMovement().z);
 		} else{
 			this.setDeltaMovement(Vec3.ZERO);
 		}
@@ -71,7 +70,7 @@ public class SunEntity extends DropEntity {
 			if (following instanceof SunEntity){
 				if (this.distanceTo(following) < 0.5F){
 					((SunEntity) following).setAmount(((SunEntity) following).getAmount()+this.getAmount());
-this.discard();
+					this.discard();
 				}
 			}
 			Vec3 vec3 = new Vec3(this.following.getX() - this.getX(), this.following.getY() + (double)this.following.getEyeHeight() / 2.0D - this.getY(), this.following.getZ() - this.getZ());
@@ -81,15 +80,6 @@ this.discard();
 				this.setDeltaMovement(this.getDeltaMovement().add(vec3.normalize().scale(d1 * d1 * (following instanceof SunEntity ? 0.1D: 0.3D))));
 			}
 		}
-
-		if (this.controller != null && (this.controller.isSpectator() || (!this.controller.isAlive()))) {
-			this.controller = null;
-		}
-
-		if (this.controller == null){
-			ColorBase = new Vec3(255,230,15);
-			ColorChange = new Vec3(0,25,15);
-		}
 	}
 
 	public int getIcon() {
@@ -98,16 +88,41 @@ this.discard();
 	}
 
 	protected int getDefaultAmount() {
-		return 50;
+		return 25;
 	}
 
 	@Override
 	public void onCollectedByPlayer(Player living) {
-		if(! level.isClientSide()) {
-			PlayerUtil.addResource(living, Resources.SUN_NUM, this.getAmount());
-			PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
+		if(! level.isClientSide() && ! MinecraftForge.EVENT_BUS.post(new PlayerCollectDropEvent.PlayerCollectSunEvent(living, this))) {
+			final int currentSun = PlayerUtil.getResource(living, Resources.SUN_NUM);
+			final int maxSun = PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(living, Resources.TREE_LVL));
+			//sun mending enchantment.
+			if(currentSun >= maxSun) {
+				final Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), living, ItemStack::isDamaged);
+				if(entry != null) {
+					entry.getValue().setDamageValue(Math.max(0, entry.getValue().getDamageValue() - this.getAmount() / 50));
+					PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
+					this.setAmount(0);
+				}
+			}
+			//player absorb.
+			final int absorbed = living.isCreative() ? this.getAmount() : Math.min(this.getAmount(), maxSun - currentSun);
+			if(absorbed > 0) {
+				PlayerUtil.addResource(living, Resources.SUN_NUM, absorbed);
+				PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
+				this.setAmount(this.getAmount() - absorbed);
+			}
 		}
-this.discard();
+	}
+
+	@Override
+	public void onCollect(LivingEntity living) {
+		if(living instanceof Player) {
+			this.onCollectedByPlayer((Player) living);
+		}
+		if(this.getAmount() <= 0) {
+			this.discard();
+		}
 	}
 
 	@Override
@@ -159,6 +174,5 @@ this.discard();
 	public int getMaxLiveTick() {
 		return PVZConfig.COMMON_CONFIG.EntitySettings.EntityLiveTick.SunLiveTick.get();
 	}
-
 
 }

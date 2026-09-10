@@ -24,7 +24,7 @@ public class MooBloomRender extends PVZCreatureRender<MooBloom>{
 	
 	@Override
 	public ResourceLocation getTextureLocation(MooBloom entity) {
-		return StringUtil.prefix("textures/entity/moo_bloom/moo_bloom.png");
+		return StringUtil.prefix("textures/entity/creature/moo_bloom.png");
 	}
 
 }

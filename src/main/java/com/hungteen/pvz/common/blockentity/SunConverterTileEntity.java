@@ -1,7 +1,6 @@
 package com.hungteen.pvz.common.blockentity;
 
 import com.hungteen.pvz.common.container.SunConverterContainer;
-import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
 import com.hungteen.pvz.common.entity.misc.drop.DropEntity.DropStates;
 import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
@@ -110,7 +109,8 @@ public class SunConverterTileEntity extends BlockEntity implements MenuProvider 
 			    }
 			    SunStorageSaplingItem.setStorageSunAmount(stack, now);
 			} else {
-				SunMendingEnchantment.repairItem(stack, amount);
+				//sun mending enchantment.
+				stack.setDamageValue(Math.max(0, stack.getDamageValue() - amount / 50));
 				amount = 0;
 			}
 		}

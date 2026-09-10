@@ -56,8 +56,13 @@ public class SunFlowerEntity extends PlantProducerEntity{
 	
 	@Override
 	public int getGenCD() {
-		final int time = 250;
-		return this.level.isDay() ?(this.level.isRaining() ? 2 * time : time) : 3 * time;
+		int time = 480;
+		if(! this.level.isDay()) {
+			time = time * 3 / 2;
+		} else if(this.level.isRaining()) {
+			time = time * 5 / 4;
+		}
+		return time;
 	}
 	
 	@Override
