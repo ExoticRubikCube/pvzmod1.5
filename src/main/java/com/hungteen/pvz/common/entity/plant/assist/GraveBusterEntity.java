@@ -48,7 +48,7 @@ public class GraveBusterEntity extends PVZPlantEntity{
 			    this.setExistTick(0);
 			}
 			if(this.getExistTick() > MAX_LIVE_TICK) {
-this.discard();
+				this.discard();
 			}
 		}
 	}
@@ -63,10 +63,12 @@ this.discard();
 				continue;
 			}
 			GraveBusterEntity buster = EntityRegister.GRAVE_BUSTER.get().create(level);
-			PlantUtil.copyPlantData(buster, this);
-			EntityUtil.onEntitySpawn(level, buster, target.blockPosition());
-			buster.startRiding(target);
-			buster.setTarget(target);
+            if (buster != null) {
+				PlantUtil.copyPlantData(buster, this);
+				EntityUtil.onEntitySpawn(level, buster, target.blockPosition());
+				buster.startRiding(target);
+				buster.setTarget(target);
+			}
 			if (-- cnt == 0) {
 				break;
 			}

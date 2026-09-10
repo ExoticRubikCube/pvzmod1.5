@@ -208,7 +208,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
     public void onCharmedBy(@Nullable LivingEntity entity) {
         if(this.canBeCharmed()){
             final Player player = EntityUtil.getEntityOwner(level, entity);
-            if (player != null && player instanceof ServerPlayer) {
+            if (player instanceof ServerPlayer) {
                 CharmZombieTrigger.INSTANCE.trigger((ServerPlayer) player, this);
             }
         }
@@ -232,7 +232,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
                     amount = 0;
                     pazEntity.onOuterDefenceHurt();
                 } else{
-                    amount -= life;
+                    amount -= (float) life;
                     pazEntity.setOuterDefenceLife(0);
                     pazEntity.onOuterDefenceBroken();
                 }
@@ -254,7 +254,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
                     amount = 0;
                     pazEntity.onInnerDefenceHurt();
                 } else{
-                    amount -= life;
+                    amount -= (float) life;
                     pazEntity.setInnerDefenceLife(0);
                     pazEntity.onInnerDefenceBroken();
                 }
@@ -355,7 +355,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
                         this.getRandomZ(1.0D), d0, d1, d2);
             }
             this.onRemoveWhenDeath();
-this.remove(RemovalReason.KILLED);
+            this.remove(RemovalReason.KILLED);
         }
     }
 
@@ -383,7 +383,7 @@ this.remove(RemovalReason.KILLED);
         this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(this.getArmorToughness());
         this.getAttribute(PVZAttributes.INNER_DEFENCE_HP.get()).setBaseValue(this.getInnerLife());
         this.getAttribute(PVZAttributes.OUTER_DEFENCE_HP.get()).setBaseValue(this.getOuterLife());
-        this.heal(this.getMaxHealth());
+        this.setHealth(this.getMaxHealth());
     }
 
     /**

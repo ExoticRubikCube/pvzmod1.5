@@ -14,7 +14,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 
-public class GloomShroomEntity extends PlantShooterEntity {
+public class  GloomShroomEntity extends PlantShooterEntity {
 
 	private static final float SHOOT_HEIGHT = 0.2F;
 	private static final int SHOOT_NUM = 8;

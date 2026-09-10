@@ -1,7 +1,6 @@
 package com.hungteen.pvz.api.types;
 
 import com.hungteen.pvz.api.paz.IPlantEntity;
-import com.hungteen.pvz.api.paz.IPlantInfo;
 import com.hungteen.pvz.api.paz.IPlantModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,6 +46,11 @@ public interface IPlantType extends IPAZType {
     boolean isShroomPlant();
 
     /**
+     * whether this plant type is willing to be carried as a riding passenger by a container plant.
+     */
+    boolean canBeHold();
+
+    /**
      * the block type : it's not an entity, but a block. <br>
      * get corresponding block, such as Lily Pad.
      */
@@ -57,16 +61,5 @@ public interface IPlantType extends IPAZType {
      * such as Tangle Kelp.
      */
     boolean isWaterPlant();
-
-    /**
-     * the outer type : it's not an entity, but a render layer. <br>
-     * such as Pumpkin.
-     */
-    boolean isOuterPlant();
-
-    /**
-     * get corresponding outer plant info.
-     */
-    Optional<IPlantInfo> getOuterPlant();
 
 }

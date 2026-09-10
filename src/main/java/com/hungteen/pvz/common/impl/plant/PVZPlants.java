@@ -9,6 +9,7 @@ import com.hungteen.pvz.client.model.entity.plant.arma.KernelPultModel;
 import com.hungteen.pvz.client.model.entity.plant.arma.MelonPultModel;
 import com.hungteen.pvz.client.model.entity.plant.assist.*;
 import com.hungteen.pvz.client.model.entity.plant.defence.GarlicModel;
+import com.hungteen.pvz.client.model.entity.plant.defence.PumpkinModel;
 import com.hungteen.pvz.client.model.entity.plant.defence.TallNutModel;
 import com.hungteen.pvz.client.model.entity.plant.defence.WallNutModel;
 import com.hungteen.pvz.client.model.entity.plant.enforce.ChomperModel;
@@ -37,9 +38,8 @@ import com.hungteen.pvz.client.model.entity.plant.spear.CatTailModel;
 import com.hungteen.pvz.client.model.entity.plant.spear.SpikeRockModel;
 import com.hungteen.pvz.client.model.entity.plant.spear.SpikeWeedModel;
 import com.hungteen.pvz.client.model.entity.plant.toxic.*;
-import com.hungteen.pvz.common.block.BlockRegister;
+
 import com.hungteen.pvz.common.entity.EntityRegister;
-import com.hungteen.pvz.common.entity.plant.defence.PumpkinEntity.PumpkinInfo;
 import com.hungteen.pvz.common.impl.*;
 import com.hungteen.pvz.common.item.ItemRegister;
 
@@ -229,10 +229,10 @@ public final class PVZPlants extends PlantType {
 	public static final IPlantType LILY_PAD = new PVZPlants("lily_pad", new PlantFeatures().isWaterPlant()
 			.cost(25).requiredLevel(11)
 			.cd(CoolDowns.SUPER_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.ASSIST)
-			.plantBlock(() -> BlockRegister.LILY_PAD.get())
 			.entityType(() -> EntityRegister.LILY_PAD.get())
 			.summonCard(() -> ItemRegister.LILY_PAD_CARD.get())
 			.enjoyCard(() -> ItemRegister.LILY_PAD_ENJOY_CARD.get())
+			.canNotBeHold()
 			.plantModel(() -> () -> new LilyPadModel(LilyPadModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeTo(() -> PVZPlants.CAT_TAIL)
 			.cdSkill(List.of())
@@ -377,12 +377,11 @@ public final class PVZPlants extends PlantType {
 	public static final IPlantType PUMPKIN = new PVZPlants("pumpkin", new PlantFeatures()
 			.cost(125).requiredLevel(40)
 			.cd(CoolDowns.SLOW).rank(RankTypes.GOLD).essence(EssenceTypes.DEFENCE)
-			.outerPlant(() -> new PumpkinInfo())
 			.entityType(() -> EntityRegister.PUMPKIN.get())
 			.summonCard(() -> ItemRegister.PUMPKIN_CARD.get())
 			.enjoyCard(() -> ItemRegister.PUMPKIN_ENJOY_CARD.get())
-			// (removed by GrassCarp when remodeling Pumpkin).plantModel(() -> PumpkinModel::new).scale(1F)
-			.cdSkill(List.of())
+			.plantModel(() -> () -> new PumpkinModel(PumpkinModel.createBodyLayer().bakeRoot())).scale(1.0F)
+			.cdSkill(List.of(SkillTypes.PUMPKIN_MORE_LIFE))
 	);
 	
 	public static final IPlantType MAGNET_SHROOM = new PVZPlants("magnet_shroom", new PlantFeatures().isShroomPlant()
@@ -412,10 +411,10 @@ public final class PVZPlants extends PlantType {
 	public static final IPlantType FLOWER_POT = new PVZPlants("flower_pot", new PlantFeatures()
 			.cost(25).requiredLevel(3)
 			.cd(CoolDowns.HUGE_FAST).rank(RankTypes.GREEN).essence(EssenceTypes.ASSIST)
-			.plantBlock(() -> BlockRegister.FLOWER_POT.get())
 			.entityType(() -> EntityRegister.FLOWER_POT.get())
 			.summonCard(() -> ItemRegister.FLOWER_POT_CARD.get())
 			.enjoyCard(() -> ItemRegister.FLOWER_POT_ENJOY_CARD.get())
+			.canNotBeHold()
 			.plantModel(() -> () -> new FlowerPotModel(FlowerPotModel.createBodyLayer().bakeRoot())).scale(0.85F)
 			.placement(Placements.ANY)
 			.cdSkill(List.of())
@@ -438,6 +437,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.COFFEE_BEAN.get())
 			.summonCard(() -> ItemRegister.COFFEE_BEAN_CARD.get())
 			.enjoyCard(() -> ItemRegister.COFFEE_BEAN_ENJOY_CARD.get())
+			.canNotBeHold()
 			.plantModel(() -> () -> new CoffeeBeanModel(CoffeeBeanModel.createBodyLayer().bakeRoot())).scale(1F)
 			.cdSkill(List.of())
 	);
@@ -503,7 +503,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TWIN_SUNFLOWER.get())
 			.summonCard(() -> ItemRegister.TWIN_SUNFLOWER_CARD.get())
 			.enjoyCard(() -> ItemRegister.TWIN_SUNFLOWER_ENJOY_CARD.get())
-			.plantModel(() -> () -> new TwinSunFlowerModel(TwinSunFlowerModel.createBodyLayer().bakeRoot())).scale(0.45F)
+			.plantModel(() -> () -> new TwinSunFlowerModel(TwinSunFlowerModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeFrom(() -> PVZPlants.SUN_FLOWER)
 			.commonSunSkill(List.of())
 	);
@@ -527,6 +527,7 @@ public final class PVZPlants extends PlantType {
 			.summonCard(() -> ItemRegister.CAT_TAIL_CARD.get())
 			.enjoyCard(() -> ItemRegister.CAT_TAIL_ENJOY_CARD.get())
 			.plantModel(() -> () -> new CatTailModel(CatTailModel.createBodyLayer().bakeRoot())).scale(1F)
+			.upgradeFrom(() -> PVZPlants.LILY_PAD)
 			.commonSunSkill(List.of(SkillTypes.MORE_THORN_DAMAGE))
 	);
 	

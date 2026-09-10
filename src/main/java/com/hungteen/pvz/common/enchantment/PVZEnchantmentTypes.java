@@ -19,7 +19,7 @@ public class PVZEnchantmentTypes {
 
     public static final EnchantmentCategory ENTITY_CARD = EnchantmentCategory.create("entity_card", (item) -> {
         if(item instanceof PlantCardItem) {
-            return ! ((PlantCardItem) item).plantType.getPlantBlock().isPresent() && ! ((PlantCardItem) item).plantType.isOuterPlant();
+            return ! ((PlantCardItem) item).plantType.getPlantBlock().isPresent();
         }
         return false;
     });
@@ -32,10 +32,7 @@ public class PVZEnchantmentTypes {
     });
 
     public static final EnchantmentCategory NO_OUTER_PLANT_CARD = EnchantmentCategory.create("no_outer_plant_card", (item) -> {
-        if(item instanceof PlantCardItem) {
-            return ! ((PlantCardItem) item).plantType.isOuterPlant();
-        }
-        return false;
+        return item instanceof PlantCardItem;
     });
 
     public static final EnchantmentCategory PLANT_CARD = EnchantmentCategory.create("plant_card", (item) -> {

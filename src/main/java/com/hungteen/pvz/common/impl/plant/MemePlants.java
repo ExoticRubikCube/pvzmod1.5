@@ -49,4 +49,5 @@ public final class MemePlants extends PlantType {
 	public String getModID() {
 		return PVZMod.MOD_ID;
 	}
+
 }

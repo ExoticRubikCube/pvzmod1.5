@@ -1,56 +1,57 @@
 package com.hungteen.pvz.common.entity.plant.defence;
 
-import com.hungteen.pvz.api.paz.IPlantEntity;
 import com.hungteen.pvz.api.types.IPlantType;
-import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
-import com.hungteen.pvz.common.entity.plant.PlantInfo;
+import com.hungteen.pvz.common.entity.plant.base.PlantDefenderEntity;
+import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 
-public class PumpkinEntity extends PVZPlantEntity{
+public class PumpkinEntity extends PlantDefenderEntity{
 
 	public PumpkinEntity(EntityType<? extends PathfinderMob> p_i48575_1_, Level p_i48575_2_) {
 		super(p_i48575_1_, p_i48575_2_);
+		this.canCollideWithPlant = false;
+		this.isImmuneToWeak = true;
+	}
+
+	@Override
+	public boolean canAttract(LivingEntity entity) {
+		return this.getPassengers().isEmpty();
+	}
+
+	@Override
+	public float getLife() {
+		return this.getSkillValue(SkillTypes.PUMPKIN_MORE_LIFE);
+	}
+
+	@Override
+	public float getSuperLife() {
+		return 800;
+	}
+
+	@Override
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(1.0F, 0.5F);
+	}
+
+	@Override
+	public boolean canHoldPlant() {
+		return true;
+	}
+
+	@Override
+	public boolean canPlantOnMe(IPlantType type) {
+		return super.canPlantOnMe(type) && !type.isWaterPlant();
+	}
+
+	@Override
+	public double getPassengersRidingOffset() {
+		return 0.025D;
 	}
 	
 	@Override
 	public IPlantType getPlantType() {
 		return PVZPlants.PUMPKIN;
 	}
-
-	@Override
-	public int getSuperTimeLength() {
-		return 0;
-	}
-	
-	public static class PumpkinInfo extends PlantInfo{
-		
-		private static final float NORMAL_PUMPKIN_LIFE = 400;
-		private static final float SUPER_PUMPKIN_LIFE = 800;
-
-		@Override
-		public void onSuper(IPlantEntity plantEntity) {
-			super.onSuper(plantEntity);
-			plantEntity.setPumpkin(true);
-			plantEntity.setOuterDefenceLife(SUPER_PUMPKIN_LIFE);
-		}
-		
-		@Override
-		public void placeOn(IPlantEntity plantEntity, int sunCost) {
-			super.placeOn(plantEntity, sunCost);
-			plantEntity.setPumpkin(true);
-			plantEntity.setOuterDefenceLife(NORMAL_PUMPKIN_LIFE);
-		}
-
-		@Override
-		public void onHeal(IPlantEntity plantEntity, float percent) {
-			final float max = plantEntity.getOuterDefenceLife() > NORMAL_PUMPKIN_LIFE ? SUPER_PUMPKIN_LIFE : NORMAL_PUMPKIN_LIFE;
-			plantEntity.setOuterDefenceLife(Mth.clamp(plantEntity.getOuterDefenceLife() * (1 + percent), 0, max));
-		}
-	}
-	
-
 }

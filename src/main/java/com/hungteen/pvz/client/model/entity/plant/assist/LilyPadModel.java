@@ -6,53 +6,38 @@ import com.hungteen.pvz.common.entity.plant.assist.LilyPadEntity;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-// Made with Blockbench 3.9.2
-// Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
-// Paste this class into your mod and generate all required imports
+// Made with Blockbench 4.9.3
+// Exported for Minecraft version 1.17 or later with Mojang mappings
 public class LilyPadModel extends PVZPlantModel<LilyPadEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "lily_pad"), "main");
 	private final ModelPart total;
 
-
 	public LilyPadModel(ModelPart root) {
-		this.total = root.getChild("total");
+		this.total = root.getChild("bone");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
-	
-		PartDefinition total = partdefinition.addOrReplaceChild("total",
-			CubeListBuilder.create()
-				.texOffs(23, 46).addBox(6.0F, 7.0F, -16.0F, 4.0F, 1.0F, 16.0F)
-				.texOffs(31, 30).addBox(10.0F, 7.0F, -15.0F, 2.0F, 1.0F, 14.0F)
-				.texOffs(31, 14).addBox(4.0F, 7.0F, -15.0F, 2.0F, 1.0F, 14.0F)
-				.texOffs(37, 1).addBox(12.0F, 7.0F, -14.0F, 1.0F, 1.0F, 12.0F)
-				.texOffs(1, 1).addBox(0.0F, 7.0F, -10.0F, 1.0F, 1.0F, 4.0F)
-				.texOffs(13, 1).addBox(1.0F, 7.0F, -12.0F, 1.0F, 1.0F, 8.0F)
-				.texOffs(11, 11).addBox(2.0F, 7.0F, -13.0F, 1.0F, 1.0F, 10.0F)
-				.texOffs(2, 24).addBox(3.0F, 7.0F, -14.0F, 1.0F, 1.0F, 12.0F)
-				.texOffs(3, 38).addBox(13.0F, 7.0F, -13.0F, 1.0F, 1.0F, 10.0F)
-				.texOffs(2, 50).addBox(14.0F, 7.0F, -12.0F, 1.0F, 1.0F, 8.0F)
-				.texOffs(1, 12).addBox(15.0F, 7.0F, -10.0F, 1.0F, 1.0F, 4.0F),
-			PartPose.offset(-8.0F, 16.0F, 8.0F));
+
+		PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-15.0F, -4.0F, 1.0F, 14.0F, 4.0F, 14.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 0).addBox(-9.0F, -0.5F, 7.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 22).addBox(-15.0F, -0.05F, 1.0F, 14.0F, 2.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 22.5F, -8.0F));
+
+		PartDefinition eyes = bone.addOrReplaceChild("eyes", CubeListBuilder.create().texOffs(0, 18).addBox(-7.0F, -4.0F, -7.1F, 14.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-8.0F, 0.0F, 8.0F));
+
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
-
 	@Override
-	public void setupAnim(LilyPadEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(LilyPadEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 	}
 
 	@Override
 	public ModelPart getPlantWholeBody() {
 		return this.total;
 	}
-
 }

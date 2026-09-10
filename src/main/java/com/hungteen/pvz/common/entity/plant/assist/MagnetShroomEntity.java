@@ -27,7 +27,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class MagnetShroomEntity extends PVZPlantEntity {
@@ -208,7 +207,7 @@ public class MagnetShroomEntity extends PVZPlantEntity {
 			if (list1.isEmpty()) {
 				return false;
 			}
-			Collections.sort(list1, this.sorter);
+			list1.sort(this.sorter);
 			this.targetMob = list1.get(0);
 			return true;
 		}

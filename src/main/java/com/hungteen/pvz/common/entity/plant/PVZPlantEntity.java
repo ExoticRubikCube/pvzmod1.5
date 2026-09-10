@@ -1,6 +1,5 @@
 package com.hungteen.pvz.common.entity.plant;
 
-import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
@@ -15,10 +14,10 @@ import com.hungteen.pvz.common.entity.AbstractPAZEntity;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.PVZLookRandomlyGoal;
 import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
+import com.hungteen.pvz.common.entity.plant.defence.PumpkinEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
 import com.hungteen.pvz.common.entity.plant.explosion.DoomShroomEntity;
 import com.hungteen.pvz.common.entity.plant.light.GoldLeafEntity;
-import com.hungteen.pvz.common.entity.plant.magic.CoffeeBeanEntity;
 import com.hungteen.pvz.common.entity.plant.spear.SpikeWeedEntity;
 import com.hungteen.pvz.common.entity.zombie.grass.TombStoneEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
@@ -75,8 +74,7 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 	protected static final int LADDER_FLAG = 0;
 	protected static final int CHARM_FLAG = 1;
 	protected static final int SLEEP_FLAG = 2;
-	protected static final int PUMPKIN_FLAG = 3;
-	protected static final int SUPER_FLAG = 4;
+	protected static final int SUPER_FLAG = 3;
 	//handle plant weak, place on wrong block.
 	private static final int PLANT_WEAK_CD = 10;
 	protected boolean isImmuneToWeak = false;
@@ -87,8 +85,6 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 	public int sleepTime = 0;
 	//handle plant itself.
     protected IPlantInfo innerPlant;
-	//handle outer plant, like pumpkin.
-	protected IPlantInfo outerPlant;
 	protected boolean canBeRemove = true;
 	protected boolean canHelpAttack = true;
 	protected boolean root = true;
@@ -491,91 +487,83 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 		this.setInSuperState(true);
 		if (first) {
 			Player player = EntityUtil.getEntityOwner(level, this);
-			if (player != null && player instanceof ServerPlayer) {
+			if (player instanceof ServerPlayer) {
 				PlantSuperTrigger.INSTANCE.trigger((ServerPlayer) player, this);
 			}
-			this.getOuterPlantInfo().ifPresent(p -> p.onSuper(this));
 		}
 	}
 
-	public boolean canPlaceOuterPlant() {
-		return ! this.getOuterPlantInfo().isPresent();
-	}
-	
-	/**
-	 *
-     */
-	public void onPlaceOuterPlant(IPlantType type, int sunCost) {
-		if(type.isOuterPlant()) {
-			this.outerPlant = type.getOuterPlant().get();
-			this.outerPlant.setType(type);
-			this.outerPlant.placeOn(this, sunCost);
-		} else {
-			PVZMod.LOGGER.error("Place Outer Plant Error : it's not outer plant type !");
-		}
-	}
-	
 	/**
 	 * {@link PlantCardItem#checkSunAndHealPlant(Player, PVZPlantEntity, PlantCardItem, ItemStack)}
 	 */
 	public void onHealBy(IPlantType plantType, float percent) {
-		if(plantType.isOuterPlant()){
-			this.getOuterPlantInfo().ifPresent(l -> l.onHeal(this, percent));
-		} else{
-			this.heal(this.getLife() * percent);
-		}
+		this.heal(this.getLife() * percent);
 		this.addEffect(EffectUtil.viewEffect(MobEffects.REGENERATION, 60, 0));
 		this.getSpawnSound().ifPresent(s -> EntityUtil.playSound(this, s));
 	}
 
-	@Override
-	public void onOuterDefenceBroken() {
-		super.onOuterDefenceBroken();
-		this.removeOuterPlant();
-	}
 
-	/**
-	 * outer plant is shoveled or eaten.
-	 */
-	public void removeOuterPlant() {
-		this.outerPlant = null;
-		this.setPumpkin(false);
-		if (this.hasMetal()) {
-			this.decreaseMetal();
-		}
-	}
-	
 	public void onPlantUpgrade(PVZPlantEntity plantEntity) {
-		// keep old plant's outer plant, such as pumpkin.
-		plantEntity.outerPlant = this.outerPlant;
-		plantEntity.setOuterDefenceLife(this.getOuterDefenceLife());
+		// keep rotation of plant
+		plantEntity.setYRot(this.getYRot());
+		plantEntity.yBodyRot = this.yBodyRot;
+		plantEntity.yHeadRot = this.yHeadRot;
 		// keep sleep of plant
 		plantEntity.sleepTime = this.sleepTime;
 		// remove old plant itself
-this.discard();
+		this.discard();
 	}
 	
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		/* pumpkin vehicle receives the damage aimed at the plant it wraps, by attack direction. */
+		if(this.getVehicle() instanceof PumpkinEntity pumpkin) {
+			final Entity direct = source.getDirectEntity();
+			if(direct != null && ! source.isBypassArmor()) {
+				final Vec3 pos = direct.position().subtract(this.position());
+				if(pos.y < 0 || pos.y * pos.y / (pos.x * pos.x + pos.z * pos.z) < 3) {
+					return pumpkin.hurt(source, amount);
+				}
+			}
+		}
+		return super.hurt(source, amount);
+	}
+
 	@Override
 	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
 		if (! level.isClientSide()) {
 			ItemStack stack = player.getItemInHand(hand);
 			if (stack.getItem() instanceof PlantCardItem item) {// plant card right click plant entity
-                if(PlantCardItem.checkSunAndHealPlant(player, this, item, stack)) {
-				} else if(PlantCardItem.checkSunAndUpgradePlant(player, this, item, stack)){
-				} else if(PlantCardItem.checkSunAndOuterPlant(player, this, item, stack)) {
-				} else if(PlantCardItem.checkSunAndInteractEntity(player, this, item, stack, type -> {
-					return type == PVZPlants.COFFEE_BEAN;
-				}, plantEntity -> {
-					if(plantEntity instanceof CoffeeBeanEntity) {
-						plantEntity.startRiding(this);
-					}
-				})) {
-					
+                /* short-circuit order defines the interaction priority: heal > upgrade > carry(takeover) > hold. */
+                if(PlantCardItem.checkSunAndHealPlant(player, this, item, stack)
+                		|| PlantCardItem.checkSunAndUpgradePlant(player, this, item, stack)
+                		|| PlantCardItem.checkSunAndCarryPlant(player, this, item, stack)
+                		|| PlantCardItem.checkSunAndHoldPlant(player, this, item, stack)) {
+					return InteractionResult.SUCCESS;
 				}
-				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.interactAt(player, vec3d, hand);
+	}
+
+	/**
+	 * whether this plant can serve as a container that other plants ride on.
+	 * e.g. LilyPad & FlowerPot, or shroom plants that carry coffee bean.
+	 */
+	public boolean canHoldPlant() {
+		return this.getPlantType().isShroomPlant() && this.isPlantSleeping();
+	}
+
+	/**
+	 * whether the given plant type can be placed onto this plant (as a riding passenger).
+	 * sleeping shroom plant only carries coffee bean, container plant can not hold the plant of same type.
+	 */
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean canPlantOnMe(IPlantType type) {
+		if(this.getPlantType().isShroomPlant()) {
+			return this.isPlantSleeping() && type == PVZPlants.COFFEE_BEAN;
+		}
+		return type != this.getPlantType();
 	}
 
 	/* misc get */
@@ -631,7 +619,7 @@ this.discard();
 
 	@Override
 	public Optional<SoundEvent> getSpawnSound() {
-		return Optional.ofNullable(this.getPlantType().isWaterPlant() ? SoundRegister.PLACE_PLANT_WATER.get() : SoundRegister.PLACE_PLANT_GROUND.get());
+		return Optional.of(this.getPlantType().isWaterPlant() ? SoundRegister.PLACE_PLANT_WATER.get() : SoundRegister.PLACE_PLANT_GROUND.get());
 	}
 
 	/* data */
@@ -645,7 +633,6 @@ this.discard();
 		compound.putInt("plant_boost_time", this.getBoostTime());
 		compound.putInt("plant_sleep_time", this.sleepTime);
 		PlantInfo.write(this.innerPlant, compound, "inner_plant_info");
-		PlantInfo.write(this.outerPlant, compound, "outer_plant_info");
 		compound.putBoolean("immune_to_weak", this.isImmuneToWeak);
 	}
 
@@ -668,7 +655,6 @@ this.discard();
 			this.sleepTime = compound.getInt("plant_sleep_time");
 		}
 		PlantInfo.read(this.innerPlant, compound, "inner_plant_info");
-		PlantInfo.read(this.outerPlant, compound, "outer_plant_info");
 		if (compound.contains("immune_to_weak")) {
 			this.isImmuneToWeak = compound.getBoolean("immune_to_weak");
 		}
@@ -678,11 +664,7 @@ this.discard();
 	}
 
 	/* getter setter */
-	
-	public Optional<IPlantInfo> getOuterPlantInfo() {
-		return Optional.ofNullable(this.outerPlant);
-	}
-	
+
 	public Optional<IPlantInfo> getPlantInfo() {
 		return Optional.ofNullable(this.innerPlant);
 	}
@@ -691,7 +673,8 @@ this.discard();
 		this.isImmuneToWeak = is;
 	}
 	
-	public boolean isImmuneToWeak() {
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean isImmuneToWeak() {
 		return this.isImmuneToWeak;
 	}
 
@@ -751,14 +734,6 @@ this.discard();
 	
 	public void setPlantSleeping(boolean flag) {
 		this.setPAZState(AlgorithmUtil.BitOperator.setBit(this.getPAZState(), SLEEP_FLAG, flag));
-	}
-	
-	public boolean hasPumpkin() {
-		return AlgorithmUtil.BitOperator.hasBitOne(this.getPAZState(), PUMPKIN_FLAG);
-	}
-	
-	public void setPumpkin(boolean flag) {
-		this.setPAZState(AlgorithmUtil.BitOperator.setBit(this.getPAZState(), PUMPKIN_FLAG, flag));
 	}
 
 	public boolean isInSuperState() {

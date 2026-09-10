@@ -59,6 +59,12 @@ public class SkillTypes {
             Arrays.asList(3, 4, 5, 6, 8)
     );
 
+    //pumpkin.
+    public static final ISkillType PUMPKIN_MORE_LIFE = new SkillType("pumpkin_more_life",
+            ArrayUtil.getAverageArray(4, 400F, 600F),
+            Arrays.asList(3, 5, 7)
+    );
+
     //potato mine.
     public static final ISkillType MINE_FAST_PREPARE = new SkillType("mine_fast_prepare",
             ArrayUtil.getAverageArray(5, 240F, 40F),

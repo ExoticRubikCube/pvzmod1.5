@@ -50,11 +50,18 @@ public class PlayerEventHandler {
         if(! PlayerUtil.isPlayerSurvival(player) || ((entity instanceof AbstractPAZEntity) && ((AbstractPAZEntity)entity).getOwnerUUID().isPresent() && player.getUUID().equals(((AbstractPAZEntity) entity).getOwnerUUID().get()))){
             boolean removed = false;
             if(entity instanceof PVZPlantEntity plantEntity && stack.getItem() instanceof ShovelItem) {
-                if (plantEntity.getOuterPlantInfo().isPresent()) {//has outer plant, shovel outer plant.
-                    SunEntity.spawnSunsByAmount(player.level, plantEntity.blockPosition(), EnchantmentUtil.getSunShovelAmount(stack, plantEntity.getOuterPlantInfo().get().getSunCost()));
-                    plantEntity.removeOuterPlant();
-                } else if (plantEntity.getPlantInfo().isPresent()) {
+                if (plantEntity.getPlantInfo().isPresent()) {
                     SunEntity.spawnSunsByAmount(player.level, plantEntity.blockPosition(), EnchantmentUtil.getSunShovelAmount(stack, plantEntity.getPlantInfo().get().getSunCost()));
+                    /* transfer passengers to the vehicle's vehicle before removing, e.g. pea wrapped by a pumpkin riding a lily pad */
+                    final Entity vehicle = plantEntity.getVehicle();
+                    if (vehicle instanceof PVZPlantEntity container) {
+                        plantEntity.getPassengers().forEach(p -> {
+                            if (p instanceof PVZPlantEntity passenger && passenger.getPlantType().canBeHold()
+                                    && container.canPlantOnMe(passenger.getPlantType())) {
+                                passenger.startRiding(container);
+                            }
+                        });
+                    }
                     plantEntity.discard();
                 }
                 removed = ! (stack.getItem() instanceof OriginShovelItem);

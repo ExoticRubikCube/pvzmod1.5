@@ -41,7 +41,7 @@ public class KernelPultEntity extends PlantPultEntity {
 	public void onPlantUpgrade(PVZPlantEntity plantEntity) {
 		super.onPlantUpgrade(plantEntity);
 		if(this.upgradeEntity != null) {
-			this.upgradeEntity.remove(RemovalReason.DISCARDED);
+			this.upgradeEntity.discard();
 		}
 	}
 	

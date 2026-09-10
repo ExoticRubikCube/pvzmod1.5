@@ -1,7 +1,6 @@
 package com.hungteen.pvz.client.render.entity.plant;
 
 import com.hungteen.pvz.client.render.layer.PlantLadderLayer;
-import com.hungteen.pvz.client.render.layer.component.PumpkinArmorLayer;
 import com.hungteen.pvz.client.render.layer.fullskin.CharmLayer;
 import com.hungteen.pvz.client.render.layer.fullskin.EnergyLayer;
 import com.hungteen.pvz.client.render.layer.fullskin.HealLightLayer;
@@ -41,7 +40,6 @@ public abstract class PVZPlantRender<T extends PVZPlantEntity> extends MobRender
 	protected void addPlantLayers(){
 		this.addLayer(new EnergyLayer<>(this));
 		this.addLayer(new CharmLayer<>(this));
-		this.addLayer(new PumpkinArmorLayer<>(this));
 		this.addLayer(new SunLightLayer<>(this));
 		this.addLayer(new HealLightLayer<>(this));
 		this.addLayer(new PlantLadderLayer<>(this));

@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.paz.IPlantEntity;
-import com.hungteen.pvz.api.paz.IPlantInfo;
 import com.hungteen.pvz.api.paz.IPlantModel;
 import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.entity.EntityRegister;
@@ -52,10 +51,10 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	protected Supplier<IPlantType> upgradeFrom;
 	protected Supplier<IPlantType> upgradeTo;
 	protected Supplier<Block> plantBlock;
-	protected Supplier<IPlantInfo> outerPlant;
 	protected ICardPlacement cardPlacement = Placements.COMMON;
 	protected boolean isShroomPlant;
 	protected boolean isWaterPlant;
+	protected boolean canBeHold = true;
 
 	protected PlantType(String name, PlantFeatures features) {
 		super(name);
@@ -77,10 +76,10 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		this.upgradeFrom = features.upgradeFrom;
 		this.upgradeTo = features.upgradeTo;
 		this.plantBlock = features.plantBlock;
-		this.outerPlant = features.outerPlant;
 		this.cardPlacement = features.cardPlacement;
 		this.isShroomPlant = features.isShroomPlant;
 		this.isWaterPlant = features.isWaterPlant;
+		this.canBeHold = features.canBeHold;
 		// last.
 		this.entityRenderResource = this.genEntityResource();
 	}
@@ -125,17 +124,12 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	public boolean isWaterPlant() {
 		return this.isWaterPlant;
 	}
-	
+
 	@Override
-	public boolean isOuterPlant() {
-		return this.outerPlant != null;
+	public boolean canBeHold() {
+		return this.canBeHold;
 	}
-	
-	@Override
-	public Optional<IPlantInfo> getOuterPlant() {
-		return Optional.ofNullable(this.outerPlant.get());
-	}
-	
+
 	/**
 	 * the resource to save entity render picture.
 	 */
@@ -226,10 +220,10 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		private Supplier<IPlantType> upgradeFrom;
 		private Supplier<IPlantType> upgradeTo;
 		private Supplier<Block> plantBlock;
-		private Supplier<IPlantInfo> outerPlant;
 		private ICardPlacement cardPlacement = Placements.COMMON;
 		private boolean isShroomPlant;
 		private boolean isWaterPlant;
+		private boolean canBeHold = true;
 
 		public PlantFeatures cost(int cost) {
 			this.sunCost = cost;
@@ -331,12 +325,6 @@ public abstract class PlantType extends PAZType implements IPlantType {
 			return this;
 		}
 
-		public PlantFeatures outerPlant(Supplier<IPlantInfo> info) {
-			this.outerPlant = info;
-			this.cardPlacement = Placements.NONE;
-			return this;
-		}
-
 		public PlantFeatures isShroomPlant() {
 			this.isShroomPlant = true;
 			this.cardPlacement = Placements.SHROOM;
@@ -346,6 +334,11 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		public PlantFeatures isWaterPlant() {
 			this.isWaterPlant = true;
 			this.cardPlacement = Placements.NONE;
+			return this;
+		}
+
+		public PlantFeatures canNotBeHold() {
+			this.canBeHold = false;
 			return this;
 		}
 

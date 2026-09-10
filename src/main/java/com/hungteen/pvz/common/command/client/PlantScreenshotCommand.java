@@ -108,7 +108,12 @@ public class PlantScreenshotCommand {
 			return List.of();
 		}
 		try {
-			return List.of(matched.create(mc.level));
+			final Entity entity = matched.create(mc.level);
+			if (entity == null) {
+				PVZMod.LOGGER.error("plant screenshot: create {} 返回空实体", register);
+				return List.of();
+			}
+			return List.of(entity);
 		} catch (RuntimeException e) {
 			PVZMod.LOGGER.error("plant screenshot: create {} 失败", register, e);
 		}
@@ -147,7 +152,8 @@ public class PlantScreenshotCommand {
 		return result;
 	}
 
-	@SubscribeEvent
+	@SuppressWarnings("removal")
+    @SubscribeEvent
 	public static void onRenderLevelLast(RenderLevelLastEvent event) {
 		if (!queue.isEmpty()) {
 			if (offscreen == null) {
@@ -157,12 +163,12 @@ public class PlantScreenshotCommand {
 				sendFeedback("command.pvz.screenshot.finish", true);
 				queue.clear();
 			} else {
-				renderEntity(queue.get(index), offscreen, 1F);
+				renderEntity(queue.get(index), offscreen);
 			}
 		}
 	}
 
-	private static void renderEntity(Entity current, TextureTarget target, float partialTicks) {
+	private static void renderEntity(Entity current, TextureTarget target) {
 		@SuppressWarnings("unchecked")
 		EntityRenderer<Entity> renderer = (EntityRenderer<Entity>) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(current);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
@@ -174,7 +180,7 @@ public class PlantScreenshotCommand {
 
 		try {
 			MeasuringBufferSource measure = new MeasuringBufferSource();
-			renderer.render(current, 0, partialTicks, pose, measure, 0x00f000f0);
+			renderer.render(current, 0, (float) 1.0, pose, measure, 0x00f000f0);
 			MeasuringBufferSource.MeasuringResult bounds = measure.getData();
 			if (bounds == null || bounds.maxX() <= bounds.minX() || bounds.maxY() <= bounds.minY()) {
 				PVZMod.LOGGER.error("plant screenshot: {} 测量不到有效渲染范围, 跳过", ForgeRegistries.ENTITY_TYPES.getKey(current.getType()));
@@ -194,7 +200,7 @@ public class PlantScreenshotCommand {
 			RenderSystem.setProjectionMatrix(Matrix4f.orthographic(cx - half, cx + half, bottom, bottom + viewSide, -100F, 100F));
 			MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(new BufferBuilder(512));
 			RenderSystem.disableCull();
-			renderer.render(current, 0, partialTicks, pose, buffer, 0x00f000f0);
+			renderer.render(current, 0, (float) 1.0, pose, buffer, 0x00f000f0);
 			buffer.endBatch();
 			RenderSystem.enableCull();
 			RenderSystem.restoreProjectionMatrix();

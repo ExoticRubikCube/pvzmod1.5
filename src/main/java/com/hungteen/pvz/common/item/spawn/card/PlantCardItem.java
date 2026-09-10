@@ -14,7 +14,6 @@ import com.hungteen.pvz.common.enchantment.card.plantcard.DenselyPlantEnchantmen
 import com.hungteen.pvz.common.enchantment.card.plantcard.SoillessPlantEnchantment;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.magic.ImitaterEntity;
-import com.hungteen.pvz.common.entity.plant.magic.ImitaterEntity.ImitateType;
 import com.hungteen.pvz.common.event.events.SummonCardUseEvent;
 import com.hungteen.pvz.common.impl.CoolDowns;
 import com.hungteen.pvz.common.impl.SkillTypes;
@@ -55,6 +54,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
@@ -139,7 +139,8 @@ public class PlantCardItem extends SummonCardItem {
 			final BlockPos pos = raytraceResult.getBlockPos();
 			/* can not place here */
 			if (world.getFluidState(pos.below()).getType() != Fluids.WATER || raytraceResult.getDirection() != Direction.UP || ! world.isEmptyBlock(pos)) {
-				return InteractionResultHolder.pass(heldStack);
+				this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
+				return InteractionResultHolder.fail(heldStack);
 		    }
 			/* check plant type that can not place in water */
 			if(! plantType.isWaterPlant() || (plantType == PVZPlants.CAT_TAIL && ! SoillessPlantEnchantment.isSoilless(plantStack))) {
@@ -151,6 +152,11 @@ public class PlantCardItem extends SummonCardItem {
 					return InteractionResultHolder.success(heldStack);
 				}
 			} else {
+				/* reject if there is already a plant entity occupying the spawn position */
+				if(! world.getEntitiesOfClass(PVZPlantEntity.class, new AABB(pos)).isEmpty()) {
+					this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
+					return InteractionResultHolder.fail(heldStack);
+				}
 				if(checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, pos, (l)->{})) {
 					return InteractionResultHolder.success(heldStack);
 				}
@@ -188,12 +194,7 @@ public class PlantCardItem extends SummonCardItem {
 			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.CD_ERROR);
 			return InteractionResult.FAIL;
 		}
-		/* check outer plants */
-		if(plantType.isOuterPlant()) {
-			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.OUTER_ERROR);
-			return InteractionResult.FAIL;
-		}
-		
+
 		/* check water plants */
 		if(plantType.isWaterPlant()) {
 			/* special placement for cat tail */
@@ -232,6 +233,11 @@ public class PlantCardItem extends SummonCardItem {
 			BlockPos spawnPos = pos;
 			if(! world.getBlockState(pos).getCollisionShape(world, pos).isEmpty()) {
 				spawnPos = pos.relative(context.getClickedFace());
+			}
+			/* reject if there is already a plant entity occupying the spawn position */
+			if(! world.getEntitiesOfClass(PVZPlantEntity.class, new AABB(spawnPos)).isEmpty()) {
+				this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
+				return InteractionResult.FAIL;
 			}
 			if(checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, spawnPos, (l)->{})) {
 			    return InteractionResult.SUCCESS;
@@ -344,50 +350,68 @@ public class PlantCardItem extends SummonCardItem {
 	}
 	
 	/**
-	 * check sunCost and add outerplant for plantEntity
+	 * check sunCost and place plant onto a container plant (as a riding passenger).
 	 */
-	public static boolean checkSunAndOuterPlant(Player player, PVZPlantEntity plantEntity, PlantCardItem cardItem,
+	public static boolean checkSunAndHoldPlant(Player player, PVZPlantEntity plantEntity, PlantCardItem cardItem,
 			ItemStack heldStack) {
 		/* check held stack */
-		if(! checkItemStackAndCD(player, heldStack, stack -> ((PlantCardItem) stack.getItem()).plantType.isOuterPlant())) {
+		if(! checkItemStackAndCD(player, heldStack, stack -> true)) {
 			return false;
 		}
 		final ItemStack plantStack = getPlantStack(heldStack);
 		final IPlantType plantType = ((PlantCardItem) plantStack.getItem()).plantType;
-		final int cost = cardItem.getBasisSunCost(plantStack);
-		if(heldStack.getItem() instanceof ImitaterCardItem) {
-			if(checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, plantEntity.blockPosition(), p -> {
-				if(p instanceof ImitaterEntity) {
-					((ImitaterEntity) p).setImitateType(ImitateType.OUTER);
-					((ImitaterEntity) p).setTargetEntity(plantEntity);
-					((ImitaterEntity) p).setImitateAction(pp -> {
-						pp.onPlaceOuterPlant(plantType, cost);
-						BreakOutEnchantment.checkAndBreakOut(pp, plantStack);
-					});
-				}
-			})){
-				return true;
-			}
-			return true;
-		} else {
-			/* not consider surrounding plants number */
-			if(checkSunAndCD(player, cardItem, plantStack, true, p -> {
-			    if(! plantEntity.canPlaceOuterPlant()) {
-				    cardItem.notifyPlayerAndCD(player, heldStack, PlacementErrors.OUTER_FULL);
-				    return false;
-			    }
-			    return true;
-		    })) {
-			    plantEntity.onPlaceOuterPlant(plantType, cost);
-			    /* check break out enchantment */
-			    BreakOutEnchantment.checkAndBreakOut(plantEntity, plantStack);
-		        onUsePlantCard(player, heldStack, plantStack, cardItem);
-		        return true;
-			}
+		/* container plant can only carry plant that it allows, and can not hold the same type */
+		if(! plantEntity.canHoldPlant() || ! plantEntity.getPassengers().isEmpty()
+				|| ! plantType.canBeHold() || ! plantEntity.canPlantOnMe(plantType)) {
+			return false;
 		}
-		return false;
+		return PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, plantEntity.blockPosition(), plantEntity1 -> {
+			if (plantEntity1 instanceof ImitaterEntity) {
+				((ImitaterEntity) plantEntity1).setImitateAction(p -> p.startRiding(plantEntity));
+			} else {
+				plantEntity1.startRiding(plantEntity);
+			}
+		});
 	}
-	
+
+	/**
+	 * check sun cost and summon pumpkin that wraps the plant (as a riding vehicle).
+	 */
+	public static boolean checkSunAndCarryPlant(Player player, PVZPlantEntity plantEntity, PlantCardItem cardItem,
+			ItemStack heldStack) {
+		/* check held stack */
+		if(! checkItemStackAndCD(player, heldStack, stack -> ((PlantCardItem) stack.getItem()).plantType == PVZPlants.PUMPKIN)) {
+			return false;
+		}
+		final ItemStack plantStack = getPlantStack(heldStack);
+		/* takeover only: pumpkin card on an unmounted plant falls to hold branch (pumpkin is a container plant) */
+		if(plantEntity.getVehicle() == null || plantEntity.getPlantType() == PVZPlants.PUMPKIN
+				|| plantEntity.canHoldPlant()) {
+			return false;
+		}
+		/* when target is riding, only a container plant that allows pumpkin can be taken over */
+		if(plantEntity.getVehicle() != null && ! (plantEntity.getVehicle() instanceof PVZPlantEntity container
+				&& container.canPlantOnMe(PVZPlants.PUMPKIN))) {
+			return false;
+		}
+		return PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, plantEntity.blockPosition(), plantEntity1 -> {
+			final Entity vehicle = plantEntity.getVehicle();
+			if (plantEntity1 instanceof ImitaterEntity) {
+				((ImitaterEntity) plantEntity1).setImitateAction(p -> {
+					plantEntity.startRiding(p);
+					if(vehicle instanceof PVZPlantEntity container) {
+						p.startRiding(container);
+					}
+				});
+			} else {
+				plantEntity.startRiding(plantEntity1);
+				if(vehicle instanceof PVZPlantEntity container) {
+					plantEntity1.startRiding(container);
+				}
+			}
+		});
+	}
+
 	/**
 	 * check sunCost and heal defender plantEntity.
 	 *
@@ -401,8 +425,8 @@ public class PlantCardItem extends SummonCardItem {
 		final ItemStack plantStack = getPlantStack(heldStack);
 		final IPlantType plantType = ((PlantCardItem) plantStack.getItem()).plantType;
 		final float percent = BandageEnchantment.getHealPercent(plantStack);
-		/* the same type or specific outer plant card */
-		if(! plantType.equals(plantEntity.getPlantType()) && ! (plantType.isOuterPlant() && plantEntity.getOuterPlantInfo().isPresent() && plantEntity.getOuterPlantInfo().get().getType().equals(plantType))) {
+		/* the same type */
+		if(! plantType.equals(plantEntity.getPlantType())) {
 			return false;
 		}
 		if(checkSunAndCD(player, cardItem, plantStack, true, p -> true)){

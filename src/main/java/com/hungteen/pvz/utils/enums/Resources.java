@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 public enum Resources {
 
     /* player tree maxLevel */
-    TREE_LVL(1, 200),
+    TREE_LVL(1, 100),
     /* xp of player tree maxLevel */
     TREE_XP(0, 0),
     /* money, common currency */

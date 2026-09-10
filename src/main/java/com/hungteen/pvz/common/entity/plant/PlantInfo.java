@@ -44,11 +44,7 @@ public class PlantInfo implements IPlantInfo {
 				final String string = compound.getString("plant_type");
 				Optional<IPlantType> op = PlantType.getPlantByName(string);
 				if(op.isPresent()) {// choose plant info type.
-					if(op.get().isOuterPlant()) {
-						info = op.get().getOuterPlant().get();
-					} else {
-						info = new PlantInfo(op.get());
-					}
+					info = new PlantInfo(op.get());
 					info.read(nbt);
 				}
 			}

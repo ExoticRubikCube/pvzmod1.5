@@ -36,6 +36,7 @@ public class ScaredyShroomEntity extends PlantShooterEntity {
 		super.defineSynchedData();
 		this.entityData.define(SCARE_TIME, 0);
 	}
+
 	@Override
 	public float getAttackDamage() {
 		return this.getSkillValue(SkillTypes.SPORE_DAMAGE);

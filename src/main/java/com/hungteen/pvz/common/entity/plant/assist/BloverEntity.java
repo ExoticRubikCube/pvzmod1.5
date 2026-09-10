@@ -34,7 +34,7 @@ public class BloverEntity extends PVZPlantEntity {
 			if(this.getExistTick() == 5) {
 			    this.blow();
 			} else if(this.getExistTick() > 60) {
-this.discard();
+				this.discard();
 			}
 		}
 	}
