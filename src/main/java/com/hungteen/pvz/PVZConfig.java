@@ -398,7 +398,6 @@ public class PVZConfig {
             public ForgeConfigSpec.BooleanValue NeedUnlockToPlant;
             public ForgeConfigSpec.BooleanValue KeepSunWhenDie;
             public ForgeConfigSpec.IntValue MaxDamageLimit;
-            public ForgeConfigSpec.IntValue SunMendingLimit;
         }
 
         public static class WorldSettings {

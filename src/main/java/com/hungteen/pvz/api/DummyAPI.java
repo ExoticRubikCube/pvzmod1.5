@@ -105,10 +105,6 @@ public class DummyAPI implements IPVZAPI {
     }
 
     @Override
-    public void registerPeaGunMode(IPlantType type) {
-    }
-
-    @Override
     public void registerBowlingMode(IPlantType type, Supplier<EntityType<? extends Entity>> supplier, float size) {
     }
 

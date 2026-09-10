@@ -581,6 +581,23 @@
       }
     ]
   },
+  "pea_sniper_shoot": {
+    "subtitle": "sound.pvz.pea_sniper_shoot",
+    "sounds": [
+      {
+        "name": "pvz:pea_sniper_shoot1"
+      },
+      {
+        "name": "pvz:pea_sniper_shoot2"
+      },
+      {
+        "name": "pvz:pea_sniper_shoot3"
+      },
+      {
+        "name": "pvz:pea_sniper_shoot4"
+      }
+    ]
+  },
   "paper_broken": {
     "subtitle": "sound.pvz.paper_broken",
     "sounds": [

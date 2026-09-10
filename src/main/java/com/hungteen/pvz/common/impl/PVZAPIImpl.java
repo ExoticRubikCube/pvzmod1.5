@@ -6,7 +6,6 @@ import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.common.impl.plant.PlantType;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.item.tool.plant.BowlingGloveItem;
-import com.hungteen.pvz.common.item.tool.plant.PeaGunItem;
 import com.hungteen.pvz.common.world.challenge.Challenge;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import net.minecraft.core.BlockPos;
@@ -170,11 +169,6 @@ public class PVZAPIImpl implements IPVZAPI{
 	@Override
 	public Optional<IZombieType> getZombieTypeByID(String id) {
 		return ZombieType.getZombieByName(id);
-	}
-
-	@Override
-	public void registerPeaGunMode(IPlantType type) {
-		PeaGunItem.registerPeaGunShootMode(type);
 	}
 
 	@Override

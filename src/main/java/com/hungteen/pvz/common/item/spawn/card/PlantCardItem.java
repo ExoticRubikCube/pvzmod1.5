@@ -190,12 +190,12 @@ public class PlantCardItem extends SummonCardItem {
 			return InteractionResult.FAIL;
 		}
 		/* check cool down */
-		if(player.getCooldowns().isOnCooldown(heldStack.getItem())) {
-			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.CD_ERROR);
-			return InteractionResult.FAIL;
-		}
+        if (player != null && player.getCooldowns().isOnCooldown(heldStack.getItem())) {
+            this.notifyPlayerAndCD(player, heldStack, PlacementErrors.CD_ERROR);
+            return InteractionResult.FAIL;
+        }
 
-		/* check water plants */
+        /* check water plants */
 		if(plantType.isWaterPlant()) {
 			/* special placement for cat tail */
 			if(plantType == PVZPlants.CAT_TAIL) {
@@ -283,7 +283,7 @@ public class PlantCardItem extends SummonCardItem {
 	 * {@link ImitaterCardItem#summonImitater(Player, ItemStack, ItemStack, PlantCardItem, BlockPos, Consumer)}
 	 */
 	public static boolean handlePlantEntity(Player player, IPlantType plantType, ItemStack plantStack, BlockPos pos, Consumer<PVZPlantEntity> consumer) {
-		if(! plantType.getEntityType().isPresent()) {
+		if(plantType.getEntityType().isEmpty()) {
 	        PVZMod.LOGGER.error("Plant Card : Summon wrong plant entity !");
 		    return false;
 	    }

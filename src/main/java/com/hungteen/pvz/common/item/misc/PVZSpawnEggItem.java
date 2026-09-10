@@ -31,9 +31,6 @@ public class PVZSpawnEggItem extends ForgeSpawnEggItem{
 		PVZ_EGGS.add(this);
 	}
 
-	/**
-	 * 注册 Dispenser 行为（ForgeSpawnEggItem 内部已处理 BY_ID map 注入）。
-	 */
 	public static void initUnaddedEggs() {
 		DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior() {
 			public ItemStack execute(BlockSource source, ItemStack stack) {

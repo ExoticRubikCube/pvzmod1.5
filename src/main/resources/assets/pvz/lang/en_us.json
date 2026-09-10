@@ -167,7 +167,7 @@
     "tooltip.pvz.imitater_card.enjoy_card":"Can not use, but it can level up for random plants on Essence Altar",
     "tooltip.pvz.imitater_card.empty":"right click imitater card while holding with left hand to open imitate gui",
     "tooltip.pvz.imitater_card.full":"Current Imitate Plant : [%s]",
-    "tooltip.pvz.pea_gun":"Long press the right button of the mouse to shoot when on main hand, off hand to open gui",
+    "tooltip.pvz.pea_gun":"Right click to shoot peas, using peas in your inventory as ammo",
     "tooltip.pvz.resource_collector.use": "Right click to collect single resource, click while shifting to range collect",
     "tooltip.pvz.resource_collector.info": "Single collect distance is %d blocks, range collect distance is %d blocks",
     "tooltip.pvz.bowling_glove.empty":"Right click WallNut or other Bowling Plants to use",
@@ -615,6 +615,7 @@
     "sound.pvz.hypno": "Hypno",
     "sound.pvz.zombie_angry": "Angry",
     "sound.pvz.change_paper": "Turn Page",
+    "sound.pvz.pea_sniper_shoot": "Pea Gun Shoot",
     "sound.pvz.paper_broken": "Paper Broken",
     "sound.pvz.phonograph": "Phonograph",
     "sound.pvz.place_plant_ground": "place On Ground",
@@ -647,8 +648,6 @@
     "sound.pvz.bruh": "Bruh",
     "sound.pvz.penny_say": "Penny Say",
     "_comment6": "--------------------------------------------GUI-------------------------------------------",
-    "gui.pvz.pea_gun.tip1": "Place a §aAppease Plant Card§r on the top slot to choose the shooting mode",
-    "gui.pvz.pea_gun.tip2": "The rest slots can store different kinds of peas",
     "gui.pvz.sun_converter.tip1": "Nine slots can place §nsun storage sapling§r to absorb sun",
     "gui.pvz.sun_converter.tip2": "Or put items with §n sun mending §r enchantment to repair them",
     "gui.pvz.slot_machine.tip1": "When the mid row has at least two items the same, you will get rewards",
@@ -946,7 +945,6 @@
     "config.pvz.rule.unlock_plant": "Need Unlock to Plant",
     "config.pvz.rule.keep_sun" :"Keep Sun When Die",
     "config.pvz.rule.max_damage": "Max damage to other entity",
-    "config.pvz.rule.sun_mending": "Sun Mending Trigger Sun",
 
     "config.pvz.world.zen_garden_chance":"Weight of Zen Garden",
     

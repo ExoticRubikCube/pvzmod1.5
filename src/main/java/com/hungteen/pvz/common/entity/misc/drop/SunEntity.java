@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.entity.misc.drop;
 
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
+import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.event.events.PlayerCollectDropEvent;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
@@ -24,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @program: pvzmod-1.18.x
@@ -33,6 +35,10 @@ import java.util.Map;
 public class SunEntity extends DropEntity {
 
 	private static final float SUN_FALL_SPEED = 0.03F;
+	//必须与 onCollectedByPlayer 的消耗条件保持一致，否则阳光会追上却无法消失
+	private static final Predicate<Entity> CAN_ABSORB_SUN = (target) -> target instanceof Player player && EntitySelector.NO_SPECTATORS.test(target)
+		&& (player.isCreative() || PlayerUtil.getResource(player, Resources.SUN_NUM) < PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(player, Resources.TREE_LVL))
+			|| EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), player, ItemStack::isDamaged) != null);
 	public Vec3 ColorBase = new Vec3(255,230,15);
 	public Vec3 ColorChange = new Vec3(0,25,15);
 	private Entity following;
@@ -54,7 +60,10 @@ public class SunEntity extends DropEntity {
 		}
 
 		if ((this.tickCount+this.getId()) % ((this.following instanceof Player) ? 200 : 50) == 0 || (this.following != null && this.following.distanceToSqr(this) > 64.0D)) {
-			this.following = this.level.getNearestPlayer(this, 6.0D);
+			this.following = this.level.getNearestPlayer(this.getX(), this.getY(), this.getZ(), 6.0D, CAN_ABSORB_SUN);
+		}
+		if (this.following instanceof Player player && ! CAN_ABSORB_SUN.test(player)) {
+			this.following = null;
 		}
 		if (this.following == null && getAmount() < 150 && (this.tickCount+this.getId()) % 50 == 0){
 			List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(2D, 2D, 2D));
@@ -96,21 +105,23 @@ public class SunEntity extends DropEntity {
 		if(! level.isClientSide() && ! MinecraftForge.EVENT_BUS.post(new PlayerCollectDropEvent.PlayerCollectSunEvent(living, this))) {
 			final int currentSun = PlayerUtil.getResource(living, Resources.SUN_NUM);
 			final int maxSun = PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(living, Resources.TREE_LVL));
-			//sun mending enchantment.
-			if(currentSun >= maxSun) {
-				final Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), living, ItemStack::isDamaged);
-				if(entry != null) {
-					entry.getValue().setDamageValue(Math.max(0, entry.getValue().getDamageValue() - this.getAmount() / 50));
-					PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
-					this.setAmount(0);
-				}
+			//sun mending enchantment, repair works at any sun amount and costs no sun.
+			final Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), living, ItemStack::isDamaged);
+			if(entry != null) {
+				SunMendingEnchantment.repairItem(entry.getValue(), this.getAmount());
 			}
 			//player absorb.
 			final int absorbed = living.isCreative() ? this.getAmount() : Math.min(this.getAmount(), maxSun - currentSun);
 			if(absorbed > 0) {
 				PlayerUtil.addResource(living, Resources.SUN_NUM, absorbed);
-				PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
 				this.setAmount(this.getAmount() - absorbed);
+			}
+			//sun can not be stored at cap, mending collection consumes the left amount.
+			if(this.getAmount() > 0 && entry != null) {
+				this.setAmount(0);
+			}
+			if(absorbed > 0 || entry != null) {
+				PlayerUtil.playClientSound(living, SoundRegister.SUN_PICK.get());
 			}
 		}
 	}

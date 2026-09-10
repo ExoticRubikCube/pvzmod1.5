@@ -38,9 +38,9 @@ public class PlayerUtil {
 //	public static final int[] TREE_LVL_XP = new int[] {100, 250, 500, 1000, 2000, 4000, 5000, 6000, 7000, 8000, 10000, 12000, 15000, 18000, 21000, 25000, 30000, 350000, 40000, 50000};
 	private static int OLD_PLAYER_LEVEL = 0;
 	private static int CACHE_MAX_SUN = 0;
-	
+
 	/**
-	 * 1级200阳光，随等级线性增长，100级达到上限1000。<br>
+	 * 1级500阳光，随等级线性增长，100级达到上限2000。<br>
 	 * {@link PlayerDataManager#addResource(Resources, int)}
 	 */
 	public static int getPlayerMaxSunNum(int lvl) {
@@ -48,7 +48,7 @@ public class PlayerUtil {
 			return CACHE_MAX_SUN;
 		} else {
 			OLD_PLAYER_LEVEL = lvl;
-			return (CACHE_MAX_SUN = Mth.clamp(200 + (lvl - 1) * 800 / 99, 200, 1000));
+			return CACHE_MAX_SUN = (int) Mth.clamp(Math.round((500 + (lvl - 1) * 1500.0 / 99.0) / 5.0) * 5, 500, 2000);
 		}
 	}
 	

@@ -1,365 +1,101 @@
 package com.hungteen.pvz.common.item.tool.plant;
 
-import com.hungteen.pvz.api.types.IPlantType;
-import com.hungteen.pvz.common.container.PeaGunContainer;
-import com.hungteen.pvz.common.container.inventory.ItemInventory;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
-import com.hungteen.pvz.common.event.PVZPlayerEvents;
-import com.hungteen.pvz.common.event.events.PeaGunShootEvent;
-import com.hungteen.pvz.common.impl.plant.OtherPlants;
-import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.PVZItemGroups;
-import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.misc.tag.PVZItemTags;
 import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.utils.EntityUtil;
-import com.hungteen.pvz.utils.PlayerUtil;
-import com.hungteen.pvz.utils.enums.Resources;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-public class PeaGunItem extends Item {
-
-	public static final int PEA_GUN_SLOT_NUM = 28;
-	// register shoot mode here.
-	private static final HashSet<IPlantType> SHOOT_MODES = new HashSet<>(
-			Arrays.asList(PVZPlants.PEA_SHOOTER, PVZPlants.SNOW_PEA, PVZPlants.REPEATER, PVZPlants.THREE_PEATER,
-					PVZPlants.SPLIT_PEA, PVZPlants.GATLING_PEA, PVZPlants.STAR_FRUIT, OtherPlants.ANGEL_STAR_FRUIT));
+public class PeaGunItem extends ProjectileWeaponItem {
 
 	public PeaGunItem() {
 		super(new Properties().tab(PVZItemGroups.PVZ_USEFUL).stacksTo(1).durability(1200));
 	}
 
-	/**
-	 * add new shoot mode.
-	 */
-	public static void registerPeaGunShootMode(IPlantType type) {
-		SHOOT_MODES.add(type);
-	}
-
-	@Nonnull
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt) {
-		return new InvProvider(stack);
-	}
-
-	public static ItemInventory getInventory(ItemStack stack) {
-		return new ItemInventory(stack, PEA_GUN_SLOT_NUM) {
-            @Override
-            public boolean canPlaceItem(int slot, @Nonnull ItemStack stack) {
-                if (slot == 0) {
-                    return isValidMode(stack);
-                } else {
-                    return stack.is(PVZItemTags.PEA_GUN_BULLETS);
-                }
-            }
-        };
-	}
-
-	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-		final ItemStack itemStack = playerIn.getItemInHand(handIn);
-		final ItemInventory inv = getInventory(itemStack);
-
-		if (handIn == InteractionHand.MAIN_HAND) {
-			if (itemStack.getDamageValue() == itemStack.getMaxDamage()) {
-				if (!worldIn.isClientSide) {
-					PlayerUtil.sendMsgTo(playerIn,
-							Component.translatable("help.pvz.broken").withStyle(ChatFormatting.RED));
-				}
-				playerIn.getCooldowns().addCooldown(this, 20);
-				return InteractionResultHolder.fail(itemStack);
-			}
-			if (!hasBullet(itemStack)) {// no bullet.
-				if (!worldIn.isClientSide) {
-					PlayerUtil.sendMsgTo(playerIn,
-							Component.translatable("help.pvz.no_bullet").withStyle(ChatFormatting.RED));
-				}
-				playerIn.getCooldowns().addCooldown(this, 20);
-				return InteractionResultHolder.fail(itemStack);
-			}
-			if (!hasShootMode(inv.getItem(0))) {// no mode.
-				if (!worldIn.isClientSide) {
-					PlayerUtil.sendMsgTo(playerIn,
-							Component.translatable("help.pvz.no_shoot_mode").withStyle(ChatFormatting.RED));
-				}
-				playerIn.getCooldowns().addCooldown(this, 20);
-				return InteractionResultHolder.fail(itemStack);
-			}
-			playerIn.startUsingItem(handIn);
-		} else {
-			if (!worldIn.isClientSide && playerIn instanceof ServerPlayer) {
-				NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
-
-					@Override
-					public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
-							Player p_createMenu_3_) {
-						return new PeaGunContainer(p_createMenu_1_, p_createMenu_3_);
-					}
-
-					@Override
-					public Component getDisplayName() {
-						return Component.translatable("gui.pvz.pea_gun.show");
-					}
-				});
-			}
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		final ItemStack gun = player.getItemInHand(hand);
+		ItemStack bulletStack = player.getProjectile(gun);
+		if (player.getAbilities().instabuild && bulletStack.getItem() == Items.ARROW) {
+			bulletStack = new ItemStack(ItemRegister.PEA.get());
 		}
-		return InteractionResultHolder.success(itemStack);
-	}
-
-	@Override
-	public void onUseTick(Level world, LivingEntity living, ItemStack stack, int tick) {
-		final int cd = getShootCD(living, stack);
-		final ItemInventory inv = getInventory(stack);
-
-		final IPlantType type = getShootMode(inv.getItem(0));
-		
-		if (living instanceof Player && tick + 5 < this.getUseDuration(stack) && tick % cd == 0) {
-			if (!MinecraftForge.EVENT_BUS.post(new PeaGunShootEvent((Player) living, stack, type))) {
-				this.performShoot(world, (Player) living, stack, type);
-			}
+		if (bulletStack.isEmpty()) {
+			return InteractionResultHolder.fail(gun);
 		}
-	}
-	
-	/**
-	 * {@link PVZPlayerEvents#tickPlayer(net.minecraftforge.event.TickEvent.PlayerTickEvent)}
-	 */
-	public static void checkHeadShoot(Player player) {
-		final ItemStack stack = player.getItemBySlot(EquipmentSlot.HEAD);
-		final ItemInventory inv = getInventory(stack);
-
-		if(stack.getItem() instanceof PeaGunItem && ! player.getCooldowns().isOnCooldown(stack.getItem())) {
-			if(stack.getDamageValue() < stack.getMaxDamage() && hasBullet(stack) && hasShootMode(inv.getItem(0))) {
-				final IPlantType mode = getShootMode(inv.getItem(0));
-				((PeaGunItem)stack.getItem()).performShoot(player.level, player, stack, mode);
-				player.getCooldowns().addCooldown(stack.getItem(), Math.max(5, PeaGunItem.getShootCD(player, stack)));
-			} else {
-				player.getCooldowns().addCooldown(stack.getItem(), 200);//cool down for no pea
-			}
+		if (level.isClientSide) {
+			return InteractionResultHolder.consume(gun);
 		}
-	}
-
-	/**
-	 * @param itemStack : pea gun stack.
-	 */
-	public void performShoot(Level world, Player player, ItemStack itemStack, IPlantType mode) {
-		final ItemStack stack = getFirstBullets(itemStack);
-
-		if (mode == PVZPlants.PEA_SHOOTER) {
-			this.shootPea(world, player, mode, stack, 0.5, 0, 0);
-		} else if (mode == PVZPlants.SNOW_PEA) {
-			this.shootPea(world, player, mode, stack, 0.5, 0, 0);
-		} else if (mode == PVZPlants.REPEATER) {
-			this.shootPea(world, player, mode, stack, 0.5, 0, 0);
-			this.shootPea(world, player, mode, stack, 0, 0, 0);
-		} else if (mode == PVZPlants.THREE_PEATER) {
-			this.shootPea(world, player, mode, stack, 0.25, -0.25, -15);
-			this.shootPea(world, player, mode, stack, 0.25, 0, 0);
-			this.shootPea(world, player, mode, stack, 0.25, 0.25, 15);
-		} else if (mode == PVZPlants.SPLIT_PEA) {
-			this.shootPea(world, player, mode, stack, 0.25, 0, 0);
-			this.shootPea(world, player, mode, stack, 0, 0, 180);
-			this.shootPea(world, player, mode, stack, -0.5, 0, 180);
-		} else if (mode == PVZPlants.STAR_FRUIT) {
-			final int base = player.getRandom().nextInt(72);
-			for (int i = 0; i < 5; ++i) {
-				this.shootPea(world, player, mode, stack, 0.25, 0, base + 72 * i);
-			}
-		} else if (mode == OtherPlants.ANGEL_STAR_FRUIT) {
-			for (int i = 0; i < 5; ++i) {
-				this.shootPea(world, player, mode, stack, 0.25, 0, 72 * i);
-			}
-		} else if (mode == PVZPlants.GATLING_PEA) {
-			this.shootPea(world, player, mode, stack, 1.5, 0, 0);
-			this.shootPea(world, player, mode, stack, 1, 0, 0);
-			this.shootPea(world, player, mode, stack, 0.5, 0, 0);
-			this.shootPea(world, player, mode, stack, 0, 0, 0);
+		final boolean flame = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, gun) > 0;
+		final int force = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, gun);
+		final PeaEntity pea = this.createBullet(level, player, bulletStack.getItem(), flame, force);
+		final boolean infinite = player.getAbilities().instabuild
+				|| EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, gun) > 0
+				|| player.hasEffect(EffectRegister.ENERGETIC_EFFECT.get());
+		if (!infinite) {
+			bulletStack.shrink(1);
 		}
-
-		final SoundEvent sound = (mode == PVZPlants.SNOW_PEA || stack.getItem().equals(ItemRegister.SNOW_PEA.get())) ? SoundRegister.SNOW_SHOOT.get() :
-				SoundEvents.SNOW_GOLEM_SHOOT;
-		EntityUtil.playSound(player, sound);
-
-		this.shrinkItemStack(player, itemStack);
-
-		if(PlayerUtil.isPlayerSurvival(player)) {
-			itemStack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-		}
-	}
-
-	public void shootPea(Level world, Player player, IPlantType mode, ItemStack stack, double forwardOffset,
-			double rightOffset, float angle) {
-		final Vec3 vec = player.getLookAngle();
-		final double deltaX = forwardOffset * vec.x - rightOffset * vec.z;
-		final double deltaZ = forwardOffset * vec.z + rightOffset * vec.x;
-		
-		final PeaEntity pea = EntityRegister.PEA.get().create(world);
-		pea.setPos(player.getX() + deltaX, player.getEyeY() - 0.4, player.getZ() + deltaZ);
-		pea.shootPea(player.getLookAngle(), 1.3F, angle);
-
-		pea.setPeaType(this.getPeaType(player));
-		pea.setPeaState(this.getPeaState(mode, stack.getItem()));
-		pea.setPower(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, player.getMainHandItem()));
-
 		pea.summonByOwner(player);
-		pea.setAttackDamage(1.5F);
-		world.addFreshEntity(pea);
+		level.playSound(null, player, SoundRegister.PEA_SNIPER_SHOOT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+		level.addFreshEntity(pea);
+		player.getCooldowns().addCooldown(this, getShootCD(player, gun));
+		gun.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+		return InteractionResultHolder.consume(gun);
 	}
 
-	private void shrinkItemStack(Player player, ItemStack stack) {
-		final ItemInventory inv = getInventory(stack);
-		final int pos = getFirstPos(stack);
-		final int lvl = PlayerUtil.getResource(player, Resources.TREE_LVL);
-		boolean flag = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
-		if (player.hasEffect(EffectRegister.ENERGETIC_EFFECT.get()) || ! PlayerUtil.isPlayerSurvival(player) || flag) {
-			//*0.6.4 removed working probability of infinity enchantment
-		} else {
-			inv.removeItem(pos, 1);
-		}
-	}
+	private PeaEntity createBullet(Level level, Player player, Item bulletItem, boolean flame, int force) {
+		final PeaEntity pea = EntityRegister.PEA.get().create(level);
+        if (pea != null) {
+			pea.setPos(player.getX(), player.getEyeY() - 0.2D, player.getZ());
+			pea.shootPea(player.getLookAngle(), 1.3D, 0.0D);
+			pea.setPeaType(PeaEntity.Type.NORMAL);
 
-	private PeaEntity.State getPeaState(IPlantType plant, Item item) {
-		if (plant == PVZPlants.SNOW_PEA) {
-			return PeaEntity.State.ICE;
-		} else if (item == ItemRegister.SNOW_PEA.get()) {
-			return PeaEntity.State.ICE;
-		} else if (item == ItemRegister.FLAME_PEA.get()) {
-			return PeaEntity.State.FIRE;
-		} else {
-			return PeaEntity.State.NORMAL;
-		}
-	}
-
-	private PeaEntity.Type getPeaType(Player player) {
-		final int lvl = PlayerUtil.getResource(player, Resources.TREE_LVL);
-		final int bigChance = (lvl + 4) / 5;
-		final int hugeChance = bigChance + (lvl + 19) / 20;
-		final int tmp = player.getRandom().nextInt(1000);
-		return tmp < bigChance ? PeaEntity.Type.BIG : tmp < hugeChance ? PeaEntity.Type.HUGE : PeaEntity.Type.NORMAL;
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-		tooltip.add(Component.translatable("tooltip.pvz.pea_gun").withStyle(ChatFormatting.GREEN));
-	}
-
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-		return enchantment == Enchantments.QUICK_CHARGE || enchantment == Enchantments.INFINITY_ARROWS
-				|| enchantment == Enchantments.POWER_ARROWS || enchantment == Enchantments.UNBREAKING
-				|| enchantment == Enchantments.MENDING || enchantment == EnchantmentRegister.SUN_MENDING.get();
-		//*0.6.4 added two mending enchantments.
-	}
-
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public int getEnchantmentValue() {
-		return 1;
-	}
-
-	@Override
-	public int getUseDuration(ItemStack p_77626_1_) {
-		return 100000;
-	}
-
-	@Override
-	public UseAnim getUseAnimation(ItemStack p_77661_1_) {
-		return UseAnim.BOW;
-	}
-
-	@Override
-	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
-		return armorType == EquipmentSlot.HEAD;
-	}
-
-	/**
-	 * check card item stack.
-	 */
-	public static IPlantType getShootMode(ItemStack stack) {
-		if (isValidMode(stack)) {
-			return ((PlantCardItem) stack.getItem()).plantType;
-		}
-		return null;
-	}
-
-	/**
-	 * check card item stack.
-	 */
-	public static boolean isValidMode(ItemStack stack) {
-		if (stack.getItem() instanceof PlantCardItem) {
-			return SHOOT_MODES.contains(((PlantCardItem) stack.getItem()).plantType) && ! ((PlantCardItem) stack.getItem()).isEnjoyCard;
-		}
-		return false;
-	}
-
-	public static boolean hasShootMode(ItemStack stack) {
-		return getShootMode(stack) != null;
-	}
-
-	public static boolean hasBullet(ItemStack stack) {
-		return !getFirstBullets(stack).isEmpty();
-	}
-
-	@Override
-	public boolean isValidRepairItem(ItemStack stack, ItemStack stack1) {
-		return stack1.getItem().equals(ItemRegister.APPEASE_ESSENCE.get());
-	}
-
-	public static ItemStack getFirstBullets(ItemStack stack) {
-		final ItemInventory inv = getInventory(stack);
-		final int pos = getFirstPos(stack);
-		return pos < 0 ? new ItemStack(Items.AIR) : inv.getItem(pos);
-	}
-
-	public static int getFirstPos(ItemStack stack) {
-		final ItemInventory inv = getInventory(stack);
-		for (int i = 1; i < PEA_GUN_SLOT_NUM; ++i) {
-			if (!inv.getItem(i).isEmpty()) {
-				return i;
+			if (bulletItem == ItemRegister.PEA.get()) {
+				pea.setPeaState(flame ? PeaEntity.State.FIRE : PeaEntity.State.NORMAL);
+				pea.setAttackDamage(8.0F + force * 2.0F);
+			} else if (bulletItem == ItemRegister.SNOW_PEA.get()) {
+				pea.setPeaState(flame ? PeaEntity.State.NORMAL : PeaEntity.State.ICE);
+				pea.setAttackDamage(7.0F + force * 2.0F);
+			} else {
+				pea.setPeaState(PeaEntity.State.FIRE);
+				pea.setAttackDamage(12.0F + force * 2.0F);
 			}
 		}
-		return -1;
+		return pea;
+	}
+
+	@Override
+	public Predicate<ItemStack> getAllSupportedProjectiles() {
+		return stack -> stack.getItem() == ItemRegister.PEA.get()
+				|| stack.getItem() == ItemRegister.SNOW_PEA.get()
+				|| stack.getItem() == ItemRegister.FLAME_PEA.get();
+	}
+
+	@Override
+	public int getDefaultProjectileRange() {
+		return 32;
 	}
 
 	/**
@@ -373,19 +109,62 @@ public class PeaGunItem extends Item {
 		return lvl == 0 ? 30 : 25 - Math.min(3, lvl) * 5;
 	}
 
-	private static class InvProvider implements ICapabilityProvider {
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable("tooltip.pvz.pea_gun").withStyle(ChatFormatting.GREEN));
+	}
 
-		private final LazyOptional<IItemHandler> opt;
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return enchantment == Enchantments.QUICK_CHARGE
+				|| enchantment == Enchantments.PUNCH_ARROWS
+				|| enchantment == Enchantments.POWER_ARROWS
+				|| (enchantment == Enchantments.INFINITY_ARROWS && !EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.FLAMING_ARROWS))
+				|| (enchantment == Enchantments.FLAMING_ARROWS && !EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.INFINITY_ARROWS))
+				|| enchantment == Enchantments.UNBREAKING
+				|| enchantment == Enchantments.MENDING
+				|| enchantment == EnchantmentRegister.SUN_MENDING.get();
+	}
 
-		private InvProvider(ItemStack stack) {
-			opt = LazyOptional.of(() -> new InvWrapper(getInventory(stack)));
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public int getEnchantmentValue() {
+		return 8;
+	}
+
+	@Override
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return UseAnim.NONE;
+	}
+
+	@Override
+	public boolean isValidRepairItem(ItemStack stack, ItemStack repairStack) {
+		return repairStack.getItem().equals(ItemRegister.APPEASE_ESSENCE.get());
+	}
+
+	/**only decoration.*/
+	@Override
+	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
+		return armorType == EquipmentSlot.HEAD;
+	}
+
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+		consumer.accept(PeaGunClientExt.INSTANCE);
+	}
+
+	private static class PeaGunClientExt implements IClientItemExtensions {
+
+		private static final PeaGunClientExt INSTANCE = new PeaGunClientExt();
+
+		@Override
+		public HumanoidModel.ArmPose getArmPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {
+			return HumanoidModel.ArmPose.BOW_AND_ARROW;
 		}
-
-			@Nonnull
-			@Override
-			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-				return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
-			}
-		}
+	}
 
 }

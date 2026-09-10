@@ -98,11 +98,6 @@ public class PVZAPI {
         void registerCDs(Collection<ICoolDown> types);
 
         /**
-         * register pea gun shooting mode.
-         */
-        void registerPeaGunMode(IPlantType type);
-
-        /**
          * register bowling gloves mode, entity type should extends {@link AbstractBowlingEntity}.
          */
         void registerBowlingMode(IPlantType type, Supplier<EntityType<? extends Entity>> supplier, float size);

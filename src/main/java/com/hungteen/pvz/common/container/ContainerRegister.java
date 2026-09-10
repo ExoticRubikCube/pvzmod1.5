@@ -31,12 +31,6 @@ public class ContainerRegister {
         });
 	});
 	
-	public static final RegistryObject<MenuType<PeaGunContainer>> PEA_GUN = CONTAINER_TYPES.register("pea_gun", () -> {
-		return IForgeMenuType.create((windowId, inv, data) -> {
-            return new PeaGunContainer(windowId, inv.player);
-        });
-	});
-	
 	public static final RegistryObject<MenuType<DaveShopContainer>> DAVE_SHOP = CONTAINER_TYPES.register("dave_shop", () -> {
 		return IForgeMenuType.create((windowId, inv, data) -> {
             return new DaveShopContainer(windowId, inv.player, data.readInt());
@@ -102,7 +96,6 @@ public class ContainerRegister {
     public static void onClientSetupEvent(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 	        MenuScreens.register(ALMANAC.get(), AlmanacScreen::new);
-	        MenuScreens.register(PEA_GUN.get(), PeaGunScreen::new);
 	        MenuScreens.register(DAVE_SHOP.get(), DaveShopScreen::new);
 	        MenuScreens.register(SUN_SHOP.get(), SunShopScreen::new);
 	        MenuScreens.register(SUN_CONVERTER.get(), SunConverterScreen::new);

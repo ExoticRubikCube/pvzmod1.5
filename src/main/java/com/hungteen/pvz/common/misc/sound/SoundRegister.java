@@ -74,6 +74,7 @@ public class SoundRegister {
 	public static final RegistryObject<SoundEvent> HYPNO = registerSound("hypno");
 	public static final RegistryObject<SoundEvent> ZOMBIE_ANGRY = registerSound("zombie_angry");
 	public static final RegistryObject<SoundEvent> CHANGE_PAPER = registerSound("change_paper");
+	public static final RegistryObject<SoundEvent> PEA_SNIPER_SHOOT = registerSound("pea_sniper_shoot");
 	public static final RegistryObject<SoundEvent> PAPER_BROKEN = registerSound("paper_broken");
 	public static final RegistryObject<SoundEvent> PHONOGRAPH = registerSound("phonograph");
 	public static final RegistryObject<SoundEvent> PLACE_PLANT_GROUND = registerSound("place_plant_ground");
@@ -111,9 +112,7 @@ public class SoundRegister {
 	public static final RegistryObject<SoundEvent> ZEN_GARDEN = registerSound("zen_garden");
 
 	private static RegistryObject<SoundEvent> registerSound(String name){
-		return SOUNDS.register(name, ()->{
-			return new SoundEvent(StringUtil.prefix(name));
-		});
+		return SOUNDS.register(name, ()-> new SoundEvent(StringUtil.prefix(name)));
 	}
 
 }

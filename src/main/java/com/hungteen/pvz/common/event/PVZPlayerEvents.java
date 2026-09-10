@@ -7,7 +7,6 @@ import com.hungteen.pvz.common.datapack.PVZDataPackManager;
 import com.hungteen.pvz.common.event.events.SummonCardUseEvent;
 import com.hungteen.pvz.common.event.handler.PlayerEventHandler;
 import com.hungteen.pvz.common.item.tool.plant.BowlingGloveItem;
-import com.hungteen.pvz.common.item.tool.plant.PeaGunItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import com.hungteen.pvz.compat.CompatUtil;
@@ -30,7 +29,6 @@ public class PVZPlayerEvents {
 			if (ev.player.tickCount < 2) {
 				PlayerUtil.getOptManager(ev.player).ifPresent(l -> l.loadSummonCardCDs());
 			}
-			PeaGunItem.checkHeadShoot(ev.player);
 			ev.player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent((l) -> {
 				if (l.getPlayerData().getOtherStats().playSoundTick > 0) {
 					--l.getPlayerData().getOtherStats().playSoundTick;

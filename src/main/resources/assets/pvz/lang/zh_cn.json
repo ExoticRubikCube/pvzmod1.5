@@ -167,7 +167,7 @@
   "tooltip.pvz.imitater_card.enjoy_card": "不能种植，但是可以在精华祭坛随机给任意植物加经验",
   "tooltip.pvz.imitater_card.empty": "左持此卡并右击来打开模仿界面",
   "tooltip.pvz.imitater_card.full": "正在模仿 : [%s]",
-  "tooltip.pvz.pea_gun": "主手右键长按发射豌豆, 副手右击打开界面",
+  "tooltip.pvz.pea_gun": "右键发射豌豆, 以背包中的豌豆为弹药",
   "tooltip.pvz.resource_collector.use": "右击可远距离单个收集资源，蹲下右击可短距离范围收集资源",
   "tooltip.pvz.resource_collector.info": "单个收集最大距离%d格，范围收集最大距离%d格",
   "tooltip.pvz.bowling_glove.empty": "右击坚果墙等保龄球实体来拾取",
@@ -617,6 +617,7 @@
   "sound.pvz.hypno": "魅惑",
   "sound.pvz.zombie_angry": "爷生气",
   "sound.pvz.change_paper": "翻页",
+  "sound.pvz.pea_sniper_shoot": "豌豆枪射击",
   "sound.pvz.paper_broken": "报纸破碎",
   "sound.pvz.phonograph": "留声机",
   "sound.pvz.place_plant_ground": "地上种植物",
@@ -649,8 +650,6 @@
   "sound.pvz.bruh": "猫猫叹气",
   "sound.pvz.penny_say": "潘妮说话",
   "_comment6": "--------------------------------------------界面-------------------------------------------",
-  "gui.pvz.pea_gun.tip1": "最上方的槽位用来放置§a喷射类植物卡§r，它决定了豌豆枪的发射模式",
-  "gui.pvz.pea_gun.tip2": "其余槽位用来放置豌豆弹药",
   "gui.pvz.sun_converter.tip1": "9个槽位可以放置§n储光树苗§r来吸收阳光",
   "gui.pvz.sun_converter.tip2": "也可以放置带有§n阳光修补§r的装备来对其修复",
   "gui.pvz.slot_machine.tip1": "当中间一行有§l至少2个图像相同§r时即中奖",
@@ -948,7 +947,6 @@
   "config.pvz.rule.unlock_plant": "种植植物需要解锁",
   "config.pvz.rule.keep_sun": "死亡不掉落阳光",
   "config.pvz.rule.max_damage": "植物和僵尸对其他生物的最大伤害",
-  "config.pvz.rule.sun_mending": "阳光修补触发阳光量",
 
   "config.pvz.world.zen_garden_chance": "禅境花园权重",
 
