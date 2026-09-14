@@ -178,7 +178,6 @@
     "tooltip.pvz.wait_for_update": "No Use, Wait for update",
     "_comment4": "--------------------------------------------Entity-------------------------------------------",
     "entity.pvz.sun":"Sun",
-    "item.pvz.sun_spawn_egg":"Sun Spawn Egg",
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
     "item.pvz.energy_spawn_egg":"Energy Spawn Egg",

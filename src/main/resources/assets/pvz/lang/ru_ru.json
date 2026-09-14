@@ -176,7 +176,6 @@
     "tooltip.pvz.wait_for_update": "Не Используй, Дождись Обновления",
     "_comment4": "--------------------------------------------Entity-------------------------------------------",
     "entity.pvz.sun":"Sun",
-    "item.pvz.sun_spawn_egg":"Яйцо Призыва Солнца",
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
     "item.pvz.energy_spawn_egg":"Яйцо Призыва Энергии",

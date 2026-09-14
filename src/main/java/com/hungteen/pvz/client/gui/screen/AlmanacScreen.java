@@ -111,11 +111,15 @@ public class AlmanacScreen extends AbstractOptionScreen<AlmanacContainer> {
 	protected void renderLogo(PoseStack stack, SearchOption a) {
 		int dx = this.leftPos + 9, dy = this.topPos + 9;
 		int scale = 2;
-		stack.pushPose();
-		stack.scale((float) scale, (float) scale, (float) scale);
-		stack.translate((double)(dx % scale) / scale , (double)(dy % scale) / scale, 0);
+		// renderGuiItem 三参重载只读取 RenderSystem 的全局 modelView 栈，缩放必须施加在同一栈上才生效
+		final PoseStack modelViewStack = RenderSystem.getModelViewStack();
+		modelViewStack.pushPose();
+		modelViewStack.scale((float) scale, (float) scale, (float) scale);
+		modelViewStack.translate((double)(dx % scale) / scale, (double)(dy % scale) / scale, 0);
+		RenderSystem.applyModelViewMatrix();
 		this.itemRenderer.renderGuiItem(SearchOption.getItemStackByOption(a), dx / scale, dy / scale);
-		stack.popPose();
+		modelViewStack.popPose();
+		RenderSystem.applyModelViewMatrix();
 	}
 
 	protected void renderBar(PoseStack stack, SearchOption a) {

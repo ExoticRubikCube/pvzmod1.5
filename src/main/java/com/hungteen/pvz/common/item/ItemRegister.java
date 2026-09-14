@@ -98,7 +98,6 @@ public class ItemRegister {
     public static final RegistryObject<Item> TIME_SOURCE = ITEMS.register("time_source", PVZMiscItem::new);
 
     /* spawn eggs */
-  	public static final RegistryObject<PVZSpawnEggItem> SUN_SPAWN_EGG = registerSpawnEgg("sun", EntityRegister.SUN, Colors.YELLOW, Colors.WHITE);
   	public static final RegistryObject<PVZSpawnEggItem> ENERGY_SPAWN_EGG = registerSpawnEgg("energy", EntityRegister.ENERGY, Colors.GREEN, Colors.DARK_GREEN);
   	public static final RegistryObject<PVZSpawnEggItem> FOODIE_ZOMBIE_SPAWN_EGG = registerSpawnEgg("foodie_zombie", EntityRegister.FOODIE_ZOMBIE, Colors.ZOMBIE_SKIN, Colors.WHITE);
   	public static final RegistryObject<PVZSpawnEggItem> MOOBLOOM_SPAWN_EGG = registerSpawnEgg("moo_bloom", EntityRegister.MOOBLOOM, Colors.YELLOW, Colors.WHITE);

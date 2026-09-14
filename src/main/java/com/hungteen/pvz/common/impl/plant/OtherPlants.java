@@ -54,7 +54,7 @@ public final class OtherPlants extends PlantType {
 
 	public static final IPlantType GOLD_BLOOM = new OtherPlants("gold_bloom", new PlantFeatures()
 			.cost(0).requiredLevel(24)
-			.cd(CoolDowns.VERY_SLOW).rank(RankTypes.PURPLE).essence(EssenceTypes.LIGHT)
+			.cd(CoolDowns.VERY_SLOW).rank(RankTypes.BLUE).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.GOLD_BLOOM.get())
 			.summonCard(() -> ItemRegister.GOLD_BLOOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.GOLD_BLOOM_ENJOY_CARD.get())

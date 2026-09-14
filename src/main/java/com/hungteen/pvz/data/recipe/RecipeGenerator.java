@@ -81,6 +81,7 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.BAMBOO_LORD_CARD.get(), Items.BAMBOO);
         registerCommonCard(consumer, ItemRegister.ICEBERG_LETTUCE_CARD.get(), PVZItemTags.CABBAGES);
         registerCommonCard(consumer, ItemRegister.BONK_CHOY_CARD.get(), PVZItemTags.CABBAGES);
+        registerCommonCard(consumer, ItemRegister.GOLD_BLOOM_CARD.get(), Items.GLOW_BERRIES);
 
         //smelt
         registerStoneSmelting(consumer, BlockRegister.AMETHYST_ORE.get(), ItemRegister.AMETHYST_INGOT.get(), 1.4F, 250, "amethyst_ingot");
