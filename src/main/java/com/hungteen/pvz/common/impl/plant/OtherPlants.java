@@ -59,7 +59,6 @@ public final class OtherPlants extends PlantType {
 			.summonCard(() -> ItemRegister.GOLD_BLOOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.GOLD_BLOOM_ENJOY_CARD.get())
 			.plantModel(() -> () -> new GoldBloomModel(GoldBloomModel.createBodyLayer().bakeRoot())).scale(1F)
-			.placement(Placements.ANY)
 			.commonSkill(List.of())
 	);
 	

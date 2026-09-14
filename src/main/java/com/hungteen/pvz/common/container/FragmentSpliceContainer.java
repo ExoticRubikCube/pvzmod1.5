@@ -40,7 +40,7 @@ public class FragmentSpliceContainer extends PVZContainer {
 		}
 
 		// result slot.
-		this.addSlot(new SlotItemHandler(te.handler, 0, 142, 62){
+		this.addSlot(new SlotItemHandler(te.handler, 0, 142, 53){
 			@Override
 			public boolean mayPlace(@Nonnull ItemStack stack) {
 				return false;
@@ -54,7 +54,7 @@ public class FragmentSpliceContainer extends PVZContainer {
 		// input slots. JEI 一键转移校验每个配方槽的 mayPickup，SlotItemHandler 默认对空槽模拟提取返回 false 会隐藏+号
 		for (int i = 0; i < 5; ++ i) {
 			for (int j = 0; j < 5; ++ j) {
-				this.addSlot(new SlotItemHandler(te.handler, j + i * 5 + 1, 16 + j * 18, 26 + i * 18) {
+				this.addSlot(new SlotItemHandler(te.handler, j + i * 5 + 1, 16 + j * 18, 17 + i * 18) {
 					@Override
 					public boolean mayPickup(Player playerIn) {
 						return true;
@@ -65,11 +65,11 @@ public class FragmentSpliceContainer extends PVZContainer {
 		// player inventory
 		for (int k = 0; k < 3; ++ k) {
 			for (int i1 = 0; i1 < 9; ++ i1) {
-				this.addSlot(new Slot(player.getInventory(), i1 + k * 9 + 9, 9 + i1 * 18, 127 + k * 18));
+				this.addSlot(new Slot(player.getInventory(), i1 + k * 9 + 9, 9 + i1 * 18, 118 + k * 18));
 			}
 		}
 		for (int l = 0; l < 9; ++ l) {
-			this.addSlot(new Slot(player.getInventory(), l, 9 + l * 18, 185));
+			this.addSlot(new Slot(player.getInventory(), l, 9 + l * 18, 176));
 		}
 		if(! this.player.level.isClientSide) {
 			this.refreshResult();

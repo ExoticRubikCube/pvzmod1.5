@@ -3,6 +3,7 @@ package com.hungteen.pvz.common.event.handler;
 import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
+import com.hungteen.pvz.api.interfaces.ICollectible;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.enchantment.EnchantmentUtil;
@@ -14,7 +15,6 @@ import com.hungteen.pvz.common.event.PVZLivingEvents;
 import com.hungteen.pvz.common.event.PVZPlayerEvents;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.display.ChallengeEnvelopeItem;
-import com.hungteen.pvz.common.item.tool.mc.OriginShovelItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.common.world.invasion.InvasionManager;
@@ -36,7 +36,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -64,7 +67,7 @@ public class PlayerEventHandler {
                     }
                     plantEntity.discard();
                 }
-                removed = ! (stack.getItem() instanceof OriginShovelItem);
+                removed = true;
                 EntityUtil.playSound(plantEntity, SoundRegister.PLACE_PLANT_GROUND.get());
 
             } else if(entity instanceof PVZZombieEntity) {
@@ -83,8 +86,8 @@ public class PlayerEventHandler {
      */
     public static void makeSuperMode(Player player, Entity entity, ItemStack heldStack) {
         if (entity instanceof PVZPlantEntity && EntityUtil.isEntityValid(entity)) {//target must still alive.
-            //origin tools or item enchanted with [Energy Transfer] can make this.
-            if (heldStack.getItem().equals(ItemRegister.ORIGIN_SWORD.get()) || EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.ENERGY_TRANSFER.get(), heldStack) > 0) {
+            //only item enchanted with [Energy Transfer] can make this.
+            if (EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.ENERGY_TRANSFER.get(), heldStack) > 0) {
                 //this plant can be super and player has enough energy.
                 if (((PVZPlantEntity) entity).canStartSuperMode() && (! PlayerUtil.isPlayerSurvival(player) || PlayerUtil.getResource(player, Resources.ENERGY_NUM) > 0)) {
                     if(PlayerUtil.isPlayerSurvival(player)) {
@@ -95,6 +98,20 @@ public class PlayerEventHandler {
                     final int treeLevel = PlayerUtil.getResource(player, Resources.TREE_LVL);
                     player.addEffect(new MobEffectInstance(EffectRegister.ENERGETIC_EFFECT.get(), 100 + (treeLevel + 1) / 2, 0));
                 }
+            }
+        }
+    }
+
+    /**
+     * {@link PVZPlayerEvents#onPlayerRightClickItem(PlayerInteractEvent.RightClickItem)}
+     */
+    public static void collectDropByReachSword(Player player, ItemStack heldStack) {
+        final int reachLevel = EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.RANGE_REACH.get(), heldStack);
+        if(reachLevel > 0 && heldStack.getItem() instanceof SwordItem && ! player.isShiftKeyDown()) {
+            //range 15/20/25 for level 1/2/3.
+            final EntityHitResult entityRay = EntityUtil.rayTraceEntities(player.level, player, player.getLookAngle(), 10 + reachLevel * 5, e -> e instanceof ICollectible);
+            if(entityRay != null && entityRay.getType() == HitResult.Type.ENTITY && entityRay.getEntity() instanceof ICollectible collectible) {
+                collectible.onCollect(player);
             }
         }
     }

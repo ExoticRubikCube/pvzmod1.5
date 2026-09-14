@@ -10,6 +10,7 @@ public class CharmEnchantment extends PVZEnchantment{
 		super(Rarity.VERY_RARE, PVZEnchantmentTypes.ENTITY_CARD, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
 		this.isTradeable = false;
 		this.isTreasureOnly = true;
+		this.isCurse = true;
 	}
 	
 	@Override

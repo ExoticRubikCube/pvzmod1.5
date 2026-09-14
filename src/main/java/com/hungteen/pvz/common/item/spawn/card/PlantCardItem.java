@@ -659,7 +659,7 @@ public class PlantCardItem extends SummonCardItem {
 
 		if(stack.getItem() instanceof PlantCardItem) {
 			IPlantType plantType = ((PlantCardItem) stack.getItem()).plantType;
-			return Math.max(plantType.getSunCost() - vary, 1);
+			return Math.max(plantType.getSunCost() - vary, 0);
 		}
 		return 1;
 	}

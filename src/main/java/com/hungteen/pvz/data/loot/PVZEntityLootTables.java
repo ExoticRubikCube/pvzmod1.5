@@ -1,18 +1,22 @@
 package com.hungteen.pvz.data.loot;
 
 import com.hungteen.pvz.common.block.BlockRegister;
+import com.hungteen.pvz.common.enchantment.EnchantmentRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZLoot;
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
@@ -150,13 +154,13 @@ public class PVZEntityLootTables implements Consumer<BiConsumer<ResourceLocation
                 ));
         t.accept(PVZLoot.DIGGER_ZOMBIE, getLootTable()
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(ItemRegister.ORIGIN_PICKAXE.get()))
                         .add(LootItem.lootTableItem(Items.DIAMOND_PICKAXE))
                         .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.005F, 0.01F))
                 ));
         t.accept(PVZLoot.RA_ZOMBIE, getLootTable()
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(ItemRegister.RESOURCE_COLLECTOR.get()))
+                        .add(LootItem.lootTableItem(Items.ENCHANTED_BOOK)
+                                .apply(SetNbtFunction.setTag(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(EnchantmentRegister.RANGE_REACH.get(), 1)).getOrCreateTag())))
                         .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.001F, 0.01F))
                 ));
         t.accept(PVZLoot.BUNGEE_ZOMBIE, getLootTable()

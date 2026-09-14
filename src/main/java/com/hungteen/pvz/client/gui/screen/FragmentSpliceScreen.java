@@ -21,8 +21,8 @@ public class FragmentSpliceScreen extends PVZContainerScreen<FragmentSpliceConta
 	public FragmentSpliceScreen(FragmentSpliceContainer screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 		this.imageWidth = 178;
-		this.imageHeight = 208;
-		this.tips.add(new DisplayField.TipField(3, 8, Arrays.asList(
+		this.imageHeight = 199;
+		this.tips.add(new DisplayField.TipField(3, 3, Arrays.asList(
 				Component.translatable("gui.pvz.fragment_splice.tip1"),
 				Component.translatable("gui.pvz.fragment_splice.tip2"),
 				Component.translatable("gui.pvz.fragment_splice.tip3"),
@@ -33,7 +33,7 @@ public class FragmentSpliceScreen extends PVZContainerScreen<FragmentSpliceConta
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		super.render(stack, mouseX, mouseY, partialTicks);
-		StringUtil.drawScaledString(stack, font, this.title.getString(), this.leftPos + 17, this.topPos + 10, 4210752, 1F);
+		StringUtil.drawScaledString(stack, font, this.title.getString(), this.leftPos + 17, this.topPos + 6, 4210752, 1F);
 		this.renderTooltip(stack, mouseX, mouseY);
     }
 

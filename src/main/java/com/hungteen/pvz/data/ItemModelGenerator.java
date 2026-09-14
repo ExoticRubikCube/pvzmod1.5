@@ -43,7 +43,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         addedItems.addAll(Arrays.asList(ItemRegister.PEA_GUN.get(), ItemRegister.ZOMBIE_FLAG.get(), ItemRegister.BOBSLE_CAR.get(),
                 ItemRegister.SCREEN_DOOR.get(), ItemRegister.JACK_BOX.get(), ItemRegister.BALLOON.get(),
                 ItemRegister.WARNING_SIGN.get(), ItemRegister.ZOMBIE_DOLL.get(), ItemRegister.POLE.get(),
-                ItemRegister.BUCKET_HEAD.get(), ItemRegister.RESOURCE_COLLECTOR.get(), ItemRegister.GARDEN_COMPASS.get()
+                ItemRegister.BUCKET_HEAD.get(), ItemRegister.GARDEN_COMPASS.get()
         ));
 
         // single add
@@ -82,14 +82,6 @@ public class ItemModelGenerator extends ItemModelProvider {
             }
         }
 
-        // for hand held item
-        Arrays.asList(ItemRegister.ORIGIN_AXE.get(), ItemRegister.ORIGIN_HOE.get(), ItemRegister.ORIGIN_PICKAXE.get(), ItemRegister.ORIGIN_SHOVEL.get(),
-                ItemRegister.ORIGIN_SWORD.get()
-        ).forEach(i -> {
-            addedItems.add(i);
-            genHeld(key(i).getPath(), StringUtil.prefix("item/" + key(i).getPath()));
-        });
-
         // last step for all normal item models.
         for (Item i : ForgeRegistries.ITEMS) {
             ResourceLocation itemKey = key(i);
@@ -105,10 +97,6 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     private ItemModelBuilder genNormal(String name, ResourceLocation... layers) {
         return gen(name, "item/generated", layers);
-    }
-
-    private ItemModelBuilder genHeld(String name, ResourceLocation... layers) {
-        return gen(name, "item/handheld", layers);
     }
 
     private ItemModelBuilder gen(String name, String parent, ResourceLocation... layers) {

@@ -2,8 +2,8 @@ package com.hungteen.pvz.common.enchantment;
 
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
-import com.hungteen.pvz.common.misc.tag.PVZItemTags;
 import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 /**
@@ -43,12 +43,12 @@ public class PVZEnchantmentTypes {
         return item instanceof ShovelItem;
     });
 
-    public static final EnchantmentCategory REACH = EnchantmentCategory.create("reach", (item) -> {
-        return item.builtInRegistryHolder().is(PVZItemTags.REACH_ITEMS);
+    public static final EnchantmentCategory SWORD = EnchantmentCategory.create("sword", (item) -> {
+        return item instanceof SwordItem;
     });
 
     public static EnchantmentCategory[] getPVZEnchantmentTypes(){
-        return new EnchantmentCategory[]{SUMMON_CARD, ENTITY_CARD, PLANT_OR_OUTER_CARD, NO_OUTER_PLANT_CARD, PLANT_CARD, SHOVEL, REACH};
+        return new EnchantmentCategory[]{SUMMON_CARD, ENTITY_CARD, PLANT_OR_OUTER_CARD, NO_OUTER_PLANT_CARD, PLANT_CARD, SHOVEL, SWORD};
     }
 
 }

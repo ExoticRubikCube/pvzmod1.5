@@ -4,6 +4,7 @@ import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.events.PlayerLevelChangeEvent;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.datapack.PVZDataPackManager;
+import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.event.events.SummonCardUseEvent;
 import com.hungteen.pvz.common.event.handler.PlayerEventHandler;
 import com.hungteen.pvz.common.item.tool.plant.BowlingGloveItem;
@@ -13,6 +14,8 @@ import com.hungteen.pvz.compat.CompatUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ShovelItem;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -82,13 +85,24 @@ public class PVZPlayerEvents {
 	
 	@SubscribeEvent
 	public static void onPlayerInteractSpec(PlayerInteractEvent.EntityInteractSpecific ev) {
-		if(! ev.getLevel().isClientSide){
-			if(ev.getHand() == InteractionHand.MAIN_HAND) {
+		if(ev.getHand() == InteractionHand.MAIN_HAND) {
+			if(! ev.getLevel().isClientSide){
 				PlayerEventHandler.quickRemoveByPlayer(ev.getEntity(), ev.getTarget(), ev.getEntity().getMainHandItem());
 				PlayerEventHandler.makeSuperMode(ev.getEntity(), ev.getTarget(), ev.getEntity().getMainHandItem());
 			}
+			if(ev.getTarget() instanceof PVZPlantEntity && ev.getItemStack().getItem() instanceof ShovelItem) {
+				ev.setCanceled(true);
+				ev.setCancellationResult(InteractionResult.SUCCESS);
+			}
 		}
 		BowlingGloveItem.onPickUp(ev);
+	}
+
+	@SubscribeEvent
+	public static void onPlayerRightClickItem(PlayerInteractEvent.RightClickItem ev) {
+		if(! ev.getLevel().isClientSide && ev.getHand() == InteractionHand.MAIN_HAND) {
+			PlayerEventHandler.collectDropByReachSword(ev.getEntity(), ev.getItemStack());
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

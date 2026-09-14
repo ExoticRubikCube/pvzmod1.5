@@ -64,7 +64,6 @@ public class ItemTagGenerator extends ItemTagsProvider {
             }
         }
         this.tag(PVZItemTags.TEMPLATE_CARDS).add(this.getFilterItems(i -> i instanceof TemplateCardItem));
-        this.tag(PVZItemTags.REACH_ITEMS).add(ItemRegister.RESOURCE_COLLECTOR.get());
         this.tag(PVZItemTags.GRAY_MATERIALS).add(Items.STONE, Items.CLAY);
         this.tag(PVZItemTags.WHITE_MATERIALS).add(Items.IRON_INGOT).add(Items.QUARTZ);
         this.tag(PVZItemTags.GREEN_MATERIALS).add(Items.EMERALD).add(ItemRegister.ORIGIN_INGOT.get());

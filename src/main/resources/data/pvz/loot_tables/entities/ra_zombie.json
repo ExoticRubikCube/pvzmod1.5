@@ -6,7 +6,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "pvz:resource_collector"
+          "name": "minecraft:enchanted_book",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{StoredEnchantments:[{id:\"pvz:range_reach\",lvl:1s}]}"
+            }
+          ]
         }
       ],
       "conditions": [

@@ -101,6 +101,14 @@
       "price": 18000,
       "weight": 80,
       "limit": 2
+    },
+    {
+      "type": "item",
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"pvz:energy_transfer\",lvl:1s}]}",
+      "price": 600,
+      "weight": 90,
+      "limit": 1
     }
   ]
 }

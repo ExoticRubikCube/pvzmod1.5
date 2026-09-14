@@ -2,7 +2,8 @@
   "parent": "pvz:adventure/first_plant",
   "display": {
     "icon": {
-      "item": "pvz:origin_sword"
+      "item": "minecraft:enchanted_book",
+      "nbt": "{StoredEnchantments:[{id:\"pvz:energy_transfer\",lvl:1s}]}"
     },
     "title": {
       "translate": "advancement.pvz.super_plant"
