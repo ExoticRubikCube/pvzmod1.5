@@ -1,9 +1,7 @@
 package com.hungteen.pvz.common.network.toserver;
 
 import com.hungteen.pvz.client.gui.GuiHandler;
-import com.hungteen.pvz.common.container.CardFusionContainer;
 import com.hungteen.pvz.common.container.EssenceAltarContainer;
-import com.hungteen.pvz.common.container.FragmentSpliceContainer;
 import com.hungteen.pvz.common.container.SlotMachineContainer;
 import com.hungteen.pvz.common.container.shop.AbstractDaveShopContainer;
 import com.hungteen.pvz.utils.PlayerUtil;
@@ -54,12 +52,6 @@ public class ClickButtonPacket {
 					if(player.containerMenu instanceof AbstractDaveShopContainer) {
 						((AbstractDaveShopContainer) player.containerMenu).onSell(message.num);
 					}
-				} else if(message.type == GuiHandler.FRAGMENT_SPLICE) {
-					if(player.containerMenu instanceof FragmentSpliceContainer container) {
-                        if(message.op == 0) {
-							container.onCraft();
-						}
-					}
 				} else if(message.type == GuiHandler.SLOT_MACHINE) {
 					if(player.containerMenu instanceof SlotMachineContainer container) {
 						if (PlayerUtil.getResource(player,Resources.LOTTERY_CHANCE) > 0) {
@@ -75,12 +67,6 @@ public class ClickButtonPacket {
 				} else if(message.type == GuiHandler.ESSENCE_ALTAR) {
 					if(player.containerMenu instanceof EssenceAltarContainer container) {
                         container.learnSkillAt(message.op);
-					}
-				} else if(message.type == GuiHandler.CARD_FUSION) {
-					if(player.containerMenu instanceof CardFusionContainer container) {
-                        if(message.op == 0) {
-							container.onCraft();
-						}
 					}
 				}
 			});

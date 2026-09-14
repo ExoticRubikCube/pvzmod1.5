@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.block.special;
 
 import com.hungteen.pvz.common.block.AbstractFacingBlock;
 import com.hungteen.pvz.common.blockentity.CardFusionTileEntity;
+import com.hungteen.pvz.common.blockentity.TileEntityRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
@@ -67,5 +70,15 @@ public class CardFusionBlock extends AbstractFacingBlock implements EntityBlock 
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CardFusionTileEntity(pos, state);
 	}
-	
+
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+		return blockEntityType == TileEntityRegister.CARD_FUSION.get()
+				? (levelIn, pos, stateIn, blockEntity) -> {
+			if (blockEntity instanceof CardFusionTileEntity fusionTable) {
+				fusionTable.tick();
+			}
+		} : null;
+	}
+
 }

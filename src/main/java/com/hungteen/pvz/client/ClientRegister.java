@@ -317,6 +317,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(STRANGE_CAT.get(), ctx -> new StrangeCatRender(ctx));
 		ev.registerEntityRenderer(ANGEL_STAR_FRUIT.get(), ctx -> new AngelStarFruitRender(ctx));
 		ev.registerEntityRenderer(GOLD_LEAF.get(), ctx -> new GoldLeafRender(ctx));
+		ev.registerEntityRenderer(GOLD_BLOOM.get(), ctx -> new GoldBloomRender(ctx));
 		ev.registerEntityRenderer(BUTTER_PULT.get(), ctx -> new ButterPultRender(ctx));
 		ev.registerEntityRenderer(BAMBOO_LORD.get(), ctx -> new BambooLordRender(ctx));
 		ev.registerEntityRenderer(ICEBERG_LETTUCE.get(), ctx -> new IcebergLettuceRender(ctx));
@@ -444,6 +445,8 @@ public class ClientRegister {
 			WinterMelonModel::createBodyLayer);
 		ev.registerLayerDefinition(GoldLeafModel.LAYER,
 			GoldLeafModel::createBodyLayer);
+		ev.registerLayerDefinition(GoldBloomModel.LAYER,
+			GoldBloomModel::createBodyLayer);
 		ev.registerLayerDefinition(PlanternModel.LAYER,
 			PlanternModel::createBodyLayer);
 		ev.registerLayerDefinition(SunFlowerModel.LAYER,

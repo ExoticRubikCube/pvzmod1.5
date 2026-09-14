@@ -56,6 +56,7 @@ public class SoundRegister {
 	public static final RegistryObject<SoundEvent> FROZEN = registerSound("frozen");
 	public static final RegistryObject<SoundEvent> FUME = registerSound("fume");
 	public static final RegistryObject<SoundEvent> GROUND_SHAKE = registerSound("ground_shake");
+	public static final RegistryObject<SoundEvent> GOLD_BLOOM_PRODUCE = registerSound("gold_bloom_produce");
 	public static final RegistryObject<SoundEvent> GARGANTUAR_DEATH = registerSound("gargantuar_death");
 	public static final RegistryObject<SoundEvent> ZOMBIE_GROAN = registerSound("zombie_groan");
 	public static final RegistryObject<SoundEvent> PLANT_DEATH = registerSound("plant_death");

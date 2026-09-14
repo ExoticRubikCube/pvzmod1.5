@@ -229,7 +229,6 @@ public class Invasion {
     private void spawnInvader(SpawnType spawnType, BlockPos pos){
         Entity entity = EntityUtil.createWithNBT(world, spawnType.getSpawnType(), spawnType.getNbt(), pos);
         if (entity instanceof AbstractPAZEntity){
-            ((AbstractPAZEntity) entity).canGiveXP = true;
             if(InvasionManager.enableSkills(this.world)){
                 AbstractPAZEntity.randomInitSkills((AbstractPAZEntity) entity, Math.max(0, this.invasionLvl - spawnType.getInvasionLevel()));
             }

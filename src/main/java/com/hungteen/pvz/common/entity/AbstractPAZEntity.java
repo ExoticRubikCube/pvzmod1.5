@@ -66,7 +66,6 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
     /* misc */
     protected boolean canSpawnDrop = true;
     protected boolean canHelpAttack = true;// no use ?
-    public boolean canGiveXP = false;
 
     static {
         populateNormalDropList(10);

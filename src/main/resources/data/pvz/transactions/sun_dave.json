@@ -29,30 +29,6 @@
     },
     {
       "type": "item",
-      "item": "pvz:sun_storage_sapling4",
-      "nbt": "{sun_storage_amount:1000}",
-      "price": 1200,
-      "weight": 100,
-      "limit": 3
-    },
-    {
-      "type": "item",
-      "item": "pvz:sun_storage_sapling4",
-      "nbt": "{sun_storage_amount:2000}",
-      "price": 2500,
-      "weight": 90,
-      "limit": 3
-    },
-    {
-      "type": "item",
-      "item": "pvz:sun_storage_sapling4",
-      "nbt": "{sun_storage_amount:5000}",
-      "price": 6000,
-      "weight": 80,
-      "limit": 2
-    },
-    {
-      "type": "item",
       "item": "minecraft:enchanted_book",
       "nbt": "{StoredEnchantments:[{'id':'pvz:sun_shovel', 'lvl':1}]}",
       "price": 3500,

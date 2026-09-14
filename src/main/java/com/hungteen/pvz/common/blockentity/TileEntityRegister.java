@@ -2,7 +2,6 @@ package com.hungteen.pvz.common.blockentity;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.render.tileentity.EssenceAltarTER;
-import com.hungteen.pvz.client.render.tileentity.SunConverterTER;
 import com.hungteen.pvz.common.block.BlockRegister;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -17,9 +16,6 @@ public class TileEntityRegister {
 
 	public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, PVZMod.MOD_ID);
 	
-	public static final RegistryObject<BlockEntityType<SunConverterTileEntity>> SUN_CONVERTER = TILE_ENTITY_TYPES.register("sun_converter", () -> {
-		return BlockEntityType.Builder.of(SunConverterTileEntity::new , BlockRegister.SUN_CONVERTER.get()).build(null);
-	});
 	public static final RegistryObject<BlockEntityType<FragmentSpliceTileEntity>> FRAGMENT_SPLICE = TILE_ENTITY_TYPES.register("fragment_splice", () -> {
 		return BlockEntityType.Builder.of(FragmentSpliceTileEntity::new , BlockRegister.FRAGMENT_SPLICE.get()).build(null);
 	});
@@ -39,7 +35,6 @@ public class TileEntityRegister {
 	@OnlyIn(Dist.CLIENT)
 	public static void bindRenderers(FMLClientSetupEvent ev) {
 		ev.enqueueWork(() -> net.minecraft.client.Minecraft.getInstance().tell(() -> {
-			BlockEntityRenderers.register(TileEntityRegister.SUN_CONVERTER.get(), ctx -> new SunConverterTER(ctx.getBlockEntityRenderDispatcher()));
 			BlockEntityRenderers.register(TileEntityRegister.ESSENCE_ALTAR.get(), EssenceAltarTER::new);
 		}));
 	}

@@ -3,7 +3,6 @@ package com.hungteen.pvz.common.container;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.blockentity.CardFusionTileEntity;
 import com.hungteen.pvz.common.item.material.EssenceItem;
-import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
 import com.hungteen.pvz.common.recipe.FusionRecipe;
 import com.hungteen.pvz.common.recipe.RecipeRegister;
 import net.minecraft.core.BlockPos;
@@ -22,6 +21,8 @@ public class CardFusionContainer extends PVZContainer {
 	private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
 	private final ContainerLevelAccess access;
 	private final Player player;
+	//craftSlots.setItem 会回调 slotsChanged -> broadcastChanges，刷新期间需阻断重入避免无限递归
+	private boolean isRefreshing = false;
 	
 	public CardFusionContainer(int id, Player player, BlockPos pos) {
 		super(ContainerRegister.CARD_FUSION.get(), id);
@@ -35,55 +36,77 @@ public class CardFusionContainer extends PVZContainer {
 
 		this.addDataSlots(this.te.array);
 
-		//sun storage sapling, 1 - 8 craft card, 9 - 11, essence, 12
-		this.addSlot(new SlotItemHandler(te.handler, 0, 9, 80) {
-			@Override
-			public boolean mayPlace(ItemStack stack) {
-				return stack.getItem() instanceof SunStorageSaplingItem;
-			}
-		});
 		//essences.
-		this.addSlot(new SlotItemHandler(te.handler, 1, 153, 80) {
+		this.addSlot(new SlotItemHandler(te.handler, 0, 17, 53) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
 				return stack.getItem() instanceof EssenceItem;
 			}
 		});
 		//result.
-		this.addSlot(new SlotItemHandler(te.handler, 2, 81, 98) {
+		this.addSlot(new SlotItemHandler(te.handler, 1, 137, 35) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
 				return false;
 			}
+
+			@Override
+			public void onTake(Player thePlayer, ItemStack stack) {
+				te.clearCraftingSlots();
+				te.essenceAmount = 0;
+				refreshResult();
+				super.onTake(thePlayer, stack);
+			}
 		});
+		//JEI 一键转移校验每个配方槽的 mayPickup，SlotItemHandler 默认对空槽模拟提取返回 false 会隐藏+号
 		for(int i = 0; i < 3; ++ i){
 			for(int j = 0; j < 3; ++ j){
-				this.addSlot(new SlotItemHandler(te.handler, i * 3 + j + 3, 63 + j * 18, 26 + i * 18));
+				this.addSlot(new SlotItemHandler(te.handler, i * 3 + j + 2, 43 + j * 18, 17 + i * 18) {
+					@Override
+					public boolean mayPickup(Player playerIn) {
+						return true;
+					}
+				});
 			}
 		}
 		//player inventory.
-		this.addInventoryAndHotBar(player, 9, 143);
+		this.addInventoryAndHotBar(player, 9, 84);
+		if( ! player.level.isClientSide) {
+			this.refreshResult();
+		}
 	}
 
-	public void onCraft(){
-		this.te.handler.setStackInSlot(2, getResult().copy());
-		this.te.clearCraftingSlots();
-		this.te.sunAmount = 0;
-		this.te.essenceAmount = 0;
+	@Override
+	public void broadcastChanges() {
+		if( ! this.player.level.isClientSide) {
+			this.refreshResult();
+		}
+		super.broadcastChanges();
+	}
+
+	private void refreshResult() {
+		if( ! this.isRefreshing) {
+			this.isRefreshing = true;
+			try {
+				this.te.handler.setStackInSlot(1, this.canPreview() ? this.getResult().copy() : ItemStack.EMPTY);
+			} finally {
+				this.isRefreshing = false;
+			}
+		}
+	}
+
+	private boolean canPreview(){
+		return this.te.essenceAmount == CardFusionTileEntity.CRAFT_ESSENCE_COST && ! this.getResult().isEmpty();
 	}
 
 	public ItemStack getResult(){
 		for(int i = 0; i < 3; ++ i){
 			for(int j = 0; j < 3; ++ j){
-				this.craftSlots.setItem(i * 3 + j, this.te.handler.getStackInSlot(i * 3 + j + 3).copy());
+				this.craftSlots.setItem(i * 3 + j, this.te.handler.getStackInSlot(i * 3 + j + 2).copy());
 			}
 		}
 		final Optional<FusionRecipe> recipe = this.player.level.getRecipeManager().getRecipeFor(RecipeRegister.FUSION_RECIPE_TYPE.get(), this.craftSlots, this.player.level);
 		return recipe.isPresent() ? recipe.get().getResultItem() : ItemStack.EMPTY;
-	}
-
-	public boolean canCraft(){
-		return this.te.array.get(0) == CardFusionTileEntity.CRAFT_SUN_COST && this.te.array.get(1) == CardFusionTileEntity.CRAFT_ESSENCE_COST && this.te.handler.getStackInSlot(2).isEmpty() && ! this.getResult().isEmpty();
 	}
 	
 	@Override
@@ -93,17 +116,24 @@ public class CardFusionContainer extends PVZContainer {
 		if (slot != null && slot.hasItem()) {
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			if (index == 0 || index < 12) {
-				if (!this.moveItemStackTo(itemstack1, 13, this.slots.size(), true)) {
+			if (index == 1) {
+				if (!this.moveItemStackTo(itemstack1, 11, this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (index < 13 + 27) {
-				if(!moveItemStackTo(itemstack1, 0, 13, false)
-						&& !moveItemStackTo(itemstack1, 13 + 27, this.slots.size(), false)) {
+				this.te.clearCraftingSlots();
+				this.te.essenceAmount = 0;
+				this.refreshResult();
+			} else if (index < 11) {
+				if (!this.moveItemStackTo(itemstack1, 11, this.slots.size(), true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (index < 11 + 27) {
+				if(!moveItemStackTo(itemstack1, 0, 11, false)
+						&& !moveItemStackTo(itemstack1, 11 + 27, this.slots.size(), false)) {
 					return ItemStack.EMPTY;
 				}
 			} else {
-				if (!this.moveItemStackTo(itemstack1, 0, 13 + 27, false)) {
+				if (!this.moveItemStackTo(itemstack1, 0, 11 + 27, false)) {
 					return ItemStack.EMPTY;
 				}
 			}

@@ -1,17 +1,13 @@
 package com.hungteen.pvz.client.gui.screen;
 
-import com.hungteen.pvz.client.gui.GuiHandler;
 import com.hungteen.pvz.client.gui.widget.DisplayField;
 import com.hungteen.pvz.common.blockentity.CardFusionTileEntity;
 import com.hungteen.pvz.common.container.CardFusionContainer;
-import com.hungteen.pvz.common.network.PVZPacketHandler;
-import com.hungteen.pvz.common.network.toserver.ClickButtonPacket;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import com.hungteen.pvz.utils.enums.Colors;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,12 +17,11 @@ import java.util.Arrays;
 public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 
 	private static final ResourceLocation TEXTURE = StringUtil.prefix("textures/gui/container/card_fusion.png");
-	protected Button craftButton;
 	
 	public CardFusionScreen(CardFusionContainer screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 		this.imageWidth = 178;
-		this.imageHeight = 255;
+		this.imageHeight = 166;
 		this.tips.add(new DisplayField.TipField(3, 3, Arrays.asList(
 			    Component.translatable("gui.pvz.card_fusion_table.tip1"),
 				Component.translatable("gui.pvz.card_fusion_table.tip2"),
@@ -35,28 +30,13 @@ public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 	}
 
 	@Override
-	protected void init() {
-		super.init();
-		this.craftButton = this.addRenderableWidget(new Button(this.leftPos + 76, this.topPos + 119, 26, 18, Component.translatable("gui.pvz.fragment_splice"), (button) -> {
-			if(this.craftButton.visible) {
-			    PVZPacketHandler.CHANNEL.sendToServer(new ClickButtonPacket(GuiHandler.CARD_FUSION, 0, 0));
-			}
-		}));
-		this.craftButton.visible = false;
-	}
-	
-	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		this.craftButton.visible = this.canCraftNow();
 		super.render(stack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(stack, mouseX, mouseY);
-		StringUtil.drawCenteredScaledString(stack, font, Component.translatable("block.pvz.card_fusion_table").getString(), this.leftPos + this.imageWidth / 2, this.topPos + 8, Colors.BLACK, 1F);
-		final float percent1 = this.menu.te.array.get(0) * 100.0F / CardFusionTileEntity.CRAFT_SUN_COST;
-		final float percent2 = this.menu.te.array.get(1) * 100.0F / CardFusionTileEntity.CRAFT_ESSENCE_COST;
-		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent1), this.leftPos + 19, this.topPos + 53, Colors.BLACK, 0.8F);
-		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent2), this.leftPos + 161, this.topPos + 53, Colors.BLACK, 0.8F);
-	    StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent1), this.leftPos + 18, this.topPos + 52, Colors.WHITE, 0.8F);
-		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent2), this.leftPos + 160, this.topPos + 52, Colors.WHITE, 0.8F);
+		StringUtil.drawScaledString(stack, font, this.title.getString(), this.leftPos + 17, this.topPos + 6, 4210752, 1F);
+		final float percent2 = this.menu.te.array.get(0) * 100.0F / CardFusionTileEntity.CRAFT_ESSENCE_COST;
+		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent2), this.leftPos + 25, this.topPos + 34, Colors.BLACK, 0.8F);
+		StringUtil.drawCenteredScaledString(stack, font, String.format("%.0f%%", percent2), this.leftPos + 24, this.topPos + 33, Colors.WHITE, 0.8F);
 	}
 	
 	@Override
@@ -65,19 +45,13 @@ public class CardFusionScreen extends PVZContainerScreen<CardFusionContainer> {
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-		final int maxLen = 52;
-		final int len1 = MathUtil.getBarLen(this.menu.te.array.get(0), CardFusionTileEntity.CRAFT_SUN_COST, maxLen);
-		final int len2 = MathUtil.getBarLen(this.menu.te.array.get(1), CardFusionTileEntity.CRAFT_ESSENCE_COST, maxLen);
-		blit(stack, this.leftPos + 9, this.topPos + 77 - len1 + 1, 178, 0, 16, len1);
-		blit(stack, this.leftPos + 153, this.topPos + 77 - len2 + 1, 194, 0, 16, len2);
+		final int maxLen = 34;
+		final int len2 = MathUtil.getBarLen(this.menu.te.array.get(0), CardFusionTileEntity.CRAFT_ESSENCE_COST, maxLen);
+		blit(stack, this.leftPos + 18, this.topPos + 51 - len2, 178, 51 - len2, 16, len2);
 
 		stack.popPose();
 
 		super.renderBg(stack, partialTicks, mouseX, mouseY);
-	}
-
-	protected boolean canCraftNow() {
-		return this.menu.canCraft();
 	}
 
 }

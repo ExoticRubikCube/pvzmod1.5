@@ -7,6 +7,7 @@ import com.hungteen.pvz.client.model.entity.plant.appease.AngelStarFruitModel;
 import com.hungteen.pvz.client.model.entity.plant.enforce.BonkChoyModel;
 import com.hungteen.pvz.client.model.entity.plant.explosion.BambooLordModel;
 import com.hungteen.pvz.client.model.entity.plant.ice.IcebergLettuceModel;
+import com.hungteen.pvz.client.model.entity.plant.light.GoldBloomModel;
 import com.hungteen.pvz.client.model.entity.plant.light.GoldLeafModel;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.impl.*;
@@ -49,6 +50,17 @@ public final class OtherPlants extends PlantType {
 			.plantModel(() -> () -> new GoldLeafModel(GoldLeafModel.createBodyLayer().bakeRoot())).scale(0.8F)
 			.placement(Placements.GOLD)
 			.cdSkill(List.of(SkillTypes.ADVANCE_GOLD))
+	);
+
+	public static final IPlantType GOLD_BLOOM = new OtherPlants("gold_bloom", new PlantFeatures()
+			.cost(0).requiredLevel(24)
+			.cd(CoolDowns.VERY_SLOW).rank(RankTypes.PURPLE).essence(EssenceTypes.LIGHT)
+			.entityType(() -> EntityRegister.GOLD_BLOOM.get())
+			.summonCard(() -> ItemRegister.GOLD_BLOOM_CARD.get())
+			.enjoyCard(() -> ItemRegister.GOLD_BLOOM_ENJOY_CARD.get())
+			.plantModel(() -> () -> new GoldBloomModel(GoldBloomModel.createBodyLayer().bakeRoot())).scale(1F)
+			.placement(Placements.ANY)
+			.commonSkill(List.of())
 	);
 	
 	public static final IPlantType ANGEL_STAR_FRUIT = new OtherPlants("angel_star_fruit", new PlantFeatures()

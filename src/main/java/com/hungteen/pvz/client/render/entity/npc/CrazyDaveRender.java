@@ -19,7 +19,7 @@ public class CrazyDaveRender extends PVZCreatureRender<CrazyDaveEntity>{
 
 	@Override
 	protected float getScaleByEntity(CrazyDaveEntity entity) {
-		return 0.6f;
+		return 1.05f;
 	}
 
 	@Override

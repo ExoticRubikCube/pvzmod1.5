@@ -2,7 +2,7 @@
   "parent": "pvz:adventure/origin",
   "display": {
     "icon": {
-      "item": "pvz:sun_storage_sapling"
+      "item": "minecraft:sunflower"
     },
     "title": {
       "translate": "advancement.pvz.sunny_days"

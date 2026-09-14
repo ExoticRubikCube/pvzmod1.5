@@ -17,6 +17,7 @@ public class BandageEnchantment extends PVZEnchantment {
         final int lvl = EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.CARD_HEAL.get(), stack);
         return 0.2F * (lvl + 1);
     }
+
     @Override
     public int getMinCost(int enchantmentLevel) {
         return enchantmentLevel * 10;

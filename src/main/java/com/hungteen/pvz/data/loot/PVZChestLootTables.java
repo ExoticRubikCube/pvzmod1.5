@@ -143,7 +143,6 @@ public class PVZChestLootTables implements Consumer<BiConsumer<ResourceLocation,
                         .add(LootItem.lootTableItem(ItemRegister.GARLIC_ENJOY_CARD.get()).setWeight(12).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(ItemRegister.MARIGOLD_ENJOY_CARD.get()).setWeight(6).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(ItemRegister.MELON_PULT_ENJOY_CARD.get()).setWeight(12).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                        .add(LootItem.lootTableItem(ItemRegister.SMALL_SUN_STORAGE_SAPLING.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(20).apply(EnchantRandomlyFunction.randomApplicableEnchantment()))
                         .add(LootItem.lootTableItem(Items.GOLDEN_APPLE).setWeight(20))
                         .add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE).setWeight(2))

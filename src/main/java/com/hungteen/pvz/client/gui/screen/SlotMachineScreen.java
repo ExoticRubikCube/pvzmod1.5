@@ -8,7 +8,6 @@ import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toserver.ClickButtonPacket;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
-import com.hungteen.pvz.utils.enums.Colors;
 import com.hungteen.pvz.utils.enums.Resources;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -144,7 +143,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 		blit(stack, this.leftPos + 61, this.topPos + 1, 61, 1, 54, 21);
 		
 		stack.translate(0, 0, 200);
-		StringUtil.drawCenteredScaledString(stack, font, this.title.getString(), this.leftPos + this.imageWidth / 2, this.topPos + 6, Colors.BLACK, 1.2F);
+		StringUtil.drawScaledString(stack, font, this.title.getString(), this.leftPos + 17, this.topPos + 6, 4210752, 1F);
 		stack.popPose();
 	}
 	

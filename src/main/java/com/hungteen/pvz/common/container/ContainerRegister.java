@@ -42,13 +42,7 @@ public class ContainerRegister {
             return new SunShopContainer(windowId, inv.player, data.readInt());
         });
 	});
-	
-	public static final RegistryObject<MenuType<SunConverterContainer>> SUN_CONVERTER = CONTAINER_TYPES.register("sun_converter", () -> {
-		return IForgeMenuType.create((windowId, inv, data) -> {
-            return new SunConverterContainer(windowId, inv.player, data.readBlockPos());
-        });
-	});
-	
+
 	public static final RegistryObject<MenuType<FragmentSpliceContainer>> FRAGMENT_SPLICE = CONTAINER_TYPES.register("fragment_splice", () -> {
 		return IForgeMenuType.create((windowId, inv, data) -> {
             return new FragmentSpliceContainer(windowId, inv.player, data.readBlockPos());
@@ -98,7 +92,6 @@ public class ContainerRegister {
 	        MenuScreens.register(ALMANAC.get(), AlmanacScreen::new);
 	        MenuScreens.register(DAVE_SHOP.get(), DaveShopScreen::new);
 	        MenuScreens.register(SUN_SHOP.get(), SunShopScreen::new);
-	        MenuScreens.register(SUN_CONVERTER.get(), SunConverterScreen::new);
 	        MenuScreens.register(FRAGMENT_SPLICE.get(), FragmentSpliceScreen::new);
 	        MenuScreens.register(SLOT_MACHINE.get(), SlotMachineScreen::new);
 	        MenuScreens.register(PENNY_SHOP.get(), PennyShopScreen::new);

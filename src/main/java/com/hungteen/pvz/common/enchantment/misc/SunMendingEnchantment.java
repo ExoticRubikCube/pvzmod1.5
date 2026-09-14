@@ -17,11 +17,11 @@ public class SunMendingEnchantment extends PVZEnchantment {
 		this.isTreasureOnly = true;
 	}
 
-	//sun cost per durability point: lvl1 50, lvl2 25, lvl3 15
+	//sun cost per durability point: lvl1 25, lvl2 10, lvl3 5
 	public static void repairItem(ItemStack stack, int amount) {
 		if (! stack.isEmpty() && stack.isDamaged()) {
 			final int lvl = EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.SUN_MENDING.get(), stack);
-			final int needSunEach = lvl >= 3 ? 15 : lvl == 2 ? 25 : 50;
+			final int needSunEach = lvl >= 3 ? 5 : lvl == 2 ? 10 : 25;
 			final int repairDamage = Math.min(stack.getDamageValue(), amount / needSunEach);
 			stack.setDamageValue(stack.getDamageValue() - repairDamage);
 		}

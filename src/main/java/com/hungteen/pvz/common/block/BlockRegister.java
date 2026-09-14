@@ -85,7 +85,6 @@ public class BlockRegister {
 	public static final RegistryObject<SunFlowerTrophyBlock> DIAMOND_SUNFLOWER_TROPHY = BLOCKS.register("diamond_sunflower_trophy", () -> new SunFlowerTrophyBlock(Block.Properties.copy(Blocks.DIAMOND_BLOCK).noOcclusion(), 3));
 	
 	//gui & te block
-	public static final RegistryObject<SunConverterBlock> SUN_CONVERTER = BLOCKS.register("sun_converter", SunConverterBlock::new);
 	public static final RegistryObject<FragmentSpliceBlock> FRAGMENT_SPLICE = BLOCKS.register("fragment_splice", FragmentSpliceBlock::new);
 	public static final RegistryObject<SlotMachineBlock> SLOT_MACHINE = BLOCKS.register("slot_machine", SlotMachineBlock::new);
 	public static final RegistryObject<EssenceAltarBlock> ESSENCE_ALTAR = BLOCKS.register("essence_altar", EssenceAltarBlock::new);
@@ -110,7 +109,7 @@ public class BlockRegister {
 			});
 
 			Arrays.asList(
-					STEEL_LADDER, SUN_CONVERTER, FRAGMENT_SPLICE, ESSENCE_ALTAR, CARD_FUSION_TABLE
+					STEEL_LADDER, FRAGMENT_SPLICE, ESSENCE_ALTAR, CARD_FUSION_TABLE
 			).forEach(block -> {
 				ev.register(Registry.ITEM_REGISTRY, helper -> {
 					helper.register(ForgeRegistries.BLOCKS.getKey(block.get()), new BlockItem(block.get(), new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL)));

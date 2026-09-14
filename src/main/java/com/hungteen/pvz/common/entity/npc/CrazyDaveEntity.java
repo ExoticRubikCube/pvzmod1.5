@@ -38,7 +38,7 @@ public class CrazyDaveEntity extends AbstractDaveEntity {
 
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
-		return EntityDimensions.scalable(0.9f, 2.6f);
+		return EntityDimensions.scalable(0.9f, 2.4f);
 	}
 	
 	@Override

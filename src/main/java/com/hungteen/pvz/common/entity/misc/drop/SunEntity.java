@@ -6,6 +6,7 @@ import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.event.events.PlayerCollectDropEvent;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.world.invasion.MissionManager;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
@@ -115,6 +116,9 @@ public class SunEntity extends DropEntity {
 			if(absorbed > 0) {
 				PlayerUtil.addResource(living, Resources.SUN_NUM, absorbed);
 				this.setAmount(this.getAmount() - absorbed);
+				if(MissionManager.getPlayerMission(living) == MissionManager.MissionType.COLLECT_SUN) {
+					PlayerUtil.addResource(living, Resources.MISSION_VALUE, absorbed);
+				}
 			}
 			//sun can not be stored at cap, mending collection consumes the left amount.
 			if(this.getAmount() > 0 && entry != null) {

@@ -48,7 +48,7 @@ public class PVZWorldEvents {
 				int z = cPos.z * 16 + random.nextInt(16);
 				BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) + 10, z);
 				int light = level.getBrightness(LightLayer.SKY, pos) - level.getSkyDarken();
-				if(light > 9 && random.nextInt(SUN_FALL_INTERVAL) == (int) (time % SUN_FALL_INTERVAL)) {
+				if(light > 9 && ! level.isRaining() && random.nextInt(SUN_FALL_INTERVAL) == (int) (time % SUN_FALL_INTERVAL)) {
 					SunEntity.dropSunRandomly(level, pos, light > 12 ? 50 : 25, 0.3F);
 				}
 			}

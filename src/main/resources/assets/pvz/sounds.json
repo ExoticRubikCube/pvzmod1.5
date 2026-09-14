@@ -404,6 +404,20 @@
       }
     ]
   },
+  "gold_bloom_produce": {
+    "subtitle": "sound.pvz.gold_bloom_produce",
+    "sounds": [
+      {
+        "name": "pvz:gold_bloom_produce1"
+      },
+      {
+        "name": "pvz:gold_bloom_produce2"
+      },
+      {
+        "name": "pvz:gold_bloom_produce3"
+      }
+    ]
+  },
   "gargantuar_death": {
     "subtitle": "sound.pvz.gargantuar_death",
     "sounds": [

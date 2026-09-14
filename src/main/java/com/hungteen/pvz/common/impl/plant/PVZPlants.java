@@ -503,7 +503,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TWIN_SUNFLOWER.get())
 			.summonCard(() -> ItemRegister.TWIN_SUNFLOWER_CARD.get())
 			.enjoyCard(() -> ItemRegister.TWIN_SUNFLOWER_ENJOY_CARD.get())
-			.plantModel(() -> () -> new TwinSunFlowerModel(TwinSunFlowerModel.createBodyLayer().bakeRoot())).scale(1F)
+			.plantModel(() -> () -> new TwinSunFlowerModel(TwinSunFlowerModel.createBodyLayer().bakeRoot())).scale(0.8F)
 			.upgradeFrom(() -> PVZPlants.SUN_FLOWER)
 			.commonSunSkill(List.of())
 	);

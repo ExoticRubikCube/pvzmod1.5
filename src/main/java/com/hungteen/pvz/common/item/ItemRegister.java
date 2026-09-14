@@ -31,7 +31,6 @@ import com.hungteen.pvz.common.item.tool.mc.OriginSwordItem;
 import com.hungteen.pvz.common.item.tool.plant.CardPackItem;
 import com.hungteen.pvz.common.item.tool.plant.PeaGunItem;
 import com.hungteen.pvz.common.item.tool.plant.ResourceCollectorItem;
-import com.hungteen.pvz.common.item.tool.plant.SunStorageSaplingItem;
 import com.hungteen.pvz.common.item.tool.zombie.*;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.enums.Colors;
@@ -194,10 +193,6 @@ public class ItemRegister {
     public static final RegistryObject<Item> PEA_GUN = ITEMS.register("pea_gun", PeaGunItem::new);
   	public static final RegistryObject<Item> RESOURCE_COLLECTOR = ITEMS.register("resource_collector", ResourceCollectorItem::new);
 //  	public static final RegistryObject<Item> BOWLING_GLOVE = ITEMS.register("bowling_glove", BowlingGloveItem::new);
-  	public static final RegistryObject<Item> SUN_STORAGE_SAPLING = ITEMS.register("sun_storage_sapling", () -> new SunStorageSaplingItem(5000));
-  	public static final RegistryObject<Item> SMALL_SUN_STORAGE_SAPLING = ITEMS.register("sun_storage_sapling2", () -> new SunStorageSaplingItem(1500));
-  	public static final RegistryObject<Item> LARGE_SUN_STORAGE_SAPLING = ITEMS.register("sun_storage_sapling3", () -> new SunStorageSaplingItem(15000));
-  	public static final RegistryObject<Item> ONCE_SUN_STORAGE_SAPLING = ITEMS.register("sun_storage_sapling4", SunStorageSaplingItem::new);
   	public static final RegistryObject<Item> FIRE_CRACKER = ITEMS.register("fire_cracker", FireCrackerItem::new);
     public static final RegistryObject<Item> ALMANAC = ITEMS.register("almanac", AlmanacItem::new);
     public static final RegistryObject<Item> GARDEN_COMPASS = ITEMS.register("garden_compass", GardenCompassItem::new);
@@ -337,6 +332,8 @@ public class ItemRegister {
     public static final RegistryObject<PlantCardItem> STRANGE_CAT_ENJOY_CARD = registerCard(MemePlants.STRANGE_CAT, true);
     public static final RegistryObject<PlantCardItem> GOLD_LEAF_CARD = registerCard(OtherPlants.GOLD_LEAF, false);
     public static final RegistryObject<PlantCardItem> GOLD_LEAF_ENJOY_CARD = registerCard(OtherPlants.GOLD_LEAF, true);
+    public static final RegistryObject<PlantCardItem> GOLD_BLOOM_CARD = registerCard(OtherPlants.GOLD_BLOOM, false);
+    public static final RegistryObject<PlantCardItem> GOLD_BLOOM_ENJOY_CARD = registerCard(OtherPlants.GOLD_BLOOM, true);
     public static final RegistryObject<PlantCardItem> ANGEL_STAR_FRUIT_CARD = registerCard(OtherPlants.ANGEL_STAR_FRUIT, false);
     public static final RegistryObject<PlantCardItem> ANGEL_STAR_FRUIT_ENJOY_CARD = registerCard(OtherPlants.ANGEL_STAR_FRUIT, true);
     public static final RegistryObject<PlantCardItem> BUTTER_PULT_CARD = registerCard(CustomPlants.BUTTER_PULT, false);

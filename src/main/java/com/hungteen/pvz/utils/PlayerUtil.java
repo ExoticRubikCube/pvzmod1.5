@@ -56,7 +56,7 @@ public class PlayerUtil {
 	 * {@link PlayerDataManager#addResource(Resources, int)}
 	 */
 	public static int getPlayerLevelUpXp(int lvl){
-		return (int) round((80 + 400*log10(lvl) + lvl*30) * 2.0 / 3.0);
+		return (int) round(80 + 400*log10(lvl) + lvl*30);
 	}
 
 	public static @NotNull Optional<PlayerDataManager> getOptManager(Player player) {
@@ -67,7 +67,8 @@ public class PlayerUtil {
 	public static PlayerDataManager getManager(Player player) {
 		if(isValidPlayer(player)) {
 			final IPlayerDataCapability cap = player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).orElse(null);
-		    return cap.getPlayerData();
+			//cap is absent during the death/respawn clone window, callers already treat a null manager as no data.
+			return cap == null ? null : cap.getPlayerData();
 		}
 		return null;
 	}

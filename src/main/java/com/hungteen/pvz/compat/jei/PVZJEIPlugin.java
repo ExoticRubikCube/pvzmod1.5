@@ -47,8 +47,8 @@ public class PVZJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(FragmentSpliceContainer.class, ContainerRegister.FRAGMENT_SPLICE.get(), FRAGMENT_RECIPE, 2, 25, 27, 36);
-        registration.addRecipeTransferHandler(CardFusionContainer.class, ContainerRegister.CARD_FUSION.get(), FUSION_RECIPE, 3, 9, 12, 36);
+        registration.addRecipeTransferHandler(FragmentSpliceContainer.class, ContainerRegister.FRAGMENT_SPLICE.get(), FRAGMENT_RECIPE, 1, 25, 26, 36);
+        registration.addRecipeTransferHandler(CardFusionContainer.class, ContainerRegister.CARD_FUSION.get(), FUSION_RECIPE, 2, 9, 11, 36);
     }
 
     @Override

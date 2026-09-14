@@ -17,7 +17,7 @@
         },
         {
             "type": "text",
-            "text": "$(byellow)SunNum:$()$(br)$(l)The upper limit of SunNum$() will increase when TreeLevel increases.$(br)$(l)Usage:$() Using $(bred)Summon Cards$() and some tools will consume SunNum.$(br)$(l)Display:$() The upper left corner of the screen or command to view.$(br)$(l)Obtaining method:$() collide with $(l)Sun$() entity or use $(byellow)Resource Collector$() or eat $(byellow)SunStorageSapling$()."
+            "text": "$(byellow)SunNum:$()$(br)$(l)The upper limit of SunNum$() will increase when TreeLevel increases.$(br)$(l)Usage:$() Using $(bred)Summon Cards$() and some tools will consume SunNum.$(br)$(l)Display:$() The upper left corner of the screen or command to view.$(br)$(l)Obtaining method:$() collide with $(l)Sun$() entity or use $(byellow)Resource Collector$()."
         },
         {
             "type": "text",

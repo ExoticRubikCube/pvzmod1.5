@@ -52,10 +52,6 @@ public class ConfigUtil {
         return PVZConfig.COMMON_CONFIG.RuleSettings.NeedUnlockToPlant.get();
     }
 
-    public static boolean AllZombieGiveXP() {
-        return PVZConfig.COMMON_CONFIG.RuleSettings.AllZombieGiveXP.get();
-    }
-
     public static boolean renderSunBar() {
         return PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderSunBar.get();
     }

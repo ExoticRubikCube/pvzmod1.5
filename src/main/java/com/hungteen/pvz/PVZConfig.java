@@ -85,11 +85,6 @@ public class PVZConfig {
                         .comment("if turn to false, there will have no monster of other monsters spawn in overworld except pvz zombies.")
                         .define("CanSpawnDefaultMonster", true);
 
-                RuleSettings.AllZombieGiveXP = builder
-                        .translation("config.pvz.rule.all_zombie_give_xp")
-                        .comment("if turn to false, only invasion zombies will give tree xp.")
-                        .define("AllZombieGiveXP", false);
-
                 RuleSettings.DespawnOwnedEntityRange = builder
                         .translation("config.pvz.rule.despawn_owned_entity_range")
                         .comment("plants summoned by players will be naturally despawned if the distance to player's spawn point is farther than this number.")
@@ -389,7 +384,6 @@ public class PVZConfig {
 
         public static class RuleSettings {
             public ForgeConfigSpec.BooleanValue CanSpawnDefaultMonster;
-            public ForgeConfigSpec.BooleanValue AllZombieGiveXP;
             public ForgeConfigSpec.IntValue DespawnOwnedEntityRange;
             public ForgeConfigSpec.BooleanValue GiveBeginnerReward;
             public ForgeConfigSpec.BooleanValue AllowNaturalTurnOrigin;
