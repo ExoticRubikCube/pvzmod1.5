@@ -4,10 +4,11 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidType;
 
 import java.util.List;
@@ -17,11 +18,38 @@ import java.util.List;
  */
 public class LilyPadEntity extends PVZPlantEntity {
 
-	private Vec3 storedPosition = Vec3.ZERO;
-
 	public LilyPadEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.root = false;
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(2, new FloatGoal(this));
+	}
+
+	/* eye height is below 0.4, so the vanilla jump threshold is 0: FloatGoal hops
+	 * while the feet are submerged, and once they reach the surface they are
+	 * hard-pinned after vanilla movement, on both sides, keeping the final position
+	 * constant with no vertical move packets or re-entry splashes */
+	@Override
+	public void tick() {
+		super.tick();
+		if(this.getVehicle() == null) {
+			final BlockPos fluidPos = this.blockPosition();
+			final FluidState fluidState = this.level.getFluidState(fluidPos);
+			if(fluidState.is(FluidTags.WATER)
+					&& this.getFluidHeight(FluidTags.WATER) <= this.getFluidJumpThreshold()) {
+				final double surfaceY = fluidPos.getY() + fluidState.getHeight(this.level, fluidPos);
+				if(this.getY() != surfaceY) {
+					this.setPos(this.getX(), surfaceY, this.getZ());
+				}
+				if(this.getDeltaMovement().y != 0.0D) {
+					this.setDeltaMovement(this.getDeltaMovement().x, 0.0D, this.getDeltaMovement().z);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -83,35 +111,6 @@ public class LilyPadEntity extends PVZPlantEntity {
 	@Override
 	public boolean rideableUnderWater() {
 		return true;
-	}
-
-	@Override
-	public void tick() {
-		if (! this.noPhysics && ! this.level.isClientSide) {
-			if (! this.level.getFluidState(new BlockPos(this.position().add(0, this.getBbHeight(), 0))).isEmpty()
-					|| this.isInLava()) {
-				this.setDeltaMovement(this.getDeltaMovement().add(0, 0.06, 0).multiply(0.5, 0.5, 0.5));
-			} else if (! this.level.getFluidState(new BlockPos(this.position().add(0, this.getEyeHeight(), 0))).isEmpty()) {
-				this.setDeltaMovement(this.getDeltaMovement().multiply(0.5, 0.5, 0.5));
-				if (Math.abs(this.getDeltaMovement().y) < 0.001 && this.getDeltaMovement().y != 0) {
-					this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0, 1));
-				}
-			}
-		}
-		if (level.isClientSide && ! level.getFluidState(new BlockPos(position().add(0, this.getEyeHeight(), 0))).isEmpty()) {
-			Vec3 deltaMovement = this.position().subtract(storedPosition);
-			if (deltaMovement.distanceToSqr(Vec3.ZERO) > 0.1) {
-				for (int i = 0; i < 3; i ++) {
-					level.addParticle(ParticleTypes.SPLASH,
-							this.getX() - (deltaMovement.x + 1) * random.nextFloat() + 0.5F,
-							this.getY() - deltaMovement.y * random.nextFloat(),
-							this.getZ() - (deltaMovement.z + 1) * random.nextFloat() + 0.5F,
-							0, 0, 0);
-				}
-			}
-			storedPosition = this.position();
-		}
-		super.tick();
 	}
 
 	@Override

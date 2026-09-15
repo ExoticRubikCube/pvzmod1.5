@@ -11,10 +11,13 @@ import com.hungteen.pvz.common.entity.zombie.pool.BalloonZombieEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.HashSet;
 
@@ -24,17 +27,41 @@ public class CatTailEntity extends PlantShooterEntity {
 	private int powerCount = 0;
 	private int powerTick = 0;
 	private final int POWER_CD = 200;
-	
+
 	public CatTailEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
-	
+
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new FloatGoal(this));
 	}
-	
+
+	@Override
+	public void tick() {
+		super.tick();
+		if(this.getVehicle() == null) {
+			final BlockPos fluidPos = this.blockPosition();
+			final FluidState fluidState = this.level.getFluidState(fluidPos);
+			if(fluidState.is(FluidTags.WATER)
+					&& this.getFluidHeight(FluidTags.WATER) <= this.getFluidJumpThreshold()) {
+				final double surfaceY = fluidPos.getY() + fluidState.getHeight(this.level, fluidPos);
+				if(this.getY() != surfaceY) {
+					this.setPos(this.getX(), surfaceY, this.getZ());
+				}
+				if(this.getDeltaMovement().y != 0.0D) {
+					this.setDeltaMovement(this.getDeltaMovement().x, 0.0D, this.getDeltaMovement().z);
+				}
+			}
+		}
+	}
+
+	@Override
+	public double getFluidJumpThreshold() {
+		return 0.0F;
+	}
+
 	@Override
 	protected void addTargetGoals() {
 		this.targetSelector.addGoal(0, new PVZGlobalTargetGoal(this, true, false, getShootRange(), getShootRange()));
@@ -131,7 +158,12 @@ public class CatTailEntity extends PlantShooterEntity {
 
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
-		return EntityDimensions.scalable(0.8F, 1F);
+		return EntityDimensions.scalable(0.8F, 0.6F);
+	}
+
+	@Override
+	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
+		return 0.5F;
 	}
 	
 	@Override

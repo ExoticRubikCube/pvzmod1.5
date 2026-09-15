@@ -28,6 +28,7 @@ import com.hungteen.pvz.common.item.tool.TimeKeyItem;
 import com.hungteen.pvz.common.item.tool.ZombieDollItem;
 import com.hungteen.pvz.common.item.tool.plant.CardPackItem;
 import com.hungteen.pvz.common.item.tool.plant.PeaGunItem;
+import com.hungteen.pvz.common.item.tool.plant.ShellStartupItem;
 import com.hungteen.pvz.common.item.tool.zombie.*;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.enums.Colors;
@@ -98,7 +99,6 @@ public class ItemRegister {
     public static final RegistryObject<Item> TIME_SOURCE = ITEMS.register("time_source", PVZMiscItem::new);
 
     /* spawn eggs */
-  	public static final RegistryObject<PVZSpawnEggItem> ENERGY_SPAWN_EGG = registerSpawnEgg("energy", EntityRegister.ENERGY, Colors.GREEN, Colors.DARK_GREEN);
   	public static final RegistryObject<PVZSpawnEggItem> FOODIE_ZOMBIE_SPAWN_EGG = registerSpawnEgg("foodie_zombie", EntityRegister.FOODIE_ZOMBIE, Colors.ZOMBIE_SKIN, Colors.WHITE);
   	public static final RegistryObject<PVZSpawnEggItem> MOOBLOOM_SPAWN_EGG = registerSpawnEgg("moo_bloom", EntityRegister.MOOBLOOM, Colors.YELLOW, Colors.WHITE);
   	public static final RegistryObject<PVZSpawnEggItem> CRAZY_DAVE_SPAWN_EGG = registerSpawnEgg("crazy_dave", EntityRegister.CRAZY_DAVE, Colors.BROWN, Colors.SILVER);
@@ -193,6 +193,8 @@ public class ItemRegister {
     public static final RegistryObject<Item> ZOMBIE_DOLL = ITEMS.register("zombie_doll", ZombieDollItem::new);
     public static final RegistryObject<Item> EDGAR_DOLL = ITEMS.register("edgar_doll", EdgarDollItem::new);
     public static final RegistryObject<Item> TIME_KEY_TO_DEEP = ITEMS.register("time_key_to_deep", TimeKeyItem::new);
+    public static final RegistryObject<Item> SHELL_STARTUP = ITEMS.register("shell_startup",
+            () -> new ShellStartupItem(new Item.Properties().stacksTo(1).tab(PVZItemGroups.PVZ_USEFUL), "tooltip.pvz.shell_startup"));
 
   	/* armor */
   	public static final RegistryObject<Item> CONE_HEAD = ITEMS.register("cone_head", () -> new ConeArmorItem(ArmorMaterials.LEATHER, EquipmentSlot.HEAD));

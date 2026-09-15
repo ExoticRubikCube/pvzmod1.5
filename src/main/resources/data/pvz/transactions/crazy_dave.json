@@ -109,6 +109,13 @@
       "price": 600,
       "weight": 90,
       "limit": 1
+    },
+    {
+      "type": "item",
+      "item": "pvz:shell_startup",
+      "price": 1750,
+      "weight": 90,
+      "limit": 1
     }
   ]
 }

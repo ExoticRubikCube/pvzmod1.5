@@ -146,6 +146,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	public void finalizeSpawn(CompoundTag tag) {
 		super.finalizeSpawn(tag);
 		if(! this.level.isClientSide()){
+			this.getSpawnSound().ifPresent(s -> EntityUtil.playSound(this, s));
 			this.setZombieType(this.getRandomVariant());
 			if(this.needRising) {// rising from dirt.
 				this.setAnimTime(- RISING_CD);

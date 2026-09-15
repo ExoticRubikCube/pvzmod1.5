@@ -4,7 +4,6 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZRandomTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
-import com.hungteen.pvz.common.entity.zombie.pool.DiggerZombieEntity;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.impl.zombie.GrassZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
@@ -32,7 +31,7 @@ import java.util.Optional;
 
 public class PoleZombieEntity extends PVZZombieEntity{
 
-	private static final EntityDataAccessor<Boolean> HAS_POLE = SynchedEntityData.defineId(DiggerZombieEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HAS_POLE = SynchedEntityData.defineId(PoleZombieEntity.class, EntityDataSerializers.BOOLEAN);
 	protected final float HorizontalJumpSpeed = 1.5F;
 	protected final float VerticalJumpSpeed = 0.7F;
 	protected Vec3 jumpDstPoint = Vec3.ZERO;

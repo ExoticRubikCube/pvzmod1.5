@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class EntityInteractPacket {
+
 	private final int type;
 	private final int op;
 	private final int num;

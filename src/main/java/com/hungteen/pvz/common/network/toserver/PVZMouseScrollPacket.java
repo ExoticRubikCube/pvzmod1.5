@@ -27,14 +27,16 @@ public class PVZMouseScrollPacket {
 		public static void onMessage(PVZMouseScrollPacket message, Supplier<NetworkEvent.Context> ctx) {
 		    ctx.get().enqueueWork(() -> {
 		    	final ServerPlayer player = ctx.get().getSender();
-		    	player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {
-		    		if(message.data == 0) {
-		    			l.getPlayerData().onSwitchCard();
-		    		} else {
-		    			l.getPlayerData().onScrollInventory(message.data);
-		    		}
-		    	});
-		    });
+                if (player != null) {
+                    player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent(l -> {
+                        if(message.data == 0) {
+                            l.getPlayerData().onSwitchCard();
+                        } else {
+                            l.getPlayerData().onScrollInventory(message.data);
+                        }
+                    });
+                }
+            });
 		    ctx.get().setPacketHandled(true);
 	    }
 	}

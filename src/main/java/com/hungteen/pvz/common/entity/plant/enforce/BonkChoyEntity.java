@@ -12,10 +12,7 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 
@@ -85,6 +82,12 @@ public class BonkChoyEntity extends PVZPlantEntity {
 	@Override
 	public int getSuperTimeLength() {
 		return 120;
+	}
+	
+	
+	@Override
+	public EntityDimensions getDimensions(Pose poseIn) {
+		return EntityDimensions.scalable(0.6F, 0.9F);
 	}
 	
 	@Override

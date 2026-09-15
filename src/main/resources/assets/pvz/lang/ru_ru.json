@@ -72,6 +72,8 @@
     "item.pvz.almanac":"Альманах",
     "item.pvz.time_key_to_deep":"Ключ Времени к Глубинам",
     "item.pvz.car_key":"Ключ От Машины",
+    "item.pvz.shell_startup":"Оболочка: Запуск",
+    "tooltip.pvz.shell_startup":"Когда растение не может вырасти на блоке, автоматически использует растения-носители из вашего рюкзака.\n§oЭто название явно означает, что когда растение запускается, ему даётся оболочка. Что-то не так?",
     "item.pvz.lawn_mower":"Газонокосилка",
     "item.pvz.target_arrow":"Стрела в Цели",
     "item.pvz.garden_rake":"Садовые Грабли",
@@ -178,7 +180,6 @@
     "entity.pvz.sun":"Sun",
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
-    "item.pvz.energy_spawn_egg":"Яйцо Призыва Энергии",
     
     "entity.pvz.pea":"Pea",
     "entity.pvz.potato":"Potato",

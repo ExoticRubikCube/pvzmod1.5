@@ -73,6 +73,8 @@
     "item.pvz.garden_compass": "Garden Compass",
     "item.pvz.time_key_to_deep":"Time Key To Deep",
     "item.pvz.car_key":"Car Key",
+    "item.pvz.shell_startup":"Shell:Startup",
+    "tooltip.pvz.shell_startup":"When a plant failed to grow on a block, automatically use holder plants in your backpack.\n§oThis name evidently means when a plant start up give it a shell. Is there anything wrong?",
     "item.pvz.lawn_mower":"Lawn Mower",
     "item.pvz.target_arrow":"Target Arrow",
     "item.pvz.garden_rake":"garden_rake",
@@ -180,7 +182,6 @@
     "entity.pvz.sun":"Sun",
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
-    "item.pvz.energy_spawn_egg":"Energy Spawn Egg",
     
     "entity.pvz.pea":"Pea",
     "entity.pvz.potato":"Potato",

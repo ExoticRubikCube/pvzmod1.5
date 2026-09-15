@@ -73,6 +73,8 @@
   "item.pvz.garden_compass": "花园指针",
   "item.pvz.time_key_to_deep": "时空之匙:深渊",
   "item.pvz.car_key": "车钥匙",
+  "item.pvz.shell_startup": "内嵌脚本",
+  "tooltip.pvz.shell_startup": "当植物无法种植在某方块上时自动种植背包中可以承载该植物的植物。\n§o脚：底部；本：植物的根。不难理解，内嵌脚本的意思当然就是指把植物底部的根嵌在什么里面了。",
   "item.pvz.lawn_mower": "小推车",
   "item.pvz.target_arrow": "带靶的箭",
   "item.pvz.garden_rake": "钉耙",
@@ -180,7 +182,6 @@
   "entity.pvz.sun": "阳光",
   "entity.pvz.jewel": "宝石",
   "entity.pvz.energy": "能量豆",
-  "item.pvz.energy_spawn_egg": "能量豆刷怪蛋",
 
   "entity.pvz.pea": "豌豆",
   "entity.pvz.potato": "土豆",

@@ -34,7 +34,7 @@ public class FlowerPotEntity extends PVZPlantEntity {
 
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
-		return EntityDimensions.scalable(0.75F, 0.475F);
+		return EntityDimensions.scalable(0.75F, 0.43F);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class FlowerPotEntity extends PVZPlantEntity {
 
 	@Override
 	public double getPassengersRidingOffset() {
-		return 0.45D;
+		return 0.4D;
 	}
 
 	@Override

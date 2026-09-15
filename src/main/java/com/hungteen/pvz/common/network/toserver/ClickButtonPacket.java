@@ -65,10 +65,10 @@ public class ClickButtonPacket {
 						}
 					}
 				} else if(message.type == GuiHandler.ESSENCE_ALTAR) {
-					if(player.containerMenu instanceof EssenceAltarContainer container) {
+                    if (player != null && player.containerMenu instanceof EssenceAltarContainer container) {
                         container.learnSkillAt(message.op);
-					}
-				}
+                    }
+                }
 			});
 			ctx.get().setPacketHandled(true);
 		}

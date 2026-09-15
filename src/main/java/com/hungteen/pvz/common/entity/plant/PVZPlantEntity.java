@@ -566,6 +566,30 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 		return type != this.getPlantType() && type != PVZPlants.COFFEE_BEAN;
 	}
 
+	/**
+	 * plant type used when this pre-created plant checks whether it can ride a container;
+	 * imitater answers with the type of the card it mimics, since it has not transformed yet.
+	 */
+	protected IPlantType getRidePlantType() {
+		return this.getPlantType();
+	}
+
+	/**
+	 * try to mount this plant onto a container plant while both are pre-created and not added to world.
+	 * @return true when the riding relation is established.
+	 */
+	public boolean mountPlantOn(PVZPlantEntity container) {
+		final IPlantType rideType = this.getRidePlantType();
+		if(container.canHoldPlant() && container.getPassengers().isEmpty()
+				&& rideType.canBeHold() && container.canPlantOnMe(rideType)) {
+			this.moveTo(container.getX(), container.getY() + container.getPassengersRidingOffset(),
+					container.getZ(), container.getYRot(), 0.0F);
+			this.startRiding(container);
+			return true;
+		}
+		return false;
+	}
+
 	/* misc get */
 	
 	public boolean canBeUpgrade(Player player) {

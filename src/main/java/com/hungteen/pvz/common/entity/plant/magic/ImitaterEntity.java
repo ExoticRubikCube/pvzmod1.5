@@ -158,6 +158,14 @@ public class ImitaterEntity extends PlantBomberEntity {
 	public IPlantType getPlantType() {
 		return PVZPlants.IMITATER;
 	}
+
+	@Override
+	protected IPlantType getRidePlantType() {
+		if(this.getImitateCard().getItem() instanceof PlantCardItem imitateCard) {
+			return imitateCard.plantType;
+		}
+		return super.getRidePlantType();
+	}
 	
 	public enum ImitateType{
 		SUMMON,

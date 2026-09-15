@@ -14,6 +14,8 @@ import com.hungteen.pvz.common.enchantment.card.plantcard.DenselyPlantEnchantmen
 import com.hungteen.pvz.common.enchantment.card.plantcard.SoillessPlantEnchantment;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.magic.ImitaterEntity;
+import com.hungteen.pvz.common.event.events.PlantConditionMatchingEvent;
+import com.hungteen.pvz.common.event.events.PlantResourceEvent;
 import com.hungteen.pvz.common.event.events.SummonCardUseEvent;
 import com.hungteen.pvz.common.impl.CoolDowns;
 import com.hungteen.pvz.common.impl.SkillTypes;
@@ -34,6 +36,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -42,12 +45,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -58,6 +61,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -121,9 +125,6 @@ public class PlantCardItem extends SummonCardItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
 		final ItemStack heldStack = getHeldStack(player.getItemInHand(handIn));
-		final ItemStack plantStack = getPlantStack(heldStack);
-		final PlantCardItem cardItem = (PlantCardItem) plantStack.getItem();
-		final IPlantType plantType = cardItem.plantType;
 		if(world.isClientSide) {
 			return InteractionResultHolder.success(heldStack);
 		}
@@ -135,32 +136,18 @@ public class PlantCardItem extends SummonCardItem {
 		/* do ray check */
 		final BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
 		if (result.getType() == HitResult.Type.BLOCK) {
-			final BlockHitResult raytraceResult = result.withPosition(result.getBlockPos().above());
-			final BlockPos pos = raytraceResult.getBlockPos();
+			final BlockPos waterPos = result.getBlockPos();
 			/* can not place here */
-			if (world.getFluidState(pos.below()).getType() != Fluids.WATER || raytraceResult.getDirection() != Direction.UP || ! world.isEmptyBlock(pos)) {
+			if (world.getFluidState(waterPos).getType() != Fluids.WATER || result.getDirection() != Direction.UP || ! world.isEmptyBlock(waterPos.above())) {
 				this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
 				return InteractionResultHolder.fail(heldStack);
 		    }
-			/* check plant type that can not place in water */
-			if(! plantType.isWaterPlant() || (plantType == PVZPlants.CAT_TAIL && ! SoillessPlantEnchantment.isSoilless(plantStack))) {
-			    this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
-			    return InteractionResultHolder.fail(heldStack);
-		    }
-			if(plantType.getPlantBlock().isPresent()) {
-				if(PlantCardItem.checkSunAndPlaceBlock(player, heldStack, plantStack, cardItem, pos)) {
-					return InteractionResultHolder.success(heldStack);
-				}
-			} else {
-				/* reject if there is already a plant entity occupying the spawn position */
-				if(! world.getEntitiesOfClass(PVZPlantEntity.class, new AABB(pos)).isEmpty()) {
-					this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
-					return InteractionResultHolder.fail(heldStack);
-				}
-				if(checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, pos, (l)->{})) {
-					return InteractionResultHolder.success(heldStack);
-				}
+			final MutableComponent plantResult = plantOnBlock(player, heldStack, world, waterPos, null);
+			if (plantResult == null) {
+				return InteractionResultHolder.success(heldStack);
 			}
+			PlayerUtil.sendMsgTo(player, plantResult);
+			PlayerUtil.playClientSound(player, SoundRegister.NO.get());
 			return InteractionResultHolder.fail(heldStack);
 		} else {
 			return InteractionResultHolder.pass(heldStack);
@@ -206,46 +193,157 @@ public class PlantCardItem extends SummonCardItem {
 			    return this.use(world, player, hand).getResult();
 			}
 		}
-		/* can not place here */
-		if(context.getClickedFace() != Direction.UP || ! world.isEmptyBlock(pos.above())) {
-			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
-			return InteractionResult.FAIL;
+		final MutableComponent plantResult = plantOnBlock(player, heldStack, world, pos, context.getClickedFace());
+		if (plantResult == null) {
+			return InteractionResult.SUCCESS;
 		}
-		/* check advance plants without Cat Tail */
-		if(! isSoilless && plantType.getUpgradeFrom().isPresent()) {
-			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.UPGRADE_ERROR);
-			return InteractionResult.FAIL;
-		}
-		/* check placement match with current block */
-		if(! isSoilless && ! plantType.getPlacement().canPlaceOnBlock(world.getBlockState(pos).getBlock())) {
-			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
-			return InteractionResult.FAIL;
-		}
-		if(plantType.getPlantBlock().isPresent()) {
-			BlockPlaceContext placeContext = new BlockPlaceContext(context);
-			if (world.getBlockState(pos).canBeReplaced(placeContext)) {	checkSunAndPlaceBlock(player, heldStack, plantStack, cardItem, pos);
-				return InteractionResult.SUCCESS;
-			} else if(world.isEmptyBlock(pos.above()) && world.getBlockState(pos).canOcclude()) {// can plant here
-			    checkSunAndPlaceBlock(player, heldStack, plantStack, cardItem, pos.above());
-			    return InteractionResult.SUCCESS;
-			}
-		} else {
-			BlockPos spawnPos = pos;
-			if(! world.getBlockState(pos).getCollisionShape(world, pos).isEmpty()) {
-				spawnPos = pos.relative(context.getClickedFace());
-			}
-			/* reject if there is already a plant entity occupying the spawn position */
-			if(! world.getEntitiesOfClass(PVZPlantEntity.class, new AABB(spawnPos)).isEmpty()) {
-				this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
-				return InteractionResult.FAIL;
-			}
-			if(checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, spawnPos, (l)->{})) {
-			    return InteractionResult.SUCCESS;
-			}
-		}
+		PlayerUtil.sendMsgTo(player, plantResult);
+		PlayerUtil.playClientSound(player, SoundRegister.NO.get());
 		return InteractionResult.FAIL;
 	}
 	
+	/**
+	 * plant card on a block position with pre/post condition events. <br>
+	 * the plant entity is pre-created and discarded when condition checks fail,
+	 * so post handlers (e.g. shell startup) can replace the failed planting with a container card.
+	 * @param direction null means planting inside fluid, otherwise the clicked face of the block.
+	 * @return null for successful planting, otherwise the fail reason.
+	 */
+	@Nullable
+	public static MutableComponent plantOnBlock(Player player, ItemStack heldStack, Level level, BlockPos clickPos, @Nullable Direction direction) {
+		if(! (level instanceof ServerLevel serverLevel)) {
+			return null;
+		}
+		final ItemStack plantStack = getPlantStack(heldStack);
+		if(! (plantStack.getItem() instanceof PlantCardItem cardItem) || ! (heldStack.getItem() instanceof PlantCardItem costCard)) {
+			return Component.empty();
+		}
+		final IPlantType plantType = cardItem.plantType;
+		final boolean isImitater = heldStack.getItem() instanceof ImitaterCardItem;
+		final boolean isSoilless = SoillessPlantEnchantment.isSoilless(plantStack);
+		/* check cool down */
+		if(player.getCooldowns().isOnCooldown(heldStack.getItem())) {
+			return PlacementErrors.CD_ERROR.getTextByArg(0, ChatFormatting.RED);
+		}
+		/* check position */
+		final boolean inWater = direction == null;
+		BlockPos spawnPos = clickPos;
+		MutableComponent positionError = null;
+		if(inWater) {
+			spawnPos = clickPos.above();
+			if(level.getFluidState(clickPos).getType() != Fluids.WATER || ! level.isEmptyBlock(spawnPos)
+					|| ! plantType.isWaterPlant()
+					|| (plantType == PVZPlants.CAT_TAIL && ! isSoilless)) {
+				positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			}
+		} else if(direction != Direction.UP || ! level.isEmptyBlock(clickPos.above())) {
+			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		} else if(! isSoilless && plantType.getUpgradeFrom().isPresent()) {
+			positionError = PlacementErrors.UPGRADE_ERROR.getTextByArg(0, ChatFormatting.RED);
+		} else if(! isSoilless && ! plantType.getPlacement().canPlaceOnBlock(level.getBlockState(clickPos).getBlock())) {
+			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		} else if(! level.getBlockState(clickPos).getCollisionShape(level, clickPos).isEmpty()) {
+			spawnPos = clickPos.relative(direction);
+		}
+		if(positionError == null && ! level.getEntitiesOfClass(PVZPlantEntity.class, new AABB(spawnPos)).isEmpty()) {
+			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		}
+		/* pre-create entity without adding to world */
+		final IPlantType entityPlantType = isImitater ? PVZPlants.IMITATER : plantType;
+		if(entityPlantType.getEntityType().isEmpty()) {
+			PVZMod.LOGGER.error("Plant Card : Summon wrong plant entity !");
+			return PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		}
+		final Mob spawnedMob = entityPlantType.getEntityType().get().create(serverLevel, plantStack.getTag(),
+				plantStack.hasCustomHoverName() ? plantStack.getHoverName() : null, player,
+				spawnPos, MobSpawnType.SPAWN_EGG, true, true);
+		if(! (spawnedMob instanceof PVZPlantEntity plantEntity)) {
+			PVZMod.LOGGER.error("Plant Card : No such plant entity !");
+			if(spawnedMob != null) {
+				spawnedMob.discard();
+			}
+			return PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		}
+		/* create(...,true,true) settles on block collision tops; fluid has none, so water
+		 * plants end up at the fluid-cell bottom. Lift them onto the surface, matching
+		 * htpvz2 customPositionSafe: clickPos.y + fluid height */
+		if(inWater) {
+			plantEntity.moveTo(clickPos.getX() + 0.5D,
+					clickPos.getY() + level.getFluidState(clickPos).getHeight(level, clickPos),
+					clickPos.getZ() + 0.5D);
+		}
+		if(plantEntity instanceof ImitaterEntity imitater) {
+			imitater.setImitateCard(plantStack.copy());
+			imitater.setDirection(player.getDirection().getOpposite());
+		}
+		plantEntity.onSpawnedByPlayer(player, cardItem.getBasisSunCost(plantStack));
+		enchantPlantEntityByCard(plantEntity, plantStack);
+		/* fire resource event */
+		final int sunCost = cardItem.getCardSunCost(player, plantStack);
+		final int coolDown = ImmediateCDEnchantment.canImmediateCD(plantStack, player.getRandom()) ? 20 : getPlantCardCD(player, plantStack, cardItem);
+		final PlantResourceEvent.CheckPlantConditionEvent resourceEvent = new PlantResourceEvent.CheckPlantConditionEvent(
+				player, heldStack, plantEntity, Resources.SUN_NUM, sunCost, coolDown);
+		MinecraftForge.EVENT_BUS.post(resourceEvent);
+		/* pre condition */
+		final PlantConditionMatchingEvent.OnBlock preEvent = new PlantConditionMatchingEvent.OnBlock(
+				plantEntity, resourceEvent, null, level, clickPos, direction, true, PlantConditionMatchingEvent.Phase.PRE);
+		MinecraftForge.EVENT_BUS.post(preEvent);
+		if(preEvent.isCanceled()) {
+			plantEntity.discard();
+			return preEvent.result != null ? preEvent.result : PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		}
+		/* check lock */
+		if(! costCard.isEnjoyCard && PlayerUtil.isPAZLocked(player, costCard.plantType) && ConfigUtil.needUnlockToPlant() && ! player.isCreative()) {
+			plantEntity.discard();
+			return PlacementErrors.LOCK_ERROR.getTextByArg(costCard.plantType.getRequiredLevel(), ChatFormatting.RED);
+		}
+		/* check sun */
+		if(resourceEvent.cost > PlayerUtil.getResource(player, Resources.SUN_NUM) && ! player.isCreative()) {
+			plantEntity.discard();
+			if(sunCost == cardItem.getBasisSunCost(plantStack)) {
+				return PlacementErrors.SUN_ERROR.getTextByArg(resourceEvent.cost, ChatFormatting.RED);
+			}
+			return PlacementErrors.MULTIPLE_SUN_ERROR.getTextByArg(resourceEvent.cost, ChatFormatting.RED);
+		}
+		/* post condition */
+		final PlantConditionMatchingEvent.OnBlock postEvent = new PlantConditionMatchingEvent.OnBlock(
+				plantEntity, resourceEvent, positionError, level, clickPos, direction, true, PlantConditionMatchingEvent.Phase.POST);
+		MinecraftForge.EVENT_BUS.post(postEvent);
+		if(postEvent.result != null) {
+			plantEntity.discard();
+			return postEvent.result;
+		}
+		/* consume sun */
+		if(! player.isCreative()) {
+			PlayerUtil.addResource(player, Resources.SUN_NUM, - resourceEvent.cost);
+		}
+		/* riding relation may be established by post handlers before entity joins world;
+		 * shell startup may have already added it as a container's passenger */
+		if(! plantEntity.isRemoved() && serverLevel.getEntity(plantEntity.getUUID()) == null) {
+			serverLevel.addFreshEntityWithPassengers(plantEntity);
+		}
+		/* handle cd and misc */
+		MinecraftForge.EVENT_BUS.post(new SummonCardUseEvent(player, heldStack, plantStack));
+		if(PlayerUtil.isPlayerSurvival(player)) {
+			if(cardItem.isEnjoyCard) {
+				heldStack.shrink(1);
+			} else {
+				PlayerUtil.setItemStackCD(player, heldStack, resourceEvent.coolDown);
+			}
+		} else {
+			player.getCooldowns().addCooldown(heldStack.getItem(), 10);
+		}
+		if(player instanceof ServerPlayer serverPlayer) {
+			if(plantType.getUpgradeFrom().isPresent()) {
+				PlayerPlacePAZTrigger.INSTANCE.trigger(serverPlayer, PlayerPlacePAZTrigger.PlaceTypes.UPGRADE.toString().toLowerCase(), plantType.getIdentity());
+			} else {
+				PlayerPlacePAZTrigger.INSTANCE.trigger(serverPlayer, PlayerPlacePAZTrigger.PlaceTypes.PLANT.toString().toLowerCase(), plantType.getIdentity());
+			}
+		}
+		player.awardStat(Stats.ITEM_USED.get(cardItem));
+		return null;
+	}
+
 	/**
 	 * check sunCost and spawn plantEntity.
 	 */
@@ -287,11 +385,30 @@ public class PlantCardItem extends SummonCardItem {
 	        PVZMod.LOGGER.error("Plant Card : Summon wrong plant entity !");
 		    return false;
 	    }
-	    PVZPlantEntity plantEntity = (PVZPlantEntity) plantType.getEntityType().get().spawn((ServerLevel) player.level, plantStack, player, pos, MobSpawnType.SPAWN_EGG, true, true);
-    	if (plantEntity == null) {
+	    final ServerLevel serverLevel = (ServerLevel) player.level;
+	    final Mob spawnedMob = plantType.getEntityType().get().create(serverLevel, plantStack.getTag(),
+	    		plantStack.hasCustomHoverName() ? plantStack.getHoverName() : null, player,
+				pos, MobSpawnType.SPAWN_EGG, true, true);
+    	if (! (spawnedMob instanceof PVZPlantEntity plantEntity)) {
     		PVZMod.LOGGER.error("Plant Card : No such plant entity !");
+			if(spawnedMob != null) {
+				spawnedMob.discard();
+			}
 			return false;
     	}
+    	if(ForgeEventFactory.doSpecialSpawn(plantEntity, serverLevel, pos.getX(), pos.getY(), pos.getZ(), null, MobSpawnType.SPAWN_EGG)) {
+    		return false;
+    	}
+    	/* create(...,true,true) settles on block collision tops; fluid has none, so water
+    	 * plants (e.g. cattail upgraded from lily pad) must be lifted onto the surface
+    	 * BEFORE joining the world, otherwise the spawn packet leaves at the fluid-cell
+    	 * bottom and only a follow-up move packet corrects it. Matches card placement */
+    	if(plantType.isWaterPlant() && ! serverLevel.getFluidState(pos).isEmpty()) {
+    		plantEntity.moveTo(pos.getX() + 0.5D,
+    				pos.getY() + serverLevel.getFluidState(pos).getHeight(serverLevel, pos),
+    				pos.getZ() + 0.5D);
+    	}
+    	serverLevel.addFreshEntityWithPassengers(plantEntity);
     	consumer.accept(plantEntity);
 		return true;
 	}

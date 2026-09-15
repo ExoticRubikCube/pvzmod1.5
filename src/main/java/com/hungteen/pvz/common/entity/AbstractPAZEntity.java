@@ -155,7 +155,6 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
                     this.setSkills(tag.getCompound(SkillTypes.SKILL_TAG));
                 }
             }
-            this.getSpawnSound().ifPresent(s -> EntityUtil.playSound(this, s));
             this.initAttributes();
             this.updatePAZStates();
         }
