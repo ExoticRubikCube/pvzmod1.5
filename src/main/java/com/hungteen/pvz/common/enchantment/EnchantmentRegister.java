@@ -6,7 +6,6 @@ import com.hungteen.pvz.common.enchantment.card.CharmEnchantment;
 import com.hungteen.pvz.common.enchantment.card.ImmediateCDEnchantment;
 import com.hungteen.pvz.common.enchantment.card.plantcard.BreakOutEnchantment;
 import com.hungteen.pvz.common.enchantment.card.plantcard.DenselyPlantEnchantment;
-import com.hungteen.pvz.common.enchantment.card.plantcard.SoillessPlantEnchantment;
 import com.hungteen.pvz.common.enchantment.misc.EnergyTransferEnchantment;
 import com.hungteen.pvz.common.enchantment.misc.RangeReachEnchantment;
 import com.hungteen.pvz.common.enchantment.misc.SunMendingEnchantment;
@@ -24,7 +23,6 @@ public class EnchantmentRegister {
 	public static final RegistryObject<Enchantment> BREAK_OUT = ENCHANTMENTS.register("break_out", BreakOutEnchantment::new);
 	public static final RegistryObject<Enchantment> CHARM = ENCHANTMENTS.register("charm", CharmEnchantment::new);
 	public static final RegistryObject<Enchantment> SUN_SHOVEL = ENCHANTMENTS.register("sun_shovel", SunShovelEnchantment::new);
-	public static final RegistryObject<Enchantment> SOILLESS_PLANT = ENCHANTMENTS.register("soilless_plant", SoillessPlantEnchantment::new);
 	public static final RegistryObject<Enchantment> SUN_MENDING = ENCHANTMENTS.register("sun_mending", SunMendingEnchantment::new);
 	public static final RegistryObject<Enchantment> DENSELY_PLANT = ENCHANTMENTS.register("densely_plant", DenselyPlantEnchantment::new);
 	public static final RegistryObject<Enchantment> IMMEDIATE_CD = ENCHANTMENTS.register("immediate_cd", ImmediateCDEnchantment::new);

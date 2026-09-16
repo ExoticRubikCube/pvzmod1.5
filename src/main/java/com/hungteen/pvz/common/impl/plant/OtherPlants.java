@@ -43,10 +43,11 @@ public final class OtherPlants extends PlantType {
 	
 	public static final IPlantType GOLD_LEAF = new OtherPlants("gold_leaf", new PlantFeatures()
 			.cost(75).requiredLevel(26)
-			.cd(CoolDowns.NORMAL).rank(RankTypes.BLUE).essence(EssenceTypes.LIGHT)
+			.cd(CoolDowns.NORMAL).rank(RankTypes.GOLD).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.GOLD_LEAF.get())
 			.summonCard(() -> ItemRegister.GOLD_LEAF_CARD.get())
 			.enjoyCard(() -> ItemRegister.GOLD_LEAF_ENJOY_CARD.get())
+			.notCountInLimit()
 			.plantModel(() -> () -> new GoldLeafModel(GoldLeafModel.createBodyLayer().bakeRoot())).scale(0.8F)
 			.placement(Placements.GOLD)
 			.cdSkill(List.of(SkillTypes.ADVANCE_GOLD))

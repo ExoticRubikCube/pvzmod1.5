@@ -42,10 +42,9 @@ public class IceShroomEntity extends PlantBomberEntity implements IIceEffect{
 			int cnt = 0;
 			for(LivingEntity entity : EntityUtil.getTargetableLivings(this, aabb)) {
 				 PVZEntityDamageSource source = PVZEntityDamageSource.causeIceDamage(this, this);
-				 this.getColdEffect().ifPresent(source::addEffect);
 				 this.getFrozenEffect().ifPresent(source::addEffect);
 				 entity.hurt(source, this.getExplodeDamage());
-				 if(EntityUtil.isEntityCold(entity)) {
+				 if(EntityUtil.isEntityFrozen(entity)) {
 					 ++ cnt;
 				 }
 			}
@@ -113,11 +112,6 @@ public class IceShroomEntity extends PlantBomberEntity implements IIceEffect{
 		return 100;
 	}
 	
-	@Override
-	public Optional<MobEffectInstance> getColdEffect() {
-		return Optional.of(new MobEffectInstance(EffectRegister.COLD_EFFECT.get(), this.getColdTick() + this.getFrozenTick(), this.getColdLvl(), false, false));
-	}
-
 	@Override
 	public Optional<MobEffectInstance> getFrozenEffect() {
 		return Optional.ofNullable(new MobEffectInstance(EffectRegister.FROZEN_EFFECT.get(), this.getFrozenTick(), this.getFrozenLvl(), false, false));

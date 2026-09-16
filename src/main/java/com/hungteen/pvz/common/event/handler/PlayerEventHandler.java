@@ -20,10 +20,7 @@ import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import com.hungteen.pvz.common.world.invasion.MissionManager;
 import com.hungteen.pvz.compat.patchouli.PVZPatchouliHandler;
-import com.hungteen.pvz.utils.ConfigUtil;
-import com.hungteen.pvz.utils.EntityUtil;
-import com.hungteen.pvz.utils.PlayerUtil;
-import com.hungteen.pvz.utils.StringUtil;
+import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.enums.Resources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -54,7 +51,7 @@ public class PlayerEventHandler {
             boolean removed = false;
             if(entity instanceof PVZPlantEntity plantEntity && stack.getItem() instanceof ShovelItem) {
                 if (plantEntity.getPlantInfo().isPresent()) {
-                    SunEntity.spawnSunsByAmount(player.level, plantEntity.blockPosition(), EnchantmentUtil.getSunShovelAmount(stack, plantEntity.getPlantInfo().get().getSunCost()));
+                    SunEntity.spawnSunsByAmount(player.level, plantEntity.blockPosition(), EnchantmentUtil.getSunShovelAmount(stack, PlantUtil.getPlantRefundSunCost(plantEntity.getPlantType())));
                     /* transfer passengers to the vehicle's vehicle before removing, e.g. pea wrapped by a pumpkin riding a lily pad */
                     final Entity vehicle = plantEntity.getVehicle();
                     if (vehicle instanceof PVZPlantEntity container) {

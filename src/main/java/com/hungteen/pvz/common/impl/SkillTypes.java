@@ -209,12 +209,6 @@ public class SkillTypes {
             Arrays.asList(2, 3, 4, 5)
     );
 
-    //water guard
-    public static final ISkillType MORE_GUARD_LIFE = new SkillType("more_guard_life",
-            ArrayUtil.getAverageArray(6, 150F, 300F),
-            Arrays.asList(2, 3, 4, 4, 5)
-    );
-
     //butter pult
     public static final ISkillType MORE_BUTTER_DAMAGE = new SkillType("more_butter_damage",
             ArrayUtil.getAverageArray(6, 0.1F, 1.1F),

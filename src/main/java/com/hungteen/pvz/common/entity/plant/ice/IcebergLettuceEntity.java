@@ -46,7 +46,7 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
 		int cnt = 0;
 		for(Entity target : EntityUtil.getTargetableEntities(this, EntityUtil.getEntityAABB(this, range, range))) {
 			this.dealDamageTo(target);
-			if(target instanceof LivingEntity && EntityUtil.isEntityCold((LivingEntity) target)) {
+			if(target instanceof LivingEntity && EntityUtil.isEntityFrozen((LivingEntity) target)) {
 				++ cnt;
 			}
 		}
@@ -58,29 +58,15 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
 	
 	private void dealDamageTo(Entity target) {
 		PVZEntityDamageSource source = PVZEntityDamageSource.causeIceDamage(this, this);
-		this.getColdEffect().ifPresent(source::addEffect);
 		this.getFrozenEffect().ifPresent(source::addEffect);
 		target.hurt(source, 0.001F);
 	}
-	
-    @Override
-	public Optional<MobEffectInstance> getColdEffect() {
-		return Optional.of(new MobEffectInstance(EffectRegister.COLD_EFFECT.get(), FROZEN_TICK + this.getColdDuration(), this.getColdLevel(), false, false));
-	}
-    
+
     @Override
 	public Optional<MobEffectInstance> getFrozenEffect() {
     	return Optional.of(new MobEffectInstance(EffectRegister.FROZEN_EFFECT.get(), FROZEN_TICK, 1, false, false));
 	}
-    
-    public int getColdLevel() {
-		return 1;
-    }
-    
-    public int getColdDuration() {
-		return 100;
-    }
-    
+
     public float getSuperRange() {
 		return 20;
     }

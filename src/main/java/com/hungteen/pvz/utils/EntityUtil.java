@@ -601,17 +601,17 @@ public class EntityUtil {
     }
 
     /**
-     * is entity has cold effect.
+     * is entity chilled by ice attacks, see {@link LivingEntity#getTicksFrozen()}.
      */
     public static boolean isEntityCold(LivingEntity entity) {
-        return entity.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(EffectRegister.COLD_EFFECT_UUID) != null;
+        return entity.getTicksFrozen() > 0;
     }
 
     /**
      * is entity has frozen effect.
      */
     public static boolean isEntityFrozen(LivingEntity entity) {
-        return entity.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(EffectRegister.FROZEN_EFFECT_UUID) != null;
+        return entity.hasEffect(EffectRegister.FROZEN_EFFECT.get());
     }
 
     /**

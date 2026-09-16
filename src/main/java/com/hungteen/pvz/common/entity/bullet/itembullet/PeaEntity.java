@@ -1,20 +1,18 @@
 package com.hungteen.pvz.common.entity.bullet.itembullet;
 
 import com.hungteen.pvz.api.interfaces.IIceEffect;
+import com.hungteen.pvz.api.paz.IPAZEntity;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.bullet.AbstractShootBulletEntity;
 import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity;
 import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity.FlameTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import com.hungteen.pvz.common.potion.EffectRegister;
-import com.hungteen.pvz.utils.EffectUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,6 +23,7 @@ public class PeaEntity extends AbstractShootBulletEntity implements ItemSupplier
 
 	private static final EntityDataAccessor<Integer> PEA_STATE = SynchedEntityData.defineId(PeaEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> PEA_TYPE = SynchedEntityData.defineId(PeaEntity.class, EntityDataSerializers.INT);
+	private static final int CHILL_FROZEN_TICK = 400;
 	public TorchWoodEntity torchWood = null;
 	private int power = 0;
 
@@ -91,12 +90,13 @@ this.discard();
 			PVZEntityDamageSource source = PVZEntityDamageSource.snowPea(this, this.getThrower());
 			LivingEntity owner = this.getThrower();
 			if (owner instanceof IIceEffect) {
-				((IIceEffect) owner).getColdEffect().ifPresent(e -> source.addEffect(e));
 				((IIceEffect) owner).getFrozenEffect().ifPresent(e -> source.addEffect(e));
-			} else if(owner instanceof Player) {
-				source.addEffect(EffectUtil.effect(EffectRegister.COLD_EFFECT.get(), 100, 5));
 			}
 			target.hurt(source, damage);
+			target.clearFire();
+			if(target.canFreeze() && (!(target instanceof IPAZEntity) || ((IPAZEntity) target).canBeCold()) && target.getTicksFrozen() < CHILL_FROZEN_TICK) {
+				target.setTicksFrozen(CHILL_FROZEN_TICK);
+			}
 		} else if (this.getPeaState() == State.FIRE || this.getPeaState() == State.BLUE_FIRE) {
 			target.hurt(PVZEntityDamageSource.flamePea(this, this.getThrower()), damage);
 		}

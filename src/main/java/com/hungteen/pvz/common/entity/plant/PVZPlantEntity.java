@@ -318,9 +318,6 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 	 * {@link EntityUtil#addPotionEffect(Entity, MobEffectInstance)}
 	 */
 	public void checkAndAddPotionEffect(MobEffectInstance effect) {
-		if (effect.getEffect() == EffectRegister.COLD_EFFECT.get() && !this.canBeCold()) {
-			return;
-		}
 		if (effect.getEffect() == EffectRegister.FROZEN_EFFECT.get() && !this.canBeFrozen()) {
 			return;
 		}

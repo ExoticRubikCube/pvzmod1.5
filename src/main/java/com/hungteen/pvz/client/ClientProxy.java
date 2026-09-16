@@ -1,6 +1,5 @@
 package com.hungteen.pvz.client;
 
-import com.hungteen.pvz.client.render.layer.fullskin.ColdLayer;
 import com.hungteen.pvz.common.CommonProxy;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.block.others.SteelLadderBlock;
@@ -13,7 +12,6 @@ import com.hungteen.pvz.common.item.tool.GardenCompassItem;
 import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.core.BlockPos;
@@ -41,11 +39,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void postInit() {
-        this.addLayersForRender();
-    }
-
-    @Override
     public void setUpClient() {
         ConeArmorItem.initArmorModel();
         BucketArmorItem.initArmorModel();
@@ -68,14 +61,14 @@ public class ClientProxy extends CommonProxy {
                 if (entity == null) {
                     return 0.0F;
                 } else {
-                    if (pLevel == null && entity.level instanceof ClientLevel) {
-                        pLevel = (ClientLevel) entity.level;
+                    if (pLevel == null && entity.level instanceof ClientLevel clientLevel) {
+                        pLevel = clientLevel;
                     }
 
                     pos = this.getPointPosition(pStack, pLevel, pEntity);
                     long i = pLevel.getGameTime();
                     if (pos != null && !(entity.position().distanceToSqr((double) pos.getX() + 0.5D, entity.position().y(), (double) pos.getZ() + 0.5D) < (double) 1.0E-5F)) {
-                        boolean flag = pEntity instanceof Player && ((Player) pEntity).isLocalPlayer();
+                        boolean flag = pEntity instanceof Player player && player.isLocalPlayer();
                         double d1 = 0.0D;
                         if (flag) {
                             d1 = pEntity.getYRot();
@@ -133,15 +126,6 @@ public class ClientProxy extends CommonProxy {
 
             private double getAngleTo(Vec3 p_239443_1_, Entity p_239443_2_) {
                 return Math.atan2(p_239443_1_.z() - p_239443_2_.getZ(), p_239443_1_.x() - p_239443_2_.getX());
-            }
-        });
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private void addLayersForRender() {
-        MC.getEntityRenderDispatcher().renderers.values().forEach(r -> {
-            if (r instanceof LivingEntityRenderer) {
-                ((LivingEntityRenderer) r).addLayer(new ColdLayer<>((LivingEntityRenderer) r));
             }
         });
     }

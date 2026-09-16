@@ -1,16 +1,13 @@
 package com.hungteen.pvz.common.world.structure.shop;
 
 import com.hungteen.pvz.common.entity.EntityRegister;
-import com.hungteen.pvz.common.entity.npc.SunDaveEntity;
 import com.hungteen.pvz.common.misc.PVZLoot;
 import com.hungteen.pvz.common.world.structure.PVZTemplateComponent;
 import com.hungteen.pvz.common.world.structure.StructureRegister;
-import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -52,12 +49,7 @@ public class SunTempleComponents {
 		@Override
 		protected void handleDataMarker(String function, BlockPos pos, ServerLevelAccessor worldIn, RandomSource rand,
 				BoundingBox sbb) {
-			if (function.equals("spawn")) {
-				if (worldIn instanceof ServerLevel serverLevel) {
-					SunDaveEntity dave = EntityRegister.SUN_DAVE.get().create(serverLevel);
-					EntityUtil.onEntitySpawn(worldIn, dave, pos.above());
-				}
-			} else if (function.equals("chest")) {
+			if (function.equals("chest")) {
 				this.createChest(worldIn, sbb, rand, pos.above(), PVZLoot.SUN_TEMPLE_CHEST, null);
 				worldIn.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 2);
 				BlockEntity te = worldIn.getBlockEntity(pos);

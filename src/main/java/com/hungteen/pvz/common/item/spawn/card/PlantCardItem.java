@@ -11,7 +11,6 @@ import com.hungteen.pvz.common.enchantment.card.BandageEnchantment;
 import com.hungteen.pvz.common.enchantment.card.ImmediateCDEnchantment;
 import com.hungteen.pvz.common.enchantment.card.plantcard.BreakOutEnchantment;
 import com.hungteen.pvz.common.enchantment.card.plantcard.DenselyPlantEnchantment;
-import com.hungteen.pvz.common.enchantment.card.plantcard.SoillessPlantEnchantment;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.magic.ImitaterEntity;
 import com.hungteen.pvz.common.event.events.PlantConditionMatchingEvent;
@@ -168,7 +167,6 @@ public class PlantCardItem extends SummonCardItem {
 		final PlantCardItem cardItem = (PlantCardItem) plantStack.getItem();
 		final IPlantType plantType = cardItem.plantType;
 		final BlockPos pos = context.getClickedPos();
-		final boolean isSoilless = SoillessPlantEnchantment.isSoilless(plantStack);
 		if(world.isClientSide) {
 			return InteractionResult.SUCCESS;
 		}
@@ -182,16 +180,9 @@ public class PlantCardItem extends SummonCardItem {
             return InteractionResult.FAIL;
         }
 
-        /* check water plants */
-		if(plantType.isWaterPlant()) {
-			/* special placement for cat tail */
-			if(plantType == PVZPlants.CAT_TAIL) {
-				if(isSoilless && world.getFluidState(pos.above()).getType() == Fluids.WATER) {
-				    return this.use(world, player, hand).getResult();
-				}
-			} else if(! isSoilless || world.getFluidState(pos.above()).getType() == Fluids.WATER) {
-			    return this.use(world, player, hand).getResult();
-			}
+        /* check water plants, cat tail is upgraded onto lily pad instead of placed in fluid directly */
+		if(plantType.isWaterPlant() && plantType != PVZPlants.CAT_TAIL) {
+			return this.use(world, player, hand).getResult();
 		}
 		final MutableComponent plantResult = plantOnBlock(player, heldStack, world, pos, context.getClickedFace());
 		if (plantResult == null) {
@@ -220,7 +211,6 @@ public class PlantCardItem extends SummonCardItem {
 		}
 		final IPlantType plantType = cardItem.plantType;
 		final boolean isImitater = heldStack.getItem() instanceof ImitaterCardItem;
-		final boolean isSoilless = SoillessPlantEnchantment.isSoilless(plantStack);
 		/* check cool down */
 		if(player.getCooldowns().isOnCooldown(heldStack.getItem())) {
 			return PlacementErrors.CD_ERROR.getTextByArg(0, ChatFormatting.RED);
@@ -233,14 +223,14 @@ public class PlantCardItem extends SummonCardItem {
 			spawnPos = clickPos.above();
 			if(level.getFluidState(clickPos).getType() != Fluids.WATER || ! level.isEmptyBlock(spawnPos)
 					|| ! plantType.isWaterPlant()
-					|| (plantType == PVZPlants.CAT_TAIL && ! isSoilless)) {
+					|| plantType == PVZPlants.CAT_TAIL) {
 				positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
 			}
 		} else if(direction != Direction.UP || ! level.isEmptyBlock(clickPos.above())) {
 			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
-		} else if(! isSoilless && plantType.getUpgradeFrom().isPresent()) {
+		} else if(plantType.getUpgradeFrom().isPresent()) {
 			positionError = PlacementErrors.UPGRADE_ERROR.getTextByArg(0, ChatFormatting.RED);
-		} else if(! isSoilless && ! plantType.getPlacement().canPlaceOnBlock(level.getBlockState(clickPos).getBlock())) {
+		} else if(! plantType.getPlacement().canPlaceOnBlock(level.getBlockState(clickPos).getBlock())) {
 			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
 		} else if(! level.getBlockState(clickPos).getCollisionShape(level, clickPos).isEmpty()) {
 			spawnPos = clickPos.relative(direction);
@@ -661,10 +651,6 @@ public class PlantCardItem extends SummonCardItem {
 		if(EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.CHARM.get(), stack) > 0) {
 			plantEntity.onCharmedBy(null);
 		}
-		/* check soilless enchantment */
-		if(EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegister.SOILLESS_PLANT.get(), stack) > 0) {
-			plantEntity.setImmuneToWeak(true);
-		}
 	}
 
 	/**
@@ -724,18 +710,15 @@ public class PlantCardItem extends SummonCardItem {
 		final PlantCardItem item = (PlantCardItem) stack.getItem();
 		if(item != null) {
 		    final IPlantType plant = item.plantType;
-		    /* upgrade plant without soilless plant enchantment */
-		    if(! SoillessPlantEnchantment.isSoilless(stack)) {
-		    	if(plant.getUpgradeFrom().isPresent()) {
-		    	    if(plant == PVZPlants.COB_CANNON) {
-		    		    tooltip.add(Component.translatable("tooltip.pvz.cob_cannon_card").withStyle(ChatFormatting.RED));
-		    	    }  else {
-		    		    tooltip.add(Component.translatable("tooltip.pvz.upgrade_card").append(plant.getUpgradeFrom().get().getText().withStyle(ChatFormatting.UNDERLINE)).withStyle(ChatFormatting.RED));
-		    	    }
-		    	} else if(plant == PVZPlants.CAT_TAIL) {
-		    		tooltip.add(Component.translatable("tooltip.pvz.upgrade_card").append(PVZPlants.LILY_PAD.getText().withStyle(ChatFormatting.UNDERLINE)).withStyle(ChatFormatting.RED));
-		    	}
-		    }
+	    	if(plant.getUpgradeFrom().isPresent()) {
+	    	    if(plant == PVZPlants.COB_CANNON) {
+	    		    tooltip.add(Component.translatable("tooltip.pvz.cob_cannon_card").withStyle(ChatFormatting.RED));
+	    	    }  else {
+	    		    tooltip.add(Component.translatable("tooltip.pvz.upgrade_card").append(plant.getUpgradeFrom().get().getText().withStyle(ChatFormatting.UNDERLINE)).withStyle(ChatFormatting.RED));
+	    	    }
+	    	} else if(plant == PVZPlants.CAT_TAIL) {
+	    		tooltip.add(Component.translatable("tooltip.pvz.upgrade_card").append(PVZPlants.LILY_PAD.getText().withStyle(ChatFormatting.UNDERLINE)).withStyle(ChatFormatting.RED));
+	    	}
 		    /* misc */
 		    if(TOOL_TIP_TYPES.contains(plant)) {
 			    tooltip.add(Component.translatable("tooltip.pvz." + plant.toString().toLowerCase() + "_card").withStyle(ChatFormatting.DARK_RED));

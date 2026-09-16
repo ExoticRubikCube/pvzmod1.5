@@ -29,6 +29,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -175,6 +177,26 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
         if (this.canDespawn){
             super.checkDespawn();
         }
+    }
+
+    @Override
+    public void tick() {
+        //frozen effect carries its own -100% modifier; only chill needs the powder snow slot.
+        if(!EntityUtil.isEntityFrozen(this) && EntityUtil.isEntityCold(this)) {
+            final AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+            if(speed != null) {
+                final double slowAmount = - 0.5D * speed.getBaseValue();
+                final AttributeModifier oldModifier = speed.getModifier(SPEED_MODIFIER_POWDER_SNOW_UUID);
+                if(oldModifier == null || slowAmount < oldModifier.getAmount()) {
+                    if(oldModifier != null) {
+                        speed.removeModifier(SPEED_MODIFIER_POWDER_SNOW_UUID);
+                    }
+                    speed.addTransientModifier(new AttributeModifier(SPEED_MODIFIER_POWDER_SNOW_UUID,
+                            "Powder snow slow", slowAmount, AttributeModifier.Operation.ADDITION));
+                }
+            }
+        }
+        super.tick();
     }
 
     @Override

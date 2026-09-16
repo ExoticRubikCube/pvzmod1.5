@@ -60,5 +60,5 @@ public class PVZLivingEvents {
 	public static void onLivingDamage(LivingDamageEvent ev) {
 		AbstractPAZEntity.damageInnerDefence(ev);
 	}
-	
+
 }

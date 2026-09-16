@@ -35,12 +35,6 @@
         },
         {
             "type": "spotlight",
-            "item": "pvz:squash_card{'Enchantments':[{'id':'pvz:soilless_plant','lvl':1}]}",
-            "title": "Soilless Plant",
-            "text": "When PlantCards have $(bred)Soilless Plant$() Enchantment, the plants summoned are able to survive on every block. Its max lvl is 1."
-        },
-        {
-            "type": "spotlight",
             "item": "pvz:cabbage_pult_card{'Enchantments':[{'id':'pvz:densely_plant','lvl':1}]}",
             "title": "Densely Plant",
             "text": "When PlantCards have $(bred)Densely Plant$() Enchantment, it can place 10 more each level before reach count limit."

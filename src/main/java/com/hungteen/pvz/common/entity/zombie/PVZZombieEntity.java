@@ -311,12 +311,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 		if (!this.canNormalUpdate()) {//can not update means stop attack.
 			return 10000000;
 		}
-		int cd = 20;
-		if (this.hasEffect(EffectRegister.COLD_EFFECT.get())) {//cold will decrease attack CD.
-			int lvl = this.getEffect(EffectRegister.COLD_EFFECT.get()).getAmplifier();
-			cd += 3 * lvl;
-		}
-		return cd;
+		//chill halves eating speed in pvz, see EntityUtil#isEntityCold.
+		return EntityUtil.isEntityCold(this) ? 40 : 20;
 	}
 
 	@Override
@@ -723,9 +719,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link EntityUtil#addPotionEffect(Entity, MobEffectInstance)}
 	 */
 	public void checkAndAddPotionEffect(MobEffectInstance effect) {
-		if (effect.getEffect() == EffectRegister.COLD_EFFECT.get() && !this.canBeCold()) {
-			return;
-		}
 		if (effect.getEffect() == EffectRegister.FROZEN_EFFECT.get() && !this.canBeFrozen()) {
 			return;
 		}

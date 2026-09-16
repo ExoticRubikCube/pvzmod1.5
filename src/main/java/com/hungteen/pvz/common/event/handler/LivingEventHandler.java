@@ -22,9 +22,7 @@ public class LivingEventHandler {
 	public static void handleHurtEffects(LivingEntity target, PVZEntityDamageSource source) {
 		if(! source.isDefended()) {//source not defended by armor.
 			if(source.isFlameDamage()) {
-				if(target.hasEffect(EffectRegister.COLD_EFFECT.get())){
-				    target.removeEffect(EffectRegister.COLD_EFFECT.get());
-				}
+				target.setTicksFrozen(0);
 				if(target.hasEffect(EffectRegister.FROZEN_EFFECT.get())){
 				    target.removeEffect(EffectRegister.FROZEN_EFFECT.get());
 				}

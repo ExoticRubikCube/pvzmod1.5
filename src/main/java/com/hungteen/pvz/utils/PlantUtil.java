@@ -1,5 +1,6 @@
 package com.hungteen.pvz.utils;
 
+import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 
 public class PlantUtil {
@@ -16,6 +17,15 @@ public class PlantUtil {
 //	public static final int[] GOLD_XP = new int[] {0,35,60,90,120,175,255,350,450,600,800,1080,1500,2500,3600,5000,6400,8100,10800,14000,999999999};
 //	public static final int[] MEGA_XP = new int[] {0,40,70,100,150,210,300,400,520,700,960,1300,1800,3000,4200,6000,7800,9600,12500,16000,999999999};
     public static int CURRENT_PLANT_NUM = 0;
+
+    /**
+     * refund sun cost equivalent of a plant: upgrade plants (purple rank) refund the base plant cost plus their own cost.
+     */
+    public static int getPlantRefundSunCost(IPlantType type) {
+        return type.getUpgradeFrom().isPresent()
+                ? type.getUpgradeFrom().get().getSunCost() + type.getSunCost()
+                : type.getSunCost();
+    }
 
     /**
      * copy data from p1 to p2

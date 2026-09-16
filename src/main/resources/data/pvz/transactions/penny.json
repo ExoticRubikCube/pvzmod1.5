@@ -6,6 +6,7 @@
     }
   },
   "has_enjoy_card": true,
+  "has_slot_machine": true,
   "goods": [
     {
       "type": "money_1",
@@ -16,14 +17,6 @@
       "type": "money_10",
       "price": 10,
       "must": true
-    },
-    {
-      "type": "item",
-      "item": "minecraft:enchanted_book",
-      "nbt": "{StoredEnchantments:[{'id':'pvz:soilless_plant', 'lvl':1}]}",
-      "price": 5,
-      "weight": 70,
-      "limit": 2
     },
     {
       "type": "item",

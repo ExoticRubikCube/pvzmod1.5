@@ -7,7 +7,6 @@ import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity.State;
 import com.hungteen.pvz.common.entity.plant.appease.PeaShooterEntity;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundEvent;
@@ -26,11 +25,6 @@ public class SnowPeaEntity extends PeaShooterEntity implements IIceEffect{
 		super(type, worldIn);
 	}
 
-	@Override
-	public Optional<MobEffectInstance> getColdEffect() {
-		return Optional.of(new MobEffectInstance(EffectRegister.COLD_EFFECT.get(), this.getColdTick(), this.getColdLvl(), false, false));
-	}
-	
 	@Override
 	public Optional<MobEffectInstance> getFrozenEffect() {
 		return Optional.empty();

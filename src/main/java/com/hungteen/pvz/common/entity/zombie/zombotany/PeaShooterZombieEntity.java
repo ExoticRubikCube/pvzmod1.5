@@ -3,7 +3,6 @@ package com.hungteen.pvz.common.entity.zombie.zombotany;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.impl.zombie.Zombotanies;
-import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -59,12 +58,8 @@ public class PeaShooterZombieEntity extends AbstractZombotanyEntity {
 	}
 
 	protected int getFixedShootCD() {
-		int now = this.getShootCD();
-		if (this.hasEffect(EffectRegister.COLD_EFFECT.get())) {
-			int lvl = this.getEffect(EffectRegister.COLD_EFFECT.get()).getAmplifier();
-			now += 3 * lvl;
-		}
-		return now;
+		final int cd = this.getShootCD();
+		return EntityUtil.isEntityCold(this) ? cd * 2 : cd;
 	}
 	
 	protected int getShootCD() {

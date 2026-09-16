@@ -5,7 +5,6 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.bullet.MelonEntity.MelonStates;
 import com.hungteen.pvz.common.entity.plant.arma.MelonPultEntity;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
-import com.hungteen.pvz.common.potion.EffectRegister;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -19,19 +18,6 @@ public class WinterMelonEntity extends MelonPultEntity implements IIceEffect {
 		super(type, worldIn);
 	}
 
-	public int getColdLvl() {
-		return 7;
-	}
-	
-	public int getColdTick() {
-		return 80;
-	}
-	
-	@Override
-	public Optional<MobEffectInstance> getColdEffect() {
-		return Optional.of(new MobEffectInstance(EffectRegister.COLD_EFFECT.get(), this.getColdTick(), this.getColdLvl(), false, false));
-	}
-	
 	@Override
 	public Optional<MobEffectInstance> getFrozenEffect() {
 		return Optional.empty();

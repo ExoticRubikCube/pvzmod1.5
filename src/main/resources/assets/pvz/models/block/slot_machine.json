@@ -5,7 +5,7 @@
 	"textures": {
 		"1": "pvz:block/slot_machine",
 		"2": "pvz:block/slot_machine1",
-		"particle": "pvz:block/slot_machine1"
+		"particle": "pvz:block/slot_machine"
 	},
 	"elements": [
 		{

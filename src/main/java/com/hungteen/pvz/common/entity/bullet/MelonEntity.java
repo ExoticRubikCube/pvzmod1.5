@@ -1,7 +1,7 @@
 package com.hungteen.pvz.common.entity.bullet;
 
+import com.hungteen.pvz.api.paz.IPAZEntity;
 import com.hungteen.pvz.common.entity.EntityRegister;
-import com.hungteen.pvz.common.entity.plant.ice.WinterMelonEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
@@ -9,15 +9,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
-
-import java.util.Optional;
 
 public class MelonEntity extends PultBulletEntity {
 
 	private static final EntityDataAccessor<Integer> MELON_STATE = SynchedEntityData.defineId(MelonEntity.class, EntityDataSerializers.INT);
+	private static final int CHILL_FROZEN_TICK = 400;
 	private Entity attackEntity = null;
 	
 	public MelonEntity(EntityType<?> type, Level worldIn) {
@@ -38,8 +36,10 @@ public class MelonEntity extends PultBulletEntity {
 	protected void dealDamage(Entity target) {
 		if(this.getMelonState() == MelonStates.ICE) {
 			PVZEntityDamageSource source = PVZEntityDamageSource.winterMelon(this, this.getThrower());
-			this.getColdEffect().ifPresent(e -> source.addEffect(e));
 			target.hurt(source, this.getAttackDamage());
+			if(target.canFreeze() && (!(target instanceof IPAZEntity) || ((IPAZEntity) target).canBeCold()) && target.getTicksFrozen() < CHILL_FROZEN_TICK) {
+				target.setTicksFrozen(CHILL_FROZEN_TICK);
+			}
 		} else{
 			target.hurt(PVZEntityDamageSource.melon(this, this.getThrower()), this.getAttackDamage());
 		}
@@ -62,8 +62,10 @@ public class MelonEntity extends PultBulletEntity {
 			if(! entity.is(attackEntity) && this.shouldHit(entity)) {
 				if(this.getMelonState() == MelonStates.ICE) {
 					PVZEntityDamageSource source = PVZEntityDamageSource.winterMelon(this, this.getThrower());
-					this.getColdEffect().ifPresent(e -> source.addEffect(e));
 					entity.hurt(source, this.getAttackDamage() / 2);
+					if(entity.canFreeze() && (!(entity instanceof IPAZEntity) || ((IPAZEntity) entity).canBeCold()) && entity.getTicksFrozen() < CHILL_FROZEN_TICK) {
+						entity.setTicksFrozen(CHILL_FROZEN_TICK);
+					}
 				} else {
 					PVZEntityDamageSource source = PVZEntityDamageSource.melon(this, this.getThrower());
 				    entity.hurt(source, this.getAttackDamage() / 2);
@@ -74,13 +76,6 @@ public class MelonEntity extends PultBulletEntity {
 			EntityUtil.spawnParticle(this, (this.getMelonState() == MelonStates.ICE ? 2 : 1));
 		}
 		EntityUtil.playSound(this, SoundRegister.MELON_HIT.get());
-	}
-	
-	protected Optional<MobEffectInstance> getColdEffect(){
-		if(this.getThrower() instanceof WinterMelonEntity) {
-			return ((WinterMelonEntity) this.getThrower()).getColdEffect();
-		}
-		return Optional.empty();
 	}
 	
 	@Override

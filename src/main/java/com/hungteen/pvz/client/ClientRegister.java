@@ -8,13 +8,15 @@ import com.hungteen.pvz.client.model.entity.creature.MooBloomModel;
 import com.hungteen.pvz.client.model.entity.misc.*;
 import com.hungteen.pvz.client.model.entity.npc.CrazyDaveModel;
 import com.hungteen.pvz.client.model.entity.npc.PennyModel;
-import com.hungteen.pvz.client.model.entity.npc.SunDaveModel;
 import com.hungteen.pvz.client.model.entity.plant.appease.*;
 import com.hungteen.pvz.client.model.entity.plant.arma.CabbagePultModel;
 import com.hungteen.pvz.client.model.entity.plant.arma.KernelPultModel;
 import com.hungteen.pvz.client.model.entity.plant.arma.MelonPultModel;
 import com.hungteen.pvz.client.model.entity.plant.assist.*;
-import com.hungteen.pvz.client.model.entity.plant.defence.*;
+import com.hungteen.pvz.client.model.entity.plant.defence.GarlicModel;
+import com.hungteen.pvz.client.model.entity.plant.defence.PumpkinModel;
+import com.hungteen.pvz.client.model.entity.plant.defence.TallNutModel;
+import com.hungteen.pvz.client.model.entity.plant.defence.WallNutModel;
 import com.hungteen.pvz.client.model.entity.plant.enforce.*;
 import com.hungteen.pvz.client.model.entity.plant.explosion.*;
 import com.hungteen.pvz.client.model.entity.plant.flame.JalapenoModel;
@@ -54,14 +56,16 @@ import com.hungteen.pvz.client.render.entity.misc.drop.JewelRender;
 import com.hungteen.pvz.client.render.entity.misc.drop.SunRender;
 import com.hungteen.pvz.client.render.entity.npc.CrazyDaveRender;
 import com.hungteen.pvz.client.render.entity.npc.PennyRender;
-import com.hungteen.pvz.client.render.entity.npc.SunDaveRender;
 import com.hungteen.pvz.client.render.entity.plant.appease.*;
 import com.hungteen.pvz.client.render.entity.plant.arma.ButterPultRender;
 import com.hungteen.pvz.client.render.entity.plant.arma.CabbagePultRender;
 import com.hungteen.pvz.client.render.entity.plant.arma.KernelPultRender;
 import com.hungteen.pvz.client.render.entity.plant.arma.MelonPultRender;
 import com.hungteen.pvz.client.render.entity.plant.assist.*;
-import com.hungteen.pvz.client.render.entity.plant.defence.*;
+import com.hungteen.pvz.client.render.entity.plant.defence.GarlicRender;
+import com.hungteen.pvz.client.render.entity.plant.defence.PumpkinRender;
+import com.hungteen.pvz.client.render.entity.plant.defence.TallNutRender;
+import com.hungteen.pvz.client.render.entity.plant.defence.WallNutRender;
 import com.hungteen.pvz.client.render.entity.plant.enforce.*;
 import com.hungteen.pvz.client.render.entity.plant.explosion.*;
 import com.hungteen.pvz.client.render.entity.plant.flame.JalapenoRender;
@@ -215,7 +219,6 @@ public class ClientRegister {
 		ev.registerEntityRenderer(MOOBLOOM.get(), ctx -> new MooBloomRender(ctx));
 		ev.registerEntityRenderer(CRAZY_DAVE.get(), ctx -> new CrazyDaveRender(ctx));
 		ev.registerEntityRenderer(PANNEY.get(), ctx -> new PennyRender(ctx));
-		ev.registerEntityRenderer(SUN_DAVE.get(), ctx -> new SunDaveRender(ctx));
 		ev.registerEntityRenderer(NORMAL_ZOMBIE.get(), ctx -> new NormalZombieRender(ctx));
 		ev.registerEntityRenderer(FLAG_ZOMBIE.get(), ctx -> new FlagZombieRender(ctx));
 		ev.registerEntityRenderer(CONEHEAD_ZOMBIE.get(), ctx -> new ConeHeadZombieRender(ctx));
@@ -313,7 +316,6 @@ public class ClientRegister {
 		ev.registerEntityRenderer(SPIKE_ROCK.get(), ctx -> new SpikeRockRender(ctx));
 		ev.registerEntityRenderer(COB_CANNON.get(), ctx -> new CobCannonRender(ctx));
 		ev.registerEntityRenderer(IMITATER.get(), ctx -> new ImitaterRender(ctx));
-		ev.registerEntityRenderer(WATER_GUARD.get(), ctx -> new WaterGuardRender(ctx));
 		ev.registerEntityRenderer(STRANGE_CAT.get(), ctx -> new StrangeCatRender(ctx));
 		ev.registerEntityRenderer(ANGEL_STAR_FRUIT.get(), ctx -> new AngelStarFruitRender(ctx));
 		ev.registerEntityRenderer(GOLD_LEAF.get(), ctx -> new GoldLeafRender(ctx));
@@ -367,8 +369,6 @@ public class ClientRegister {
 			CrazyDaveModel::createBodyLayer);
 		ev.registerLayerDefinition(PennyModel.LAYER,
 			PennyModel::createBodyLayer);
-		ev.registerLayerDefinition(SunDaveModel.LAYER,
-			SunDaveModel::createBodyLayer);
 		ev.registerLayerDefinition(AngelStarFruitModel.LAYER,
 			AngelStarFruitModel::createBodyLayer);
 		ev.registerLayerDefinition(GatlingPeaModel.LAYER,
@@ -409,8 +409,6 @@ public class ClientRegister {
 			TallNutModel::createBodyLayer);
 		ev.registerLayerDefinition(WallNutModel.LAYER,
 			WallNutModel::createBodyLayer);
-		ev.registerLayerDefinition(WaterGuardModel.LAYER,
-			WaterGuardModel::createBodyLayer);
 		ev.registerLayerDefinition(BonkChoyModel.LAYER,
 			BonkChoyModel::createBodyLayer);
 		ev.registerLayerDefinition(ChomperModel.LAYER,

@@ -18,7 +18,6 @@ import com.hungteen.pvz.common.entity.misc.drop.JewelEntity;
 import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import com.hungteen.pvz.common.entity.npc.CrazyDaveEntity;
 import com.hungteen.pvz.common.entity.npc.PennyEntity;
-import com.hungteen.pvz.common.entity.npc.SunDaveEntity;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.plant.appease.*;
 import com.hungteen.pvz.common.entity.plant.arma.ButterPultEntity;
@@ -26,7 +25,10 @@ import com.hungteen.pvz.common.entity.plant.arma.CabbagePultEntity;
 import com.hungteen.pvz.common.entity.plant.arma.KernelPultEntity;
 import com.hungteen.pvz.common.entity.plant.arma.MelonPultEntity;
 import com.hungteen.pvz.common.entity.plant.assist.*;
-import com.hungteen.pvz.common.entity.plant.defence.*;
+import com.hungteen.pvz.common.entity.plant.defence.GarlicEntity;
+import com.hungteen.pvz.common.entity.plant.defence.PumpkinEntity;
+import com.hungteen.pvz.common.entity.plant.defence.TallNutEntity;
+import com.hungteen.pvz.common.entity.plant.defence.WallNutEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.*;
 import com.hungteen.pvz.common.entity.plant.explosion.*;
 import com.hungteen.pvz.common.entity.plant.flame.JalapenoEntity;
@@ -138,7 +140,6 @@ public class EntityRegister {
 	 */
 	public static final RegistryObject<EntityType<CrazyDaveEntity>> CRAZY_DAVE = registerEntityType(CrazyDaveEntity::new, "crazy_dave", MobCategory.CREATURE);
 	public static final RegistryObject<EntityType<PennyEntity>> PANNEY = registerEntityType(PennyEntity::new, "panney", MobCategory.CREATURE);
-	public static final RegistryObject<EntityType<SunDaveEntity>> SUN_DAVE = registerEntityType(SunDaveEntity::new, "sun_dave", MobCategory.CREATURE);
 
 	/**
 	 * zombies
@@ -225,7 +226,6 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<MariGoldEntity>> MARIGOLD = registerPlantEntityType(MariGoldEntity::new, "marigold");
 	public static final RegistryObject<EntityType<GatlingPeaEntity>> GATLING_PEA = registerPlantEntityType(GatlingPeaEntity::new, "gatling_pea");
 	public static final RegistryObject<EntityType<TwinSunFlowerEntity>> TWIN_SUNFLOWER = registerPlantEntityType(TwinSunFlowerEntity::new, "twin_sunflower");
-	public static final RegistryObject<EntityType<WaterGuardEntity>> WATER_GUARD = registerPlantEntityType(WaterGuardEntity::new, "water_guard");
 	public static final RegistryObject<EntityType<PumpkinEntity>> PUMPKIN = registerPlantEntityType(PumpkinEntity::new, "pumpkin");
 	public static final RegistryObject<EntityType<PlanternEntity>> PLANTERN = registerPlantEntityType(PlanternEntity::new, "plantern");
 	public static final RegistryObject<EntityType<MagnetShroomEntity>> MAGNET_SHROOM = registerPlantEntityType(MagnetShroomEntity::new, "magnet_shroom");
@@ -282,7 +282,7 @@ public class EntityRegister {
 		}
 		Arrays.asList(
 				SUN.get(), COIN.get(), JEWEL.get(), ENERGY.get(),
-				CRAZY_DAVE.get(), SUN_DAVE.get(),
+				CRAZY_DAVE.get(),
 				FOODIE_ZOMBIE.get()
 		).forEach(obj -> {
 			ev.put(obj, PathfinderMob.createMobAttributes().build());

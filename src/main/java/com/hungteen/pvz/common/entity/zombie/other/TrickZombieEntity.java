@@ -6,7 +6,6 @@ import com.hungteen.pvz.common.impl.zombie.CustomZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZLoot;
-import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import net.minecraft.core.BlockPos;
@@ -68,7 +67,7 @@ public class TrickZombieEntity extends PVZZombieEntity{
 	
 	@Override
 	protected void dropAllDeathLoot(DamageSource damageSourceIn) {
-		if(! this.hasEffect(EffectRegister.COLD_EFFECT.get()) && ! this.isCharmed()) {
+		if(! EntityUtil.isEntityCold(this) && ! this.isCharmed()) {
 			if(this.getRandom().nextInt(EXPLOSION_CHANCE) == 0) {
 //				Explosion.Mode mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
 				this.level.explode(this, getX(), getY(), getZ(), 0.5f, Explosion.BlockInteraction.NONE);

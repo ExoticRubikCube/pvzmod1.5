@@ -6,6 +6,7 @@ import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.api.types.IRankType;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.impl.RankTypes;
+import com.hungteen.pvz.common.impl.plant.OtherPlants;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.tag.PVZItemTags;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
@@ -50,13 +52,14 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.SNOW_PEA_CARD.get(), ItemRegister.SNOW_PEA.get());
         registerCommonCard(consumer, ItemRegister.CHOMPER_CARD.get(), BlockRegister.CHOMPER.get().asItem());
         //2-1
-        registerCommonCard(consumer, ItemRegister.SUN_SHROOM_CARD.get(), ItemRegister.SPORE.get());
-        registerCommonCard(consumer, ItemRegister.FUME_SHROOM_CARD.get(), ItemRegister.SPORE.get());
+        registerCommonCard(consumer, ItemRegister.SUN_SHROOM_CARD.get(), Tags.Items.MUSHROOMS);
+        registerCommonCard(consumer, ItemRegister.FUME_SHROOM_CARD.get(), Tags.Items.MUSHROOMS);
+        registerCommonCard(consumer, ItemRegister.PUFF_SHROOM_CARD.get(), Tags.Items.MUSHROOMS);
         registerCommonCard(consumer, ItemRegister.GRAVE_BUSTER_CARD.get(), Items.VINE);
         registerCommonCard(consumer, ItemRegister.HYPNO_SHROOM_CARD.get(), Items.RED_MUSHROOM);
-        registerCommonCard(consumer, ItemRegister.SCAREDY_SHROOM_CARD.get(), ItemRegister.SPORE.get());
+        registerCommonCard(consumer, ItemRegister.SCAREDY_SHROOM_CARD.get(), Tags.Items.MUSHROOMS);
         registerCommonCard(consumer, ItemRegister.ICE_SHROOM_CARD.get(), Items.BROWN_MUSHROOM);
-        registerCommonCard(consumer, ItemRegister.DOOM_SHROOM_CARD.get(), ItemRegister.SPORE.get());
+        registerCommonCard(consumer, ItemRegister.DOOM_SHROOM_CARD.get(), Items.BROWN_MUSHROOM);
         //3-1
         registerCommonCard(consumer, ItemRegister.LILY_PAD_CARD.get(), Items.LILY_PAD);
         registerCommonCard(consumer, ItemRegister.TANGLE_KELP_CARD.get(), Items.SEAGRASS);
@@ -68,7 +71,7 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.CACTUS_CARD.get(), Items.CACTUS);
         registerCommonCard(consumer, ItemRegister.BLOVER_CARD.get(), Items.GRASS);
         registerCommonCard(consumer, ItemRegister.PUMPKIN_CARD.get(), Items.PUMPKIN);
-        registerCommonCard(consumer, ItemRegister.MAGNET_SHROOM_CARD.get(), ItemRegister.SPORE.get());
+        registerCommonCard(consumer, ItemRegister.MAGNET_SHROOM_CARD.get(), Tags.Items.MUSHROOMS);
         //5-1
         registerCommonCard(consumer, ItemRegister.CABBAGE_PULT_CARD.get(), PVZItemTags.CABBAGES);
         registerCommonCard(consumer, ItemRegister.FLOWER_POT_CARD.get(), Items.FLOWER_POT);
@@ -82,6 +85,7 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.ICEBERG_LETTUCE_CARD.get(), PVZItemTags.CABBAGES);
         registerCommonCard(consumer, ItemRegister.BONK_CHOY_CARD.get(), PVZItemTags.CABBAGES);
         registerCommonCard(consumer, ItemRegister.GOLD_BLOOM_CARD.get(), Items.GLOW_BERRIES);
+        registerCommonCard(consumer, ItemRegister.GOLD_LEAF_CARD.get(), ItemTags.LEAVES);
 
         //smelt
         registerStoneSmelting(consumer, BlockRegister.AMETHYST_ORE.get(), ItemRegister.AMETHYST_INGOT.get(), 1.4F, 250, "amethyst_ingot");
@@ -89,7 +93,9 @@ public class RecipeGenerator extends RecipeProvider {
 
         //fragment splice
         PVZAPI.get().getPlants().forEach(p -> {
-            registerFragment(consumer, p);
+            if (p != OtherPlants.GOLD_LEAF) {
+                registerFragment(consumer, p);
+            }
         });
 
         //fusion recipe
@@ -110,11 +116,6 @@ public class RecipeGenerator extends RecipeProvider {
         ), ItemRegister.SPLIT_PEA_CARD.get());
 
         registerFusion(consumer, Arrays.asList(
-                ItemRegister.LILY_PAD_CARD.get(),
-                ItemRegister.WALL_NUT_CARD.get()
-        ), ItemRegister.WATER_GUARD_CARD.get());
-
-        registerFusion(consumer, Arrays.asList(
                 ItemRegister.FUME_SHROOM_CARD.get(),
                 ItemRegister.SCAREDY_SHROOM_CARD.get()
         ), ItemRegister.PUFF_SHROOM_CARD.get());
@@ -125,7 +126,7 @@ public class RecipeGenerator extends RecipeProvider {
         ), ItemRegister.TALL_NUT_CARD.get());
 
         registerFusion(consumer, Arrays.asList(
-                ItemRegister.SCAREDY_SHROOM_CARD.get(),
+                ItemRegister.PUFF_SHROOM_CARD.get(),
                 ItemRegister.TANGLE_KELP_CARD.get()
         ), ItemRegister.SEA_SHROOM_CARD.get());
     }
