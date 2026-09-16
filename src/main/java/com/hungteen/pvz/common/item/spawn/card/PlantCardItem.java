@@ -477,8 +477,11 @@ public class PlantCardItem extends SummonCardItem {
 		}
 		final ItemStack plantStack = getPlantStack(heldStack);
 		final IPlantType plantType = ((PlantCardItem) plantStack.getItem()).plantType;
-		/* container plant can only carry plant that it allows, and can not hold the same type */
+		/* container plant can only carry plant that it allows, and can not hold the same type;
+		 * upgrade cards must grow out of their base plant via the upgrade path, never held
+		 * directly onto an empty container (the post-placement shell chain uses mountPlantOn) */
 		if(! plantEntity.canHoldPlant() || ! plantEntity.getPassengers().isEmpty()
+				|| plantType.getUpgradeFrom().isPresent()
 				|| ! plantType.canBeHold() || ! plantEntity.canPlantOnMe(plantType)) {
 			return false;
 		}
@@ -748,9 +751,10 @@ public class PlantCardItem extends SummonCardItem {
 		final long count = EntityUtil.getFriendlyLivings(player, EntityUtil.getEntityAABB(player, range, range))
 		    .stream().filter(entity -> {
 				return entity instanceof PVZPlantEntity
+						&& ((PVZPlantEntity) entity).getPlantType().countInLimit()
 						&& ((PVZPlantEntity) entity).getOwnerUUID().isPresent()
 						&& ((PVZPlantEntity) entity).getOwnerUUID().get().equals(player.getUUID());
-			}).count() + 1;
+			}).count() + (this.plantType.countInLimit() ? 1 : 0);
 
 		final long multipy = Math.max(0, (count - ConfigUtil.getLimitPlantCount() - DenselyPlantEnchantment.getExtraPlantNum(stack) + 4) / 5);
 		return (int) Math.min(100000L, this.getBasisSunCost(stack) * (1L << multipy));

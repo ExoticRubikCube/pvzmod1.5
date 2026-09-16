@@ -10,6 +10,8 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -41,6 +43,16 @@ public class KernelPultEntity extends PlantPultEntity {
 	public void onPlantUpgrade(PVZPlantEntity plantEntity) {
 		super.onPlantUpgrade(plantEntity);
 		if(this.upgradeEntity != null) {
+			/* the cannon model spans two blocks along its facing axis; align that axis
+			 * with the two kernel pults, keeping the copied facing when it already matches */
+			final BlockPos offset = this.upgradeEntity.blockPosition().subtract(this.blockPosition());
+			final Direction toNeighbor = Direction.getNearest(offset.getX(), 0, offset.getZ());
+			if(toNeighbor.getAxis() != this.getDirection().getAxis()) {
+				final float yaw = toNeighbor.toYRot();
+				plantEntity.setYRot(yaw);
+				plantEntity.yBodyRot = yaw;
+				plantEntity.yHeadRot = yaw;
+			}
 			this.upgradeEntity.discard();
 		}
 	}

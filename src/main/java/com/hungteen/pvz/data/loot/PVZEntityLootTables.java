@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
@@ -43,10 +45,16 @@ public class PVZEntityLootTables implements Consumer<BiConsumer<ResourceLocation
 
     private static LootTable.Builder getZombieLootTable() {
         return getRottenFleshLootTable()
+                /* rare plant drops follow the sky light cycle: nuts/seeds by day, spores by night */
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(ItemRegister.CORN_SEEDS.get()))
                         .add(LootItem.lootTableItem(Items.SUNFLOWER))
                         .add(LootItem.lootTableItem(ItemRegister.NUT.get()))
+                        .when(TimeCheck.time(IntRange.range(0, 12999)).setPeriod(24000L))
+                        .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.01F, 0.01F)))
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(ItemRegister.SPORE.get()))
+                        .when(TimeCheck.time(IntRange.range(13000, 23000)).setPeriod(24000L))
                         .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.01F, 0.01F)));
     }
 
@@ -108,10 +116,18 @@ public class PVZEntityLootTables implements Consumer<BiConsumer<ResourceLocation
                         .add(LootItem.lootTableItem(Items.MYCELIUM))
                         .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.08F, 0.01F))
                 ));
-        t.accept(PVZLoot.MOURNER_ZOMBIE, getZombieLootTable()
+        /* mourner keeps its own unconditional spore pool day and night, so it never
+         * joins the shared night spore pool; the day-only nut/seed pool still applies */
+        t.accept(PVZLoot.MOURNER_ZOMBIE, getRottenFleshLootTable()
+                .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(ItemRegister.CORN_SEEDS.get()))
+                        .add(LootItem.lootTableItem(Items.SUNFLOWER))
+                        .add(LootItem.lootTableItem(ItemRegister.NUT.get()))
+                        .when(TimeCheck.time(IntRange.range(0, 12999)).setPeriod(24000L))
+                        .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.01F, 0.01F)))
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(ItemRegister.SPORE.get()))
-                        .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.2F, 0.01F))
+                        .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.1F, 0.01F))
                 ));
         t.accept(PVZLoot.BOBSLE_TEAM, getZombieLootTable()
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))

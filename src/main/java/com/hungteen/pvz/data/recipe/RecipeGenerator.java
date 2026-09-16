@@ -61,7 +61,7 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.LILY_PAD_CARD.get(), Items.LILY_PAD);
         registerCommonCard(consumer, ItemRegister.TANGLE_KELP_CARD.get(), Items.SEAGRASS);
         registerCommonCard(consumer, ItemRegister.JALAPENO_CARD.get(), ItemRegister.PEPPER.get());
-        registerCommonCard(consumer, ItemRegister.SPIKE_WEED_CARD.get(), Items.GRASS);
+        registerCommonCard(consumer, ItemRegister.SPIKE_WEED_CARD.get(), PVZItemTags.SPIKE_WEED_MATERIALS);
         registerCommonCard(consumer, ItemRegister.TORCH_WOOD_CARD.get(), ItemTags.LOGS);
         //4-1
         registerCommonCard(consumer, ItemRegister.PLANTERN_CARD.get(), BlockRegister.LANTERN.get().asItem());

@@ -7,10 +7,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
 // Made with Blockbench 3.6.6
@@ -18,26 +15,32 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class PuffShroomModel extends PVZPlantModel<PuffShroomEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "puff_shroom"), "main");
-	private final ModelPart total;
 
+	private final ModelPart total;
+	private final ModelPart eyes_closed;
+	private final ModelPart hat;
+	private final ModelPart mouth;
 
 	public PuffShroomModel(ModelPart root) {
 		this.total = root.getChild("total");
+		this.eyes_closed = this.total.getChild("eyes_closed");
+		this.hat = this.total.getChild("hat");
+		this.mouth = this.total.getChild("mouth");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
-	
-		PartDefinition total = partdefinition.addOrReplaceChild("total",
-			CubeListBuilder.create()
-				.texOffs(31, 47).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F)
-				.texOffs(0, 0).addBox(-6.0F, -12.0F, -6.0F, 12.0F, 4.0F, 12.0F)
-				.texOffs(0, 17).addBox(-5.0F, -15.0F, -5.0F, 10.0F, 3.0F, 10.0F)
-				.texOffs(0, 31).addBox(-4.0F, -16.0F, -4.0F, 8.0F, 1.0F, 8.0F)
-				.texOffs(1, 42).addBox(-1.0F, -4.0F, -5.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(9, 41).addBox(-2.0F, -5.0F, -7.0F, 4.0F, 4.0F, 2.0F),
-			PartPose.offset(0.0F, 24.0F, 0.0F));
+
+		PartDefinition total = partdefinition.addOrReplaceChild("total", CubeListBuilder.create().texOffs(0, 25).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.0F, 0.0F));
+
+		PartDefinition eyes_closed = total.addOrReplaceChild("eyes_closed", CubeListBuilder.create().texOffs(0, 37).addBox(-3.0F, -6.0F, -2.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.001F)), PartPose.offset(0.0F, 6.0F, -1.0F));
+
+		PartDefinition hat = total.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -4.75F, -4.0F, 10.0F, 5.0F, 10.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 15).addBox(-5.0F, -0.25F, -4.0F, 10.0F, 0.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, -1.0F));
+
+		PartDefinition mouth = total.addOrReplaceChild("mouth", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.75F, 0.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 5.5F, -4.0F));
+
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 

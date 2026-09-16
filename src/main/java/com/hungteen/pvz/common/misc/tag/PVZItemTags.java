@@ -23,6 +23,7 @@ public class PVZItemTags {
 	public static final TagKey<Item> AMETHYST_ORES = forgeTag("ores/amethyst");
 	
 	//pvz
+	public static final TagKey<Item> SPIKE_WEED_MATERIALS = pvzTag("spike_weed_materials");
 	public static final TagKey<Item> PLANT_SUMMON_CARDS = pvzTag("cards/plant_summon_card");
 	public static final TagKey<Item> PLANT_ENJOY_CARDS = pvzTag("cards/plant_enjoy_card");
 	public static final TagKey<Item> PLANT_CARDS = pvzTag("cards/plant_card");

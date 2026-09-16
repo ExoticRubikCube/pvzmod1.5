@@ -1,6 +1,7 @@
 package com.hungteen.pvz.client.model.entity.plant.defence;
 
 import com.hungteen.pvz.PVZMod;
+import com.hungteen.pvz.client.model.entity.ComponentModel;
 import com.hungteen.pvz.client.model.entity.plant.PVZPlantModel;
 import com.hungteen.pvz.common.entity.plant.defence.TallNutEntity;
 import net.minecraft.client.model.EntityModel;
@@ -57,5 +58,35 @@ public class TallNutModel extends PVZPlantModel<TallNutEntity> {
 	@Override
 	public EntityModel<TallNutEntity> getPlantModel() {
 		return this;
+	}
+
+	public static class TallNutArmorModel extends ComponentModel<TallNutEntity> {
+
+		private final ModelPart body;
+
+		public TallNutArmorModel() {
+			this(createBodyLayer().bakeRoot());
+		}
+
+		private TallNutArmorModel(ModelPart root) {
+			this.body = root.getChild("body");
+		}
+
+		private static LayerDefinition createBodyLayer() {
+			MeshDefinition mesh = new MeshDefinition();
+			PartDefinition root = mesh.getRoot();
+			root.addOrReplaceChild("body",
+				CubeListBuilder.create()
+					.texOffs(0, 60).addBox(-8.0F, -32.0F, -8.0F, 16.0F, 4.0F, 16.0F, new CubeDeformation(0.0F))
+					.texOffs(0, 0).addBox(-9.505F, -28.01F, -9.515F, 19.0F, 18.0F, 19.0F, new CubeDeformation(0.0F))
+					.texOffs(0, 37).addBox(-10.005F, -13.01F, -10.015F, 20.0F, 3.0F, 20.0F, new CubeDeformation(0.0F)),
+				PartPose.offset(0.0F, 24.0F, 0.0F));
+			return LayerDefinition.create(mesh, 128, 128);
+		}
+
+		@Override
+		public ModelPart getTotalModel() {
+			return this.body;
+		}
 	}
 }

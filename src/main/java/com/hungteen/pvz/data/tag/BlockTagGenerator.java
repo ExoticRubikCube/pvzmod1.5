@@ -43,7 +43,7 @@ public class BlockTagGenerator extends BlockTagsProvider {
         this.tag(PVZBlockTags.GOLD_TILES).add(BlockRegister.GOLD_TILE1.get(), BlockRegister.GOLD_TILE2.get(),
                 BlockRegister.GOLD_TILE3.get());
         this.tag(PVZBlockTags.PLANT_SUIT_BLOCKS).addTag(PVZBlockTags.GOLD_TILES)
-                .add(Blocks.GRASS_BLOCK, BlockRegister.FLOWER_POT.get(), BlockRegister.LILY_PAD.get());
+                .add(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, BlockRegister.FLOWER_POT.get(), BlockRegister.LILY_PAD.get());
         this.tag(BlockTags.LOGS).add(BlockRegister.NUT_LOG.get());
     }
 

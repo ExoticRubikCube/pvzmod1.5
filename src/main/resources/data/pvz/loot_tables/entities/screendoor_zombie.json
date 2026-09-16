@@ -52,6 +52,38 @@
       ],
       "conditions": [
         {
+          "condition": "minecraft:time_check",
+          "period": 24000,
+          "value": {
+            "max": 12999,
+            "min": 0
+          }
+        },
+        {
+          "condition": "minecraft:random_chance_with_looting",
+          "chance": 0.01,
+          "looting_multiplier": 0.01
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "pvz:spore"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:time_check",
+          "period": 24000,
+          "value": {
+            "max": 23000,
+            "min": 13000
+          }
+        },
+        {
           "condition": "minecraft:random_chance_with_looting",
           "chance": 0.01,
           "looting_multiplier": 0.01

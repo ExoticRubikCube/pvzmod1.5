@@ -3,6 +3,7 @@ package com.hungteen.pvz.common.event;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.events.PlayerLevelChangeEvent;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
+import com.hungteen.pvz.common.capability.player.PlayerDataManager;
 import com.hungteen.pvz.common.datapack.PVZDataPackManager;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.event.events.SummonCardUseEvent;
@@ -30,7 +31,7 @@ public class PVZPlayerEvents {
 	public static void tickPlayer(TickEvent.PlayerTickEvent ev) {
 		if(! ev.player.level.isClientSide) {
 			if (ev.player.tickCount < 2) {
-				PlayerUtil.getOptManager(ev.player).ifPresent(l -> l.loadSummonCardCDs());
+				PlayerUtil.getOptManager(ev.player).ifPresent(PlayerDataManager::loadSummonCardCDs);
 			}
 			ev.player.getCapability(CapabilityHandler.PLAYER_DATA_CAPABILITY).ifPresent((l) -> {
 				if (l.getPlayerData().getOtherStats().playSoundTick > 0) {
@@ -45,11 +46,8 @@ public class PVZPlayerEvents {
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent ev) {
 		if (! ev.getEntity().level.isClientSide) {
 			PlayerEventHandler.onPlayerLogin(ev.getEntity());
-
 			InvasionManager.addPlayer(ev.getEntity());
-
 			PlayerEventHandler.unLockPAZs(ev.getEntity());
-
 			//sync to client data pack.
 			PVZDataPackManager.sendSyncPacketsTo(ev.getEntity());
 		}
@@ -59,7 +57,6 @@ public class PVZPlayerEvents {
 	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent ev) {
 		if (! ev.getEntity().level.isClientSide) {
 			PlayerEventHandler.onPlayerLogout(ev.getEntity());
-
 			InvasionManager.removePlayer(ev.getEntity());
 		}
 	}

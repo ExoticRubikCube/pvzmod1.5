@@ -51,6 +51,12 @@ public interface IPlantType extends IPAZType {
     boolean canBeHold();
 
     /**
+     * whether this plant is counted when the dense-planting sun cost penalty counts nearby plants.
+     * container plants such as flower pot and lily pad do not occupy the count.
+     */
+    boolean countInLimit();
+
+    /**
      * the block type : it's not an entity, but a block. <br>
      * get corresponding block, such as Lily Pad.
      */

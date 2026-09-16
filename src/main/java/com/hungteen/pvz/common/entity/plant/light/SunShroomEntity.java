@@ -22,7 +22,7 @@ import java.util.List;
 public class SunShroomEntity extends PlantProducerEntity {
 	
 	public static final int GROW_CD = 2400;
-	public static final int GROW_ANIM_CD = 10;
+	public static final int GROW_ANIM_CD = 30;
 	
 	public SunShroomEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);

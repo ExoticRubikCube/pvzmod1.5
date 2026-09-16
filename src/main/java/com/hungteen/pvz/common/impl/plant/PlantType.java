@@ -55,6 +55,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	protected boolean isShroomPlant;
 	protected boolean isWaterPlant;
 	protected boolean canBeHold = true;
+	protected boolean countInLimit = true;
 
 	protected PlantType(String name, PlantFeatures features) {
 		super(name);
@@ -80,6 +81,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		this.isShroomPlant = features.isShroomPlant;
 		this.isWaterPlant = features.isWaterPlant;
 		this.canBeHold = features.canBeHold;
+		this.countInLimit = features.countInLimit;
 		// last.
 		this.entityRenderResource = this.genEntityResource();
 	}
@@ -128,6 +130,11 @@ public abstract class PlantType extends PAZType implements IPlantType {
 	@Override
 	public boolean canBeHold() {
 		return this.canBeHold;
+	}
+
+	@Override
+	public boolean countInLimit() {
+		return this.countInLimit;
 	}
 
 	/**
@@ -224,6 +231,7 @@ public abstract class PlantType extends PAZType implements IPlantType {
 		private boolean isShroomPlant;
 		private boolean isWaterPlant;
 		private boolean canBeHold = true;
+		private boolean countInLimit = true;
 
 		public PlantFeatures cost(int cost) {
 			this.sunCost = cost;
@@ -339,6 +347,11 @@ public abstract class PlantType extends PAZType implements IPlantType {
 
 		public PlantFeatures canNotBeHold() {
 			this.canBeHold = false;
+			return this;
+		}
+
+		public PlantFeatures notCountInLimit() {
+			this.countInLimit = false;
 			return this;
 		}
 

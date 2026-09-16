@@ -3,36 +3,42 @@ package com.hungteen.pvz.client.render.entity.plant.light;
 import com.hungteen.pvz.client.model.entity.plant.light.SunShroomModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.light.SunShroomEntity;
+import com.hungteen.pvz.utils.StringUtil;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SunShroomRender extends PVZPlantRender<SunShroomEntity>{
-	
+	private static final ResourceLocation GROWN_TEXTURE = StringUtil.prefix("textures/entity/plant/light/sun_shroom_grown.png");
+
 	public SunShroomRender(EntityRendererProvider.Context context) {
 		super(context, new SunShroomModel(context.bakeLayer(SunShroomModel.LAYER)), 0.3f);
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(SunShroomEntity entity) {
+		return entity.getExistTick() >= SunShroomEntity.GROW_CD - SunShroomEntity.GROW_ANIM_CD
+				? GROWN_TEXTURE : super.getTextureLocation(entity);
 	}
 
 	@Override
 	public float getScaleByEntity(SunShroomEntity entity) {
 		final float smallSize = 0.2F;
 		final float bigSize = 0.35F;
-//		final float hugeSize = 0.6F;
-		final int T = SunShroomEntity.GROW_ANIM_CD;
+		final int animStart = SunShroomEntity.GROW_CD - SunShroomEntity.GROW_ANIM_CD;
 		final int tick = entity.getExistTick();
-		if(tick <= 20) {
+		if(tick < animStart) {
 			return smallSize;
 		}
-		if(entity.isInGrowStage(2)) {
-			return bigSize;
+		if(tick < SunShroomEntity.GROW_CD) {
+			/* grow-up window kept in sync with SunShroomEntity#growUpTo */
+			final float progress = (float) (tick - animStart) / SunShroomEntity.GROW_ANIM_CD;
+			return smallSize + (bigSize - smallSize) * progress;
 		}
-		if(entity.isInGrowStage(1)) {
-			final int now = tick + T - SunShroomEntity.GROW_CD;
-			return now >= 0 ? smallSize + (bigSize - smallSize) * now / T : smallSize;
-		}
-		return smallSize;
+		return bigSize;
 	}
 
 }
