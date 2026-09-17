@@ -2,6 +2,6 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "pvz:item/misc/purple_card",
-    "layer1": "pvz:screenshot/plant/angel_star_fruit"
+    "layer1": "pvz:screenshot/plant/angel_starfruit"
   }
 }

@@ -18,21 +18,21 @@ public final class PoolZombies extends ZombieType {
 	 * day.
 	 */
 	public static final ZombieType SNORKEL_ZOMBIE = new PoolZombies("snorkel_zombie", new ZombieFeatures()
-		    .rank(RankTypes.WHITE).xp(5)
+		    .rank(RankTypes.WHITE).xp(3)
 			.entityType(() -> EntityRegister.SNORKEL_ZOMBIE.get())
 			.zombieModel(() -> () -> new SnorkelZombieModel(SnorkelZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType ZOMBONI = new PoolZombies("zomboni", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(32)
+		    .rank(RankTypes.BLUE).xp(19)
 			.entityType(() -> EntityRegister.ZOMBONI.get())
 			.zombieModel(() -> () -> new ZomboniModel(ZomboniModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.commonSkill(List.of())
 	);
 	
 	public static final ZombieType BOBSLE_TEAM = new PoolZombies("bobsle_team", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(10)
+		    .rank(RankTypes.GREEN).xp(6)
 			.entityType(() -> EntityRegister.BOBSLE_TEAM.get())
 			.zombieModel(() -> () -> new BobsleTeamModel(BobsleTeamModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.BOBSLE_TEAM)
@@ -40,28 +40,28 @@ public final class PoolZombies extends ZombieType {
 	);
 	
 	public static final ZombieType BOBSLE_ZOMBIE = new PoolZombies("bobsle_zombie", new ZombieFeatures()
-		    .rank(RankTypes.WHITE).xp(2)
+		    .rank(RankTypes.WHITE).xp(1)
 			.entityType(() -> EntityRegister.BOBSLE_ZOMBIE.get())
 			.zombieModel(() -> () -> new BobsleZombieModel(BobsleZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType DOLPHIN_RIDER = new PoolZombies("dolphin_rider", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(24)
+		    .rank(RankTypes.GREEN).xp(14)
 			.entityType(() -> EntityRegister.DOLPHIN_RIDER.get())
 			.scale(0.5F)
 			.commonSkill(List.of())
 	);
 	
 	public static final ZombieType DOLPHIN_RIDER_ZOMBIE = new PoolZombies("dolphin_rider_zombie", new ZombieFeatures()
-		    .rank(RankTypes.WHITE).xp(8)
+		    .rank(RankTypes.WHITE).xp(4)
 			.entityType(() -> EntityRegister.DOLPHIN_RIDER_ZOMBIE.get())
 			.zombieModel(() -> () -> new DolphinRiderZombieModel(DolphinRiderZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType ZOMBIE_DOLPHIN = new PoolZombies("zombie_dolphin", new ZombieFeatures()
-		    .rank(RankTypes.GRAY).xp(2)
+		    .rank(RankTypes.GRAY).xp(1)
 			.entityType(() -> EntityRegister.ZOMBIE_DOLPHIN.get())
 			.scale(0.5F)
 			.loot(PVZLoot.ZOMBIE_DOLPHIN)
@@ -69,7 +69,7 @@ public final class PoolZombies extends ZombieType {
 	);
 	
 	public static final ZombieType JACK_IN_BOX_ZOMBIE = new PoolZombies("jack_in_box_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(16)
+		    .rank(RankTypes.GREEN).xp(9)
 			.entityType(() -> EntityRegister.JACK_IN_BOX_ZOMBIE.get())
 			.zombieModel(() -> () -> new JackInBoxZombieModel(JackInBoxZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.JACK_IN_BOX_ZOMBIE)
@@ -77,7 +77,7 @@ public final class PoolZombies extends ZombieType {
 	);
 	
 	public static final ZombieType BALLOON_ZOMBIE = new PoolZombies("balloon_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(10)
+		    .rank(RankTypes.BLUE).xp(6)
 			.entityType(() -> EntityRegister.BALLOON_ZOMBIE.get())
 			.zombieModel(() -> () -> new BalloonZombieModel(BalloonZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.BALLOON_ZOMBIE)
@@ -85,7 +85,7 @@ public final class PoolZombies extends ZombieType {
 	);
 	
 	public static final ZombieType DIGGER_ZOMBIE = new PoolZombies("digger_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(20)
+		    .rank(RankTypes.BLUE).xp(12)
 			.entityType(() -> EntityRegister.DIGGER_ZOMBIE.get())
 			.zombieModel(() -> () -> new DiggerZombieModel(DiggerZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.DIGGER_ZOMBIE)
@@ -93,14 +93,14 @@ public final class PoolZombies extends ZombieType {
 	);
 	
 	public static final ZombieType POGO_ZOMBIE = new PoolZombies("pogo_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(18)
+		    .rank(RankTypes.GREEN).xp(10)
 			.entityType(() -> EntityRegister.POGO_ZOMBIE.get())
 			.zombieModel(() -> () -> new PogoZombieModel(PogoZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType YETI_ZOMBIE = new PoolZombies("yeti_zombie", new ZombieFeatures()
-		    .rank(RankTypes.PURPLE).xp(36)
+		    .rank(RankTypes.PURPLE).xp(21)
 			.entityType(() -> EntityRegister.YETI_ZOMBIE.get())
 			.zombieModel(() -> () -> new YetiZombieModel(YetiZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())

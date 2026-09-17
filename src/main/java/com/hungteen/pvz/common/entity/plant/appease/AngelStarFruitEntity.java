@@ -103,7 +103,7 @@ public class AngelStarFruitEntity extends PlantShooterEntity {
 	
 	@Override
 	public IPlantType getPlantType() {
-		return OtherPlants.ANGEL_STAR_FRUIT;
+		return OtherPlants.ANGEL_STARFRUIT;
 	}
 
 }

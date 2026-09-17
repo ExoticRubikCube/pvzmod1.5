@@ -143,7 +143,7 @@ public final class PVZPlants extends PlantType {
 	 */
 	
 	public static final IPlantType PUFF_SHROOM = new PVZPlants("puff_shroom", new PlantFeatures().isShroomPlant()
-			.cost(10).requiredLevel(21)
+                        .cost(0).requiredLevel(21)
 			.cd(CoolDowns.SUPER_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.TOXIC)
 			.entityType(() -> EntityRegister.PUFF_SHROOM.get())
 			.summonCard(() -> ItemRegister.PUFF_SHROOM_CARD.get())
@@ -158,7 +158,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.SUN_SHROOM.get())
 			.summonCard(() -> ItemRegister.SUN_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.SUN_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> () -> new SunShroomModel(SunShroomModel.createBodyLayer().bakeRoot())).scale(0.4F)
+			.plantModel(() -> () -> new SunShroomModel(SunShroomModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.commonSkill(List.of())
 	);
 	
@@ -168,7 +168,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.FUME_SHROOM.get())
 			.summonCard(() -> ItemRegister.FUME_SHROOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.FUME_SHROOM_ENJOY_CARD.get())
-			.plantModel(() -> () -> new FumeShroomModel(FumeShroomModel.createBodyLayer().bakeRoot())).scale(0.9F)
+			.plantModel(() -> () -> new FumeShroomModel(FumeShroomModel.createBodyLayer().bakeRoot())).scale(1F)
 			.upgradeTo(() -> PVZPlants.GLOOM_SHROOM)
 			.commonSkill(List.of(SkillTypes.SPORE_DAMAGE))
 	);
@@ -270,7 +270,7 @@ public final class PVZPlants extends PlantType {
 	);
 	
 	public static final IPlantType JALAPENO = new PVZPlants("jalapeno", new PlantFeatures()
-			.cost(175).requiredLevel(45)
+			.cost(125).requiredLevel(45)
 			.cd(CoolDowns.HUGE_SLOW).rank(RankTypes.BLUE).essence(EssenceTypes.FLAME)
 			.entityType(() -> EntityRegister.JALAPENO.get())
 			.summonCard(() -> ItemRegister.JALAPENO_CARD.get())
@@ -315,7 +315,7 @@ public final class PVZPlants extends PlantType {
 	 * pool night.
 	 */
 	public static final IPlantType SEA_SHROOM = new PVZPlants("sea_shroom", new PlantFeatures().isShroomPlant().isWaterPlant()
-			.cost(10).requiredLevel(20)
+                        .cost(0).requiredLevel(20)
 			.cd(CoolDowns.SUPER_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.TOXIC)
 			.entityType(() -> EntityRegister.SEA_SHROOM.get())
 			.summonCard(() -> ItemRegister.SEA_SHROOM_CARD.get())
@@ -325,7 +325,7 @@ public final class PVZPlants extends PlantType {
 	);
 	
 	public static final IPlantType PLANTERN = new PVZPlants("plantern", new PlantFeatures()
-			.cost(75).requiredLevel(5)
+			.cost(25).requiredLevel(5)
 			.cd(CoolDowns.FAST).rank(RankTypes.WHITE).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.PLANTERN.get())
 			.summonCard(() -> ItemRegister.PLANTERN_CARD.get())
@@ -346,7 +346,7 @@ public final class PVZPlants extends PlantType {
 	);
 	
 	public static final IPlantType BLOVER = new PVZPlants("blover", new PlantFeatures()
-			.cost(50).requiredLevel(19)
+			.cost(100).requiredLevel(19)
 			.cd(CoolDowns.FAST).rank(RankTypes.GREEN).essence(EssenceTypes.ASSIST)
 			.entityType(() -> EntityRegister.BLOVER.get())
 			.summonCard(() -> ItemRegister.BLOVER_CARD.get())
@@ -365,12 +365,12 @@ public final class PVZPlants extends PlantType {
 			.commonSkill(Arrays.asList(SkillTypes.PEA_DAMAGE, SkillTypes.SPLIT_DOUBLE_CHANCE))
 	);
 	
-	public static final IPlantType STAR_FRUIT = new PVZPlants("star_fruit", new PlantFeatures()
+	public static final IPlantType STARFRUIT = new PVZPlants("starfruit", new PlantFeatures()
 			.cost(150).requiredLevel(31)
 			.cd(CoolDowns.FAST).rank(RankTypes.GREEN).essence(EssenceTypes.APPEASE)
-			.entityType(() -> EntityRegister.STAR_FRUIT.get())
-			.summonCard(() -> ItemRegister.STAR_FRUIT_CARD.get())
-			.enjoyCard(() -> ItemRegister.STAR_FRUIT_ENJOY_CARD.get())
+			.entityType(() -> EntityRegister.STARFRUIT.get())
+			.summonCard(() -> ItemRegister.STARFRUIT_CARD.get())
+			.enjoyCard(() -> ItemRegister.STARFRUIT_ENJOY_CARD.get())
 			.plantModel(() -> () -> new StarFruitModel(StarFruitModel.createBodyLayer().bakeRoot())).scale(0.82F)
 			.commonSkill(List.of(SkillTypes.MORE_STAR_DAMAGE))
 	);
@@ -381,12 +381,13 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.PUMPKIN.get())
 			.summonCard(() -> ItemRegister.PUMPKIN_CARD.get())
 			.enjoyCard(() -> ItemRegister.PUMPKIN_ENJOY_CARD.get())
+			.notCountInLimit()
 			.plantModel(() -> () -> new PumpkinModel(PumpkinModel.createBodyLayer().bakeRoot())).scale(1.0F)
 			.cdSkill(List.of(SkillTypes.PUMPKIN_MORE_LIFE))
 	);
 	
 	public static final IPlantType MAGNET_SHROOM = new PVZPlants("magnet_shroom", new PlantFeatures().isShroomPlant()
-			.cost(100).requiredLevel(41)
+                        .cost(75).requiredLevel(41)
 			.cd(CoolDowns.LITTLE_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.ASSIST)
 			.entityType(() -> EntityRegister.MAGNET_SHROOM.get())
 			.summonCard(() -> ItemRegister.MAGNET_SHROOM_CARD.get())

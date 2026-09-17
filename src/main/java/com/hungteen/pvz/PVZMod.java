@@ -27,13 +27,8 @@ import org.apache.logging.log4j.Logger;
 @Mod(PVZMod.MOD_ID)
 @Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PVZMod {
-    // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
-    // Mod ID.
 	public static final String MOD_ID = "pvz";
-	// Mod Version.
-	public static final String MOD_VERSION = "0.6.6";
-	// Proxy of Server and Client.
 	public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
 	@SuppressWarnings("removal")

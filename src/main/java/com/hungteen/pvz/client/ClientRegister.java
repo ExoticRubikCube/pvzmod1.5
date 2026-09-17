@@ -185,6 +185,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(JEWEL.get(), ctx -> new JewelRender(ctx));
 		ev.registerEntityRenderer(ENERGY.get(), ctx -> new EnergyRender(ctx));
 		ev.registerEntityRenderer(GIFT_BOX.get(), ctx -> new GiftBoxRender(ctx));
+		ev.registerEntityRenderer(FALLEN_STAR.get(), ctx -> new FallenStarRender(ctx));
 		ev.registerEntityRenderer(PEA.get(), ctx -> new PeaRender(ctx));
 		ev.registerEntityRenderer(POTATO.get(), ctx -> new PotatoRender(ctx));
 		ev.registerEntityRenderer(SPORE.get(), ctx -> new SporeRender(ctx));
@@ -296,7 +297,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(CACTUS.get(), ctx -> new CactusRender(ctx));
 		ev.registerEntityRenderer(BLOVER.get(), ctx -> new BloverRender(ctx));
 		ev.registerEntityRenderer(SPLIT_PEA.get(), ctx -> new SplitPeaRender(ctx));
-		ev.registerEntityRenderer(STAR_FRUIT.get(), ctx -> new StarFruitRender(ctx));
+		ev.registerEntityRenderer(STARFRUIT.get(), ctx -> new StarFruitRender(ctx));
 		ev.registerEntityRenderer(PUMPKIN.get(), ctx -> new PumpkinRender(ctx));
 		ev.registerEntityRenderer(MAGNET_SHROOM.get(), ctx -> new MagnetShroomRender(ctx));
 		ev.registerEntityRenderer(CABBAGE_PULT.get(), ctx -> new CabbagePultRender(ctx));
@@ -317,7 +318,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(COB_CANNON.get(), ctx -> new CobCannonRender(ctx));
 		ev.registerEntityRenderer(IMITATER.get(), ctx -> new ImitaterRender(ctx));
 		ev.registerEntityRenderer(STRANGE_CAT.get(), ctx -> new StrangeCatRender(ctx));
-		ev.registerEntityRenderer(ANGEL_STAR_FRUIT.get(), ctx -> new AngelStarFruitRender(ctx));
+		ev.registerEntityRenderer(ANGEL_STARFRUIT.get(), ctx -> new AngelStarFruitRender(ctx));
 		ev.registerEntityRenderer(GOLD_LEAF.get(), ctx -> new GoldLeafRender(ctx));
 		ev.registerEntityRenderer(GOLD_BLOOM.get(), ctx -> new GoldBloomRender(ctx));
 		ev.registerEntityRenderer(BUTTER_PULT.get(), ctx -> new ButterPultRender(ctx));

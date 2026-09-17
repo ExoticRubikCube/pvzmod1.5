@@ -18,7 +18,7 @@ public final class GrassZombies extends ZombieType {
 	 * day.
 	 */
 	public static final ZombieType NORMAL_ZOMBIE = new GrassZombies("normal_zombie", new ZombieFeatures()
-			.rank(RankTypes.WHITE).xp(5)
+			.rank(RankTypes.WHITE).xp(3)
 			.entityType(() -> EntityRegister.NORMAL_ZOMBIE.get())
 			.zombieModel(() -> () -> new NormalZombieModel(NormalZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.NORMAL_ZOMBIE)
@@ -26,7 +26,7 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType FLAG_ZOMBIE = new GrassZombies("flag_zombie", new ZombieFeatures()
-		    .rank(RankTypes.WHITE).xp(10)
+		    .rank(RankTypes.WHITE).xp(6)
 			.entityType(() -> EntityRegister.FLAG_ZOMBIE.get())
 			.zombieModel(() -> () -> new FlagZombieModel(FlagZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.FLAG_ZOMBIE)
@@ -34,7 +34,7 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType CONEHEAD_ZOMBIE = new GrassZombies("conehead_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(20)
+		    .rank(RankTypes.GREEN).xp(12)
 			.entityType(() -> EntityRegister.CONEHEAD_ZOMBIE.get())
 			.zombieModel(() -> () -> new ConeHeadZombieModel(ConeHeadZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.CONEHEAD_ZOMBIE)
@@ -42,14 +42,14 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType POLE_ZOMBIE = new GrassZombies("pole_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(25)
+		    .rank(RankTypes.GREEN).xp(15)
 			.entityType(() -> EntityRegister.POLE_ZOMBIE.get())
 			.zombieModel(() -> () -> new PoleZombieModel(PoleZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType BUCKETHEAD_ZOMBIE = new GrassZombies("buckethead_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(30)
+		    .rank(RankTypes.BLUE).xp(18)
 			.entityType(() -> EntityRegister.BUCKETHEAD_ZOMBIE.get())
 			.zombieModel(() -> () -> new BucketHeadZombieModel(BucketHeadZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.BUCKETHEAD_ZOMBIE)
@@ -57,7 +57,7 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType NEWSPAPER_ZOMBIE = new GrassZombies("newspaper_zombie", new ZombieFeatures()
-		    .rank(RankTypes.WHITE).xp(8)
+		    .rank(RankTypes.WHITE).xp(4)
 			.entityType(() -> EntityRegister.NEWSPAPER_ZOMBIE.get())
 			.zombieModel(() -> () -> new NewspaperZombieModel(NewspaperZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
@@ -70,7 +70,7 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType SCREENDOOR_ZOMBIE = new GrassZombies("screendoor_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(10)
+		    .rank(RankTypes.GREEN).xp(6)
 			.entityType(() -> EntityRegister.SCREENDOOR_ZOMBIE.get())
 			.zombieModel(() -> () -> new ScreenDoorZombieModel(ScreenDoorZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.SCREENDOOR_ZOMBIE)
@@ -78,7 +78,7 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType FOOTBALL_ZOMBIE = new GrassZombies("football_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(32)
+		    .rank(RankTypes.BLUE).xp(19)
 			.entityType(() -> EntityRegister.FOOTBALL_ZOMBIE.get())
 			.zombieModel(() -> () -> new FootballZombieModel(FootballZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.FOOTBALL_ZOMBIE)
@@ -86,21 +86,21 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType DANCING_ZOMBIE = new GrassZombies("dancing_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(20)
+		    .rank(RankTypes.BLUE).xp(12)
 			.entityType(() -> EntityRegister.DANCING_ZOMBIE.get())
 			.zombieModel(() -> () -> new DancingZombieModel(DancingZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType BACKUP_DANCER = new GrassZombies("backup_dancer", new ZombieFeatures()
-		    .rank(RankTypes.WHITE).xp(2)
+		    .rank(RankTypes.WHITE).xp(1)
 			.entityType(() -> EntityRegister.BACKUP_DANCER.get())
 			.zombieModel(() -> () -> new BackupDancerModel(BackupDancerModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType GIGA_FOOTBALL_ZOMBIE = new GrassZombies("giga_football_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GOLD).xp(40)
+		    .rank(RankTypes.GOLD).xp(24)
 			.entityType(() -> EntityRegister.GIGA_FOOTBALL_ZOMBIE.get())
 			.zombieModel(() -> () -> new GigaFootballZombieModel(GigaFootballZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.GIGA_FOOTBALL_ZOMBIE)
@@ -108,14 +108,14 @@ public final class GrassZombies extends ZombieType {
 	);
 	
 	public static final ZombieType OLD_ZOMBIE = new GrassZombies("old_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(25)
+		    .rank(RankTypes.BLUE).xp(15)
 			.entityType(() -> EntityRegister.OLD_ZOMBIE.get())
 			.zombieModel(() -> () -> new OldZombieModel(OldZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())
 	);
 	
 	public static final ZombieType SUNDAY_EDITION_ZOMBIE = new GrassZombies("sunday_edition_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GOLD).xp(50)
+		    .rank(RankTypes.GOLD).xp(30)
 			.entityType(() -> EntityRegister.SUNDAY_EDITION_ZOMBIE.get())
 			.zombieModel(() -> () -> new SundayEditionZombieModel(SundayEditionZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.eatCommonSkill(List.of())

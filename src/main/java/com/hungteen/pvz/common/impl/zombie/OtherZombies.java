@@ -18,7 +18,7 @@ public final class OtherZombies extends ZombieType {
 	 * egypt.
 	 */
 	public static final ZombieType RA_ZOMBIE = new OtherZombies("ra_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(10)
+		    .rank(RankTypes.GREEN).xp(6)
 			.entityType(() -> EntityRegister.RA_ZOMBIE.get())
 			.zombieModel(() -> () -> new RaZombieModel(RaZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.RA_ZOMBIE)

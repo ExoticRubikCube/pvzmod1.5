@@ -120,11 +120,11 @@
   ],
   "rewards": {
     "unlocks": [
-      "pvz:angel_star_fruit"
+      "pvz:angel_starfruit"
     ],
     "items": [
       {
-        "item": "pvz:star_fruit_enjoy_card",
+        "item": "pvz:starfruit_enjoy_card",
         "amount": {
           "random": {
             "min": 2,
@@ -133,7 +133,7 @@
         }
       },
       {
-        "item": "pvz:angel_star_fruit_enjoy_card",
+        "item": "pvz:angel_starfruit_enjoy_card",
         "amount": {
           "random": {
             "min": 3,

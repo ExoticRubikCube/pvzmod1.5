@@ -18,7 +18,7 @@ public final class Zombotanies extends ZombieType {
 	 * zombotany.
 	 */
 	public static final ZombieType PEASHOOTER_ZOMBIE = new Zombotanies("peashooter_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(8)
+		    .rank(RankTypes.GREEN).xp(4)
 			.entityType(() -> EntityRegister.PEASHOOTER_ZOMBIE.get())
 			.zombieModel(() -> () -> new PeaShooterZombieModel(PeaShooterZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.PEASHOOTER_ZOMBIE)
@@ -26,7 +26,7 @@ public final class Zombotanies extends ZombieType {
 	);
 	
 	public static final ZombieType WALLNUT_ZOMBIE = new Zombotanies("wallnut_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(25)
+		    .rank(RankTypes.GREEN).xp(15)
 			.entityType(() -> EntityRegister.WALLNUT_ZOMBIE.get())
 			.zombieModel(() -> () -> new WallNutZombieModel(WallNutZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.WALLNUT_ZOMBIE)
@@ -34,7 +34,7 @@ public final class Zombotanies extends ZombieType {
 	);
 	
 	public static final ZombieType GATLINGPEA_ZOMBIE = new Zombotanies("gatlingpea_zombie", new ZombieFeatures()
-		    .rank(RankTypes.PURPLE).xp(10)
+		    .rank(RankTypes.PURPLE).xp(6)
 			.entityType(() -> EntityRegister.GATLINGPEA_ZOMBIE.get())
 			.zombieModel(() -> () -> new GatlingPeaZombieModel(GatlingPeaZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.GATLINGPEA_ZOMBIE)
@@ -42,7 +42,7 @@ public final class Zombotanies extends ZombieType {
 	);
 	
 	public static final ZombieType SQUASH_ZOMBIE = new Zombotanies("squash_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(10)
+		    .rank(RankTypes.BLUE).xp(6)
 			.entityType(() -> EntityRegister.SQUASH_ZOMBIE.get())
 			.zombieModel(() -> () -> new SquashZombieModel(SquashZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.SQUASH_ZOMBIE)
@@ -50,7 +50,7 @@ public final class Zombotanies extends ZombieType {
 	);
 	
 	public static final ZombieType JALAPENO_ZOMBIE = new Zombotanies("jalapeno_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GOLD).xp(12)
+		    .rank(RankTypes.GOLD).xp(7)
 			.entityType(() -> EntityRegister.JALAPENO_ZOMBIE.get())
 			.zombieModel(() -> () -> new JalapenoZombieModel(JalapenoZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.JALAPENO_ZOMBIE)
@@ -58,7 +58,7 @@ public final class Zombotanies extends ZombieType {
 	);
 	
 	public static final ZombieType TALLNUT_ZOMBIE = new Zombotanies("tallnut_zombie", new ZombieFeatures()
-		    .rank(RankTypes.PURPLE).xp(36)
+		    .rank(RankTypes.PURPLE).xp(21)
 			.entityType(() -> EntityRegister.TALLNUT_ZOMBIE.get())
 			.zombieModel(() -> () -> new TallNutZombieModel(TallNutZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.TALLNUT_ZOMBIE)
@@ -66,7 +66,7 @@ public final class Zombotanies extends ZombieType {
 	);
 	
 	public static final ZombieType PUMPKIN_ZOMBIE = new Zombotanies("pumpkin_zombie", new ZombieFeatures()
-		    .rank(RankTypes.PURPLE).xp(33)
+		    .rank(RankTypes.PURPLE).xp(19)
 			.entityType(() -> EntityRegister.PUMPKIN_ZOMBIE.get())
 			.zombieModel(() -> () -> new PumpkinZombieModel(PumpkinZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.PUMPKIN_ZOMBIE)

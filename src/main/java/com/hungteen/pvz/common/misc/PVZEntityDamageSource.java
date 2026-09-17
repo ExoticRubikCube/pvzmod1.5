@@ -37,6 +37,7 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 
 	public static final PVZEntityDamageSource PLANT_WILT = new PVZEntityDamageSource("plant_wilt");
 	public static final PVZEntityDamageSource CHOMPER_PLANT = new PVZEntityDamageSource("chomper_plant").setEatDamage();
+	public static final PVZEntityDamageSource FALLEN_STAR = new PVZEntityDamageSource("fallen_star");
 
 	public PVZEntityDamageSource(String name) {
 		this(name, null);

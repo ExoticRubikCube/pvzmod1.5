@@ -12,10 +12,7 @@ import com.hungteen.pvz.common.entity.misc.*;
 import com.hungteen.pvz.common.entity.misc.bowling.ExplosionBowlingEntity;
 import com.hungteen.pvz.common.entity.misc.bowling.GiantNutBowlingEntity;
 import com.hungteen.pvz.common.entity.misc.bowling.WallNutBowlingEntity;
-import com.hungteen.pvz.common.entity.misc.drop.CoinEntity;
-import com.hungteen.pvz.common.entity.misc.drop.EnergyEntity;
-import com.hungteen.pvz.common.entity.misc.drop.JewelEntity;
-import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
+import com.hungteen.pvz.common.entity.misc.drop.*;
 import com.hungteen.pvz.common.entity.npc.CrazyDaveEntity;
 import com.hungteen.pvz.common.entity.npc.PennyEntity;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
@@ -86,6 +83,7 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<JewelEntity>> JEWEL = registerEntityType(JewelEntity::new, "jewel", MobCategory.MISC);
 	public static final RegistryObject<EntityType<EnergyEntity>> ENERGY = registerEntityType(EnergyEntity::new, "energy", MobCategory.MISC, 0.9f, 2f);
 	public static final RegistryObject<EntityType<GiftBoxEntity>> GIFT_BOX = registerEntityType(GiftBoxEntity::new, "gift_box", MobCategory.MISC, 0.9f, 1f);
+	public static final RegistryObject<EntityType<FallenStar>> FALLEN_STAR = registerEntityType(FallenStar::new, "fallen_star", MobCategory.MISC, 0.4f, 0.4f);
 
 	/**
 	 * bullets
@@ -231,8 +229,8 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<MagnetShroomEntity>> MAGNET_SHROOM = registerPlantEntityType(MagnetShroomEntity::new, "magnet_shroom");
 	public static final RegistryObject<EntityType<CatTailEntity>> CAT_TAIL = registerPlantEntityType(CatTailEntity::new, "cat_tail");
 	public static final RegistryObject<EntityType<StrangeCatEntity>> STRANGE_CAT = registerPlantEntityType(StrangeCatEntity::new, "strange_cat");
-	public static final RegistryObject<EntityType<StarFruitEntity>> STAR_FRUIT = registerPlantEntityType(StarFruitEntity::new, "star_fruit");
-	public static final RegistryObject<EntityType<AngelStarFruitEntity>> ANGEL_STAR_FRUIT = registerPlantEntityType(AngelStarFruitEntity::new, "angel_star_fruit");
+	public static final RegistryObject<EntityType<StarFruitEntity>> STARFRUIT = registerPlantEntityType(StarFruitEntity::new, "starfruit");
+	public static final RegistryObject<EntityType<AngelStarFruitEntity>> ANGEL_STARFRUIT = registerPlantEntityType(AngelStarFruitEntity::new, "angel_starfruit");
 	public static final RegistryObject<EntityType<CactusEntity>> CACTUS = registerPlantEntityType(CactusEntity::new, "cactus");
 	public static final RegistryObject<EntityType<BloverEntity>> BLOVER = registerPlantEntityType(BloverEntity::new, "blover");
 	public static final RegistryObject<EntityType<GloomShroomEntity>> GLOOM_SHROOM = registerPlantEntityType(GloomShroomEntity::new, "gloom_shroom");

@@ -51,8 +51,8 @@ public class SunShroomEntity extends PlantProducerEntity {
 	@Override
 	public void startSuperMode(boolean first) {
 		super.startSuperMode(first);
-		if(! this.isInGrowStage(3)) {
-			this.growUpTo(3);
+		if(!this.isInGrowStage(2)) {
+			this.growUpTo(2);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class SunShroomEntity extends PlantProducerEntity {
 	
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
-		return this.isInGrowStage(2) ? EntityDimensions.scalable(0.8f, 1.2f):
+		return this.isInGrowStage(2) ? EntityDimensions.scalable(0.9f, 0.9f):
 			   EntityDimensions.scalable(0.4f, 0.4f);
 	}
 	

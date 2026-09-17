@@ -46,6 +46,7 @@ public class ItemTagGenerator extends ItemTagsProvider {
         this.tag(PVZItemTags.AMETHYST_ORES).add(BlockRegister.AMETHYST_ORE.get().asItem());
 
         //pvz tag
+        this.tag(PVZItemTags.LANTERNS).add(Items.LANTERN).add(BlockRegister.LANTERN.get().asItem());
         this.tag(PVZItemTags.SPIKE_WEED_MATERIALS).add(Items.GLOW_LICHEN, Items.MOSS_CARPET);
         for (Item item : ForgeRegistries.ITEMS) {
             if (item instanceof SummonCardItem) {

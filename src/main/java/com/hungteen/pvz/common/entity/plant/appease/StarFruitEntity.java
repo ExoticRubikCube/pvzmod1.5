@@ -95,7 +95,7 @@ public class StarFruitEntity extends PlantShooterEntity {
 	
 	@Override
 	public IPlantType getPlantType() {
-		return PVZPlants.STAR_FRUIT;
+		return PVZPlants.STARFRUIT;
 	}
 	
 }

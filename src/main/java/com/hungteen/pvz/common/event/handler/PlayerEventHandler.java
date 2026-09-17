@@ -1,7 +1,6 @@
 package com.hungteen.pvz.common.event.handler;
 
 import com.hungteen.pvz.PVZConfig;
-import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.PVZAPI;
 import com.hungteen.pvz.api.interfaces.ICollectible;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
@@ -150,11 +149,7 @@ public class PlayerEventHandler {
                 PVZPatchouliHandler.giveInitialGuideBook(player);
                 // give challenge envelope to player.
                 player.addItem(ChallengeEnvelopeItem.getChallengeEnvelope(StringUtil.prefix("strange_help")));
-            } else if (!l.lastVersion.equals(PVZMod.MOD_VERSION)) {//version changed.
-
-            }
-
-            l.lastVersion = PVZMod.MOD_VERSION;
+            }  //version changed.
         });
 
     }

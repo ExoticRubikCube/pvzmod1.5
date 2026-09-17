@@ -22,7 +22,7 @@ public final class CustomZombies extends ZombieType {
 	 */
 	
 	public static final ZombieType LAVA_ZOMBIE = new CustomZombies("lava_zombie", new ZombieFeatures()
-		    .rank(RankTypes.PURPLE).xp(36)
+		    .rank(RankTypes.PURPLE).xp(21)
 			.entityType(() -> EntityRegister.LAVA_ZOMBIE.get())
 			.zombieModel(() -> () -> new LavaZombieModel(LavaZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.LAVA_ZOMBIE)
@@ -30,7 +30,7 @@ public final class CustomZombies extends ZombieType {
 	);
 	
 	public static final ZombieType MOURNER_ZOMBIE = new CustomZombies("mourner_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GREEN).xp(10)
+		    .rank(RankTypes.GREEN).xp(6)
 			.entityType(() -> EntityRegister.MOURNER_ZOMBIE.get())
 			.zombieModel(() -> () -> new MournerZombieModel(MournerZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.LAVA_ZOMBIE)
@@ -38,7 +38,7 @@ public final class CustomZombies extends ZombieType {
 	);
 	
 	public static final ZombieType COFFIN = new CustomZombies("coffin", new ZombieFeatures()
-		    .rank(RankTypes.BLACK).xp(100)
+		    .rank(RankTypes.BLACK).xp(60)
 			.entityType(() -> EntityRegister.COFFIN.get())
 			.scale(0.5F)
 			.loot(PVZLoot.COFFIN)
@@ -46,7 +46,7 @@ public final class CustomZombies extends ZombieType {
 	);
 	
 	public static final ZombieType NOBLE_ZOMBIE = new CustomZombies("noble_zombie", new ZombieFeatures()
-		    .rank(RankTypes.MEGA).xp(250)
+		    .rank(RankTypes.MEGA).xp(150)
 			.entityType(() -> EntityRegister.NOBLE_ZOMBIE.get())
 			.zombieModel(() -> () -> new NobleZombieModel(NobleZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.NOBLE_ZOMBIE)
@@ -54,7 +54,7 @@ public final class CustomZombies extends ZombieType {
 	);
 	
 	public static final ZombieType TRICK_ZOMBIE = new CustomZombies("trick_zombie", new ZombieFeatures()
-		    .rank(RankTypes.GRAY).xp(3)
+		    .rank(RankTypes.GRAY).xp(1)
 			.entityType(() -> EntityRegister.TRICK_ZOMBIE.get())
 			.zombieModel(() -> () -> new TrickZombieModel(TrickZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
 			.loot(PVZLoot.TRICK_ZOMBIE)

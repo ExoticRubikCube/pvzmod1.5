@@ -169,7 +169,7 @@ public class PVZChestLootTables implements Consumer<BiConsumer<ResourceLocation,
                         .add(LootItem.lootTableItem(ItemRegister.CACTUS_ENJOY_CARD.get()).setWeight(6).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(ItemRegister.BLOVER_ENJOY_CARD.get()).setWeight(10).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(ItemRegister.SPLIT_PEA_ENJOY_CARD.get()).setWeight(6).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
-                        .add(LootItem.lootTableItem(ItemRegister.STAR_FRUIT_ENJOY_CARD.get()).setWeight(12).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+                        .add(LootItem.lootTableItem(ItemRegister.STARFRUIT_ENJOY_CARD.get()).setWeight(12).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(ItemRegister.PUMPKIN_ENJOY_CARD.get()).setWeight(6).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(ItemRegister.MAGNET_SHROOM_ENJOY_CARD.get()).setWeight(15).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
                         .add(LootItem.lootTableItem(Items.WITHER_ROSE).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))

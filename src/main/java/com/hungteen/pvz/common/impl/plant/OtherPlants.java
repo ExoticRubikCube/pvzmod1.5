@@ -55,7 +55,7 @@ public final class OtherPlants extends PlantType {
 
 	public static final IPlantType GOLD_BLOOM = new OtherPlants("gold_bloom", new PlantFeatures()
 			.cost(0).requiredLevel(24)
-			.cd(CoolDowns.VERY_SLOW).rank(RankTypes.BLUE).essence(EssenceTypes.LIGHT)
+			.cd(CoolDowns.SUPER_SLOW).rank(RankTypes.BLUE).essence(EssenceTypes.LIGHT)
 			.entityType(() -> EntityRegister.GOLD_BLOOM.get())
 			.summonCard(() -> ItemRegister.GOLD_BLOOM_CARD.get())
 			.enjoyCard(() -> ItemRegister.GOLD_BLOOM_ENJOY_CARD.get())
@@ -63,12 +63,12 @@ public final class OtherPlants extends PlantType {
 			.commonSkill(List.of())
 	);
 	
-	public static final IPlantType ANGEL_STAR_FRUIT = new OtherPlants("angel_star_fruit", new PlantFeatures()
+	public static final IPlantType ANGEL_STARFRUIT = new OtherPlants("angel_starfruit", new PlantFeatures()
 			.cost(225).requiredLevel(46)
 			.cd(CoolDowns.LITTLE_FAST).rank(RankTypes.PURPLE).essence(EssenceTypes.APPEASE)
-			.entityType(() -> EntityRegister.ANGEL_STAR_FRUIT.get())
-			.summonCard(() -> ItemRegister.ANGEL_STAR_FRUIT_CARD.get())
-			.enjoyCard(() -> ItemRegister.ANGEL_STAR_FRUIT_ENJOY_CARD.get())
+			.entityType(() -> EntityRegister.ANGEL_STARFRUIT.get())
+			.summonCard(() -> ItemRegister.ANGEL_STARFRUIT_CARD.get())
+			.enjoyCard(() -> ItemRegister.ANGEL_STARFRUIT_ENJOY_CARD.get())
 			.plantModel(() -> () -> new AngelStarFruitModel(AngelStarFruitModel.createBodyLayer().bakeRoot())).scale(0.8F)
 			.commonSunSkill(Arrays.asList(SkillTypes.MORE_STAR_DAMAGE, SkillTypes.TEN_STARS))
 	);

@@ -66,8 +66,9 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.JALAPENO_CARD.get(), ItemRegister.PEPPER.get());
         registerCommonCard(consumer, ItemRegister.SPIKE_WEED_CARD.get(), PVZItemTags.SPIKE_WEED_MATERIALS);
         registerCommonCard(consumer, ItemRegister.TORCH_WOOD_CARD.get(), ItemTags.LOGS);
+        registerCommonCard(consumer, ItemRegister.STARFRUIT_CARD.get(), ItemRegister.STARFRUIT.get());
         //4-1
-        registerCommonCard(consumer, ItemRegister.PLANTERN_CARD.get(), BlockRegister.LANTERN.get().asItem());
+        registerCommonCard(consumer, ItemRegister.PLANTERN_CARD.get(), PVZItemTags.LANTERNS);
         registerCommonCard(consumer, ItemRegister.CACTUS_CARD.get(), Items.CACTUS);
         registerCommonCard(consumer, ItemRegister.BLOVER_CARD.get(), Items.GRASS);
         registerCommonCard(consumer, ItemRegister.PUMPKIN_CARD.get(), Items.PUMPKIN);
@@ -86,6 +87,8 @@ public class RecipeGenerator extends RecipeProvider {
         registerCommonCard(consumer, ItemRegister.BONK_CHOY_CARD.get(), PVZItemTags.CABBAGES);
         registerCommonCard(consumer, ItemRegister.GOLD_BLOOM_CARD.get(), Items.GLOW_BERRIES);
         registerCommonCard(consumer, ItemRegister.GOLD_LEAF_CARD.get(), ItemTags.LEAVES);
+        registerCommonCard(consumer, ItemRegister.SQUASH_CARD.get(), Items.PUMPKIN);
+        registerCommonCard(consumer, ItemRegister.ANGEL_STARFRUIT_CARD.get(), ItemRegister.ANGEL_STARFRUIT.get());
 
         //smelt
         registerStoneSmelting(consumer, BlockRegister.AMETHYST_ORE.get(), ItemRegister.AMETHYST_INGOT.get(), 1.4F, 250, "amethyst_ingot");
