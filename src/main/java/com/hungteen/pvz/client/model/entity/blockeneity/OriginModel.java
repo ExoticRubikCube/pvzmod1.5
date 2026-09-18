@@ -1,4 +1,4 @@
-package com.hungteen.pvz.client.model.entity.te;// Made with Blockbench 4.1.3
+package com.hungteen.pvz.client.model.entity.blockeneity;// Made with Blockbench 4.1.3
 
 import com.hungteen.pvz.PVZMod;
 import com.mojang.blaze3d.vertex.PoseStack;

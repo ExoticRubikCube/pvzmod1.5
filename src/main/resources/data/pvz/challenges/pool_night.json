@@ -3,7 +3,8 @@
     "hungteen"
   ],
   "tags": [
-    "overworld"
+    "overworld",
+    "fog"
   ],
   "bar_color": "green",
   "trade_price": 100,
@@ -39,7 +40,7 @@
           }
         }
       ],
-      "duration": 500
+      "duration": 50000
     },
     {
       "spawns": [

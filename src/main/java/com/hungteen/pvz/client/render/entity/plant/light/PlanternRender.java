@@ -2,8 +2,9 @@ package com.hungteen.pvz.client.render.entity.plant.light;
 
 import com.hungteen.pvz.client.model.entity.plant.light.PlanternModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
-import com.hungteen.pvz.client.render.layer.fullskin.PlanternLayerRender;
+import com.hungteen.pvz.client.render.layer.LightLayer;
 import com.hungteen.pvz.common.entity.plant.light.PlanternEntity;
+import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +23,7 @@ public class PlanternRender extends PVZPlantRender<PlanternEntity> {
 	@Override
 	protected void addPlantLayers() {
 		super.addPlantLayers();
-		this.addLayer(new PlanternLayerRender(this));
+		this.addLayer(new LightLayer<>(this, StringUtil.prefix("textures/entity/layer/plantern_light.png"), (plantern, partialTicks, ageInTicks) -> 0.4F + 0.1F * (float) Math.sin((double) plantern.tickCount / 60)));
 	}
 	
 	@Nullable

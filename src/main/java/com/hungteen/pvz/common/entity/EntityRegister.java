@@ -104,6 +104,9 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<FireCrackerEntity>> FIRE_CRACKER = registerEntityType(FireCrackerEntity::new, "fire_cracker", MobCategory.MISC);
 	public static final RegistryObject<EntityType<BallEntity>> BALL = registerEntityType(BallEntity::new, "ball", MobCategory.MISC);
 	public static final RegistryObject<EntityType<CornEntity>> CORN = registerEntityType(CornEntity::new, "corn", MobCategory.MISC);
+	public static final RegistryObject<EntityType<ThrownFogInBottle>> FOG_IN_BOTTLE = ENTITY_TYPES.register("fog_in_bottle",
+			() -> EntityType.Builder.<ThrownFogInBottle>of(ThrownFogInBottle::new, MobCategory.MISC).sized(0.25F, 0.25F)
+					.clientTrackingRange(4).updateInterval(20).build(StringUtil.prefix("fog_in_bottle").toString()));
 
 	/**
 	 * effects

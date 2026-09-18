@@ -72,10 +72,10 @@ public class BlockRegister {
 	public static final RegistryObject<Block> NUT_LOG = BLOCKS.register("nut_log", () -> new PVZLogBlock(Block.Properties.copy(Blocks.OAK_WOOD), 5, 5));
 	public static final RegistryObject<Block> NUT_SAPLING = BLOCKS.register("nut_sapling", () -> new PVZSaplingBlock(NutTree::new));
 	public static final RegistryObject<Block> CHOMPER = BLOCKS.register("chomper", ChomperBlock::new);
+	public static final RegistryObject<Block> PLANTERN = BLOCKS.register("plantern", PlanternBlock::new);
 	public static final RegistryObject<LilyPadBlock> LILY_PAD = BLOCKS.register("lily_pad", LilyPadBlock::new);
 	
 	//special
-	public static final RegistryObject<Block> LANTERN = BLOCKS.register("lantern", LanternBlock::new);
 	public static final RegistryObject<FlowerPotBlock> FLOWER_POT = BLOCKS.register("flower_pot", FlowerPotBlock::new);
 	public static final RegistryObject<GoldTileBlock> GOLD_TILE1 = BLOCKS.register("gold_tile1", () -> new GoldTileBlock(1));
 	public static final RegistryObject<GoldTileBlock> GOLD_TILE2 = BLOCKS.register("gold_tile2", () -> new GoldTileBlock(2));
@@ -84,7 +84,7 @@ public class BlockRegister {
 	public static final RegistryObject<SunFlowerTrophyBlock> GOLD_SUNFLOWER_TROPHY = BLOCKS.register("gold_sunflower_trophy", () -> new SunFlowerTrophyBlock(Block.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion(), 2));
 	public static final RegistryObject<SunFlowerTrophyBlock> DIAMOND_SUNFLOWER_TROPHY = BLOCKS.register("diamond_sunflower_trophy", () -> new SunFlowerTrophyBlock(Block.Properties.copy(Blocks.DIAMOND_BLOCK).noOcclusion(), 3));
 	
-	//gui & te block
+	//gui & blockeneity block
 	public static final RegistryObject<FragmentSpliceBlock> FRAGMENT_SPLICE = BLOCKS.register("fragment_splice", FragmentSpliceBlock::new);
 	public static final RegistryObject<SlotMachineBlock> SLOT_MACHINE = BLOCKS.register("slot_machine", SlotMachineBlock::new);
 	public static final RegistryObject<EssenceAltarBlock> ESSENCE_ALTAR = BLOCKS.register("essence_altar", EssenceAltarBlock::new);
@@ -100,8 +100,8 @@ public class BlockRegister {
 			Arrays.asList(
 					ORIGIN_ORE, APPEASE_ORE, LIGHT_ORE, EXPLOSION_ORE, DEFENCE_ORE, ICE_ORE, ENFORCE_ORE, TOXIC_ORE, ASSIST_ORE, MAGIC_ORE, FLAME_ORE, SPEAR_ORE, ARMA_ORE, ELECTRIC_ORE, SHADOW_ORE, AMETHYST_ORE,
 					AMETHYST_BLOCK, ORIGIN_BLOCK, BUTTER_BLOCK, FROZEN_MELON,
-					NUT_LEAVES, NUT_LOG, NUT_SAPLING, CHOMPER,
-					LANTERN, FLOWER_POT, GOLD_TILE1, GOLD_TILE2, GOLD_TILE3, LUNAR_STONE, SILVER_SUNFLOWER_TROPHY, GOLD_SUNFLOWER_TROPHY, DIAMOND_SUNFLOWER_TROPHY
+					NUT_LEAVES, NUT_LOG, NUT_SAPLING, CHOMPER, PLANTERN,
+					FLOWER_POT, GOLD_TILE1, GOLD_TILE2, GOLD_TILE3, LUNAR_STONE, SILVER_SUNFLOWER_TROPHY, GOLD_SUNFLOWER_TROPHY, DIAMOND_SUNFLOWER_TROPHY
 			).forEach(block -> {
 				ev.register(Registry.ITEM_REGISTRY, helper -> {
 					helper.register(ForgeRegistries.BLOCKS.getKey(block.get()), new BlockItem(block.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));

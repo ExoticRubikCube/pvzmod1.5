@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "pvz:block/plantern_lower"
+    },
+    "half=upper": {
+      "model": "pvz:block/plantern_upper"
+    }
+  }
+}

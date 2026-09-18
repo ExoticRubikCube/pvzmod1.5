@@ -33,20 +33,20 @@ public class EffectRegister {
 	});
 
 	public static final RegistryObject<MobEffect> EXCITE_EFFECT = EFFECTS.register("excite", () -> {
-		return new FrozenEffect(MobEffectCategory.BENEFICIAL, Colors.GOLD_YELLOW);
+		return new PVZEffect(MobEffectCategory.BENEFICIAL, Colors.GOLD_YELLOW);
 	});
 
 	public static final RegistryObject<MobEffect> LIGHT_EYE_EFFECT = EFFECTS.register("light_eye", () -> {
-		return new FrozenEffect(MobEffectCategory.BENEFICIAL, Colors.LITTLE_YELLOW1);
+		return new PVZEffect(MobEffectCategory.BENEFICIAL, Colors.LITTLE_YELLOW1);
 	});
 
 	public static final RegistryObject<MobEffect> BUTTER_EFFECT = EFFECTS.register("butter", () -> {
-		return new FrozenEffect(MobEffectCategory.HARMFUL, Colors.LITTLE_YELLOW1).addAttributeModifier(Attributes.MOVEMENT_SPEED,
+		return new PVZEffect(MobEffectCategory.HARMFUL, Colors.LITTLE_YELLOW1).addAttributeModifier(Attributes.MOVEMENT_SPEED,
 				BUTTER_EFFECT_UUID.toString(), -1f, Operation.MULTIPLY_TOTAL);
 	});
 
 	public static final RegistryObject<MobEffect> ENERGETIC_EFFECT = EFFECTS.register("energetic", () -> {
-		return new FrozenEffect(MobEffectCategory.BENEFICIAL, Colors.CREEPER_GREEN);
+		return new PVZEffect(MobEffectCategory.BENEFICIAL, Colors.CREEPER_GREEN);
 	});
 
 }

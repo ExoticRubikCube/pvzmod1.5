@@ -41,7 +41,7 @@ import java.util.Locale;
 import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, value = Dist.CLIENT)
-public class PlantScreenshotCommand {
+public class PVZScreenshotCommand {
 
 	private static final Path OUT_DIR = Path.of("mods", "pvz_screenshot");
 	private static final int IMAGE_SIZE = 32;

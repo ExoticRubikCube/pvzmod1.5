@@ -3,10 +3,12 @@ package com.hungteen.pvz.client.events;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.client.events.handler.PVZEntityRenderHandler;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
+import com.hungteen.pvz.common.world.PVZFog;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,5 +32,12 @@ public class PVZClientEvents {
 	public static void addToolTips(ItemTooltipEvent event) {
 		SummonCardItem.appendSkillToolTips(event.getItemStack(), event.getToolTip());
 	}
-	
+
+	@SubscribeEvent
+	public static void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.START) {
+			PVZFog.clientTick(0.05F);
+		}
+	}
+
 	}

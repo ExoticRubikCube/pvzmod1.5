@@ -1,7 +1,7 @@
 package com.hungteen.pvz.common.command;
 
 import com.hungteen.pvz.PVZMod;
-import com.hungteen.pvz.common.command.client.PlantScreenshotCommand;
+import com.hungteen.pvz.common.command.client.PVZScreenshotCommand;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -25,6 +25,6 @@ public class PVZCommandHandler {
     @SubscribeEvent
     public static void clientInit(RegisterClientCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        PlantScreenshotCommand.register(dispatcher);
+        PVZScreenshotCommand.register(dispatcher);
     }
 }

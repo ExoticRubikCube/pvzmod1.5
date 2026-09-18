@@ -8,8 +8,11 @@ import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.api.raid.IPlacementComponent;
 import com.hungteen.pvz.api.raid.ISpawnComponent;
 import com.hungteen.pvz.common.advancement.trigger.ChallengeTrigger;
+import com.hungteen.pvz.common.capability.level.PVZFogCapability;
 import com.hungteen.pvz.common.entity.AbstractPAZEntity;
 import com.hungteen.pvz.common.entity.ai.goal.ChallengeMoveGoal;
+import com.hungteen.pvz.common.network.PVZFogPacket;
+import com.hungteen.pvz.common.world.PVZFog;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
@@ -33,6 +36,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -40,6 +44,11 @@ public class Challenge implements IChallenge {
 
 	private static final Component CHALLENGE_NAME_COMPONENT = Component.translatable("event.minecraft.raid");
 	private static final Component CHALLENGE_WARN = Component.translatable("challenge.pvz.too_far_away").withStyle(ChatFormatting.RED);
+
+	private static final int FOG_RECOVER_TICK = 480;
+	private static final int FOG_LIFE_TICK = 1200;
+	private static final double FOG_STRENGTH = 1.5D;
+	private static final double FOG_RANGE = 18.0D;
 	private final ServerBossEvent challengeBar = new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
 	private final int id;//unique specify id.
 	public final ServerLevel world;
@@ -56,6 +65,7 @@ public class Challenge implements IChallenge {
 	protected Set<UUID> heroes = new HashSet<>();
 	private boolean firstTick = false;
 	private int currentMaxLevel = 0;
+	private int fogRecoverDelay = 0;
 	
 	
 	public Challenge(int id, ServerLevel world, ResourceLocation res, BlockPos pos) {
@@ -75,6 +85,7 @@ public class Challenge implements IChallenge {
 		this.currentWave = nbt.getInt("current_wave");
 		this.currentSpawn = nbt.getInt("current_spawn");
 		this.firstTick = nbt.getBoolean("first_tick");
+		this.fogRecoverDelay = nbt.getInt("fog_recover_delay");
 		{// for raid center position.
 			CompoundTag tmp = nbt.getCompound("center_pos");
 			this.center = new BlockPos(tmp.getInt("pos_x"), tmp.getInt("pos_y"), tmp.getInt("pos_z"));
@@ -105,6 +116,7 @@ public class Challenge implements IChallenge {
 		nbt.putInt("current_wave", this.currentWave);
 		nbt.putInt("current_spawn", this.currentSpawn);
 		nbt.putBoolean("first_tick", this.firstTick);
+		nbt.putInt("fog_recover_delay", this.fogRecoverDelay);
 		{// for raid center position.
 			CompoundTag tmp = new CompoundTag();
 			tmp.putInt("pos_x", this.center.getX());
@@ -192,6 +204,24 @@ public class Challenge implements IChallenge {
 		if(! this.firstTick){//first tick.
 			this.firstTick = true;
 			this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, this.challenge.getPrepareSound()));
+			if(this.hasTag("fog")) {
+				PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
+			}
+		}
+		if(this.firstTick && this.hasTag("fog") && ! this.isRemoving()) {
+			PVZFog fog = PVZFogCapability.getFog(this.world, this.getFogUUID());
+			if(fog != null && fog.lifeLeft < 0) {
+				//三叶草已标记移除，Capability下一tick清理，按原作24秒后重新蔓延
+				this.fogRecoverDelay = FOG_RECOVER_TICK;
+			} else if(fog == null && this.fogRecoverDelay > 0) {
+				-- this.fogRecoverDelay;
+				if(this.fogRecoverDelay == 0) {
+					PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
+				}
+			} else if(fog == null) {
+				//雾自然到期或重载后缺失，与Capability移除同一tick补造，客户端视觉无断层
+				PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
+			}
 		}
 		++ this.tick;
 	}
@@ -396,6 +426,8 @@ public class Challenge implements IChallenge {
 	
 	public void remove() {
 		this.status = Status.REMOVING;
+		//非雾挑战不存在对应UUID的雾，此处返回false且不发包，无副作用
+		PVZFogCapability.modifyFogFeatures(this.world, this.getFogUUID(), PVZFogPacket.ModifyType.REMOVE, 0);
 		this.challengeBar.removeAllPlayers();
 		this.raiders.forEach(e -> e.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED));
 	}
@@ -406,6 +438,10 @@ public class Challenge implements IChallenge {
 	
 	public BlockPos getCenter() {
 		return this.center;
+	}
+
+	private UUID getFogUUID() {
+		return UUID.nameUUIDFromBytes(("pvz_challenge_fog_" + this.id).getBytes(StandardCharsets.UTF_8));
 	}
 	
 	public boolean isRaider(Entity raider) {

@@ -1,6 +1,6 @@
 package com.hungteen.pvz.client.render.tileentity;
 
-import com.hungteen.pvz.client.model.entity.te.OriginModel;
+import com.hungteen.pvz.client.model.entity.blockeneity.OriginModel;
 import com.hungteen.pvz.common.blockentity.EssenceAltarTileEntity;
 import com.hungteen.pvz.utils.StringUtil;
 import com.mojang.blaze3d.vertex.PoseStack;

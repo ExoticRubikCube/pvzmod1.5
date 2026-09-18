@@ -4,16 +4,19 @@ package com.hungteen.pvz.common.capability;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.capability.challenge.IRaiderDataCapability;
 import com.hungteen.pvz.common.capability.challenge.RaiderDataProvider;
+import com.hungteen.pvz.common.capability.level.PVZFogCapability;
 import com.hungteen.pvz.common.capability.player.IPlayerDataCapability;
 import com.hungteen.pvz.common.capability.player.PlayerDataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -30,6 +33,7 @@ public class CapabilityHandler {
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.register(IPlayerDataCapability.class);
 		event.register(IRaiderDataCapability.class);
+		event.register(PVZFogCapability.class);
 	}
 
 	@Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -41,6 +45,18 @@ public class CapabilityHandler {
 				event.addCapability(new ResourceLocation(PVZMod.MOD_ID, "player_data"), new PlayerDataProvider((Player) entity));
 			}
 			event.addCapability(new ResourceLocation(PVZMod.MOD_ID, "challenge_data"), new RaiderDataProvider(0));
+		}
+
+		@SubscribeEvent
+		public static void attachLevelCapabilities(AttachCapabilitiesEvent<Level> event) {
+			event.addCapability(new ResourceLocation(PVZMod.MOD_ID, "pvz_fog"), new PVZFogCapability(event.getObject()));
+		}
+
+		@SubscribeEvent
+		public static void onServerTick(TickEvent.ServerTickEvent event) {
+			if (event.phase == TickEvent.Phase.START) {
+				PVZFogCapability.tick(event);
+			}
 		}
 	}
 }

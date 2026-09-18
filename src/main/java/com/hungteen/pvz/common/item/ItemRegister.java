@@ -22,6 +22,7 @@ import com.hungteen.pvz.common.item.spawn.EdgarDollItem;
 import com.hungteen.pvz.common.item.spawn.GardenRakeItem;
 import com.hungteen.pvz.common.item.spawn.LawnMowerItem;
 import com.hungteen.pvz.common.item.spawn.bullet.FireCrackerItem;
+import com.hungteen.pvz.common.item.spawn.bullet.FogInBottleItem;
 import com.hungteen.pvz.common.item.spawn.card.ImitaterCardItem;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.item.tool.GardenCompassItem;
@@ -197,6 +198,8 @@ public class ItemRegister {
     public static final RegistryObject<Item> TIME_KEY_TO_DEEP = ITEMS.register("time_key_to_deep", TimeKeyItem::new);
     public static final RegistryObject<Item> SHELL_STARTUP = ITEMS.register("shell_startup",
             () -> new ShellStartupItem(new Item.Properties().stacksTo(1).tab(PVZItemGroups.PVZ_USEFUL), "tooltip.pvz.shell_startup"));
+    public static final RegistryObject<Item> FOG_IN_BOTTLE = ITEMS.register("fog_in_bottle",
+            () -> new FogInBottleItem(new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL)));
 
   	/* armor */
   	public static final RegistryObject<Item> CONE_HEAD = ITEMS.register("cone_head", () -> new ConeArmorItem(ArmorMaterials.LEATHER, EquipmentSlot.HEAD));

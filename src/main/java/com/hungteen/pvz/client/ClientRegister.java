@@ -2,6 +2,7 @@ package com.hungteen.pvz.client;
 
 import com.hungteen.pvz.client.model.baked.ImitaterCardBakedModel;
 import com.hungteen.pvz.client.model.baked.PVZBakedModel;
+import com.hungteen.pvz.client.model.entity.blockeneity.OriginModel;
 import com.hungteen.pvz.client.model.entity.bullet.*;
 import com.hungteen.pvz.client.model.entity.creature.FoodieZombieModel;
 import com.hungteen.pvz.client.model.entity.creature.MooBloomModel;
@@ -32,7 +33,6 @@ import com.hungteen.pvz.client.model.entity.plant.spear.CatTailModel;
 import com.hungteen.pvz.client.model.entity.plant.spear.SpikeRockModel;
 import com.hungteen.pvz.client.model.entity.plant.spear.SpikeWeedModel;
 import com.hungteen.pvz.client.model.entity.plant.toxic.*;
-import com.hungteen.pvz.client.model.entity.te.OriginModel;
 import com.hungteen.pvz.client.model.entity.zombie.grass.*;
 import com.hungteen.pvz.client.model.entity.zombie.other.*;
 import com.hungteen.pvz.client.model.entity.zombie.pool.*;
@@ -92,6 +92,7 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
@@ -143,6 +144,7 @@ public class ClientRegister {
         event.register(ParticleRegister.FROZEN_MELON_SLICE.get(), FrozenMelonSliceParticle.Provider::new);
         event.register(ParticleRegister.GREEN_SWEEP.get(), GreenSweepParticle.Provider::new);
         event.register(ParticleRegister.POP_CORN.get(), PopCornParticle.Provider::new);
+        event.register(ParticleRegister.FOG.get(), FogParticle.Provider::new);
 	}
 
 
@@ -164,7 +166,7 @@ public class ClientRegister {
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.NUT_LEAVES.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.NUT_SAPLING.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.TOXIC_SHROOM.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(BlockRegister.LANTERN.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegister.PLANTERN.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.FLOWER_POT.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.LILY_PAD.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.CABBAGE.get(), RenderType.cutout());
@@ -202,6 +204,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(FIRE_CRACKER.get(), ctx -> new FireCrackerRender(ctx));
 		ev.registerEntityRenderer(BALL.get(), ctx -> new BallRender(ctx));
 		ev.registerEntityRenderer(CORN.get(), ctx -> new CornRender(ctx));
+		ev.registerEntityRenderer(FOG_IN_BOTTLE.get(), ctx -> new ThrownItemRenderer<>(ctx, 1, false));
 		ev.registerEntityRenderer(ORIGIN_EFFECT.get(), ctx -> new OriginEffectRender(ctx));
 		ev.registerEntityRenderer(DOOM_FIXER.get(), ctx -> new DoomFixerRender(ctx));
 		ev.registerEntityRenderer(SMALL_CHOMPER.get(), ctx -> new SmallChomperRender(ctx));
