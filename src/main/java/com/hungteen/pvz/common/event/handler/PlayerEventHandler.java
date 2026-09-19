@@ -16,6 +16,8 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.display.ChallengeEnvelopeItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
+import com.hungteen.pvz.common.world.challenge.Challenge;
+import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import com.hungteen.pvz.common.world.invasion.MissionManager;
 import com.hungteen.pvz.compat.patchouli.PVZPatchouliHandler;
@@ -23,6 +25,8 @@ import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.enums.Resources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -174,6 +178,12 @@ public class PlayerEventHandler {
      */
     public static void handlePlayerDeath(LivingDeathEvent ev, Player player) {
         if (player != null && !player.level.isClientSide && PlayerUtil.isValidPlayer(player)) {
+            /* tracked hero death fails every running challenge sharing this player */
+            if (player.level instanceof ServerLevel serverLevel) {
+                for (Challenge challenge : ChallengeManager.getChallenges(serverLevel)) {
+                    challenge.onHeroDeath((ServerPlayer) player);
+                }
+            }
             /* spawn sun around*/
             spawnSunAroundPlayer(player);
         }

@@ -7,4 +7,8 @@ public interface IRaiderDataCapability {
     void LoadfromNBT(CompoundTag nbt);
     int getChallengeID();
     void setChallengeID(int ch);
+    int getThreat();
+    void setThreat(int threat);
+    int getWave();
+    void setWave(int wave);
 }

@@ -1,7 +1,10 @@
 package com.hungteen.pvz.common.entity.plant.assist;
 
+import com.hungteen.pvz.api.types.ICardPlacement;
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
+import com.hungteen.pvz.common.impl.Placements;
+import com.hungteen.pvz.common.impl.plant.OtherPlants;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
@@ -68,9 +71,15 @@ public class LilyPadEntity extends PVZPlantEntity {
 	}
 
 	@Override
+	public ICardPlacement getCarryPlacement() {
+		return Placements.COMMON;
+	}
+
+	@Override
 	public boolean canPlantOnMe(IPlantType type) {
 		return super.canPlantOnMe(type) && !type.isWaterPlant() && type != PVZPlants.SPIKE_WEED
-				&& type != PVZPlants.SPIKE_ROCK && type != PVZPlants.POTATO_MINE;
+				&& type != PVZPlants.SPIKE_ROCK && type != PVZPlants.POTATO_MINE
+				&& type != OtherPlants.GOLD_LEAF;
 	}
 
 	@Override

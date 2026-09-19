@@ -45,7 +45,6 @@ public class StringUtil {
 	/*
 	 * for wave level
 	 */
-	public static final String WAVE_DURATION = "duration";
 	public static final String SPAWNS = "spawns";
 
 	/*

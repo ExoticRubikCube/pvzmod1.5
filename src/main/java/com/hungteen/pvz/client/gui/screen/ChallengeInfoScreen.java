@@ -42,9 +42,13 @@ public class ChallengeInfoScreen extends Screen{
 	private void initEntries(IChallengeComponent challengeComponent){
 		for(int i = 0; i < challengeComponent.getTotalWaveCount(); ++ i){
 			final IWaveComponent waveComponent = challengeComponent.getWaves().get(i);
-			this.entries.add(Component.translatable("gui.pvz.challenge_info.wave", i + 1, waveComponent.getLastDuration()).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED));
+			MutableComponent waveTitle = Component.translatable("gui.pvz.challenge_info.wave", i + 1, waveComponent.getThreat());
+			if(waveComponent.isBigWave()) {
+				waveTitle = Component.literal("★ ").append(waveTitle);
+			}
+			this.entries.add(waveTitle.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED));
 			challengeComponent.getSpawns(i).forEach(spawn -> {
-				this.entries.add(Component.translatable("gui.pvz.challenge_info.spawn", spawn.getSpawnTick(), spawn.getSpawnAmount(), spawn.getSpawnType().getDescription().getString()));
+				this.entries.add(Component.translatable("gui.pvz.challenge_info.spawn", spawn.getThreat(), spawn.getWeight(), spawn.getSpawnType().getDescription().getString()));
 			});
 		}
 	}

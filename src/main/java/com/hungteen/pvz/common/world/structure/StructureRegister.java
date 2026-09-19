@@ -2,7 +2,7 @@ package com.hungteen.pvz.common.world.structure;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.misc.tag.PVZBiomeTags;
-import com.hungteen.pvz.common.world.FeatureRegister;
+import com.hungteen.pvz.common.world.feature.FeatureRegister;
 import com.hungteen.pvz.common.world.structure.shop.DaveVillaComponents;
 import com.hungteen.pvz.common.world.structure.shop.DaveVillaStructure;
 import com.hungteen.pvz.common.world.structure.shop.SunTempleComponents;

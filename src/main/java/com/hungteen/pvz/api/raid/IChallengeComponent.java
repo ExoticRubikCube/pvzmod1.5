@@ -25,11 +25,6 @@ public interface IChallengeComponent {
     int getPrepareCD(int wavePos);
 
     /**
-     * get how many ticks will this wave last.
-     */
-    int getLastDuration(int wavePos);
-
-    /**
      * how many waves is there.
      */
     int getTotalWaveCount();
@@ -54,9 +49,6 @@ public interface IChallengeComponent {
     int getTradeWeight();
 
     int getTradePrice();
-
-
-    boolean isWaveFinish(int wavePos, int spawnPos);
 
     boolean hasTag(String tag);
 

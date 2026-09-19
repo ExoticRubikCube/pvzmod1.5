@@ -9,9 +9,9 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 
-public class Plantern  extends SimpleBlockFeature {
+public class PlanternFeatures extends SimpleBlockFeature {
 
-    public Plantern() {
+    public PlanternFeatures() {
         super(SimpleBlockConfiguration.CODEC);
     }
 

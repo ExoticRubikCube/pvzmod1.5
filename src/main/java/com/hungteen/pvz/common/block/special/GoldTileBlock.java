@@ -22,7 +22,7 @@ public class GoldTileBlock extends Block {
 	public final int lvl;
 	
 	public GoldTileBlock(int lvl) {
-		super(Properties.copy(Blocks.GOLD_BLOCK).strength(6.0F, 6.0F));
+		super(Properties.copy(Blocks.GOLD_BLOCK).strength(5.25F, 10.5F));
 		this.lvl = lvl;
 	}
 

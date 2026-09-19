@@ -18,9 +18,24 @@ public interface IWaveComponent {
     int getPrepareCD();
 
     /**
-     * how many ticks will this wave last.
+     * threat budget of this wave, aligned with htpvz2 Wave.threat.
      */
-    int getLastDuration();
+    int getThreat();
+
+    /**
+     * flag wave (big wave), the first summon is forced to be a flag zombie.
+     */
+    boolean isBigWave();
+
+    /**
+     * minimum in-wave ticks before switching to next wave is allowed.
+     */
+    int getMinimumWaitTime();
+
+    /**
+     * maximum in-wave ticks, after which the wave must be cleared before switching.
+     */
+    int getMaximumWaitTime();
 
     /**
      * get spawn component list.

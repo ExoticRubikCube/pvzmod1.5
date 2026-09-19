@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.entity.plant.assist;
 
 import com.hungteen.pvz.api.types.IPlantType;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
+import com.hungteen.pvz.common.impl.plant.OtherPlants;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
@@ -29,7 +30,8 @@ public class FlowerPotEntity extends PVZPlantEntity {
 
 	@Override
 	public boolean canPlantOnMe(IPlantType type) {
-		return super.canPlantOnMe(type) && !type.isWaterPlant() && type != PVZPlants.SPIKE_WEED && type != PVZPlants.SPIKE_ROCK;
+		return super.canPlantOnMe(type) && !type.isWaterPlant() && type != PVZPlants.SPIKE_WEED
+				&& type != PVZPlants.SPIKE_ROCK && type != OtherPlants.GOLD_LEAF;
 	}
 
 	@Override

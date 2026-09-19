@@ -1,8 +1,7 @@
-package com.hungteen.pvz.common.world;
+package com.hungteen.pvz.common.world.feature;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
-import com.hungteen.pvz.common.world.feature.Plantern;
 import com.hungteen.pvz.common.world.structure.StructureRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -46,7 +45,7 @@ public class FeatureRegister {
 			DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, PVZMod.MOD_ID);
 
 	public static final RegistryObject<Feature<SimpleBlockConfiguration>> PLANTERN_FEATURE =
-			FEATURES.register("plantern_feature", Plantern::new);
+			FEATURES.register("plantern_feature", PlanternFeatures::new);
 
 	public static Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_LUNAR_STONE_CF;
 	public static Holder<PlacedFeature> ORE_LUNAR_STONE_PF;

@@ -12,9 +12,30 @@ public interface ISpawnComponent {
      */
     boolean readJson(JsonObject json);
 
-    int getSpawnTick();
+    /**
+     * threat cost of this zombie in the wave threat budget.
+     */
+    int getThreat();
 
-    int getSpawnAmount();
+    /**
+     * pick weight of this zombie in the weighted random selection.
+     */
+    int getWeight();
+
+    /**
+     * earliest wave ratio (0.0 ~ 1.0) this zombie can be picked, aligned with htpvz2 startFrom.
+     */
+    float getStartFrom();
+
+    /**
+     * elite zombie can only be picked in big waves.
+     */
+    boolean isElite();
+
+    /**
+     * flag zombie is forced as the first summon of a big wave.
+     */
+    boolean isFlag();
 
     IPlacementComponent getPlacement();
 

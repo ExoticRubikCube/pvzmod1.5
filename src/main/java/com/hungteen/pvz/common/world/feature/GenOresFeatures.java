@@ -4,7 +4,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
-public class GenOres {
+public class GenOresFeatures {
 
 	public static final class FillerBlockType {
 		public static final RuleTest END_STONE = new BlockMatchTest(Blocks.END_STONE);

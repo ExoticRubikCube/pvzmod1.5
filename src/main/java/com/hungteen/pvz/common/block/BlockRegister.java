@@ -14,7 +14,7 @@ import com.hungteen.pvz.common.impl.EssenceTypes;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.item.blockitem.LilyPadItem;
 import com.hungteen.pvz.common.item.blockitem.SlotMachineItem;
-import com.hungteen.pvz.common.world.feature.NutTree;
+import com.hungteen.pvz.common.world.feature.NutTreeFeatures;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -70,7 +70,7 @@ public class BlockRegister {
 	//plants
 	public static final RegistryObject<Block> NUT_LEAVES = BLOCKS.register("nut_leaves", () -> new PVZLeavesBlock(Block.Properties.copy(Blocks.OAK_LEAVES), 30, 60));
 	public static final RegistryObject<Block> NUT_LOG = BLOCKS.register("nut_log", () -> new PVZLogBlock(Block.Properties.copy(Blocks.OAK_WOOD), 5, 5));
-	public static final RegistryObject<Block> NUT_SAPLING = BLOCKS.register("nut_sapling", () -> new PVZSaplingBlock(NutTree::new));
+	public static final RegistryObject<Block> NUT_SAPLING = BLOCKS.register("nut_sapling", () -> new PVZSaplingBlock(NutTreeFeatures::new));
 	public static final RegistryObject<Block> CHOMPER = BLOCKS.register("chomper", ChomperBlock::new);
 	public static final RegistryObject<Block> PLANTERN = BLOCKS.register("plantern", PlanternBlock::new);
 	public static final RegistryObject<LilyPadBlock> LILY_PAD = BLOCKS.register("lily_pad", LilyPadBlock::new);

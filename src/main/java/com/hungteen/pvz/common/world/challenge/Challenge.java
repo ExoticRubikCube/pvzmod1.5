@@ -7,13 +7,16 @@ import com.hungteen.pvz.api.interfaces.IChallenge;
 import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.api.raid.IPlacementComponent;
 import com.hungteen.pvz.api.raid.ISpawnComponent;
+import com.hungteen.pvz.api.raid.IWaveComponent;
 import com.hungteen.pvz.common.advancement.trigger.ChallengeTrigger;
+import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.capability.level.PVZFogCapability;
 import com.hungteen.pvz.common.entity.AbstractPAZEntity;
 import com.hungteen.pvz.common.entity.ai.goal.ChallengeMoveGoal;
 import com.hungteen.pvz.common.network.PVZFogPacket;
-import com.hungteen.pvz.common.world.PVZFog;
-import com.hungteen.pvz.utils.ConfigUtil;
+import com.hungteen.pvz.common.network.PVZPacketHandler;
+import com.hungteen.pvz.common.network.toclient.ChallengeBarPacket;
+import com.hungteen.pvz.common.world.PVZFog;import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
@@ -24,11 +27,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.commands.SummonCommand;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
@@ -49,6 +53,8 @@ public class Challenge implements IChallenge {
 	private static final int FOG_LIFE_TICK = 1200;
 	private static final double FOG_STRENGTH = 1.5D;
 	private static final double FOG_RANGE = 18.0D;
+	private static final int MAX_ZOMBIES_IN_WAVE = 50;
+	private static final int SWITCH_INTERVAL = 5;
 	private final ServerBossEvent challengeBar = new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
 	private final int id;//unique specify id.
 	public final ServerLevel world;
@@ -57,33 +63,37 @@ public class Challenge implements IChallenge {
 	protected BlockPos center;//raid center block position.
 	protected Status status = Status.PREPARE;
 	protected int tick = 0;
+	protected int totalTime = 0;
 	protected int stopTick = 0;
-	protected int waitTick = 0;
 	protected int currentWave = 0;
-	protected int currentSpawn = 0;
+	protected int waveSwitchThreshold = 0;
+	protected int waveStartThreat = 0;
 	protected Set<Entity> raiders = new HashSet<>();
 	protected Set<UUID> heroes = new HashSet<>();
 	private boolean firstTick = false;
 	private int currentMaxLevel = 0;
 	private int fogRecoverDelay = 0;
-	
-	
+
+
+
 	public Challenge(int id, ServerLevel world, ResourceLocation res, BlockPos pos) {
 		this.id = id;
 		this.world = world;
 		this.resource = res;
 		this.center = pos;
 	}
-	
+
 	public Challenge(ServerLevel world, CompoundTag nbt) {
 		this.world = world;
 		this.id = nbt.getInt("challenge_id");
 		this.status = Status.values()[nbt.getInt("challenge_status")];
 		this.resource = new ResourceLocation(nbt.getString("challenge_resource"));
 		this.tick = nbt.getInt("challenge_tick");
+		this.totalTime = nbt.getInt("total_time");
 		this.stopTick = nbt.getInt("stop_tick");
 		this.currentWave = nbt.getInt("current_wave");
-		this.currentSpawn = nbt.getInt("current_spawn");
+		this.waveSwitchThreshold = nbt.getInt("wave_switch_threshold");
+		this.waveStartThreat = nbt.getInt("wave_start_threat");
 		this.firstTick = nbt.getBoolean("first_tick");
 		this.fogRecoverDelay = nbt.getInt("fog_recover_delay");
 		{// for raid center position.
@@ -106,15 +116,17 @@ public class Challenge implements IChallenge {
             }
 		}
 	}
-	
+
 	public void save(CompoundTag nbt) {
 		nbt.putInt("challenge_id", this.id);
 		nbt.putInt("challenge_status", this.status.ordinal());
 		nbt.putString("challenge_resource", this.resource.toString());
 		nbt.putInt("challenge_tick", this.tick);
+		nbt.putInt("total_time", this.totalTime);
 		nbt.putInt("stop_tick", this.stopTick);
 		nbt.putInt("current_wave", this.currentWave);
-		nbt.putInt("current_spawn", this.currentSpawn);
+		nbt.putInt("wave_switch_threshold", this.waveSwitchThreshold);
+		nbt.putInt("wave_start_threat", this.waveStartThreat);
 		nbt.putBoolean("first_tick", this.firstTick);
 		nbt.putInt("fog_recover_delay", this.fogRecoverDelay);
 		{// for raid center position.
@@ -139,7 +151,7 @@ public class Challenge implements IChallenge {
 			nbt.put("heroes", list);
 		}
 	}
-	
+
 	/**
 	 * {@link PVZChallengeData#tick()}
 	 */
@@ -159,6 +171,8 @@ public class Challenge implements IChallenge {
 			PVZMod.LOGGER.warn("Challenge Tick Error : Where is the challenge component ?");
 			return ;
 		}
+		++ this.tick;
+		++ this.totalTime;
 		this.tickBar();
 		if(this.isStopping()) {
 			/* has stopped */
@@ -170,33 +184,27 @@ public class Challenge implements IChallenge {
 			/* prepare state */
 			if(this.tick >= this.challenge.getPrepareCD(this.currentWave)) {
 				this.waveStart();
-				this.waitTick = 0;
 			}
 		} else if(this.isRunning()) {
-			/* running state */
-			if(this.tick >= this.challenge.getLastDuration(this.currentWave) || canNextWave()) {
-				if (this.waitTick > 20 || !canNextWave()) {
-					this.checkNextWave();
-				} else if (canNextWave()) {
-					this.waitTick ++;
+			/* running state, whole wave spawns at wave start, only the countdown to next wave is ticked */
+			if(this.tick % SWITCH_INTERVAL == 0) {
+				this.updateDifficultyLevel();
+				this.updateRaiders();
+				if(this.trySwitchWave()) {
+					this.syncBar();
+				}
+				if(this.isVictory()) {
+					this.onVictory();
+					return ;
 				}
 			}
-			if(this.isLoss()) {//fail to start next wave.
-				this.onLoss();
-				return ;
-			}
-			if(this.isVictory()) {
-				this.onVictory();
-				return ;
-			}
-			this.tickWave();
 		} else if(this.isLoss()) {
 			/* loss state */
 			if(this.tick >= this.challenge.getLossTick()) {
 				this.remove();
 			}
 		} else if(this.isVictory()) {
-			/* running state */
+			/* victory state */
 			if(this.tick >= this.challenge.getWinTick()) {
 				this.remove();
 			}
@@ -223,16 +231,15 @@ public class Challenge implements IChallenge {
 				PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
 			}
 		}
-		++ this.tick;
 	}
-	
+
 	/**
 	 * {@link #tick()}
 	 */
-	protected void tickWave() {
+	protected void updateDifficultyLevel() {
 		/* update difficulty level */
 		if(this.getWorld().getDifficulty() == Difficulty.HARD){
-			if(this.tick % 10 == 2){
+			if(this.tick % 10 == 0){
 				this.currentMaxLevel = 0;
 				this.getPlayers().forEach(p -> {
 					this.currentMaxLevel += PlayerUtil.getResource(p, Resources.TREE_LVL);
@@ -241,48 +248,145 @@ public class Challenge implements IChallenge {
 		} else {
 			this.currentMaxLevel = 0;
 		}
-
-		/* check spawn entities */
-		final List<ISpawnComponent> spawns = this.challenge.getSpawns(this.currentWave);
-		while(this.currentSpawn < spawns.size() && this.tick >= spawns.get(this.currentSpawn).getSpawnTick()) {
-			this.spawnEntities(spawns.get(this.currentSpawn++));
-		}
-		
-		/* update raiders list */
-        this.raiders.removeIf(entity -> !entity.isAlive());
 	}
-	
-	protected void spawnEntities(ISpawnComponent spawn) {
-		final int count = spawn.getSpawnAmount();
-		for(int i = 0; i < count; ++ i) {
-			Entity entity = this.createEntity(spawn);
-			if(entity != null) {
-				this.raiders.add(entity);
-				if(entity instanceof Mob) {
-					// avoid despawn.
-					((Mob) entity).setPersistenceRequired();
 
-					//close to center goal.
-					if (this.getRaidComponent().shouldCloseToCenter()) {
-						((Mob) entity).goalSelector.addGoal(0, new ChallengeMoveGoal(((Mob) entity), this));
-					}
-				}
-				if(entity instanceof AbstractPAZEntity){//init skills.
-					AbstractPAZEntity.randomInitSkills((AbstractPAZEntity) entity, Math.max(0, this.currentMaxLevel - this.getRaidComponent().getRecommendLevel()));
+	/**
+	 * drop dead members.
+	 * {@link #tick()}
+	 */
+	protected void updateRaiders() {
+		this.raiders.removeIf(entity -> !entity.isAlive());
+	}
+
+	/**
+	 * buy the whole roster of this wave with its points budget, equivalent to pvz2D PickZombieWaves.
+	 * the flag zombie is forced ahead on a big wave, the rest are weighted picks that consume points.
+	 */
+	protected List<ISpawnComponent> pickWaveRoster(IWaveComponent wave, int points) {
+		final List<ISpawnComponent> roster = new ArrayList<>();
+		if(wave.isBigWave()) {
+			for(ISpawnComponent spawn : wave.getSpawns()) {
+				if(spawn.isFlag()) {
+					roster.add(spawn);
+					break;
 				}
 			}
 		}
+		int pointsLeft = points;
+		while(pointsLeft > 0 && roster.size() < MAX_ZOMBIES_IN_WAVE) {
+			final List<ISpawnComponent> candidates = new ArrayList<>();
+			int allWeight = 0;
+			for(ISpawnComponent spawn : wave.getSpawns()) {
+				if(! spawn.isFlag() && pointsLeft >= spawn.getThreat() && (! spawn.isElite() || wave.isBigWave())
+						&& (float) this.currentWave / this.challenge.getTotalWaveCount() >= spawn.getStartFrom()) {
+					candidates.add(spawn);
+					allWeight += spawn.getWeight();
+				}
+			}
+			if(candidates.isEmpty() || allWeight <= 0) {
+				break;
+			}
+			int selected = this.world.random.nextInt(allWeight);
+			ISpawnComponent picked = null;
+			for(ISpawnComponent spawn : candidates) {
+				selected -= spawn.getWeight();
+				if(selected <= 0) {
+					picked = spawn;
+					break;
+				}
+			}
+			if(picked == null) {
+				break;
+			}
+			roster.add(picked);
+			pointsLeft -= picked.getThreat();
+		}
+		return roster;
 	}
-	
+
 	/**
-	 * copy from {@link SummonCommand}
+	 * summon one zombie of the picked roster and bind its threat cost and spawn wave onto the raider capability.
+	 */
+	protected boolean summonEntity(ISpawnComponent spawn, int wavePos) {
+		final Entity entity = this.createEntity(spawn);
+		if(entity == null) {
+			return false;
+		}
+		this.raiders.add(entity);
+		entity.getCapability(CapabilityHandler.RAIDER_DATA_CAPABILITY).ifPresent(cap -> {
+			cap.setThreat(spawn.getThreat());
+			cap.setWave(wavePos);
+		});
+		if(entity instanceof Mob) {
+			// avoid despawn.
+			((Mob) entity).setPersistenceRequired();
+
+			//close to center goal.
+			if (this.getRaidComponent().shouldCloseToCenter()) {
+				((Mob) entity).goalSelector.addGoal(0, new ChallengeMoveGoal(((Mob) entity), this));
+			}
+		}
+		if(entity instanceof AbstractPAZEntity){//init skills.
+			AbstractPAZEntity.randomInitSkills((AbstractPAZEntity) entity, Math.max(0, this.currentMaxLevel - this.getRaidComponent().getRecommendLevel()));
+		}
+		return true;
+	}
+
+	/**
+	 * copy from {@link net.minecraft.server.commands.SummonCommand}
 	 */
 	private Entity createEntity(ISpawnComponent spawn) {
 		final IPlacementComponent placement = spawn.getPlacement() != null ? spawn.getPlacement() : this.challenge.getPlacement(this.currentWave);
 		final BlockPos pos = placement.getPlacePosition(this.world, this.center);
-		return EntityUtil.createWithNBT(this.world, spawn.getSpawnType(), spawn.getNBT(), pos);
+		final CompoundTag nbt = spawn.getNBT().copy();
+		nbt.putInt("pvz_avoid_same_hash_random", this.world.random.nextInt());
+		return EntityUtil.createWithNBT(this.world, spawn.getSpawnType(), nbt, pos);
 	}
-	
+
+	/**
+	 * total threat of alive raiders spawned in the given wave.
+	 */
+	public int getLivingMembersThreat(int wavePos) {
+		int result = 0;
+		for(Entity raider : this.raiders) {
+			final int[] cost = new int[1];
+			raider.getCapability(CapabilityHandler.RAIDER_DATA_CAPABILITY).ifPresent(cap -> {
+				if(cap.getWave() == wavePos) {
+					cost[0] = cap.getThreat();
+				}
+			});
+			result += cost[0];
+		}
+		return result;
+	}
+
+	/**
+	 * countdown driven wave switching, equivalent to pvz2D mZombieCountDown plus the health early trigger.
+	 * before the minimum wait the wave holds; inside the wait window it advances once this wave loses enough
+	 * threat; past the maximum wait it advances unconditionally. waves may overlap, the final wave only ends
+	 * in victory after every raider is dead.
+	 */
+	public boolean trySwitchWave() {
+		final IWaveComponent wave = this.getCurrentWaveComponent();
+		if(this.tick < wave.getMinimumWaitTime()) {
+			return false;
+		}
+		if(this.currentWave >= this.challenge.getTotalWaveCount() - 1) {
+			if(this.raiders.isEmpty()) {
+				this.status = Status.VICTORY;
+				return true;
+			}
+			return false;
+		}
+		if(this.tick < wave.getMaximumWaitTime() && this.getLivingMembersThreat(this.currentWave) > this.waveSwitchThreshold) {
+			return false;
+		}
+		this.currentWave += 1;
+		this.tick = 0;
+		this.status = Status.PREPARE;
+		return true;
+	}
+
 	/**
 	 * {@link #tick()}
 	 */
@@ -291,60 +395,103 @@ public class Challenge implements IChallenge {
 			this.updatePlayers();
 		}
 		this.challengeBar.setColor(this.challenge.getBarColor());
-		if(this.isPreparing()) {
-			this.challengeBar.setName(this.challenge.getTitle());
-			this.challengeBar.setProgress(this.tick * 1.0F / this.challenge.getPrepareCD(this.currentWave));
-		} else if(this.isRunning()) {
-			this.challengeBar.setName(this.challenge.getTitle().copy().append(" - ").append(Component.translatable("event.minecraft.raid.raiders_remaining", this.raiders.size())));
-			this.challengeBar.setProgress((1 - this.tick * 1.0F / this.challenge.getLastDuration(this.currentWave)) > 0 ? (1 - this.tick * 1.0F / this.challenge.getLastDuration(this.currentWave)) : 0);
-		} else if(this.isVictory()) {
-			this.challengeBar.setName(this.challenge.getTitle().copy().append(" - ").append(this.challenge.getWinTitle()));
-			this.challengeBar.setProgress(1F);
-		} else if(this.isLoss()) {
-			this.challengeBar.setName(this.challenge.getTitle().copy().append(" - ").append(this.challenge.getLossTitle()));
+		this.challengeBar.setName(this.getBarName());
+		if(this.isPreparing() || this.isRunning()) {
+			this.challengeBar.setProgress(this.getWaveProgress());
+		} else {
 			this.challengeBar.setProgress(1F);
 		}
 	}
-	
+
+	/**
+	 * aligned with pvz2D Board::UpdateProgressMeter: wave slot start plus in-wave kill fraction,
+	 * the previous wave end equals the next wave start so the fill never bounces back.
+	 */
+	private float getWaveProgress() {
+		final int totalWaves = this.challenge.getTotalWaveCount();
+		if(this.currentWave >= totalWaves - 1) {
+			return 1.0F;
+		}
+		float fraction = 0.0F;
+		if(this.isRunning()) {
+			final int damageTarget = this.waveStartThreat - this.waveSwitchThreshold;
+			if(damageTarget >= 1) {
+				fraction = Mth.clamp((float) (this.waveStartThreat - this.getLivingMembersThreat(this.currentWave)) / damageTarget, 0.0F, 1.0F);
+			}
+		}
+		return (this.currentWave + fraction) / (totalWaves - 1);
+	}
+
+	/**
+	 * bar title carries the challenge id as an extra translatable arg, client side uses it to match synced wave data.
+	 */
+	private Component getBarName() {
+		final MutableComponent name = Component.translatable("challenge." + this.resource.getNamespace() + "." + this.resource.getPath() + ".name", this.id);
+		if(this.isVictory()) {
+			return name.append(" - ").append(this.challenge.getWinTitle());
+		} else if(this.isLoss()) {
+			return name.append(" - ").append(this.challenge.getLossTitle());
+		}
+		return name;
+	}
+
+	/**
+	 * sync wave layout and current progress to all tracked players, for the custom boss bar with flag markers.
+	 */
+	private void syncBar() {
+		this.getPlayers().forEach(this::syncBarTo);
+	}
+
+	private void syncBarTo(ServerPlayer player) {
+		final BitSet bigWaves = new BitSet();
+		for(int i = 0; i < this.challenge.getTotalWaveCount(); ++ i) {
+			if(this.challenge.getWaves().get(i).isBigWave()) {
+				bigWaves.set(i);
+			}
+		}
+		PVZPacketHandler.sendToClient(player, new ChallengeBarPacket(this.id, this.challenge.getTotalWaveCount(), this.currentWave, bigWaves));
+	}
+
 	/**
 	 * player who is alive and in suitable range can be tracked.
 	 */
 	private Predicate<ServerPlayer> validPlayer() {
 		return (player) -> {
 			final int range = ConfigUtil.getRaidRange();
-			return player.isAlive() && Math.abs(player.getX() - this.center.getX()) < range
+			return Math.abs(player.getX() - this.center.getX()) < range
 					&& Math.abs(player.getY() - this.center.getY()) < range
 					&& Math.abs(player.getZ() - this.center.getZ()) < range;
 		};
 	}
-	
+
 	/**
 	 * {@link #tickBar()}
 	 */
 	protected void updatePlayers() {
 		final Set<ServerPlayer> oldPlayers = Sets.newHashSet(this.challengeBar.getPlayers());
 		final Set<ServerPlayer> newPlayers = Sets.newHashSet(this.world.getPlayers(this.validPlayer()));
-		
+
 		/* add new join players */
 		newPlayers.forEach(p -> {
 			if(! oldPlayers.contains(p)) {
 				this.challengeBar.addPlayer(p);
+				this.syncBarTo(p);
 			}
 		});
-		
+
 		/* remove offline players */
 		oldPlayers.forEach(p -> {
 			if(! newPlayers.contains(p)) {
-				
+
 				this.challengeBar.removePlayer(p);
 			}
 		});
-		
+
 		/* add heroes */
 		this.challengeBar.getPlayers().forEach(p -> {
             this.heroes.add(p.getUUID());
 		});
-		
+
 		if(this.challengeBar.getPlayers().isEmpty()){
 			if(! this.isStopping()) {
 				++ this.stopTick;
@@ -359,13 +506,26 @@ public class Challenge implements IChallenge {
 			this.stopTick = 0;
 		}
 	}
-	
+
 	/**
 	 * run when prepare time is finished.
 	 */
 	protected void waveStart() {
-		this.tick = 0;
 		this.status = Status.RUNNING;
+		final IWaveComponent wave = this.getCurrentWaveComponent();
+		int points = Math.max(1, wave.getThreat());
+		if(this.currentWave >= 1) {
+			points *= (int) Math.sqrt(Math.max(1, this.getPlayers().size()));
+		}
+		/* the whole roster enters in the same tick, staggered arrival comes from spawn placement offsets and zombie speed variance */
+		int spawnedThreat = 0;
+		for(ISpawnComponent spawn : this.pickWaveRoster(wave, points)) {
+			if(this.summonEntity(spawn, this.currentWave)) {
+				spawnedThreat += spawn.getThreat();
+			}
+		}
+		this.waveSwitchThreshold = Mth.floor(spawnedThreat * (0.5F + this.world.random.nextFloat() * 0.15F));
+		this.waveStartThreat = spawnedThreat;
 		this.getPlayers().forEach(p -> {
 			if(this.getRaidComponent().showRoundTitle()){
 				PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.round", this.currentWave + 1).withStyle(ChatFormatting.DARK_RED));
@@ -373,28 +533,20 @@ public class Challenge implements IChallenge {
 			PlayerUtil.playClientSound(p, this.challenge.getStartWaveSound());
 		});
 	}
-	
-	/**
-	 * check can start next wave or not.
-	 */
-	public boolean canNextWave() {
-		return (this.raiders.isEmpty() && this.challenge.isWaveFinish(this.currentWave, this.currentSpawn));
+
+	private IWaveComponent getCurrentWaveComponent() {
+		final List<IWaveComponent> waves = this.challenge.getWaves();
+		return waves.get(Mth.clamp(this.currentWave, 0, waves.size() - 1));
 	}
-	
+
 	/**
-	 * {@link #tick()}
+	 * any tracked hero dies means the zombies broke into the house, aligned with htpvz2 target death failure.
+	 * {@link com.hungteen.pvz.common.event.handler.PlayerEventHandler#handlePlayerDeath}
 	 */
-	protected void checkNextWave() {
-		this.tick = 0;
-		if(this.canNextWave()) {
-			this.currentSpawn = 0;
-			if(++ this.currentWave >= this.challenge.getTotalWaveCount()) {
-				this.status = Status.VICTORY;
-			} else {
-				this.status = Status.PREPARE;
-			}
-		} else {
+	public void onHeroDeath(ServerPlayer player) {
+		if((this.isPreparing() || this.isRunning()) && this.heroes.contains(player.getUUID())) {
 			this.status = Status.LOSS;
+			this.onLoss();
 		}
 	}
 
@@ -423,19 +575,21 @@ public class Challenge implements IChallenge {
 			this.challenge.getRewards().forEach(r -> r.rewardGlobally(this));
 		}
 	}
-	
+
 	public void remove() {
 		this.status = Status.REMOVING;
 		//非雾挑战不存在对应UUID的雾，此处返回false且不发包，无副作用
 		PVZFogCapability.modifyFogFeatures(this.world, this.getFogUUID(), PVZFogPacket.ModifyType.REMOVE, 0);
+		final ChallengeBarPacket removePacket = ChallengeBarPacket.remove(this.id);
+		this.getPlayers().forEach(player -> PVZPacketHandler.sendToClient(player, removePacket));
 		this.challengeBar.removeAllPlayers();
 		this.raiders.forEach(e -> e.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED));
 	}
-	
+
 	public int getId() {
 		return this.id;
 	}
-	
+
 	public BlockPos getCenter() {
 		return this.center;
 	}
@@ -443,57 +597,57 @@ public class Challenge implements IChallenge {
 	private UUID getFogUUID() {
 		return UUID.nameUUIDFromBytes(("pvz_challenge_fog_" + this.id).getBytes(StandardCharsets.UTF_8));
 	}
-	
+
 	public boolean isRaider(Entity raider) {
 		return this.raiders.contains(raider);
 	}
-	
+
 	public boolean isStopping() {
 		return this.stopTick > 0;
 	}
-	
+
 	public boolean isPreparing() {
 		return this.status == Status.PREPARE;
 	}
-	
+
 	public boolean isRunning() {
 		return this.status == Status.RUNNING;
 	}
-	
+
 	public boolean isRemoving() {
 		return this.status == Status.REMOVING;
 	}
-	
+
 	public boolean isLoss() {
 		return this.status == Status.LOSS;
 	}
-	
+
 	public boolean isVictory() {
 		return this.status == Status.VICTORY;
 	}
-	
+
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	
+
 	/**
 	 * get raid component by resource.
 	 */
 	public IChallengeComponent getRaidComponent() {
 		return this.challenge != null ? this.challenge : (this.challenge = ChallengeManager.getChallengeByResource(this.resource));
 	}
-	
+
 	/**
 	 * get tracked players by raid bar.
 	 */
 	public List<ServerPlayer> getPlayers(){
 		return new ArrayList<>(this.challengeBar.getPlayers());
 	}
-	
+
 	public boolean hasTag(String tag) {
 		return this.challenge.hasTag(tag);
 	}
-	
+
 	public List<String> getAuthors(){
 		return this.challenge.getAuthors();
 	}
@@ -514,5 +668,5 @@ public class Challenge implements IChallenge {
 	      LOSS,
 	      REMOVING
     }
-	
+
 }

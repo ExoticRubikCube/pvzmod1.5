@@ -41,31 +41,18 @@ public class OverlayEvents {
 				PVZOverlayHandler.renderInvasionProgress(stack, width, height);
 				PVZOverlayHandler.renderMission(stack, width, height);
 			}
-			
+
 			if(mc.player.getVehicle() instanceof CobCannonEntity cob) {
                 if(cob.getCornNum() > 0) {
 					PVZOverlayHandler.renderTargetAim(stack, width, height);
 				}
 			}
-			
+
 			/* render card slots on left side */
 //			PVZOverlayHandler.drawCardInventory(mc.player, stack, width, height);
 		}
 	}
 
-//	@SubscribeEvent
-//	public static void onRenderFog(RenderGuiEvent.Pre ev) {
-//		if (mc.player == null || mc.player.isSpectator()) {
-//			return;
-//		}
-//		if (PVZConfig.CLIENT_CONFIG.OverlaySettings.RenderFog.get()) {
-//			int tick = PlayerUtil.getResource(ClientProxy.MC.player, Resources.NO_FOG_TICK);
-//			if(tick < 0) {
-//				PVZOverlayHandler.renderFog(ev.getPoseStack(), ev.getWindow().getGuiScaledWidth(), ev.getWindow().getGuiScaledHeight(), Math.min(- tick * 1F / FogManager.CD, 1F));
-//			}
-//		}
-//	}
-	
 	private static boolean canRender() {
 		return mc.player != null && ! mc.player.isSpectator();
 	}

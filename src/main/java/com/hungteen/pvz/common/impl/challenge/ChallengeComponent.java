@@ -173,9 +173,7 @@ public class ChallengeComponent implements IChallengeComponent {
 		            if(! wave.readJson(obj)) {
 		            	return false;
 		            }
-		            //by tick order.
-		            wave.getSpawns().sort(new Sorter());
-				    this.waves.add(wave);
+			        this.waves.add(wave);
 			    }
 			}
 		}
@@ -235,17 +233,7 @@ public class ChallengeComponent implements IChallengeComponent {
 	public int getPrepareCD(int wavePos) {
 		return this.waves.get(this.wavePos(wavePos)).getPrepareCD();
 	}
-	
-	@Override
-	public int getLastDuration(int wavePos) {
-		return this.waves.get(this.wavePos(wavePos)).getLastDuration();
-	}
-	
-	@Override
-	public boolean isWaveFinish(int wavePos, int spawnPos) {
-		return spawnPos >= this.waves.get(this.wavePos(wavePos)).getSpawns().size();
-	}
-	
+
 	@Override
 	public int getTotalWaveCount() {
 		return this.waves.size();
@@ -358,14 +346,4 @@ public class ChallengeComponent implements IChallengeComponent {
 		return this.shouldCloseToCenter;
 	}
 
-	private static class Sorter implements Comparator<ISpawnComponent> {
-
-		public int compare(ISpawnComponent a, ISpawnComponent b) {
-			final double d0 = a.getSpawnTick();
-			final double d1 = b.getSpawnTick();
-			return d0 < d1 ? -1 : d0 > d1 ? 1 : 0;
-		}
-		
-	}
-	
 }

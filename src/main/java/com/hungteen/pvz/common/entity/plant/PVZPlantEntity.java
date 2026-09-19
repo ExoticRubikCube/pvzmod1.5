@@ -5,9 +5,7 @@ import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.paz.IPlantEntity;
 import com.hungteen.pvz.api.paz.IPlantInfo;
-import com.hungteen.pvz.api.types.IEssenceType;
-import com.hungteen.pvz.api.types.IPAZType;
-import com.hungteen.pvz.api.types.IPlantType;
+import com.hungteen.pvz.api.types.*;
 import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.advancement.trigger.PlantSuperTrigger;
 import com.hungteen.pvz.common.entity.AbstractPAZEntity;
@@ -64,7 +62,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlantEntity {
+public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlantEntity, IPlantCarrier {
 
 	private static final EntityDataAccessor<Integer> SUPER_TIME = SynchedEntityData.defineId(PVZPlantEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> ATTACK_TIME = SynchedEntityData.defineId(PVZPlantEntity.class, EntityDataSerializers.INT);
@@ -560,7 +558,9 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 		if(this.getPlantType().isShroomPlant()) {
 			return this.isPlantSleeping() && type == PVZPlants.COFFEE_BEAN;
 		}
-		return type != this.getPlantType() && type != PVZPlants.COFFEE_BEAN;
+		final ICardPlacement carryPlacement = this.getCarryPlacement();
+		return type != this.getPlantType() && type != PVZPlants.COFFEE_BEAN
+				&& (carryPlacement == null || carryPlacement.canPlantOn(type.getPlacement()));
 	}
 
 	/**

@@ -288,7 +288,7 @@ public class ChallengeManager {
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-		} else if(! name.equals("")){
+		} else if(!name.isEmpty()){
 			PVZMod.LOGGER.warn("Spawn Type Missing : can not find {}", name);
 		}
 		return new SpawnComponent();
@@ -323,17 +323,12 @@ public class ChallengeManager {
 
 	public static IAmountComponent readAmount(JsonObject json, String amountTag){
 		JsonObject obj = GsonHelper.getAsJsonObject(json, amountTag);
-		if(obj != null && ! obj.entrySet().isEmpty()) {
+		if(! obj.entrySet().isEmpty()) {
 			for(Entry<String, JsonElement> entry : obj.entrySet()) {
 				final IAmountComponent tmp = getAmountComponent(entry.getKey());
-				if(tmp != null) {
-					tmp.readJson(entry.getValue());
-					return tmp;
-				} else {
-					PVZMod.LOGGER.warn("Amount Component : Read Spawn Amount Wrongly");
-				}
-				break;
-			}
+                tmp.readJson(entry.getValue());
+                return tmp;
+            }
 		}
 		return new ConstantAmount();
 	}

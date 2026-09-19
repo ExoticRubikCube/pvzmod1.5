@@ -1,5 +1,6 @@
 package com.hungteen.pvz.client;
 
+import com.hungteen.pvz.client.challenge.ChallengeBarOverlay;
 import com.hungteen.pvz.common.CommonProxy;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.block.others.SteelLadderBlock;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import javax.annotation.Nullable;
 
@@ -37,6 +39,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ChallengeBarOverlay::registerOverlay);
     }
 
     @Override
@@ -67,7 +70,10 @@ public class ClientProxy extends CommonProxy {
                     }
 
                     pos = this.getPointPosition(pStack, pLevel, pEntity);
-                    long i = pLevel.getGameTime();
+                    long i = 0;
+                    if (pLevel != null) {
+                        i = pLevel.getGameTime();
+                    }
                     if (pos != null && !(entity.position().distanceToSqr((double) pos.getX() + 0.5D, entity.position().y(), (double) pos.getZ() + 0.5D) < (double) 1.0E-5F)) {
                         boolean flag = pEntity instanceof Player player && player.isLocalPlayer();
                         double d1 = 0.0D;

@@ -4,13 +4,25 @@ import com.hungteen.pvz.api.types.ICardPlacement;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.misc.tag.PVZBlockTags;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 public class Placements {
 
 	public static final ICardPlacement NONE = block -> false;
-	
-	public static final ICardPlacement ANY = block -> true;
+
+	public static final ICardPlacement ANY = new ICardPlacement() {
+
+		@Override
+		public boolean canPlaceOnBlock(Block block) {
+			return true;
+		}
+
+		@Override
+		public boolean canPlantOn(ICardPlacement plantPlacement) {
+			return true;
+		}
+	};
 	
 	public static final ICardPlacement COMMON = (block) -> {
 		return block.defaultBlockState().is(PVZBlockTags.PLANT_SUIT_BLOCKS);
@@ -21,7 +33,7 @@ public class Placements {
 	};
 	
 	public static final ICardPlacement GOLD = (block) -> {
-		return block.defaultBlockState().is(PVZBlockTags.GOLD_TILES) || block.defaultBlockState().is(Blocks.GOLD_BLOCK);
+		return block.defaultBlockState().is(Blocks.GOLD_BLOCK);
 	};
 	
 	public static final ICardPlacement SAND = (block) -> {
@@ -39,5 +51,5 @@ public class Placements {
 	public static final ICardPlacement WATER = (block) -> {
 		return block.defaultBlockState().is(Blocks.WATER);
 	};
-	
+
 }
