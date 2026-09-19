@@ -254,7 +254,7 @@ public class PVZOverlayHandler {
 	 * {@link #renderResources(PoseStack, int, int)}
 	 */
 	private static void renderSunBar(PoseStack stack, int width, int height) {
-		final int max = PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(ClientProxy.MC.player, Resources.TREE_LVL));
+		final int max = PlayerUtil.getSunLimit(ClientProxy.MC.player);
 		final int now = PlayerUtil.getResource(ClientProxy.MC.player, Resources.SUN_NUM);
 		final int len = MathUtil.getBarLen(now, max, SUN_BAR_W2);
 		final float sz = 0.7F;

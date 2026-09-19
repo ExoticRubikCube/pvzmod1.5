@@ -155,7 +155,10 @@ public class PlayerEventHandler {
                 player.addItem(ChallengeEnvelopeItem.getChallengeEnvelope(StringUtil.prefix("strange_help")));
             }  //version changed.
         });
-
+        //须在init()同步后校正，setResource会再发包覆盖为最终阳光值
+        if(player instanceof ServerPlayer serverPlayer) {
+            ChallengeManager.onChallengePlayerLogin(serverPlayer);
+        }
     }
 
     /**
@@ -171,6 +174,10 @@ public class PlayerEventHandler {
                 });
             });
         });
+        //先退出阳光交换再保存玩家cap，保证落盘的是真实阳光而非挑战余额
+        if(player instanceof ServerPlayer serverPlayer) {
+            ChallengeManager.onChallengePlayerLogout(serverPlayer);
+        }
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.hungteen.pvz.common.entity.npc;
 
-import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.common.container.provider.PVZContainerProvider;
 import com.hungteen.pvz.common.container.shop.DaveShopContainer;
 import com.hungteen.pvz.utils.StringUtil;
@@ -39,11 +38,6 @@ public class CrazyDaveEntity extends AbstractDaveEntity {
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
 		return EntityDimensions.scalable(0.9f, 2.4f);
-	}
-	
-	@Override
-	public PVZGroupType getEntityGroupType() {
-		return PVZGroupType.PLANTS;
-	}
+}
 
 }

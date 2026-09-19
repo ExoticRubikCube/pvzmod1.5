@@ -16,8 +16,9 @@ import java.util.List;
 public class WaveComponent implements IWaveComponent {
 
 	public static final String NAME = "default";
-	private static final int DEFAULT_MIN_WAIT = 200;
-	private static final int DEFAULT_MAX_WAIT = 800;
+	//pvz2D ZOMBIE_COUNTDOWN 2500~3100cs, health early trigger compresses to 200cs after 400cs: total 120~620t minus 20t prepare
+	private static final int DEFAULT_MIN_WAIT = 100;
+	private static final int DEFAULT_MAX_WAIT = 600;
 	private final List<ISpawnComponent> spawns = new ArrayList<>();
 	private IPlacementComponent placement;
 	private int preCD;
@@ -29,8 +30,8 @@ public class WaveComponent implements IWaveComponent {
 	@Override
 	public boolean readJson(JsonObject json) {
 
-		/* prepare tick */
-		this.preCD = GsonHelper.getAsInt(json, "pre_tick", 100);
+		/* prepare tick, normal waves only keep the 50cs NextWaveComing window (pvz2D Board.cpp:5468) */
+		this.preCD = GsonHelper.getAsInt(json, "pre_tick", 20);
 
 		/* wave threat budget, 0 lets challenge fallback to spawn table sum */
 		this.threat = Math.max(0, GsonHelper.getAsInt(json, "threat", 0));

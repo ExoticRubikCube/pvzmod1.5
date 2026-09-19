@@ -38,7 +38,7 @@ public class SunEntity extends DropEntity {
 	private static final float SUN_FALL_SPEED = 0.03F;
 	//必须与 onCollectedByPlayer 的消耗条件保持一致，否则阳光会追上却无法消失
 	private static final Predicate<Entity> CAN_ABSORB_SUN = (target) -> target instanceof Player player && EntitySelector.NO_SPECTATORS.test(target)
-		&& (player.isCreative() || PlayerUtil.getResource(player, Resources.SUN_NUM) < PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(player, Resources.TREE_LVL))
+		&& (player.isCreative() || PlayerUtil.getResource(player, Resources.SUN_NUM) < PlayerUtil.getSunLimit(player)
 			|| EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), player, ItemStack::isDamaged) != null);
 	public Vec3 ColorBase = new Vec3(255,230,15);
 	public Vec3 ColorChange = new Vec3(0,25,15);
@@ -105,7 +105,7 @@ public class SunEntity extends DropEntity {
 	public void onCollectedByPlayer(Player living) {
 		if(! level.isClientSide() && ! MinecraftForge.EVENT_BUS.post(new PlayerCollectDropEvent.PlayerCollectSunEvent(living, this))) {
 			final int currentSun = PlayerUtil.getResource(living, Resources.SUN_NUM);
-			final int maxSun = PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(living, Resources.TREE_LVL));
+			final int maxSun = PlayerUtil.getSunLimit(living);
 			//sun mending enchantment, repair works at any sun amount and costs no sun.
 			final Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), living, ItemStack::isDamaged);
 			if(entry != null) {

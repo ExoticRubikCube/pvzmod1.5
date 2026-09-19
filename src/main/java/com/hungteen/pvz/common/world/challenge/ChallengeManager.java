@@ -8,6 +8,7 @@ import com.hungteen.pvz.RegistryHandler;
 import com.hungteen.pvz.api.events.RaidEvent;
 import com.hungteen.pvz.api.raid.*;
 import com.hungteen.pvz.common.datapack.ChallengeTypeLoader;
+import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.impl.challenge.ChallengeComponent;
 import com.hungteen.pvz.common.impl.challenge.SpawnComponent;
 import com.hungteen.pvz.common.impl.challenge.WaveComponent;
@@ -24,9 +25,11 @@ import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -80,6 +83,10 @@ public class ChallengeManager {
 		return getChallengeNearBy(world, pos).isPresent();
 	}
 
+	public static boolean hasPlantNearby(ServerLevel world, BlockPos pos) {
+		return ! world.getEntitiesOfClass(PVZPlantEntity.class, new AABB(pos).inflate(ConfigUtil.getRaidRange())).isEmpty();
+	}
+
 	public static Optional<Challenge> getChallengeNearBy(ServerLevel world, BlockPos pos){
 		final List<Challenge> list = getChallenges(world);
 		for(Challenge r : list) {
@@ -103,6 +110,32 @@ public class ChallengeManager {
 	
 	public static List<Challenge> getChallenges(ServerLevel world) {
 		return PVZChallengeData.getInvasionData(world).getChallenges();
+	}
+
+	/**
+	 * 玩家是否处于任一挑战的阳光交换态，供多信标范围重叠时先到先得。
+	 */
+	public static boolean isSunExchanged(ServerPlayer player) {
+		for(Challenge challenge : getChallenges((ServerLevel) player.level)) {
+			if(challenge.isSunExchanged(player.getUUID())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 登录时按挑战NBT会话校正阳光：正常登出则续用余额，崩溃关服则恢复真实快照。
+	 */
+	public static void onChallengePlayerLogin(ServerPlayer player) {
+		getChallenges((ServerLevel) player.level).forEach(c -> c.onPlayerLogin(player));
+	}
+
+	/**
+	 * 登出时退出交换：挑战余额留存挑战，真实阳光写回玩家cap随存档保存。
+	 */
+	public static void onChallengePlayerLogout(ServerPlayer player) {
+		getChallenges((ServerLevel) player.level).forEach(c -> c.onPlayerLogout(player));
 	}
 
 	public static Map<ResourceLocation, IChallengeComponent> getChallengeTypes() {

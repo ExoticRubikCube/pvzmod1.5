@@ -562,10 +562,20 @@ public class PlantCardItem extends SummonCardItem {
 		final IPlantType plantType = ((PlantCardItem) plantStack.getItem()).plantType;
 		if(plantType.getUpgradeFrom().isPresent() && plantEntity.getPlantType().equals(plantType.getUpgradeFrom().get())) {
             return plantEntity.canBeUpgrade(player) && PlantCardItem.checkSunAndSummonPlant(player, heldStack, plantStack, cardItem, plantEntity.blockPosition(), (plant) -> {
+                /* the upgraded plant inherits the container its base rode on, or it floats above and wilts. */
+                final Entity carrier = plantEntity.getVehicle();
                 if (plant instanceof ImitaterEntity) {
-                    ((ImitaterEntity) plant).setImitateAction((p) -> plantEntity.onPlantUpgrade(p));
+                    ((ImitaterEntity) plant).setImitateAction((p) -> {
+                        plantEntity.onPlantUpgrade(p);
+                        if(carrier instanceof PVZPlantEntity carrierPlant) {
+                            p.mountPlantOn(carrierPlant);
+                        }
+                    });
                 } else {
                     plantEntity.onPlantUpgrade(plant);
+                    if(carrier instanceof PVZPlantEntity carrierPlant) {
+                        plant.mountPlantOn(carrierPlant);
+                    }
                 }
             });
 		}

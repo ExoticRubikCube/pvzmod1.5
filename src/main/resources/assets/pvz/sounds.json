@@ -15,6 +15,22 @@
       }
     ]
   },
+  "awooga": {
+    "subtitle": "sound.pvz.awooga",
+    "sounds": [
+      {
+        "name": "pvz:awooga"
+      }
+    ]
+  },
+  "siren": {
+    "subtitle": "sound.pvz.siren",
+    "sounds": [
+      {
+        "name": "pvz:siren"
+      }
+    ]
+  },
   "plant_siren": {
     "subtitle": "sound.pvz.plant_siren",
     "sounds": [

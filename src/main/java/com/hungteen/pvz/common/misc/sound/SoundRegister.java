@@ -13,6 +13,8 @@ public class SoundRegister {
 
 	public static final RegistryObject<SoundEvent> ADVANCEMENT = registerSound("advancement");
 	public static final RegistryObject<SoundEvent> ZOMBIE_SIREN = registerSound("zombie_siren");
+	public static final RegistryObject<SoundEvent> SIREN = registerSound("siren");
+	public static final RegistryObject<SoundEvent> AWOOGA = registerSound("awooga");
 	public static final RegistryObject<SoundEvent> PLANT_SIREN = registerSound("plant_siren");
 	public static final RegistryObject<SoundEvent> BALLOON_INFLATE = registerSound("balloon_inflate");
 	public static final RegistryObject<SoundEvent> BALLOON_POP = registerSound("balloon_pop");

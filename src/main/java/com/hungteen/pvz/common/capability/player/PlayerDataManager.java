@@ -15,6 +15,7 @@ import com.hungteen.pvz.common.network.CardInventoryPacket;
 import com.hungteen.pvz.common.network.PAZStatsPacket;
 import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toclient.PlayerStatsPacket;
+import com.hungteen.pvz.common.network.toclient.SunLimitPacket;
 import com.hungteen.pvz.common.world.invasion.Invasion;
 import com.hungteen.pvz.common.world.invasion.MissionManager;
 import com.hungteen.pvz.utils.PlayerUtil;
@@ -47,6 +48,8 @@ public class PlayerDataManager {
 	private final Map<IPAZType, Boolean> pazLocked = new HashMap<>();
 	/* misc data */
 	private Invasion invasion;
+	//挑战信阳光交换期间覆盖树等级阳光上限，0为不覆盖；不随NBT持久，进入/退出交换时随包同步
+	private int sunLimitOverride;
 	public String lastVersion = StringUtil.INIT_VERSION;
 	private final OtherStats otherStats;
 	
@@ -290,6 +293,20 @@ public class PlayerDataManager {
 	public int getResource(Resources res){
 		return this.resources.get(res);
 	}
+
+	public int getSunLimitOverride() {
+		return this.sunLimitOverride;
+	}
+
+	public void setSunLimitOverride(int limit) {
+		this.sunLimitOverride = limit;
+		if(player instanceof ServerPlayer) {
+			PVZPacketHandler.CHANNEL.send(
+				PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+				new SunLimitPacket(limit)
+			);
+		}
+	}
 	
 	/**
 	 * check (min, max) and sync send packet.
@@ -310,7 +327,7 @@ public class PlayerDataManager {
 		if(res == Resources.TREE_XP) {
 			addTreeXp(now, num);
 		} else if(res == Resources.SUN_NUM) {
-			now = Mth.clamp(now + num, 0, PlayerUtil.getPlayerMaxSunNum(resources.get(Resources.TREE_LVL)));
+			now = Mth.clamp(now + num, 0, PlayerUtil.getSunLimit(player));
 			resources.put(Resources.SUN_NUM, now);
 			if(player instanceof ServerPlayer){
 				SunAmountTrigger.INSTANCE.trigger((ServerPlayer) player, now);

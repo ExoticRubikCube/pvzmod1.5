@@ -44,6 +44,16 @@ public interface IChallengeComponent {
      */
     int getRecommendLevel();
 
+    /**
+     * isolated challenge sun each player holds when entering the challenge range.
+     */
+    int getInitialSun();
+
+    /**
+     * sun cap during challenge, overriding player tree level cap.
+     */
+    int getSunLimit();
+
     boolean canTrade();
 
     int getTradeWeight();

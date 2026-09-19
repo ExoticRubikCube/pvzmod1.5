@@ -107,6 +107,8 @@ public class ChallengeEnvelopeItem extends Item {
             } else{
                 if(ChallengeManager.hasChallengeNearby((ServerLevel) context.getLevel(), context.getClickedPos().above())){
                     PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.full_challenge").withStyle(ChatFormatting.RED));
+                } else if(ChallengeManager.hasPlantNearby((ServerLevel) context.getLevel(), context.getClickedPos().above())){
+                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.plant_inside").withStyle(ChatFormatting.RED));
                 } else{
                     if(ChallengeManager.createChallenge((ServerLevel) context.getLevel(), getChallengeType(context.getItemInHand()), context.getClickedPos().above())) {
                         if (PlayerUtil.isPlayerSurvival(context.getPlayer())) {

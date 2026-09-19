@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.events.RaidEvent;
 import com.hungteen.pvz.api.interfaces.IChallenge;
+import com.hungteen.pvz.api.paz.IZombieEntity;
 import com.hungteen.pvz.api.raid.IChallengeComponent;
-import com.hungteen.pvz.api.raid.IPlacementComponent;
 import com.hungteen.pvz.api.raid.ISpawnComponent;
 import com.hungteen.pvz.api.raid.IWaveComponent;
 import com.hungteen.pvz.common.advancement.trigger.ChallengeTrigger;
@@ -13,6 +13,7 @@ import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.capability.level.PVZFogCapability;
 import com.hungteen.pvz.common.entity.AbstractPAZEntity;
 import com.hungteen.pvz.common.entity.ai.goal.ChallengeMoveGoal;
+import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.network.PVZFogPacket;
 import com.hungteen.pvz.common.network.PVZPacketHandler;
 import com.hungteen.pvz.common.network.toclient.ChallengeBarPacket;
@@ -28,6 +29,8 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.game.ClientboundClearTitlesPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -36,8 +39,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.nio.charset.StandardCharsets;
@@ -55,6 +64,18 @@ public class Challenge implements IChallenge {
 	private static final double FOG_RANGE = 18.0D;
 	private static final int MAX_ZOMBIES_IN_WAVE = 50;
 	private static final int SWITCH_INTERVAL = 5;
+	//对齐pvz2D mHugeWaveCountDown：旗帜波刷怪前750cs（7.5秒）红字预警
+	private static final int WAVE_WARNING_TICK = 150;
+	//Board.cpp:5398 红字后25cs播吼声；Board.cpp:5341 末波刷怪后60cs播finalwave
+	private static final int HUGE_WAVE_ROAR_DELAY = 5;
+	private static final int FINAL_WAVE_SOUND_DELAY = 12;
+	//对齐StartReadySetPlant.reanim总时长1830cs（约37tick）：READY:SET:PLANT按2:3:5
+	private static final int SET_TITLE_TICK = 7;
+	private static final int PLANT_TITLE_TICK = 18;
+	//范围僵尸减速：MULTIPLY_TOTAL -0.25 等效速度倍率0.75；固定UUID同时供伤害事件识别"处于挑战区域"状态
+	public static final UUID CHALLENGE_SLOW_MODIFIER_UUID = UUID.nameUUIDFromBytes("pvz_challenge_zombie_slow".getBytes(StandardCharsets.UTF_8));
+	public static final float CHALLENGE_ZOMBIE_DAMAGE_FACTOR = 0.5F;
+	private static final AttributeModifier CHALLENGE_SLOW_MODIFIER = new AttributeModifier(CHALLENGE_SLOW_MODIFIER_UUID, "Challenge speed debuff", -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	private final ServerBossEvent challengeBar = new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
 	private final int id;//unique specify id.
 	public final ServerLevel world;
@@ -70,9 +91,15 @@ public class Challenge implements IChallenge {
 	protected int waveStartThreat = 0;
 	protected Set<Entity> raiders = new HashSet<>();
 	protected Set<UUID> heroes = new HashSet<>();
+	//由本挑战成功挂上减速修饰符的僵尸，离开范围摘除并在remove兜底
+	private final Set<Mob> slowedZombies = new HashSet<>();
 	private boolean firstTick = false;
+	private boolean warningSent = false;
+	private int finalWaveSoundDelay = 0;
 	private int currentMaxLevel = 0;
 	private int fogRecoverDelay = 0;
+	//玩家真实阳光在进入范围时快照于此，SUN_NUM槽位在挑战期间承载挑战余额
+	private final Map<UUID, SunSession> sunSessions = new HashMap<>();
 
 
 
@@ -95,6 +122,8 @@ public class Challenge implements IChallenge {
 		this.waveSwitchThreshold = nbt.getInt("wave_switch_threshold");
 		this.waveStartThreat = nbt.getInt("wave_start_threat");
 		this.firstTick = nbt.getBoolean("first_tick");
+		this.warningSent = nbt.getBoolean("warning_sent");
+		this.finalWaveSoundDelay = nbt.getInt("final_wave_sound_delay");
 		this.fogRecoverDelay = nbt.getInt("fog_recover_delay");
 		{// for raid center position.
 			CompoundTag tmp = nbt.getCompound("center_pos");
@@ -115,6 +144,14 @@ public class Challenge implements IChallenge {
                 this.heroes.add(NbtUtils.loadUUID(tag));
             }
 		}
+		if(nbt.contains("sun_sessions")) {
+			ListTag list = nbt.getList("sun_sessions", 10);
+			for(Tag tag : list) {
+				final CompoundTag tmp = (CompoundTag) tag;
+				this.sunSessions.put(NbtUtils.loadUUID(tmp.get("player_uuid")),
+						new SunSession(tmp.getInt("original_sun"), tmp.getInt("challenge_sun"), tmp.getBoolean("exchanged")));
+			}
+		}
 	}
 
 	public void save(CompoundTag nbt) {
@@ -128,6 +165,8 @@ public class Challenge implements IChallenge {
 		nbt.putInt("wave_switch_threshold", this.waveSwitchThreshold);
 		nbt.putInt("wave_start_threat", this.waveStartThreat);
 		nbt.putBoolean("first_tick", this.firstTick);
+		nbt.putBoolean("warning_sent", this.warningSent);
+		nbt.putInt("final_wave_sound_delay", this.finalWaveSoundDelay);
 		nbt.putInt("fog_recover_delay", this.fogRecoverDelay);
 		{// for raid center position.
 			CompoundTag tmp = new CompoundTag();
@@ -149,6 +188,22 @@ public class Challenge implements IChallenge {
 				list.add(NbtUtils.createUUID(uuid));
 			}
 			nbt.put("heroes", list);
+		}
+		{// for isolated challenge sun sessions.
+			ListTag list = new ListTag();
+			this.sunSessions.forEach((uuid, session) -> {
+				final Player online = this.world.getPlayerByUUID(uuid);
+				if(session.exchanged && online != null) {
+					session.challengeSun = PlayerUtil.getResource(online, Resources.SUN_NUM);
+				}
+				final CompoundTag tmp = new CompoundTag();
+				tmp.put("player_uuid", NbtUtils.createUUID(uuid));
+				tmp.putInt("original_sun", session.originalSun);
+				tmp.putInt("challenge_sun", session.challengeSun);
+				tmp.putBoolean("exchanged", session.exchanged);
+				list.add(tmp);
+			});
+			nbt.put("sun_sessions", list);
 		}
 	}
 
@@ -182,11 +237,42 @@ public class Challenge implements IChallenge {
 		}
 		if(this.isPreparing()) {
 			/* prepare state */
-			if(this.tick >= this.challenge.getPrepareCD(this.currentWave)) {
+			final int prepareCD = this.challenge.getPrepareCD(this.currentWave);
+			final boolean isBigWave = this.getCurrentWaveComponent().isBigWave();
+			//对齐pvz2D StartReadySetPlant.reanim：SET、PLANT两段标题依次切换
+			if(this.currentWave == 0 && (this.tick == SET_TITLE_TICK || this.tick == PLANT_TITLE_TICK)) {
+				final String titleKey = this.tick == SET_TITLE_TICK ? "challenge.pvz.set" : "challenge.pvz.plant";
+				final int stayTick = this.tick == SET_TITLE_TICK ? PLANT_TITLE_TICK - SET_TITLE_TICK - 3 : 15;
+				this.getPlayers().forEach(p -> {
+					p.connection.send(new ClientboundSetTitlesAnimationPacket(1, stayTick, 2));
+					PlayerUtil.sendTitleToPlayer(p, Component.translatable(titleKey).withStyle(ChatFormatting.WHITE));
+				});
+			}
+			if(! this.warningSent && prepareCD >= WAVE_WARNING_TICK && this.tick >= prepareCD - WAVE_WARNING_TICK && isBigWave) {
+				this.warningSent = true;
+				if(this.getRaidComponent().showRoundTitle()) {
+					this.getPlayers().forEach(p -> {
+						p.connection.send(new ClientboundSetTitlesAnimationPacket(0, WAVE_WARNING_TICK + 20, 0));
+						PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
+					});
+				}
+			}
+			//对齐pvz2D Board.cpp:5398：红字出现25cs后播hugewave吼声
+			if(this.warningSent && this.tick == prepareCD - WAVE_WARNING_TICK + HUGE_WAVE_ROAR_DELAY) {
+				this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, SoundRegister.HUGE_WAVE.get()));
+			}
+			if(this.tick >= prepareCD) {
 				this.waveStart();
 			}
 		} else if(this.isRunning()) {
 			/* running state, whole wave spawns at wave start, only the countdown to next wave is ticked */
+			//对齐pvz2D Board.cpp:5360-5367：末波刷怪60cs后播finalwave
+			if(this.finalWaveSoundDelay > 0) {
+				-- this.finalWaveSoundDelay;
+				if(this.finalWaveSoundDelay == 0) {
+					this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, SoundRegister.FINAL_WAVE.get()));
+				}
+			}
 			if(this.tick % SWITCH_INTERVAL == 0) {
 				this.updateDifficultyLevel();
 				this.updateRaiders();
@@ -211,7 +297,22 @@ public class Challenge implements IChallenge {
 		}
 		if(! this.firstTick){//first tick.
 			this.firstTick = true;
-			this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, this.challenge.getPrepareSound()));
+			if(this.currentWave == 0){
+				//首tick先于updatePlayers，立即为范围内玩家建立独立阳光，保证READY过场前HUD已是挑战余额
+				this.world.getPlayers(this.validPlayer()).forEach(p -> {
+					if(! ChallengeManager.isSunExchanged(p)) {
+						this.enterSunExchange(p);
+					}
+				});
+			}
+			this.getPlayers().forEach(p -> {
+				PlayerUtil.playClientSound(p, this.challenge.getPrepareSound());
+				if(this.currentWave == 0){
+					//对齐pvz2D REANIM_READYSETPLANT：开局过场首段READY，语音音效readysetplant同时播放
+					p.connection.send(new ClientboundSetTitlesAnimationPacket(1, SET_TITLE_TICK - 2, 1));
+					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.ready").withStyle(ChatFormatting.WHITE));
+				}
+			});
 			if(this.hasTag("fog")) {
 				PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
 			}
@@ -336,8 +437,18 @@ public class Challenge implements IChallenge {
 	 * copy from {@link net.minecraft.server.commands.SummonCommand}
 	 */
 	private Entity createEntity(ISpawnComponent spawn) {
-		final IPlacementComponent placement = spawn.getPlacement() != null ? spawn.getPlacement() : this.challenge.getPlacement(this.currentWave);
-		final BlockPos pos = placement.getPlacePosition(this.world, this.center);
+		final BlockPos pos;
+		if(spawn.getPlacement() != null) {
+			pos = spawn.getPlacement().getPlacePosition(this.world, this.center);
+		} else {
+			// zombies walk in from 1~5 blocks outside one of the four square edges, spawn distance is global
+			final int side = this.world.random.nextInt(4);
+			final int outer = ConfigUtil.getRaidRange() + 1 + this.world.random.nextInt(5);
+			final int along = this.world.random.nextInt(ConfigUtil.getRaidRange() * 2 + 1) - ConfigUtil.getRaidRange();
+			final int spawnX = this.center.getX() + (side == 0 ? outer : side == 1 ? -outer : along);
+			final int spawnZ = this.center.getZ() + (side == 2 ? outer : side == 3 ? -outer : along);
+			pos = new BlockPos(spawnX, this.world.getHeight(Heightmap.Types.WORLD_SURFACE, spawnX, spawnZ), spawnZ);
+		}
 		final CompoundTag nbt = spawn.getNBT().copy();
 		nbt.putInt("pvz_avoid_same_hash_random", this.world.random.nextInt());
 		return EntityUtil.createWithNBT(this.world, spawn.getSpawnType(), nbt, pos);
@@ -383,6 +494,7 @@ public class Challenge implements IChallenge {
 		}
 		this.currentWave += 1;
 		this.tick = 0;
+		this.warningSent = false;
 		this.status = Status.PREPARE;
 		return true;
 	}
@@ -393,6 +505,7 @@ public class Challenge implements IChallenge {
 	protected void tickBar() {
 		if(this.tick % 10 == 0 && ! this.world.players().isEmpty()) {
 			this.updatePlayers();
+			this.updateZombieDebuffs();
 		}
 		this.challengeBar.setColor(this.challenge.getBarColor());
 		this.challengeBar.setName(this.getBarName());
@@ -456,12 +569,14 @@ public class Challenge implements IChallenge {
 	 * player who is alive and in suitable range can be tracked.
 	 */
 	private Predicate<ServerPlayer> validPlayer() {
-		return (player) -> {
-			final int range = ConfigUtil.getRaidRange();
-			return Math.abs(player.getX() - this.center.getX()) < range
-					&& Math.abs(player.getY() - this.center.getY()) < range
-					&& Math.abs(player.getZ() - this.center.getZ()) < range;
-		};
+		return this::isInRange;
+	}
+
+	private boolean isInRange(Entity entity) {
+		final int range = ConfigUtil.getRaidRange();
+		return Math.abs(entity.getX() - this.center.getX()) < range
+				&& Math.abs(entity.getY() - this.center.getY()) < range
+				&& Math.abs(entity.getZ() - this.center.getZ()) < range;
 	}
 
 	/**
@@ -482,8 +597,8 @@ public class Challenge implements IChallenge {
 		/* remove offline players */
 		oldPlayers.forEach(p -> {
 			if(! newPlayers.contains(p)) {
-
 				this.challengeBar.removePlayer(p);
+				this.leaveSunExchange(p);
 			}
 		});
 
@@ -491,6 +606,16 @@ public class Challenge implements IChallenge {
 		this.challengeBar.getPlayers().forEach(p -> {
             this.heroes.add(p.getUUID());
 		});
+
+		/* 中途走进范围或离开后返回的玩家在此续接独立阳光；终态不再交换 */
+		if(this.isPreparing() || this.isRunning()) {
+			newPlayers.forEach(p -> {
+				final SunSession session = this.sunSessions.get(p.getUUID());
+				if((session == null || ! session.exchanged) && ! ChallengeManager.isSunExchanged(p)) {
+					this.enterSunExchange(p);
+				}
+			});
+		}
 
 		if(this.challengeBar.getPlayers().isEmpty()){
 			if(! this.isStopping()) {
@@ -526,12 +651,27 @@ public class Challenge implements IChallenge {
 		}
 		this.waveSwitchThreshold = Mth.floor(spawnedThreat * (0.5F + this.world.random.nextFloat() * 0.15F));
 		this.waveStartThreat = spawnedThreat;
+		final boolean isFinalWave = this.currentWave >= this.challenge.getTotalWaveCount() - 1;
 		this.getPlayers().forEach(p -> {
 			if(this.getRaidComponent().showRoundTitle()){
-				PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.round", this.currentWave + 1).withStyle(ChatFormatting.DARK_RED));
+				if(isFinalWave){
+					p.connection.send(new ClientboundSetTitlesAnimationPacket(10, 60, 10));
+					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.final_wave").withStyle(ChatFormatting.DARK_RED));
+				} else if(this.warningSent){
+					p.connection.send(new ClientboundClearTitlesPacket(false));
+				} else if(wave.isBigWave()){
+					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
+				}
 			}
-			PlayerUtil.playClientSound(p, this.challenge.getStartWaveSound());
+			if(wave.isBigWave()){
+				PlayerUtil.playClientSound(p, SoundRegister.SIREN.get());
+			} else if(this.currentWave == 0){
+				PlayerUtil.playClientSound(p, SoundRegister.AWOOGA.get());
+			}
 		});
+		if(isFinalWave){
+			this.finalWaveSoundDelay = FINAL_WAVE_SOUND_DELAY;
+		}
 	}
 
 	private IWaveComponent getCurrentWaveComponent() {
@@ -555,6 +695,8 @@ public class Challenge implements IChallenge {
 	 */
 	protected void onLoss() {
 		this.tick = 0;
+		//onHeroDeath返回后PlayerEventHandler会按真实阳光处理死亡掉落，必须先恢复
+		this.releaseAllSunSessions();
 		this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, this.challenge.getLossSound()));
 		MinecraftForge.EVENT_BUS.post(new RaidEvent.RaidLossEvent(this));
 	}
@@ -564,6 +706,7 @@ public class Challenge implements IChallenge {
 	 */
 	protected void onVictory() {
 		this.tick = 0;
+		this.releaseAllSunSessions();
 		this.getPlayers().forEach(p -> {
 			PlayerUtil.playClientSound(p, this.challenge.getWinSound());
 			ChallengeTrigger.INSTANCE.trigger(p, this.resource.toString());
@@ -578,6 +721,8 @@ public class Challenge implements IChallenge {
 
 	public void remove() {
 		this.status = Status.REMOVING;
+		//和平/组件缺失/无人超时等所有移除出口的终态兜底，幂等
+		this.releaseAllSunSessions();
 		//非雾挑战不存在对应UUID的雾，此处返回false且不发包，无副作用
 		PVZFogCapability.modifyFogFeatures(this.world, this.getFogUUID(), PVZFogPacket.ModifyType.REMOVE, 0);
 		final ChallengeBarPacket removePacket = ChallengeBarPacket.remove(this.id);
@@ -661,6 +806,85 @@ public class Challenge implements IChallenge {
 		return world;
 	}
 
+	/**
+	 * 进入范围：快照真实阳光并以挑战开局余额替换；存在离场会话时续用上次挑战余额。
+	 * 上限包必须先于阳光值包到达客户端，否则余额高于树等级上限时会被客户端clamp截断。
+	 */
+	private void enterSunExchange(ServerPlayer player) {
+		final SunSession session = this.sunSessions.get(player.getUUID());
+		PlayerUtil.setSunLimitOverride(player, this.challenge.getSunLimit());
+		if(session == null) {
+			final int initialSun = this.challenge.getInitialSun();
+			this.sunSessions.put(player.getUUID(), new SunSession(PlayerUtil.getResource(player, Resources.SUN_NUM), initialSun));
+			PlayerUtil.setResource(player, Resources.SUN_NUM, initialSun);
+		} else {
+			session.originalSun = PlayerUtil.getResource(player, Resources.SUN_NUM);
+			PlayerUtil.setResource(player, Resources.SUN_NUM, session.challengeSun);
+			session.exchanged = true;
+		}
+	}
+
+	/**
+	 * 离开范围：当前槽位值存回挑战余额，真实阳光快照写回槽位。
+	 */
+	private void leaveSunExchange(ServerPlayer player) {
+		final SunSession session = this.sunSessions.get(player.getUUID());
+		if(session != null && session.exchanged) {
+			session.challengeSun = PlayerUtil.getResource(player, Resources.SUN_NUM);
+			PlayerUtil.setResource(player, Resources.SUN_NUM, session.originalSun);
+			PlayerUtil.setSunLimitOverride(player, 0);
+			session.exchanged = false;
+		}
+	}
+
+	/**
+	 * 挑战终态恢复全部在线玩家真实阳光；离线玩家登出时已写回，仅落标志。
+	 */
+	private void releaseAllSunSessions() {
+		this.sunSessions.forEach((uuid, session) -> {
+			if(session.exchanged) {
+				final Player player = this.world.getPlayerByUUID(uuid);
+				if(player != null) {
+					PlayerUtil.setResource(player, Resources.SUN_NUM, session.originalSun);
+					PlayerUtil.setSunLimitOverride(player, 0);
+				}
+				session.exchanged = false;
+			}
+		});
+	}
+
+	boolean isSunExchanged(UUID uuid) {
+		final SunSession session = this.sunSessions.get(uuid);
+		return session != null && session.exchanged;
+	}
+
+	/**
+	 * 崩溃关服时玩家cap可能保存的是交换态余额，依NBT恢复的exchanged残留标志校正；正常登出则续用会话。
+	 */
+	public void onPlayerLogin(ServerPlayer player) {
+		final SunSession session = this.sunSessions.get(player.getUUID());
+		if(session != null) {
+			if((this.isPreparing() || this.isRunning()) && this.isInRange(player)) {
+				if(this.challenge != null) {
+					PlayerUtil.setSunLimitOverride(player, this.challenge.getSunLimit());
+				}
+				if(! session.exchanged) {
+					session.originalSun = PlayerUtil.getResource(player, Resources.SUN_NUM);
+				}
+				PlayerUtil.setResource(player, Resources.SUN_NUM, session.challengeSun);
+				session.exchanged = true;
+			} else if(session.exchanged) {
+				PlayerUtil.setResource(player, Resources.SUN_NUM, session.originalSun);
+				PlayerUtil.setSunLimitOverride(player, 0);
+				session.exchanged = false;
+			}
+		}
+	}
+
+	public void onPlayerLogout(ServerPlayer player) {
+		this.leaveSunExchange(player);
+	}
+
 	public enum Status {
 		  PREPARE,
 	      RUNNING,
@@ -668,5 +892,24 @@ public class Challenge implements IChallenge {
 	      LOSS,
 	      REMOVING
     }
+
+	/**
+	 * 单次挑战内一名玩家的阳光隔离会话：originalSun为进入前真实阳光，challengeSun为挑战内独立余额。
+	 */
+	private static final class SunSession {
+		private int originalSun;
+		private int challengeSun;
+		private boolean exchanged;
+
+		private SunSession(int originalSun, int challengeSun) {
+			this(originalSun, challengeSun, true);
+		}
+
+		private SunSession(int originalSun, int challengeSun, boolean exchanged) {
+			this.originalSun = originalSun;
+			this.challengeSun = challengeSun;
+			this.exchanged = exchanged;
+		}
+	}
 
 }

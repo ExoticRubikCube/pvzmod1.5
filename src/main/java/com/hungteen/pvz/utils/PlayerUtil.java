@@ -51,6 +51,19 @@ public class PlayerUtil {
 			return CACHE_MAX_SUN = (int) Mth.clamp(Math.round((500 + (lvl - 1) * 1500.0 / 99.0) / 5.0) * 5, 500, 2000);
 		}
 	}
+
+	//挑战信阳光交换期走关卡配置上限（默认9999），其余沿用树等级上限；资源clamp、阳光拾取、HUD上限条必须共用此口径
+	public static int getSunLimit(Player player) {
+		final PlayerDataManager manager = getManager(player);
+		if(manager != null && manager.getSunLimitOverride() > 0) {
+			return manager.getSunLimitOverride();
+		}
+		return getPlayerMaxSunNum(getResource(player, Resources.TREE_LVL));
+	}
+
+	public static void setSunLimitOverride(Player player, int limit) {
+		getOptManager(player).ifPresent(m -> m.setSunLimitOverride(limit));
+	}
 	
 	/**
 	 * {@link PlayerDataManager#addResource(Resources, int)}

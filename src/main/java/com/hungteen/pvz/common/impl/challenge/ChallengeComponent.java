@@ -51,6 +51,8 @@ public class ChallengeComponent implements IChallengeComponent {
 	private boolean showRound;
 	private int recommendLevel;
 	private boolean shouldCloseToCenter;
+	private int initialSun = 50;
+	private int sunLimit = 9999;
 	
 	@Override
 	public boolean readJson(JsonObject json) {
@@ -127,6 +129,8 @@ public class ChallengeComponent implements IChallengeComponent {
 			this.showRound = GsonHelper.getAsBoolean(json, "show_round", true);
 			this.recommendLevel = GsonHelper.getAsInt(json, "recommend_level", 1);
 			this.shouldCloseToCenter = GsonHelper.getAsBoolean(json, "close_to_center", true);
+			this.initialSun = GsonHelper.getAsInt(json, "initial_sun", 50);
+			this.sunLimit = GsonHelper.getAsInt(json, "sun_limit", 9999);
 		}
 		/* sounds */
 		{
@@ -319,6 +323,16 @@ public class ChallengeComponent implements IChallengeComponent {
 	@Override
 	public int getRecommendLevel() {
 		return recommendLevel;
+	}
+
+	@Override
+	public int getInitialSun() {
+		return this.initialSun;
+	}
+
+	@Override
+	public int getSunLimit() {
+		return this.sunLimit;
 	}
 
 	@Override
