@@ -63,12 +63,12 @@ public class ScreenDoorZombieEntity extends DefenceZombieEntity implements IHasM
 	
 	@Override
 	public float getLife() {
-		return 24;
+		return 27;
 	}
 	
 	@Override
 	public float getOuterLife() {
-		return 200;
+		return 110;
 	}
 
 	@Override

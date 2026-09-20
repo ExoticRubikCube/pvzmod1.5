@@ -30,6 +30,10 @@ public class EntityGroupHander {
         if((entityType.getCategory() == MobCategory.MONSTER || entityType.is(PVZEntityTypeTags.PVZ_OTHER_MONSTERS)) && ! entityType.is(PVZEntityTypeTags.PVZ_NOT_MONSTERS)){
             return PVZGroupType.OTHER_MONSTERS;
         }
+        //zombies never actively hunt wolves/cats (tamed or not), but still retaliate after being attacked.
+        if(entity.getType() == EntityType.WOLF || entity.getType() == EntityType.CAT){
+            return PVZGroupType.NEUTRALS;
+        }
         //this type is a tamable entity or in guardian tag (can not be banned).
         if((entity instanceof TamableAnimal || entityType.is(PVZEntityTypeTags.PVZ_OTHER_GUARDIANS)) && ! entityType.is(PVZEntityTypeTags.PVZ_NOT_GUARDIANS)){
             return PVZGroupType.OTHER_GUARDIANS;

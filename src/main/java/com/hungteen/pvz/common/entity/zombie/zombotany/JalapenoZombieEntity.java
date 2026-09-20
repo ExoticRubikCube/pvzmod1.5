@@ -48,7 +48,7 @@ public class JalapenoZombieEntity extends AbstractZombotanyEntity {
 
 	@Override
 	public float getLife() {
-		return 44;
+		return 50;
 	}
 	
 	@Override

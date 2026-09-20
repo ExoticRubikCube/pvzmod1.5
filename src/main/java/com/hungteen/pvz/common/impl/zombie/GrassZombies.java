@@ -107,13 +107,6 @@ public final class GrassZombies extends ZombieType {
 			.eatCommonSkill(List.of())
 	);
 	
-	public static final ZombieType OLD_ZOMBIE = new GrassZombies("old_zombie", new ZombieFeatures()
-		    .rank(RankTypes.BLUE).xp(15)
-			.entityType(() -> EntityRegister.OLD_ZOMBIE.get())
-			.zombieModel(() -> () -> new OldZombieModel(OldZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
-			.eatCommonSkill(List.of())
-	);
-	
 	public static final ZombieType SUNDAY_EDITION_ZOMBIE = new GrassZombies("sunday_edition_zombie", new ZombieFeatures()
 		    .rank(RankTypes.GOLD).xp(30)
 			.entityType(() -> EntityRegister.SUNDAY_EDITION_ZOMBIE.get())

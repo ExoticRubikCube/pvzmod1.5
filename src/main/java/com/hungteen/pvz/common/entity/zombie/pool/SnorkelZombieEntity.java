@@ -21,7 +21,7 @@ public class SnorkelZombieEntity extends SwimmerZombieEntity {
 
 	@Override
 	public float getLife() {
-		return 20;
+		return 27;
 	}
 	
 	@Override

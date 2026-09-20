@@ -90,7 +90,7 @@ public class ImpEntity extends PVZZombieEntity {
 	
 	@Override
 	public float getLife() {
-		return 10;
+		return 27;
 	}
 	
 	@Override

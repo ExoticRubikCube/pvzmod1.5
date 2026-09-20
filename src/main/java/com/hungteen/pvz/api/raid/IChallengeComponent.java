@@ -5,11 +5,13 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IChallengeComponent {
 
@@ -98,6 +100,17 @@ public interface IChallengeComponent {
     SoundEvent getWinSound();
 
     SoundEvent getLossSound();
+
+    default SoundEvent getBgmSound() {
+        return null;
+    }
+
+    /**
+     * data driven challenge BGM, analogous to Biome#getBackgroundMusic.
+     */
+    default Optional<Music> getBgmMusic() {
+        return Optional.empty();
+    }
 
     List<Pair<MutableComponent, Integer>> getMessages();
 

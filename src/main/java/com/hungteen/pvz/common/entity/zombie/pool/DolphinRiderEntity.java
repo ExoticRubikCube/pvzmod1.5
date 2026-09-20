@@ -160,7 +160,7 @@ this.discard();
 	
 	@Override
 	public float getLife() {
-		return 60;
+		return 50;
 	}
 	
 	public boolean isDolphinJumping() {

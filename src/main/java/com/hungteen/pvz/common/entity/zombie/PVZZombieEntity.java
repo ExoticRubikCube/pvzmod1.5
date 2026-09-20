@@ -21,6 +21,8 @@ import com.hungteen.pvz.common.entity.misc.drop.CoinEntity;
 import com.hungteen.pvz.common.entity.misc.drop.CoinEntity.CoinType;
 import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
+import com.hungteen.pvz.common.entity.plant.base.PlantCloserEntity;
+import com.hungteen.pvz.common.entity.plant.enforce.ChomperEntity;
 import com.hungteen.pvz.common.entity.plant.enforce.SquashEntity;
 import com.hungteen.pvz.common.entity.plant.spear.SpikeWeedEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
@@ -47,6 +49,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -67,8 +71,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZombieEntity {
 
@@ -88,6 +94,12 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	protected boolean canLostHead = true;
 	protected int climbUpTick = 0;
 	protected int maxClimbUpTick = 5;
+
+	//挑战减速偏置：MULTIPLY_TOTAL -0.25 等效速度倍率0.75；固定UUID供自身摘除
+	public static final UUID CHALLENGE_SLOW_MODIFIER_UUID = UUID.nameUUIDFromBytes("pvz_challenge_zombie_slow".getBytes(StandardCharsets.UTF_8));
+	public static final float CHALLENGE_ZOMBIE_DAMAGE_FACTOR = 0.5F;
+	private static final AttributeModifier CHALLENGE_SLOW_MODIFIER = new AttributeModifier(
+			CHALLENGE_SLOW_MODIFIER_UUID, "Challenge speed debuff", -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
 	public PVZZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
@@ -204,6 +216,17 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link #aiStep()}
 	 */
 	public void zombieTick() {
+		//挑战减速由僵尸自管理，与冻住/爬升等状态无关，始终按是否在范围内摘/挂
+		this.updateChallengeSlow();
+		//垂死：断头后每秒6点匀速掉血(原版60/s ÷10)，归零才真正死亡
+		if(! this.level.isClientSide() && ! this.hasHead() && this.getHealth() > 0) {
+			final float hp = this.getHealth() - 0.3F;
+			if(hp <= 0) {
+				this.die(DamageSource.GENERIC);
+			} else {
+				this.setHealth(hp);
+			}
+		}
 		if (this.tickCount <= 2) {
 			this.refreshDimensions();
 		}
@@ -237,6 +260,23 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 				}
 			} else {
 				this.climbUpTick = 0;
+			}
+		}
+	}
+
+	/**
+	 * 处于任一活跃挑战范围内挂/摘减速修饰符，由僵尸实体自管理，挑战结束或离开范围即时摘除，仅服务端。
+	 * {@link #zombieTick()}
+	 */
+	protected void updateChallengeSlow() {
+		final AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+		if(! this.level.isClientSide() && speed != null) {
+			if(this.isInChallengeRange()) {
+				if(speed.getModifier(CHALLENGE_SLOW_MODIFIER_UUID) == null) {
+					speed.addTransientModifier(CHALLENGE_SLOW_MODIFIER);
+				}
+			} else {
+				speed.removeModifier(CHALLENGE_SLOW_MODIFIER_UUID);
 			}
 		}
 	}
@@ -312,7 +352,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 			return 10000000;
 		}
 		//chill halves eating speed in pvz, see EntityUtil#isEntityCold.
-		return EntityUtil.isEntityCold(this) ? 40 : 20;
+		return EntityUtil.isEntityCold(this) ? 27 : 20;
 	}
 
 	@Override
@@ -417,7 +457,19 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link ZombieBreakPlantBlockGoal#canZombieContinue()}
 	 */
 	public boolean canBreakPlantBlock() {
-		return ! this.isCharmed();
+		return ! this.isCharmed() && this.hasHead();
+	}
+
+	/**
+	 * 垂死僵尸(断头)不会触发近战/吞食型植物，但仍被远程火力集火。
+	 * {@link AbstractPAZEntity#canPAZTarget(Entity)}
+	 */
+	@Override
+	public boolean canBeTargetBy(LivingEntity living) {
+		if(! this.hasHead() && (living instanceof PlantCloserEntity || living instanceof SquashEntity || living instanceof ChomperEntity)) {
+			return false;
+		}
+		return super.canBeTargetBy(living);
 	}
 
 	/**
@@ -438,6 +490,10 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if(! level.isClientSide()) {
+			//处于活跃挑战范围内，玩家(含其箭矢等投射物)对该僵尸伤害减半
+			if(source.getEntity() instanceof Player && this.isInChallengeRange()) {
+				amount *= CHALLENGE_ZOMBIE_DAMAGE_FACTOR;
+			}
 			boolean flag = super.hurt(source, amount);
 			if(ConfigUtil.enableZombieDropParts()) {
 				if(!this.level.isClientSide()) {
@@ -465,6 +521,9 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 
 	@Override
 	public boolean doHurtTarget(Entity entityIn) {
+		if(! this.hasHead()) {//垂死状态失去伤害能力
+			return false;
+		}
 		entityIn.invulnerableTime = 0;
 		this.setAnimTime(PERFORM_ATTACK_CD);
 		// add
@@ -711,7 +770,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link #hurt}
 	 */
 	public boolean checkCanLostHead() {
-		return this.getHealth() < 10 && this.getHealth() / this.getMaxHealth() < 0.1F;
+		return this.getHealth() < this.getMaxHealth() / 3;
 	}
 
 	/**

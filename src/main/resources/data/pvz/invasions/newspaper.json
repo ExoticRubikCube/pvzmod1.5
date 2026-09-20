@@ -20,11 +20,6 @@
       "spawn_weight": 50
     },
     {
-      "entity_type": "pvz:old_zombie",
-      "invasion_level": 45,
-      "spawn_weight": 40
-    },
-    {
       "entity_type": "pvz:sunday_edition_zombie",
       "invasion_level": 45,
       "spawn_weight": 30

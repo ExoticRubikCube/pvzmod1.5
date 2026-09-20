@@ -131,7 +131,7 @@ this.remove(RemovalReason.KILLED);
 	
 	@Override
 	public float getLife() {
-		return 60;
+		return 138;
 	}
 
 	@Override

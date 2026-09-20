@@ -44,7 +44,7 @@ public class ZombieUtil {
 	public static final float SUPER_HIGH = 100;
 
 	// range
-	public static final float CLOSE_TARGET_RANGE = 32;
+	public static final float CLOSE_TARGET_RANGE = 48;
 	public static final float LITTLE_CLOSE_TARGET_RANGE = 50;
 	public static final float NORMAL_TARGET_RANGE = 64;
 	public static final float LOW_TARGET_HEIGHT = 20;

@@ -170,7 +170,6 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<CoffinEntity>> COFFIN = registerZombieEntityType(CoffinEntity::new, "coffin");
 	public static final RegistryObject<EntityType<MournerZombieEntity>> MOURNER_ZOMBIE = registerZombieEntityType(MournerZombieEntity::new, "mourner_zombie");
 	public static final RegistryObject<EntityType<NobleZombieEntity>> NOBLE_ZOMBIE = registerZombieEntityType(NobleZombieEntity::new, "noble_zombie");
-	public static final RegistryObject<EntityType<OldZombieEntity>> OLD_ZOMBIE = registerZombieEntityType(OldZombieEntity::new, "old_zombie");
 	public static final RegistryObject<EntityType<SundayEditionZombieEntity>> SUNDAY_EDITION_ZOMBIE = registerZombieEntityType(SundayEditionZombieEntity::new, "sunday_edition_zombie");
 	public static final RegistryObject<EntityType<JackInBoxZombieEntity>> JACK_IN_BOX_ZOMBIE = registerZombieEntityType(JackInBoxZombieEntity::new, "jack_in_box_zombie");
 	public static final RegistryObject<EntityType<PogoZombieEntity>> POGO_ZOMBIE = registerZombieEntityType(PogoZombieEntity::new, "pogo_zombie");

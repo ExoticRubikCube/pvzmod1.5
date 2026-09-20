@@ -18,12 +18,12 @@ public class ConeHeadZombieEntity extends NormalZombieEntity{
 	
 	@Override
 	public float getLife() {
-		return 20;
+		return 27;
 	}
 	
 	@Override
 	public float getInnerLife() {
-		return 40;
+		return 37;
 	}
 	
 	/**

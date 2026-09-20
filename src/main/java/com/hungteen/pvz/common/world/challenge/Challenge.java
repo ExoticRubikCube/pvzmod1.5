@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.events.RaidEvent;
 import com.hungteen.pvz.api.interfaces.IChallenge;
-import com.hungteen.pvz.api.paz.IZombieEntity;
 import com.hungteen.pvz.api.raid.IChallengeComponent;
 import com.hungteen.pvz.api.raid.ISpawnComponent;
 import com.hungteen.pvz.api.raid.IWaveComponent;
@@ -39,14 +38,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.nio.charset.StandardCharsets;
@@ -69,14 +63,11 @@ public class Challenge implements IChallenge {
 	//Board.cpp:5398 红字后25cs播吼声；Board.cpp:5341 末波刷怪后60cs播finalwave
 	private static final int HUGE_WAVE_ROAR_DELAY = 5;
 	private static final int FINAL_WAVE_SOUND_DELAY = 12;
-	//对齐StartReadySetPlant.reanim总时长1830cs（约37tick）：READY:SET:PLANT按2:3:5
-	private static final int SET_TITLE_TICK = 7;
-	private static final int PLANT_TITLE_TICK = 18;
-	//范围僵尸减速：MULTIPLY_TOTAL -0.25 等效速度倍率0.75；固定UUID同时供伤害事件识别"处于挑战区域"状态
-	public static final UUID CHALLENGE_SLOW_MODIFIER_UUID = UUID.nameUUIDFromBytes("pvz_challenge_zombie_slow".getBytes(StandardCharsets.UTF_8));
-	public static final float CHALLENGE_ZOMBIE_DAMAGE_FACTOR = 0.5F;
-	private static final AttributeModifier CHALLENGE_SLOW_MODIFIER = new AttributeModifier(CHALLENGE_SLOW_MODIFIER_UUID, "Challenge speed debuff", -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL);
-	private final ServerBossEvent challengeBar = new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
+	//对齐pvz2D StartReadySetPlant.reanim总时长1830ms（约37tick）：5+27+5
+	private static final int READY_TITLE_STAY_TICK = 27;
+	//减速与玩家伤害减半已下放至PVZZombieEntity，由僵尸实体依据isInChallengeRange()自管理
+	//复刻原版末影龙 dragonEvent：playBossMusic 随 add 包全量下发，音乐由客户端原版 MusicManager 驱动
+	private final ServerBossEvent challengeBar = (ServerBossEvent)(new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS).setPlayBossMusic(true));
 	private final int id;//unique specify id.
 	public final ServerLevel world;
 	public final ResourceLocation resource;//res to read raid component.
@@ -91,8 +82,6 @@ public class Challenge implements IChallenge {
 	protected int waveStartThreat = 0;
 	protected Set<Entity> raiders = new HashSet<>();
 	protected Set<UUID> heroes = new HashSet<>();
-	//由本挑战成功挂上减速修饰符的僵尸，离开范围摘除并在remove兜底
-	private final Set<Mob> slowedZombies = new HashSet<>();
 	private boolean firstTick = false;
 	private boolean warningSent = false;
 	private int finalWaveSoundDelay = 0;
@@ -239,20 +228,11 @@ public class Challenge implements IChallenge {
 			/* prepare state */
 			final int prepareCD = this.challenge.getPrepareCD(this.currentWave);
 			final boolean isBigWave = this.getCurrentWaveComponent().isBigWave();
-			//对齐pvz2D StartReadySetPlant.reanim：SET、PLANT两段标题依次切换
-			if(this.currentWave == 0 && (this.tick == SET_TITLE_TICK || this.tick == PLANT_TITLE_TICK)) {
-				final String titleKey = this.tick == SET_TITLE_TICK ? "challenge.pvz.set" : "challenge.pvz.plant";
-				final int stayTick = this.tick == SET_TITLE_TICK ? PLANT_TITLE_TICK - SET_TITLE_TICK - 3 : 15;
-				this.getPlayers().forEach(p -> {
-					p.connection.send(new ClientboundSetTitlesAnimationPacket(1, stayTick, 2));
-					PlayerUtil.sendTitleToPlayer(p, Component.translatable(titleKey).withStyle(ChatFormatting.WHITE));
-				});
-			}
 			if(! this.warningSent && prepareCD >= WAVE_WARNING_TICK && this.tick >= prepareCD - WAVE_WARNING_TICK && isBigWave) {
 				this.warningSent = true;
 				if(this.getRaidComponent().showRoundTitle()) {
 					this.getPlayers().forEach(p -> {
-						p.connection.send(new ClientboundSetTitlesAnimationPacket(0, WAVE_WARNING_TICK + 20, 0));
+						p.connection.send(new ClientboundSetTitlesAnimationPacket(10, WAVE_WARNING_TICK - 20, 10));
 						PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
 					});
 				}
@@ -308,9 +288,8 @@ public class Challenge implements IChallenge {
 			this.getPlayers().forEach(p -> {
 				PlayerUtil.playClientSound(p, this.challenge.getPrepareSound());
 				if(this.currentWave == 0){
-					//对齐pvz2D REANIM_READYSETPLANT：开局过场首段READY，语音音效readysetplant同时播放
-					p.connection.send(new ClientboundSetTitlesAnimationPacket(1, SET_TITLE_TICK - 2, 1));
-					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.ready").withStyle(ChatFormatting.WHITE));
+					p.connection.send(new ClientboundSetTitlesAnimationPacket(5, READY_TITLE_STAY_TICK, 5));
+					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.ready").withStyle(ChatFormatting.DARK_RED));
 				}
 			});
 			if(this.hasTag("fog")) {
@@ -474,19 +453,21 @@ public class Challenge implements IChallenge {
 	/**
 	 * countdown driven wave switching, equivalent to pvz2D mZombieCountDown plus the health early trigger.
 	 * before the minimum wait the wave holds; inside the wait window it advances once this wave loses enough
-	 * threat; past the maximum wait it advances unconditionally. waves may overlap, the final wave only ends
-	 * in victory after every raider is dead.
+	 * threat; past the maximum wait it advances unconditionally. waves may overlap. the final wave spawns its
+	 * whole roster at wave start and grants victory as soon as every raider is dead, aligned with htpvz2 which
+	 * settles immediately on the last member removal instead of waiting out the remaining minimum wait.
 	 */
 	public boolean trySwitchWave() {
 		final IWaveComponent wave = this.getCurrentWaveComponent();
-		if(this.tick < wave.getMinimumWaitTime()) {
-			return false;
-		}
-		if(this.currentWave >= this.challenge.getTotalWaveCount() - 1) {
+		final boolean isFinalWave = this.currentWave >= this.challenge.getTotalWaveCount() - 1;
+		if(isFinalWave) {
 			if(this.raiders.isEmpty()) {
 				this.status = Status.VICTORY;
 				return true;
 			}
+			return false;
+		}
+		if(this.tick < wave.getMinimumWaitTime()) {
 			return false;
 		}
 		if(this.tick < wave.getMaximumWaitTime() && this.getLivingMembersThreat(this.currentWave) > this.waveSwitchThreshold) {
@@ -505,7 +486,6 @@ public class Challenge implements IChallenge {
 	protected void tickBar() {
 		if(this.tick % 10 == 0 && ! this.world.players().isEmpty()) {
 			this.updatePlayers();
-			this.updateZombieDebuffs();
 		}
 		this.challengeBar.setColor(this.challenge.getBarColor());
 		this.challengeBar.setName(this.getBarName());
@@ -562,7 +542,7 @@ public class Challenge implements IChallenge {
 				bigWaves.set(i);
 			}
 		}
-		PVZPacketHandler.sendToClient(player, new ChallengeBarPacket(this.id, this.challenge.getTotalWaveCount(), this.currentWave, bigWaves));
+		PVZPacketHandler.sendToClient(player, new ChallengeBarPacket(this.id, this.challengeBar.getId(), this.resource, this.challenge.getTotalWaveCount(), this.currentWave, bigWaves));
 	}
 
 	/**
@@ -660,6 +640,7 @@ public class Challenge implements IChallenge {
 				} else if(this.warningSent){
 					p.connection.send(new ClientboundClearTitlesPacket(false));
 				} else if(wave.isBigWave()){
+					p.connection.send(new ClientboundSetTitlesAnimationPacket(10, WAVE_WARNING_TICK - 20, 10));
 					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
 				}
 			}
@@ -697,6 +678,8 @@ public class Challenge implements IChallenge {
 		this.tick = 0;
 		//onHeroDeath返回后PlayerEventHandler会按真实阳光处理死亡掉落，必须先恢复
 		this.releaseAllSunSessions();
+		//终态翻平音乐标志，客户端情境音乐随下一拍自动停止
+		this.challengeBar.setPlayBossMusic(false);
 		this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, this.challenge.getLossSound()));
 		MinecraftForge.EVENT_BUS.post(new RaidEvent.RaidLossEvent(this));
 	}
@@ -707,6 +690,8 @@ public class Challenge implements IChallenge {
 	protected void onVictory() {
 		this.tick = 0;
 		this.releaseAllSunSessions();
+		//终态翻平音乐标志，客户端情境音乐随下一拍自动停止
+		this.challengeBar.setPlayBossMusic(false);
 		this.getPlayers().forEach(p -> {
 			PlayerUtil.playClientSound(p, this.challenge.getWinSound());
 			ChallengeTrigger.INSTANCE.trigger(p, this.resource.toString());
@@ -723,6 +708,7 @@ public class Challenge implements IChallenge {
 		this.status = Status.REMOVING;
 		//和平/组件缺失/无人超时等所有移除出口的终态兜底，幂等
 		this.releaseAllSunSessions();
+		//僵尸减速由僵尸实体自管理，挑战移除后其isInChallengeRange()失效自摘，无需在此处理
 		//非雾挑战不存在对应UUID的雾，此处返回false且不发包，无副作用
 		PVZFogCapability.modifyFogFeatures(this.world, this.getFogUUID(), PVZFogPacket.ModifyType.REMOVE, 0);
 		final ChallengeBarPacket removePacket = ChallengeBarPacket.remove(this.id);

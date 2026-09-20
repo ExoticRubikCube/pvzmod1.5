@@ -67,7 +67,7 @@ public class GigaFootballZombieEntity extends FootballZombieEntity {
 
 	@Override
 	public float getInnerLife() {
-		return 300;
+		return 280;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class GigaFootballZombieEntity extends FootballZombieEntity {
 	
 	@Override
 	public float getLife() {
-		return 100;
+		return 27;
 	}
 	
 	@Override

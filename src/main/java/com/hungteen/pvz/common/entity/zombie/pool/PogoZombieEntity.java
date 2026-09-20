@@ -103,7 +103,7 @@ public class PogoZombieEntity extends PVZZombieEntity implements IHasMetal {
 	
 	@Override
 	public float getLife() {
-		return 48;
+		return 50;
 	}
 
 	public boolean hasPogo() {

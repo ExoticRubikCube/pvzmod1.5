@@ -131,7 +131,7 @@ public class CatapultZombieEntity extends CarZombieEntity implements IPult,IHasW
 	
     @Override
 	public float getLife() {
-		return 105;
+		return 85;
 	}
     
     @Override

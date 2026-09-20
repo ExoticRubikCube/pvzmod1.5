@@ -19,7 +19,7 @@ public class GatlingPeaZombieEntity extends PeaShooterZombieEntity {
 	
 	@Override
 	public float getLife() {
-		return 30;
+		return 27;
 	}
 	
 	@Override

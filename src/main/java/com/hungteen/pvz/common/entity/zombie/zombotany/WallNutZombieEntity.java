@@ -14,7 +14,7 @@ public class WallNutZombieEntity extends AbstractZombotanyEntity {
 
 	@Override
 	public float getLife() {
-		return 160;
+		return 137;
 	}
 	
 	@Override

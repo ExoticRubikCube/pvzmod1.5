@@ -109,6 +109,19 @@ public class SoundRegister {
 	public static final RegistryObject<SoundEvent> CAR = registerSound("car");
 	public static final RegistryObject<SoundEvent> BRUH = registerSound("bruh");
 	public static final RegistryObject<SoundEvent> PENNY_SAY = registerSound("penny_say");
+	public static final RegistryObject<SoundEvent> CHALLENGE_BGM = registerSound("challenge_bgm");
+	public static final RegistryObject<SoundEvent> BGM_GRASSWALK_COMPLETE = registerSound("grasswalk_complete");
+	public static final RegistryObject<SoundEvent> BGM_MOONGRAINS_COMPLETE = registerSound("moongrains_complete");
+	public static final RegistryObject<SoundEvent> BGM_WATERYGRAVES = registerSound("waterygraves_complete");
+	public static final RegistryObject<SoundEvent> BGM_POOL = registerSound("pool_complete");
+	public static final RegistryObject<SoundEvent> BGM_RIGORMORMIST_COMPLETE = registerSound("rigormormist_complete");
+	public static final RegistryObject<SoundEvent> BGM_GRAZETHEROOF_COMPLETE = registerSound("grazetheroof_complete");
+	public static final RegistryObject<SoundEvent> BGM_CEREBRAWL = registerSound("cerebrawl");
+	public static final RegistryObject<SoundEvent> BGM_LOONBOON = registerSound("loonboon");
+	public static final RegistryObject<SoundEvent> BGM_CONVEYER = registerSound("conveyer_bgm");
+	public static final RegistryObject<SoundEvent> BGM_ULTIMATE_BATTLE = registerSound("ultimate_battle");
+	public static final RegistryObject<SoundEvent> BGM_FINAL_BOSS = registerSound("final_boss");
+	public static final RegistryObject<SoundEvent> BGM_BRAINIAC_MANIAC = registerSound("brainiac_maniac");
 
 	//disc
 	public static final RegistryObject<SoundEvent> ZOMBIE_ON_YOUR_LAWN = registerSound("zombie_on_your_lawn");

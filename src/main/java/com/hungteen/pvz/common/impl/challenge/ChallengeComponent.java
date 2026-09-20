@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
@@ -41,6 +42,7 @@ public class ChallengeComponent implements IChallengeComponent {
 	private SoundEvent waveSound = SoundRegister.HUGE_WAVE.get();
 	private SoundEvent winSound = SoundRegister.WIN_MUSIC.get();
 	private SoundEvent lossSound = SoundRegister.LOSE_MUSIC.get();
+	private SoundEvent bgmSound = SoundRegister.CHALLENGE_BGM.get();
 	private int winTick;
 	private int lossTick;
 	/* for trade */
@@ -160,6 +162,12 @@ public class ChallengeComponent implements IChallengeComponent {
 						this.lossSound = sound;
 					}
 				}
+				{
+					final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(GsonHelper.getAsString(obj, "bgm_sound", "")));
+					if(sound != null){
+						this.bgmSound = sound;
+					}
+				}
 			}
 		}
 		/* spawn placement */
@@ -271,6 +279,17 @@ public class ChallengeComponent implements IChallengeComponent {
 	@Override
 	public SoundEvent getLossSound() {
 		return this.lossSound;
+	}
+
+	@Override
+	public SoundEvent getBgmSound() {
+		return this.bgmSound;
+	}
+
+	@Override
+	public Optional<Music> getBgmMusic() {
+		//参数对齐 Musics.END_BOSS：挑战 BGM 由原版 MusicManager 无缝循环播放
+		return Optional.of(new Music(this.bgmSound, 0, 0, true));
 	}
 	
 	@Override

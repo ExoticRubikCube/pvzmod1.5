@@ -114,7 +114,7 @@ public class Edgar090505Entity extends EdgarRobotEntity {
 
     @Override
     public float getInnerLife() {
-        return 4000;
+        return 3000;
     }
 
     @Override

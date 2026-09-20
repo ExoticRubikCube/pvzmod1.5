@@ -42,7 +42,7 @@ this.discard();
 	
 	@Override
 	public float getLife() {
-		return 25;
+		return 27;
 	}
 	
 	@Override

@@ -106,12 +106,12 @@ public class LadderZombieEntity extends DefenceZombieEntity implements IHasMetal
 	
 	@Override
 	public float getLife() {
-		return 65;
+		return 50;
 	}
 	
 	@Override
 	public float getOuterLife() {
-		return 250;
+		return 50;
 	}
 
 	@Override

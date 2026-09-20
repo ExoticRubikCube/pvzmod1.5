@@ -168,7 +168,7 @@ public class CatTailEntity extends PlantShooterEntity {
 	
 	@Override
 	public float getShootRange() {
-		return 80;
+		return 50;
 	}
 	
 	@Override

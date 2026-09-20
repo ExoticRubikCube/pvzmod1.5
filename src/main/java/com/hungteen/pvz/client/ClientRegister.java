@@ -248,7 +248,6 @@ public class ClientRegister {
 		ev.registerEntityRenderer(COFFIN.get(), ctx -> new CoffinRender(ctx));
 		ev.registerEntityRenderer(MOURNER_ZOMBIE.get(), ctx -> new MournerZombieRender(ctx));
 		ev.registerEntityRenderer(NOBLE_ZOMBIE.get(), ctx -> new NobleZombieRender(ctx));
-		ev.registerEntityRenderer(OLD_ZOMBIE.get(), ctx -> new OldZombieRender(ctx));
 		ev.registerEntityRenderer(SUNDAY_EDITION_ZOMBIE.get(), ctx -> new SundayEditionZombieRender(ctx));
 		ev.registerEntityRenderer(JACK_IN_BOX_ZOMBIE.get(), ctx -> new JackInBoxZombieRender(ctx));
 		ev.registerEntityRenderer(POGO_ZOMBIE.get(), ctx -> new PogoZombieRender(ctx));
@@ -505,8 +504,6 @@ public class ClientRegister {
 			NewspaperZombieModel::createBodyLayer);
 		ev.registerLayerDefinition(NormalZombieModel.LAYER,
 			NormalZombieModel::createBodyLayer);
-		ev.registerLayerDefinition(OldZombieModel.LAYER,
-			OldZombieModel::createBodyLayer);
 		ev.registerLayerDefinition(PoleZombieModel.LAYER,
 			PoleZombieModel::createBodyLayer);
 		ev.registerLayerDefinition(ScreenDoorZombieModel.LAYER,

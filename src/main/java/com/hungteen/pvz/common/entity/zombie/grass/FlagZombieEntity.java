@@ -20,7 +20,7 @@ public class FlagZombieEntity extends NormalZombieEntity{
 
 	@Override
 	public float getLife() {
-		return 19;
+		return 27;
 	}
 	
 	@Override

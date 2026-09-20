@@ -22,7 +22,7 @@ public class TallNutZombieEntity extends AbstractZombotanyEntity {
 	
 	@Override
 	public float getLife() {
-		return 320;
+		return 247;
 	}
 	
 	@Override

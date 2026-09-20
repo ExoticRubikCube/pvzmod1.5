@@ -31,8 +31,7 @@ public class PVZMod {
 	public static final String MOD_ID = "pvz";
 	public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
-	@SuppressWarnings("removal")
-    public PVZMod() {
+	public PVZMod() {
 		PVZConfig.register(ModLoadingContext.get());
     	IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
     	RegistryHandler.deferredRegister(modBus);

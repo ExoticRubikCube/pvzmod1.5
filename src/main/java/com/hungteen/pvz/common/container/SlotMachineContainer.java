@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.container;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.blockentity.SlotMachineTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +18,7 @@ public class SlotMachineContainer extends AbstractContainerMenu {
 		this.player = player;
 		this.te = (SlotMachineTileEntity) player.level.getBlockEntity(pos);
 		if(this.te == null) {
-			System.out.println("Error: Open Slot Machine GUI !");
+			PVZMod.LOGGER.debug("Error: Open Slot Machine GUI !");
 			return ;
 		}
 		this.addDataSlots(this.te.array);

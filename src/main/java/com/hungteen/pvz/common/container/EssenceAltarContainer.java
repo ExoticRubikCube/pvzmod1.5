@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.container;
 
+import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.types.IPAZType;
 import com.hungteen.pvz.api.types.ISkillType;
 import com.hungteen.pvz.common.blockentity.EssenceAltarTileEntity;
@@ -29,6 +30,10 @@ public class EssenceAltarContainer extends PVZContainer{
 		this.player = player;
 		this.te = (EssenceAltarTileEntity) player.level.getBlockEntity(worldPos);
 
+		if(this.te == null) {
+			PVZMod.LOGGER.debug("Error: Open Essence Altar GUI !");
+			return ;
+		}
 		//add summon card slot.
 		this.addSlot(new SlotItemHandler(this.te.handler, 0, 27, 9){
 			@Override

@@ -11,6 +11,7 @@ import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
 import com.hungteen.pvz.common.event.PVZLivingEvents;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
+import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
@@ -23,6 +24,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
@@ -92,6 +94,18 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
         super(entityType, world);
         this.refreshDimensions();
 //        this.setPersistenceRequired();
+    }
+
+    /**
+     * 该PAZ实体是否处于任一挑战信的有效范围内，仅服务端以挑战中心三轴判距。
+     * {@link ChallengeManager#getChallengeNearBy(net.minecraft.server.level.ServerLevel, net.minecraft.core.BlockPos)}
+     */
+    public boolean isInChallengeRange() {
+        boolean inRange = false;
+        if(this.level instanceof ServerLevel serverLevel) {
+            inRange = ChallengeManager.getChallengeNearBy(serverLevel, this.blockPosition()).isPresent();
+        }
+        return inRange;
     }
 
     @Override
@@ -185,7 +199,7 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
         if(!EntityUtil.isEntityFrozen(this) && EntityUtil.isEntityCold(this)) {
             final AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
             if(speed != null) {
-                final double slowAmount = - 0.5D * speed.getBaseValue();
+                final double slowAmount = - 0.25D * speed.getBaseValue();
                 final AttributeModifier oldModifier = speed.getModifier(SPEED_MODIFIER_POWDER_SNOW_UUID);
                 if(oldModifier == null || slowAmount < oldModifier.getAmount()) {
                     if(oldModifier != null) {

@@ -140,7 +140,7 @@ public class RaZombieEntity extends PVZZombieEntity {
 
 	@Override
 	public float getLife() {
-		return 36;
+		return 19;
 	}
 
 	@Override

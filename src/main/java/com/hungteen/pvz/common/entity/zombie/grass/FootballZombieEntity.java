@@ -33,7 +33,7 @@ public class FootballZombieEntity extends PVZZombieEntity implements IHasMetal {
 
 	@Override
 	public float getLife() {
-		return 20;
+		return 27;
 	}
 	
 	@Override

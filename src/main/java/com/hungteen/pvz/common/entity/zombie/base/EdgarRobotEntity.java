@@ -63,7 +63,6 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
             ZOMBIES_2.addItem(GrassZombies.CONEHEAD_ZOMBIE, 100);
             ZOMBIES_2.addItem(GrassZombies.POLE_ZOMBIE, 90);
             ZOMBIES_2.addItem(GrassZombies.DANCING_ZOMBIE, 70);
-            ZOMBIES_2.addItem(GrassZombies.OLD_ZOMBIE, 80);
             ZOMBIES_2.addItem(PoolZombies.JACK_IN_BOX_ZOMBIE, 85);
             ZOMBIES_2.addItem(PoolZombies.DIGGER_ZOMBIE, 70);
             ZOMBIES_2.addItem(PoolZombies.POGO_ZOMBIE, 85);

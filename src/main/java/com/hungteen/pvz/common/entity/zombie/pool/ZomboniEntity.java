@@ -110,7 +110,7 @@ public class ZomboniEntity extends CarZombieEntity implements IHasMultiPart, IHa
 
 	@Override
 	public float getLife() {
-		return 130;
+		return 135;
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public class BackupDancerEntity extends PVZZombieEntity{
 	
 	@Override
 	public float getLife() {
-		return 20;
+		return 27;
 	}
 	
 	/**

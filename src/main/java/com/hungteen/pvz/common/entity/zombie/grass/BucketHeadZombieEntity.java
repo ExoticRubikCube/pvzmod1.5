@@ -21,7 +21,7 @@ public class BucketHeadZombieEntity extends NormalZombieEntity implements IHasMe
 	
 	@Override
 	public float getLife() {
-		return 20;
+		return 27;
 	}
 	
 	@Override

@@ -54,7 +54,7 @@ public class PeaShooterZombieEntity extends AbstractZombotanyEntity {
 	
 	@Override
 	public float getLife() {
-		return 20;
+		return 27;
 	}
 
 	protected int getFixedShootCD() {

@@ -70,12 +70,12 @@ public class NewspaperZombieEntity extends DefenceZombieEntity {
 	
 	@Override
 	public float getLife() {
-		return 22;
+		return 27;
 	}
 	
 	@Override
 	public float getOuterLife() {
-		return 10;
+		return 15;
 	}
 	
 	public boolean isAngry() {
