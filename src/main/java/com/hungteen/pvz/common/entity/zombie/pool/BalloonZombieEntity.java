@@ -40,7 +40,7 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 	@Override
 	public void resetParts() {
 		removeParts();
-		this.part = new PVZHealthPartEntity(this, 0.6f, 0.7f);
+		this.part = new PVZHealthPartEntity(this, 0.6f, -0.45f);
 		this.part.setOwner(this);
 	}
 	
@@ -64,8 +64,8 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 		if(source.getDirectEntity() instanceof AbstractArrow) {
 			return true;
 		}
-		if(source instanceof PVZEntityDamageSource) {
-			return ((PVZEntityDamageSource) source).isThornDamage();
+		if(source instanceof PVZEntityDamageSource pvzEntityDamageSource) {
+			return pvzEntityDamageSource.isThornDamage();
 		}
 		return false;
 	}

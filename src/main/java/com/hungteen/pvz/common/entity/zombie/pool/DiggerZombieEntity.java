@@ -162,5 +162,10 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	public boolean hasPickaxe() {
 		return this.getInnerDefenceLife() > 0;
 	}
+
+	public boolean hasMinerHat() {
+		final double percent = this.getInnerDefenceLife() / this.getInnerLife();
+		return percent > 0;
+	}
 	
 }

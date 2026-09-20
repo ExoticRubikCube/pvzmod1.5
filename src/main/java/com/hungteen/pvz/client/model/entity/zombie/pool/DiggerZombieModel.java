@@ -126,6 +126,7 @@ public DiggerZombieModel(ModelPart root) {
 		super.updateFreeParts(entity);
 		final boolean hasPickaxe = entity.hasPickaxe();
 		this.pickaxe.visible = hasPickaxe;
+		this.hat.visible = entity.hasMinerHat();
 		this.isRightHandFree = ! hasPickaxe;
 	}
 
