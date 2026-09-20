@@ -23,6 +23,11 @@ public class SnorkelZombieEntity extends SwimmerZombieEntity {
 	public float getLife() {
 		return 27;
 	}
+
+	@Override
+	protected float getWaterSlowDown() {
+		return 1.175f;//潜水4s/格 ÷ 普通4.7s/格
+	}
 	
 	@Override
 	public ZombieType getZombieType() {

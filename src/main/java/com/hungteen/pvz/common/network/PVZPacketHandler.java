@@ -41,7 +41,6 @@ public class PVZPacketHandler {
 		CHANNEL.registerMessage(id++, CardInventoryPacket.class, CardInventoryPacket::encode, CardInventoryPacket::new, CardInventoryPacket.Handler::onMessage);
 		CHANNEL.registerMessage(id++, PAZStatsPacket.class, PAZStatsPacket::encode, PAZStatsPacket::new, PAZStatsPacket.Handler::onMessage);
 		CHANNEL.registerMessage(id++, DatapackPacket.class, DatapackPacket::encode, DatapackPacket::new, DatapackPacket.Handler::onMessage);
-		CHANNEL.registerMessage(id++, SpawnBodyPartPacket.class, SpawnBodyPartPacket::encode, SpawnBodyPartPacket::new, SpawnBodyPartPacket.Handler::onMessage);
 		CHANNEL.registerMessage(id++, PVZFogPacket.class, PVZFogPacket::encode, PVZFogPacket::new, PVZFogPacket::handle);
 		CHANNEL.registerMessage(id++, ChallengeBarPacket.class, ChallengeBarPacket::encode, ChallengeBarPacket::new, ChallengeBarPacket::handle);
 		CHANNEL.registerMessage(id++, SunLimitPacket.class, SunLimitPacket::encode, SunLimitPacket::new, SunLimitPacket.Handler::onMessage);

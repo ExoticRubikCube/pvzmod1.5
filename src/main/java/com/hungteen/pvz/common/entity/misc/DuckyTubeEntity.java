@@ -47,11 +47,6 @@ public class DuckyTubeEntity extends PVZZombieToolBase {
 	}
 
 	@Override
-	protected float getWaterSlowDown() {
-		return 0.93f;
-	}
-
-	@Override
 	public boolean isPushedByFluid() {
 		return false;
 	}

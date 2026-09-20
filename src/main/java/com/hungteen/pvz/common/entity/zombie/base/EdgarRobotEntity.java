@@ -1,6 +1,5 @@
 package com.hungteen.pvz.common.entity.zombie.base;
 
-import com.hungteen.pvz.api.enums.BodyType;
 import com.hungteen.pvz.api.types.IZombieType;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZNearestTargetGoal;
@@ -10,8 +9,6 @@ import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.roof.BungeeZombieEntity;
 import com.hungteen.pvz.common.impl.zombie.*;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.network.PVZPacketHandler;
-import com.hungteen.pvz.common.network.toclient.SpawnBodyPartPacket;
 import com.hungteen.pvz.utils.*;
 import com.hungteen.pvz.utils.others.WeightList;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -29,7 +26,6 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -199,10 +195,7 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
 
     @Override
     protected void onFallBody(DamageSource source) {
-        Arrays.asList(BodyType.HEAD, BodyType.BODY, BodyType.LEFT_HAND, BodyType.RIGHT_HAND,
-                        BodyType.LEFT_LEG, BodyType.RIGHT_LEG)
-                .forEach(type -> PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
-                        new SpawnBodyPartPacket(type.ordinal(), this.getId(), type == BodyType.HEAD ? source.getSourcePosition() : null)));
+        //粒子由客户端渲染器本地检测生成(僵王六部位在渲染器特判)，不发包
     }
 
     /**

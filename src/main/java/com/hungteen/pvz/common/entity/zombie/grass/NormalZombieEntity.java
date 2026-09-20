@@ -31,12 +31,7 @@ public class NormalZombieEntity extends PVZZombieEntity {
 	public float getLife() {
 		return 27;
 	}
-	
-	@Override
-	protected float getWaterSlowDown() {
-		return 0.91f;
-	}
-	
+
 	@Override
 	public ZombieType getZombieType() {
 		return GrassZombies.NORMAL_ZOMBIE;

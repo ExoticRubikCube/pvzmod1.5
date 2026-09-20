@@ -5,6 +5,7 @@ import com.hungteen.pvz.common.advancement.trigger.InvasionTrigger;
 import com.hungteen.pvz.common.datapack.InvasionTypeLoader;
 import com.hungteen.pvz.common.event.events.InvasionEvent;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
@@ -144,6 +145,11 @@ public class InvasionManager {
      * {@link #activateInvasionEvents(Level,int)}
      */
     public static void enableInvasion(ServerPlayer player) {
+            //挑战进行中的玩家不触发僵尸入侵，避免入侵条与僵尸生成叠加进挑战
+            if(ChallengeManager.getChallengeNearBy(player.getLevel(), player.blockPosition())
+                    .map(c -> c.isPreparing() || c.isRunning()).orElse(false)) {
+                return;
+            }
             final Invasion invasion = PlayerUtil.getInvasion(player);
             if(! invasion.isRunning()){
                 PlayerUtil.sendMsgTo(player, START);

@@ -150,7 +150,7 @@ this.discard();
 
 	@Override
 	protected float getWaterSlowDown() {
-		return 0.94f;
+		return 2.9f;
 	}
 	
 	@Override

@@ -22,9 +22,9 @@ public class MinecraftMixin {
 	private static boolean pvz$hadChallengeMusic = false;
 
 	/**
-	 * 挑战 bar 在任意维度都直接给出挑战 BGM 情境。音乐一旦响起就持续循环，玩家进出范围不停曲不重播；
-	 * 仅当挑战 bar 仍在而音乐标志翻平（终态）时单次 stopPlaying 完成硬切
-	 * （普通群系音乐 replace=false 不会主动打断当前曲，需在此显式停）。
+	 * 挑战 BGM 只在玩家处于挑战范围内时播放：bar 对当前客户端不可见（离开范围被移除、或终态音乐标志翻平）的
+	 * 那一刻单次 stopPlaying 完成硬切（普通群系音乐 replace=false 不会主动打断当前曲，需在此显式停）。
+	 * 挑战自身进度由服务端持续推进，不因玩家进出范围而重置。
 	 */
 	@Inject(method = "getSituationalMusic", at = @At("HEAD"), cancellable = true)
 	private void pvz$challengeMusic(CallbackInfoReturnable<Music> cir) {
@@ -34,7 +34,7 @@ public class MinecraftMixin {
 		if (music != null) {
 			pvz$hadChallengeMusic = true;
 			cir.setReturnValue(music);
-		} else if (pvz$hadChallengeMusic && hasEndedChallengeBar(events)) {
+		} else if (pvz$hadChallengeMusic) {
 			pvz$hadChallengeMusic = false;
 			minecraft.getMusicManager().stopPlaying();
 		}
@@ -51,19 +51,6 @@ public class MinecraftMixin {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * 挑战 bar 仍在但音乐标志已翻平，说明该挑战已进入终态（胜利/失败）；
-	 * 玩家离开范围时 bar 直接被移除、不在此列，因此进出范围不会误停音乐。
-	 */
-	private static boolean hasEndedChallengeBar(Map<UUID, LerpingBossEvent> events) {
-		for (LerpingBossEvent event : events.values()) {
-			if (! event.shouldPlayBossMusic() && resolveChallengeMusic(event) != null) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Nullable

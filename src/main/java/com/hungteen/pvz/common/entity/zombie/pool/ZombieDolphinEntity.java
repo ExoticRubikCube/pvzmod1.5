@@ -76,11 +76,6 @@ public class ZombieDolphinEntity extends PVZZombieEntity {
 	}
 	
 	@Override
-	protected float getWaterSlowDown() {
-		return 0.89f;
-	}
-	
-	@Override
 	public double getPassengersRidingOffset() {
 		return -0.5f;
 	}

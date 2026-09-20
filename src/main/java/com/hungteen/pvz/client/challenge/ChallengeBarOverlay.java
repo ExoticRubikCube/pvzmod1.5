@@ -8,8 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.BossEvent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,9 +32,10 @@ public class ChallengeBarOverlay {
 
 	@SubscribeEvent
 	public static void onCustomizeBossBar(CustomizeGuiOverlayEvent.BossEventProgress event) {
-		final Integer challengeId = getChallengeId(event.getBossEvent());
-		if(challengeId != null && ClientChallengeBarManager.get(challengeId) != null) {
-			SNAPSHOTS.add(new BarSnapshot(challengeId, event.getX(), event.getY(), event.getBossEvent()));
+		//血条名称参数经网络 JSON 序列化后会丢失 Number 类型，只能按 bar UUID 匹配（服务端 ChallengeBarPacket 已同步该 UUID）
+		final BarData data = ClientChallengeBarManager.getByBarUuid(event.getBossEvent().getId());
+		if(data != null) {
+			SNAPSHOTS.add(new BarSnapshot(data, event.getX(), event.getY(), event.getBossEvent()));
 			event.setCanceled(true);
 		}
 	}
@@ -57,10 +56,7 @@ public class ChallengeBarOverlay {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, ICONS);
 		for(BarSnapshot snapshot : SNAPSHOTS) {
-			final BarData data = ClientChallengeBarManager.get(snapshot.challengeId);
-			if(data != null) {
-				renderBar(stack, width, snapshot, data);
-			}
+			renderBar(stack, width, snapshot, snapshot.data);
 		}
 		RenderSystem.disableBlend();
 		SNAPSHOTS.clear();
@@ -84,21 +80,10 @@ public class ChallengeBarOverlay {
 		Minecraft.getInstance().font.drawShadow(stack, name, (float) (screenWidth / 2 - nameWidth / 2), (float) (y - 9), 0xFFFFFF);
 	}
 
-	private static Integer getChallengeId(BossEvent event) {
-		final ComponentContents contents = event.getName().getContents();
-		if(contents instanceof TranslatableContents translatable && translatable.getKey().startsWith("challenge.pvz.")) {
-			final Object[] args = translatable.getArgs();
-			if(args.length > 0 && args[args.length - 1] instanceof Number number) {
-				return number.intValue();
-			}
-		}
-		return null;
-	}
-
 	private static void blit(PoseStack stack, int x, int y, int u, int v, int width, int height) {
 		GuiComponent.blit(stack, x, y, 0, (float) u, (float) v, width, height, TEX_SIZE, TEX_SIZE);
 	}
 
-	private record BarSnapshot(int challengeId, int x, int y, BossEvent event) {
+	private record BarSnapshot(BarData data, int x, int y, BossEvent event) {
 	}
 }

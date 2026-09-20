@@ -19,10 +19,6 @@ public class ClientChallengeBarManager {
 		BARS.put(challengeId, new BarData(challengeBarId, resource, totalWaves, currentWave, (BitSet) bigWaves.clone()));
 	}
 
-	public static BarData get(int challengeId) {
-		return BARS.get(challengeId);
-	}
-
 	@Nullable
 	public static BarData getByBarUuid(UUID challengeBarId) {
 		for (BarData data : BARS.values()) {

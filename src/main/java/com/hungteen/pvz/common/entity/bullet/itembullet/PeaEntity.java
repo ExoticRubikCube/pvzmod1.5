@@ -8,6 +8,7 @@ import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity;
 import com.hungteen.pvz.common.entity.plant.flame.TorchWoodEntity.FlameTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
+import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import java.util.List;
 
 public class PeaEntity extends AbstractShootBulletEntity implements ItemSupplier {
 
@@ -99,7 +102,26 @@ this.discard();
 			}
 		} else if (this.getPeaState() == State.FIRE || this.getPeaState() == State.BLUE_FIRE) {
 			target.hurt(PVZEntityDamageSource.flamePea(this, this.getThrower()), damage);
+			this.doSplashDamage(target);
 		}
+	}
+
+	/**
+	 * 火球 1×1 溅射：总溅射池 = 直接伤害×35%(火球40对应溅射14)，按溅射目标数分摊，溅射不去冰。
+	 * {@link #dealPeaDamage(Entity)}
+	 */
+	private void doSplashDamage(Entity directTarget) {
+		if(this.level.isClientSide()) {
+			return;
+		}
+		final float splashPool = this.getAttackDamage() * 0.35F;
+		List<LivingEntity> splashTargets = this.level.getEntitiesOfClass(LivingEntity.class,
+				EntityUtil.getEntityAABB(this, 1F, 1F), target -> target != directTarget && this.shouldHit(target));
+		if(splashTargets.isEmpty()) {
+			return;
+		}
+		final float each = splashPool / splashTargets.size();
+		splashTargets.forEach(target -> target.hurt(PVZEntityDamageSource.flamePea(this, this.getThrower()), each));
 	}
 	
 	@Override
@@ -114,9 +136,9 @@ this.discard();
 		}
 		// fire 
 		if (this.getPeaState() == State.FIRE) {
-			damage *= 1.5F;
+			damage *= 2F;//PvZ1 火球 = 豌豆 ×2 = 40
 		} else if (this.getPeaState() == State.BLUE_FIRE) {
-			damage *= 1.75F;
+			damage *= 3F;//PvZ2 施肥蓝火 = 豌豆 ×3
 		}
 		return damage;
 	}

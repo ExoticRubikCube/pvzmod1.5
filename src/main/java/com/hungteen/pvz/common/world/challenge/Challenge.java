@@ -571,6 +571,8 @@ public class Challenge implements IChallenge {
 			if(! oldPlayers.contains(p)) {
 				this.challengeBar.addPlayer(p);
 				this.syncBarTo(p);
+				//挑战期间禁止僵尸入侵叠加：清空入侵波次与任务，入侵进度条随之消失
+				PlayerUtil.getInvasion(p).disable();
 			}
 		});
 

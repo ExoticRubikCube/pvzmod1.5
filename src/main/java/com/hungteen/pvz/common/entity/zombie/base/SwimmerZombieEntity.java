@@ -45,10 +45,5 @@ public abstract class SwimmerZombieEntity extends PVZZombieEntity{
 		}
 		return new EntityDimensions(0.7f, 1.9f, false);
 	}
-	
-	@Override
-	protected float getWaterSlowDown() {
-		return 0.94f;
-	}
-	
+
 }

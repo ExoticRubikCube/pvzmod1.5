@@ -1,11 +1,8 @@
 package com.hungteen.pvz.common.entity.zombie.base;
 
-import com.hungteen.pvz.api.enums.BodyType;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.network.PVZPacketHandler;
-import com.hungteen.pvz.common.network.toclient.SpawnBodyPartPacket;
 import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSource;
@@ -50,8 +47,7 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 	
 	@Override
 	protected void onFallBody(DamageSource source) {
-		PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
-				new SpawnBodyPartPacket(BodyType.HEAD.ordinal(), this.getId(), source.getSourcePosition()));
+		//粒子由客户端渲染器本地检测生成，不发包
 	}
 
 	@Override

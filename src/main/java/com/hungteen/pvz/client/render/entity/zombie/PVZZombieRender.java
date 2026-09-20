@@ -7,13 +7,18 @@ import com.hungteen.pvz.client.particle.ModelPartParticle;
 import com.hungteen.pvz.client.render.entity.PVZCreatureRender;
 import com.hungteen.pvz.client.render.layer.fullskin.*;
 import com.hungteen.pvz.common.entity.zombie.PVZZombieEntity;
+import com.hungteen.pvz.common.entity.zombie.base.EdgarRobotEntity;
 import com.hungteen.pvz.common.potion.EffectRegister;
+import com.hungteen.pvz.utils.ConfigUtil;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Optional;
 
 public abstract class PVZZombieRender <T extends PVZZombieEntity> extends PVZCreatureRender<T> {
@@ -37,6 +42,31 @@ public abstract class PVZZombieRender <T extends PVZZombieEntity> extends PVZCre
 		this.addLayer(new SunLightLayer<>(this));
 		this.addLayer(new SunLayer<>(this));
 	}
+
+	@Override
+	public void render(T zombie, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+		//htpvz2式本地检测：掉手/掉头/死亡由渲染器直接生成粒子，不发包；一次性标志防重复
+		if (ConfigUtil.enableZombieDropParts() && ! ClientProxy.MC.isPaused()) {
+			if (zombie.renderHand && ! zombie.hasHand() && zombie.canLostHand()) {
+				zombie.renderHand = false;
+				this.createBodyParticle(zombie, BodyType.HAND, Optional.empty());
+			}
+			if (zombie.renderHead && ! zombie.hasHead() && zombie.canLostHead()) {
+				zombie.renderHead = false;
+				this.createBodyParticle(zombie, BodyType.HEAD, Optional.empty());
+			}
+			if (zombie.renderBody && zombie.isDeadOrDying()) {
+				zombie.renderBody = false;
+				if (zombie instanceof EdgarRobotEntity) {//僵王六部位一次抛落
+					List.of(BodyType.HEAD, BodyType.BODY, BodyType.LEFT_HAND, BodyType.RIGHT_HAND, BodyType.LEFT_LEG, BodyType.RIGHT_LEG)
+							.forEach(type -> this.createBodyParticle(zombie, type, Optional.empty()));
+				} else {
+					this.createBodyParticle(zombie, BodyType.BODY, Optional.empty());
+				}
+			}
+		}
+		super.render(zombie, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+	}
 	
 	@Override
 	public Vec3 getTranslateVec(T entity) {
@@ -53,7 +83,7 @@ public abstract class PVZZombieRender <T extends PVZZombieEntity> extends PVZCre
 
 	/**
 	 * spawn a body part particle when the body part is dropped.
-	 * called by {@link com.hungteen.pvz.common.network.toclient.SpawnBodyPartPacket}.
+	 * called by renderer local detect(htpvz2式不发包)。
 	 */
 	public void createBodyParticle(T zombie, BodyType type, Optional<Vec3> damageSourcePos) {
 		ModelPartParticle body = new ModelPartParticle((ClientLevel) zombie.level, zombie.position());

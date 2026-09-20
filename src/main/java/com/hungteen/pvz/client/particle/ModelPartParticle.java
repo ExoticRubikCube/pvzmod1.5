@@ -33,6 +33,8 @@ import java.util.Optional;
 public class ModelPartParticle extends Particle implements IBodyEntity {
 
     public static final int MAX_EXIST_TICK = 60;
+    private static final int MIN_LANDED_LIFE = 40;//落地后至少存活的摇晃时长
+    private static final int MAX_LAND_WAIT = 100;//未落地(卡墙/半空)时最多额外等待时长
     private int max_exist_tick = MAX_EXIST_TICK;
     public ModelPart model;
     public ResourceLocation texture;
@@ -188,7 +190,8 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
     public void tick() {
         super.tick();
         this.rotation = this.rotation.add(aRotation);
-        if (this.age >= this.max_exist_tick) {
+        //落地后按max_exist_tick消失；未落地(抛落/卡半空)最多再等MAX_LAND_WAIT，避免尸体未贴地就消失或永久滞留
+        if ((this.age >= this.max_exist_tick && this.stoppedByCollision) || this.age >= this.max_exist_tick + MAX_LAND_WAIT) {
             this.remove();
         }
     }
@@ -196,12 +199,17 @@ public class ModelPartParticle extends Particle implements IBodyEntity {
     @Override
     public void move(double x, double y, double z) {
         super.move(x, y, z);
-        //ref ZombieDropBodyEntity：落地点急剧减速(×0.3)并停住姿态，避免尸体贴着地面滑走。
-        if (this.onGround) {
+        //ref htpvz2(AT f_107205_ stoppedByCollision)：落地/撞墙/顶天花板均置true，任一碰撞即停旋转，避免尸体贴墙仍旋转。
+        if (this.stoppedByCollision) {
             this.aRotation = Vec3.ZERO;
             this.xd *= 0.3F;
             this.yd *= 0.3F;
             this.zd *= 0.3F;
+            //落地才开始摇晃计时：若抛落动画耗时长导致临近消失才落地，延长保证贴地后仍有MIN_LANDED_LIFE摇晃时间
+            if (this.max_exist_tick - this.age < MIN_LANDED_LIFE) {
+                this.max_exist_tick = this.age + MIN_LANDED_LIFE;
+                this.lifetime = this.max_exist_tick;
+            }
         }
     }
 

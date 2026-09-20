@@ -1,7 +1,6 @@
 package com.hungteen.pvz.common.entity.zombie;
 
 import com.hungteen.pvz.PVZConfig;
-import com.hungteen.pvz.api.enums.BodyType;
 import com.hungteen.pvz.api.enums.MetalTypes;
 import com.hungteen.pvz.api.enums.PVZGroupType;
 import com.hungteen.pvz.api.paz.IZombieEntity;
@@ -29,8 +28,6 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
-import com.hungteen.pvz.common.network.PVZPacketHandler;
-import com.hungteen.pvz.common.network.toclient.SpawnBodyPartPacket;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.AlgorithmUtil;
 import com.hungteen.pvz.utils.ConfigUtil;
@@ -92,6 +89,10 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	public boolean canCollideWithZombie = true;
 	protected boolean canLostHand = true;
 	protected boolean canLostHead = true;
+	//htpvz2式客户端一次性掉件标志，渲染器本地检测到后置false，防止每帧重复生成粒子
+	public boolean renderHand = true;
+	public boolean renderHead = true;
+	public boolean renderBody = true;
 	protected int climbUpTick = 0;
 	protected int maxClimbUpTick = 5;
 
@@ -218,8 +219,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	public void zombieTick() {
 		//挑战减速由僵尸自管理，与冻住/爬升等状态无关，始终按是否在范围内摘/挂
 		this.updateChallengeSlow();
-		//垂死：断头后每秒6点匀速掉血(原版60/s ÷10)，归零才真正死亡
-		if(! this.level.isClientSide() && ! this.hasHead() && this.getHealth() > 0) {
+		//垂死：断头后每秒6点匀速掉血(原版60/s ÷10)，归零才真正死亡；isDeadOrDying 防归零后每tick重复die刷尸体粒子
+		if(! this.level.isClientSide() && ! this.isDeadOrDying() && ! this.hasHead() && this.getHealth() > 0) {
 			final float hp = this.getHealth() - 0.3F;
 			if(hp <= 0) {
 				this.die(DamageSource.GENERIC);
@@ -292,26 +293,21 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * trigger at {@link #hurt(DamageSource, float)}
 	 */
 	private void onLostHand(DamageSource source) {
-		this.lostHand(true);
-				PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
-								new SpawnBodyPartPacket(BodyType.HAND.ordinal(), this.getId(), null));
+		this.lostHand(true);//粒子由客户端渲染器本地检测生成，不发包
 	}
 	
 	/**
 	 * trigger at {@link #hurt(DamageSource, float)}
 	 */
 	private void onLostHead(DamageSource source) {
-		this.lostHead(true);
-		PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
-				new SpawnBodyPartPacket(BodyType.HEAD.ordinal(), this.getId(), source.getSourcePosition()));
+		this.lostHead(true);//粒子由客户端渲染器本地检测生成，不发包
 	}
 	
 	/**
 	 * trigger at {@link #die(DamageSource)}
 	 */
 	protected void onFallBody(DamageSource source) {
-		PVZPacketHandler.sendToNearByClient(level, this.position(), 32D,
-				new SpawnBodyPartPacket(BodyType.BODY.ordinal(), this.getId(), null));
+		//粒子由客户端渲染器本地检测生成，不发包
 	}
 	
 	/**
@@ -728,7 +724,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 
 	@Override
 	protected float getWaterSlowDown() {
-		return 0.85f;
+		return 1.0f;//原作僵尸水中速度与陆地一致，不减速
 	}
 	
 	@Override

@@ -11,9 +11,4 @@ public abstract class AbstractZombotanyEntity extends PVZZombieEntity {
 		super(type, worldIn);
 	}
 
-	@Override
-	protected float getWaterSlowDown() {
-		return 0.91f;
-	}
-	
 }
