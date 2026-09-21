@@ -50,6 +50,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -787,6 +788,18 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 	@Override
 	public IPAZType getPAZType() {
 		return this.getPlantType();
+	}
+
+	/**
+	 * creative mode middle-click pick on plant entity gives its summon card.
+	 * {@link net.minecraft.client.Minecraft#pickBlock()}
+	 */
+	@Nullable
+	@Override
+	public ItemStack getPickResult() {
+		return this.getPlantType().getSummonCard()
+				.map(Item::getDefaultInstance)
+				.orElse(null);
 	}
 
 	/**

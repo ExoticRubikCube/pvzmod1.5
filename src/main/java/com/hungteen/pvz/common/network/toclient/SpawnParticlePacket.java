@@ -38,7 +38,6 @@ public class SpawnParticlePacket {
 	}
 
 	public static class Handler {
-		@SuppressWarnings("resource")
 		public static void onMessage(SpawnParticlePacket message, Supplier<NetworkEvent.Context> ctx) {
 		    ctx.get().enqueueWork(()->{
 		    	int id = message.type;
