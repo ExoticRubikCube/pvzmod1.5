@@ -10,6 +10,10 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -28,15 +32,23 @@ import java.util.Optional;
 
 public class BalloonZombieEntity extends DefenceZombieEntity {
 
+	private static final EntityDataAccessor<Boolean> HAS_BALLOON = SynchedEntityData.defineId(BalloonZombieEntity.class, EntityDataSerializers.BOOLEAN);
+
 	private final MoveControl FlyController = new FlyingMoveControl(this, 360, true);
 	private final MoveControl GroundController = new MoveControl(this);
 	private PathNavigation FlyNavigator;
 	private PathNavigation GroundNavigator;
-	
+
 	public BalloonZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
-	
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(HAS_BALLOON, true);
+	}
+
 	@Override
 	public void resetParts() {
 		removeParts();
@@ -73,6 +85,7 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 	@Override
 	public void onOuterDefenceBroken() {
 		super.onOuterDefenceBroken();
+		this.setBalloon(false);
 		if(! level.isClientSide()) {
 			EntityUtil.playSound(this, SoundRegister.BALLOON_POP.get());
 		}
@@ -92,6 +105,15 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 		this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(ZombieUtil.FLY_FAST);
 		this.setNoGravity(this.hasBalloon());
 		this.moveControl = this.hasBalloon() ? FlyController : GroundController;
+	}
+
+	@Override
+	public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
+		super.onSyncedDataUpdated(data);
+		if(data.equals(HAS_BALLOON)) {
+			this.setNoGravity(this.hasBalloon());
+			this.moveControl = this.hasBalloon() ? FlyController : GroundController;
+		}
 	}
 	
 	@Override
@@ -139,6 +161,12 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 	public boolean canBeButtered() {
 		return ! this.hasBalloon();
 	}
+
+	@Override
+	protected boolean canBleedWhenDying() {
+		//PvZ1气球僵尸飞行中不会触发垂死（气球为外防具，本体不受伤），气球破后坠落才按普通僵尸临界机制流血
+		return ! this.hasBalloon();
+	}
 	
 	@Override
 	public boolean canBeFrozen() {
@@ -169,10 +197,28 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 		return Optional.ofNullable(SoundRegister.BALLOON_INFLATE.get());
 	}
 	
-	public boolean hasBalloon() {
-		return this.getOuterDefenceLife() > 0;
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if(compound.contains("has_balloon")) {
+			this.setBalloon(compound.getBoolean("has_balloon"));
+		}
 	}
-	
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("has_balloon", this.hasBalloon());
+	}
+
+	public boolean hasBalloon() {
+		return this.entityData.get(HAS_BALLOON);
+	}
+
+	public void setBalloon(boolean has) {
+		this.entityData.set(HAS_BALLOON, has);
+	}
+
     @Override
     public ZombieType getZombieType() {
 	    return PoolZombies.BALLOON_ZOMBIE;

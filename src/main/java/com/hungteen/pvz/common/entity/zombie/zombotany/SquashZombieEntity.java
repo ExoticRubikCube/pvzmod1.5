@@ -16,7 +16,6 @@ public class SquashZombieEntity extends AbstractZombotanyEntity {
 
 	public SquashZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
-		this.canLostHead = false;
 	}
 
 	@Override

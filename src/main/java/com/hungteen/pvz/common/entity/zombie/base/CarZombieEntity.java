@@ -5,7 +5,6 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +28,7 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 			    this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), (this.getRandom().nextFloat() - 0.5) / 10, 0.05, (this.getRandom().nextFloat() - 0.5) / 10);
 			}
 		}
+		
 	}
 	
 	@Override
@@ -43,12 +43,6 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 		}
 		super.onRemoveWhenDeath();
 	}
-	
-	
-	@Override
-	protected void onFallBody(DamageSource source) {
-		//粒子由客户端渲染器本地检测生成，不发包
-	}
 
 	@Override
 	public float getKBValue() {
@@ -56,7 +50,7 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 	}
 
 	public boolean isCarShaking() {
-		return this.getHealth() <= this.getMaxHealth() / 4;
+		return this.getHealth() <= 20;
 	}
 	
 	@Override

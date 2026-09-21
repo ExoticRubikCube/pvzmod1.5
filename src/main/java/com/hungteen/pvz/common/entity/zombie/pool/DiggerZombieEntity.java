@@ -15,6 +15,10 @@ import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.ICanAttract;
 import com.hungteen.pvz.utils.interfaces.IHasMetal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,10 +30,32 @@ import net.minecraft.world.level.Level;
 public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 
 	public static final int MAX_OUT_TIME = 30;
-	
+
+	private static final EntityDataAccessor<Boolean> HAS_PICKAXE = SynchedEntityData.defineId(DiggerZombieEntity.class, EntityDataSerializers.BOOLEAN);
+
 	public DiggerZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 		this.increaseMetal();
+	}
+	
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(HAS_PICKAXE, true);
+	}
+	
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if(compound.contains("has_pickaxe")) {
+			this.setPickaxe(compound.getBoolean("has_pickaxe"));
+		}
+	}
+	
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("has_pickaxe", this.hasPickaxe());
 	}
 	
 	@Override
@@ -122,22 +148,34 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
 	@Override
 	public void onInnerDefenceBroken() {
 		super.onInnerDefenceBroken();
-		if(! this.level.isClientSide()) {
-			this.updateAttributes(false);
-		}
+		//矿工帽被击破只掉帽子，稿子仍在、继续挖地，不出土
 	}
 	
 	@Override
 	public void decreaseMetal() {
-		this.setInnerDefenceLife(0);
+		//磁铁吸走稿子才出土：清稿子状态并减速，帽子(inner)不受影响
+		this.setPickaxe(false);
 		this.updateAttributes(false);
 	}
 	
 	@Override
 	public void increaseMetal() {
-		this.setInnerDefenceLife(this.getInnerLife());
+		this.setPickaxe(true);
+		this.updateAttributes(true);
 	}
-	
+
+	public boolean hasPickaxe() {
+		return this.entityData.get(HAS_PICKAXE);
+	}
+
+	public void setPickaxe(boolean has) {
+		this.entityData.set(HAS_PICKAXE, has);
+	}
+
+	public boolean hasMinerHat() {
+		return this.getInnerDefenceLife() > 0;
+	}
+  
 	@Override
 	public MetalTypes getMetalType() {
 		return MetalTypes.IRON_PICKAXE;
@@ -158,14 +196,6 @@ public class DiggerZombieEntity extends PVZZombieEntity implements IHasMetal {
     public ZombieType getZombieType() {
 	    return PoolZombies.DIGGER_ZOMBIE;
     }
-	
-	public boolean hasPickaxe() {
-		return this.getInnerDefenceLife() > 0;
-	}
 
-	public boolean hasMinerHat() {
-		final double percent = this.getInnerDefenceLife() / this.getInnerLife();
-		return percent > 0;
-	}
 	
 }

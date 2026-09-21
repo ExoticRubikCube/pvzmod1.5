@@ -89,18 +89,15 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	public boolean canCollideWithZombie = true;
 	protected boolean canLostHand = true;
 	protected boolean canLostHead = true;
-	//htpvz2式客户端一次性掉件标志，渲染器本地检测到后置false，防止每帧重复生成粒子
 	public boolean renderHand = true;
 	public boolean renderHead = true;
 	public boolean renderBody = true;
 	protected int climbUpTick = 0;
 	protected int maxClimbUpTick = 5;
 
-	//挑战减速偏置：MULTIPLY_TOTAL -0.25 等效速度倍率0.75；固定UUID供自身摘除
 	public static final UUID CHALLENGE_SLOW_MODIFIER_UUID = UUID.nameUUIDFromBytes("pvz_challenge_zombie_slow".getBytes(StandardCharsets.UTF_8));
-	public static final float CHALLENGE_ZOMBIE_DAMAGE_FACTOR = 0.5F;
 	private static final AttributeModifier CHALLENGE_SLOW_MODIFIER = new AttributeModifier(
-			CHALLENGE_SLOW_MODIFIER_UUID, "Challenge speed debuff", -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL);
+			CHALLENGE_SLOW_MODIFIER_UUID, "Challenge speed debuff", -0.2D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
 	public PVZZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
@@ -217,16 +214,9 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link #aiStep()}
 	 */
 	public void zombieTick() {
-		//挑战减速由僵尸自管理，与冻住/爬升等状态无关，始终按是否在范围内摘/挂
 		this.updateChallengeSlow();
-		//垂死：断头后每秒6点匀速掉血(原版60/s ÷10)，归零才真正死亡；isDeadOrDying 防归零后每tick重复die刷尸体粒子
-		if(! this.level.isClientSide() && ! this.isDeadOrDying() && ! this.hasHead() && this.getHealth() > 0) {
-			final float hp = this.getHealth() - 0.3F;
-			if(hp <= 0) {
-				this.die(DamageSource.GENERIC);
-			} else {
-				this.setHealth(hp);
-			}
+		if (!this.hasHead() && this.canBleedWhenDying() && !this.isDeadOrDying()) {
+			this.setHealth(this.getHealth() - 0.3F);
 		}
 		if (this.tickCount <= 2) {
 			this.refreshDimensions();
@@ -238,12 +228,13 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 				ParticleUtil.spawnSplash(this.level, this.position(), 1);
 			}
 		}
+
 		//natural spawn zombie will heal in lava.
-		if(! this.level.isClientSide()){
-			if(ConfigUtil.immuineToDamage() && this.isInLava() && this.getExistTick() % 10 == 0 && ! this.getOwnerUUID().isPresent()){
-				this.heal(20);
-			}
-		}
+		//if(!this.level.isClientSide()){
+		//	if(ConfigUtil.immuineToDamage() && this.getExistTick() % 10 == 0 && ! this.getOwnerUUID().isPresent()){
+		//		this.heal(20);
+		//	}
+		//}
 	}
 
 	/**
@@ -302,14 +293,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	private void onLostHead(DamageSource source) {
 		this.lostHead(true);//粒子由客户端渲染器本地检测生成，不发包
 	}
-	
-	/**
-	 * trigger at {@link #die(DamageSource)}
-	 */
-	protected void onFallBody(DamageSource source) {
-		//粒子由客户端渲染器本地检测生成，不发包
-	}
-	
+
 	/**
 	 * 尸体掉落粒子是否携带防御部件(梯/门/杆/报纸/盒/侏儒)，由子类判定，原setBodyStates迁移。
 	 */
@@ -319,15 +303,15 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	
 	/**
 	 * trigger when zombie be mini state.
-	 * change max health to 60% and give speed effect and damage boost.
+	 * shrink max health and inner defence life to 60% and give speed effect and damage boost.
 	 *
      */
 	public void onZombieBeMini() {
 		this.setMiniZombie(true);
 		final float healthDec = 0.6F;
 		EntityUtil.setLivingMaxHealthAndHeal(this, this.getMaxHealth() * healthDec);
+		this.setInnerDefenceLife(this.getInnerLife() * healthDec);
 		this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1000000, 0, false, false));
-		this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 1000000, 0, false, false));
 	}
 
 	@Override
@@ -344,7 +328,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * use for attack goals.
 	 */
 	public int getAttackCD() {
-		if (!this.canNormalUpdate()) {//can not update means stop attack.
+		if (!this.hasHead() || !this.canNormalUpdate()) {//can not update means stop attack.
 			return 10000000;
 		}
 		//chill halves eating speed in pvz, see EntityUtil#isEntityCold.
@@ -354,16 +338,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
 		return this.isMiniZombie() ? EntityDimensions.scalable(0.3F, 0.6F) : EntityDimensions.scalable(0.8f, 1.98f);
-	}
-
-	@Override
-	public void die(DamageSource source) {
-		super.die(source);
-		if(ConfigUtil.enableZombieDropParts()) {
-			if(! this.level.isClientSide()) {
-			    this.onFallBody(source);
-			}
-		}
 	}
 
 	@Override
@@ -411,9 +385,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link #onRemoveWhenDeath()}
 	 */
 	protected void spawnSpecialDrops() {
-		getDropSpecialList().getRandomItem(this.random).ifPresent(type -> {
-			this.doZombieDrop(type);
-		});
+		getDropSpecialList().getRandomItem(this.random).ifPresent(this::doZombieDrop);
 	}
 
 	/**
@@ -422,29 +394,29 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 */
 	private void doZombieDrop(DropType type) {
 		switch(type) {
-		case COPPER:{
-			CoinEntity.spawnCoin(level, blockPosition(), CoinType.COPPER);
-			break;
-		}
-		case SILVER:{
-			CoinEntity.spawnCoin(level, blockPosition(), CoinType.SILVER);
-			break;
-		}
-		case GOLD:{
-			CoinEntity.spawnCoin(level, blockPosition(), CoinType.GOLD);
-			break;
-		}
-		case JEWEL:{
-			EntityUtil.createEntityAndSpawn(level, EntityRegister.JEWEL.get(), blockPosition());
-			break;
-		}
-		case CHOCOLATE:{
-			ItemEntity chocolate = new ItemEntity(level, getX(), getY(), getZ(),
-					new ItemStack(ItemRegister.CHOCOLATE.get()));
-			EntityUtil.playSound(chocolate, SoundRegister.JEWEL_DROP.get());
-			level.addFreshEntity(chocolate);
-			break;
-		}
+			case COPPER: {
+				CoinEntity.spawnCoin(level, blockPosition(), CoinType.COPPER);
+				break;
+			}
+			case SILVER: {
+				CoinEntity.spawnCoin(level, blockPosition(), CoinType.SILVER);
+				break;
+			}
+			case GOLD: {
+				CoinEntity.spawnCoin(level, blockPosition(), CoinType.GOLD);
+				break;
+			}
+			case JEWEL: {
+				EntityUtil.createEntityAndSpawn(level, EntityRegister.JEWEL.get(), blockPosition());
+				break;
+			}
+			case CHOCOLATE: {
+				ItemEntity chocolate = new ItemEntity(level, getX(), getY(), getZ(),
+						new ItemStack(ItemRegister.CHOCOLATE.get()));
+				EntityUtil.playSound(chocolate, SoundRegister.JEWEL_DROP.get());
+				level.addFreshEntity(chocolate);
+				break;
+			}
 		}
 	}
 
@@ -462,7 +434,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 */
 	@Override
 	public boolean canBeTargetBy(LivingEntity living) {
-		if(! this.hasHead() && (living instanceof PlantCloserEntity || living instanceof SquashEntity || living instanceof ChomperEntity)) {
+		if(!this.hasHead() && (living instanceof PlantCloserEntity || living instanceof SquashEntity || living instanceof ChomperEntity)) {
 			return false;
 		}
 		return super.canBeTargetBy(living);
@@ -485,10 +457,9 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if(! level.isClientSide()) {
-			//处于活跃挑战范围内，玩家(含其箭矢等投射物)对该僵尸伤害减半
+		if(!level.isClientSide()) {
 			if(source.getEntity() instanceof Player && this.isInChallengeRange()) {
-				amount *= CHALLENGE_ZOMBIE_DAMAGE_FACTOR;
+				amount *= 0.5F;
 			}
 			boolean flag = super.hurt(source, amount);
 			if(ConfigUtil.enableZombieDropParts()) {
@@ -506,20 +477,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 		return false;
 	}
 
-	protected void dealDamageEffectToZombie(PVZEntityDamageSource source) {
-		if (source.isDefended()) {
-			return;
-		}
-		for (MobEffectInstance effect : source.getEffects()) {
-			EntityUtil.addPotionEffect(this, effect);
-		}
-	}
-
 	@Override
 	public boolean doHurtTarget(Entity entityIn) {
-		if(! this.hasHead()) {//垂死状态失去伤害能力
-			return false;
-		}
 		entityIn.invulnerableTime = 0;
 		this.setAnimTime(PERFORM_ATTACK_CD);
 		// add
@@ -537,8 +496,8 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 
 		boolean flag = entityIn.hurt(getZombieAttackDamageSource(), getModifyAttackDamage(entityIn, f));
 		if (flag) {
-			if (f1 > 0.0F && entityIn instanceof LivingEntity) {
-				((LivingEntity) entityIn).knockback(f1 * 0.5F,
+			if (f1 > 0.0F && entityIn instanceof LivingEntity livingEntity) {
+				livingEntity.knockback(f1 * 0.5F,
                         Mth.sin(this.getYRot() * ((float) Math.PI / 180F)),
                         -Mth.cos(this.getYRot() * ((float) Math.PI / 180F)));
 				this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
@@ -654,8 +613,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 					d1 = d1 * d3;
 					d0 = d0 * 0.05000000074505806D;
 					d1 = d1 * 0.05000000074505806D;
-					d0 = d0;
-					d1 = d1;
 					if (!this.isVehicle()) {
 						this.push(-d0, 0.0D, -d1);
 					}
@@ -678,21 +635,20 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 			int i = this.level.getGameRules().getInt(GameRules.RULE_MAX_ENTITY_CRAMMING);
 			if (i > 0 && list.size() > i - 1 && this.random.nextInt(4) == 0) {
 				int j = 0;
-				for (int k = 0; k < list.size(); ++k) {
-					if (!list.get(k).isPassenger()) {
-						++j;
-					}
-				}
+                for (LivingEntity livingEntity : list) {
+                    if (!livingEntity.isPassenger()) {
+                        ++j;
+                    }
+                }
 				if (j > i - 1) {
 					this.hurt(DamageSource.CRAMMING, 6.0F);
 				}
 			}
-			for (int l = 0; l < list.size(); ++ l) {
-				final LivingEntity target = list.get(l);
-				if (! this.is(target) && this.shouldCollideWithEntity(target)) {// can collide with
-					this.doPush(target);
-				}
-			}
+            for (final LivingEntity target : list) {
+                if (!this.is(target) && this.shouldCollideWithEntity(target)) {// can collide with
+                    this.doPush(target);
+                }
+            }
 		}
 	}
 	
@@ -1023,6 +979,13 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	
     public void lostHead(boolean is) {
 		this.setStateByFlag(is, HEAD_FLAG);
+	}
+    
+    /**
+	 * 是否在垂死状态(PHASE_ZOMBIE_DYING)流血：断头后每秒匀速掉血，默认true；飞行中气球僵尸等特殊僵尸按需覆写为false。
+	 */
+    protected boolean canBleedWhenDying() {
+		return true;
 	}
     
     private void setStateByFlag(boolean is, int flag) {

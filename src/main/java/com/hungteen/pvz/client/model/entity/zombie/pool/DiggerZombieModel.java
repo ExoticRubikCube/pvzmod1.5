@@ -10,6 +10,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import java.util.Optional;
+
 // Made with Blockbench 3.7.4
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
@@ -153,6 +155,11 @@ public DiggerZombieModel(ModelPart root) {
 	@Override
 	public ModelPart getZombieHead() {
 		return this.head;
+	}
+
+	@Override
+	public Optional<ModelPart> getHelmet() {
+		return Optional.ofNullable(this.hat);
 	}
 	
 	@Override

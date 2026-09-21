@@ -10,7 +10,6 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -103,9 +102,8 @@ public class BobsleTeamEntity extends PVZZombieEntity implements IHasMultiPart {
 			if(this.isInWaterOrBubble() || (this.isOnGround() && !EntityUtil.isOnSnow(this) && !EntityUtil.isOnIce(this))) {
 				++ this.outSnowTick;
 				if(this.outSnowTick > MAX_OUT_SNOW_TICK) {
-					this.onFallBody(DamageSource.DRY_OUT);
 					this.onRemoveWhenDeath();
-this.remove(RemovalReason.KILLED);
+					this.remove(RemovalReason.KILLED);
 				}
 			} else {
 				this.outSnowTick = 0;
@@ -118,8 +116,10 @@ this.remove(RemovalReason.KILLED);
 		if(! level.isClientSide()) {
 			for(int i = 0; i < 4; ++ i) {
 				BobsleZombieEntity zombie = EntityRegister.BOBSLE_ZOMBIE.get().create(level);
-				ZombieUtil.copySummonZombieData(this, zombie);
-				EntityUtil.onEntityRandomPosSpawn(level, zombie, this.blockPosition(), 2);
+                if (zombie != null) {
+                    ZombieUtil.copySummonZombieData(this, zombie);
+                }
+                EntityUtil.onEntityRandomPosSpawn(level, zombie, this.blockPosition(), 2);
 			}
 		}
 	}

@@ -643,7 +643,7 @@ public class EntityUtil {
      */
     public static void setLivingMaxHealthAndHeal(LivingEntity living, float maxHealth) {
         living.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth);
-        living.heal(maxHealth);
+        living.setHealth(maxHealth);
     }
 
     /**

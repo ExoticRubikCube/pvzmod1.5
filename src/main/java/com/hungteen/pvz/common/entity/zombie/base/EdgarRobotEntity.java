@@ -193,11 +193,6 @@ public abstract class EdgarRobotEntity extends AbstractBossZombieEntity {
         }
     }
 
-    @Override
-    protected void onFallBody(DamageSource source) {
-        //粒子由客户端渲染器本地检测生成(僵王六部位在渲染器特判)，不发包
-    }
-
     /**
      * Skill : Shoot ElementBall To Target
      * {@link EdgarShootBallGoal#tick()}
