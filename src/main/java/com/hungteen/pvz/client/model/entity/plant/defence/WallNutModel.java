@@ -21,7 +21,6 @@ public class WallNutModel<T extends WallNutEntity> extends PVZPlantModel<T> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "wall_nut"), "main");
 	private final ModelPart body;
 
-
 	public WallNutModel(ModelPart root) {
 		this.body = root.getChild("body");
 	}

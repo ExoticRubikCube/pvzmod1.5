@@ -18,7 +18,6 @@ public class TallNutModel extends PVZPlantModel<TallNutEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "tall_nut"), "main");
 	private final ModelPart body;
 
-
 	public TallNutModel(ModelPart root) {
 		this.body = root.getChild("body");
 	}

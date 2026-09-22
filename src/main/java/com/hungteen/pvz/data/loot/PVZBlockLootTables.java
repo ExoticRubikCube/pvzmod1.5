@@ -17,11 +17,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.LimitCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -114,11 +116,23 @@ public class PVZBlockLootTables implements Consumer<BiConsumer<ResourceLocation,
                 createCropDrops(BlockRegister.PEA_PLANT.get(), ItemRegister.PEA.get(), ItemRegister.PEA.get(), this.tmpBuilder));
         this.tmpBuilder = getAgeBuilder(BlockRegister.CORN.get(), 7);
         this.add(BlockRegister.CORN.get(), createDoubleCropDrops(BlockRegister.CORN.get(), ItemRegister.CORN.get(), ItemRegister.CORN_SEEDS.get(), this.tmpBuilder));
+        this.tmpBuilder = getAgeBuilder(BlockRegister.PEPPER.get(), 7);
+        this.add(BlockRegister.PEPPER.get(),
+                createCropDrops(BlockRegister.PEPPER.get(), ItemRegister.PEPPER.get(), ItemRegister.PEPPER.get(), this.tmpBuilder));
 
         // leaves
         this.add(BlockRegister.NUT_LEAVES.get(), (block) -> {
             return createLeavesDrops(block, BlockRegister.NUT_SAPLING.get(), ItemRegister.NUT.get(), NORMAL_LEAVES_SAPLING_CHANCES);
         });
+
+         this.add(BlockRegister.FROZEN_MELON.get(), LootTable.lootTable().withPool(LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1.0F))
+                .add(LootItem.lootTableItem(BlockRegister.FROZEN_MELON.get()).when(HAS_SILK_TOUCH)
+                        .otherwise(LootItem.lootTableItem(ItemRegister.FROZEN_MELON_SLICE.get())
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 7.0F)))
+                                .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))
+                                .apply(LimitCount.limitCount(IntRange.upperBound(9)))
+                                .apply(ApplyExplosionDecay.explosionDecay())))));
 
         // misc
         this.dropOther(BlockRegister.GOLD_TILE1.get(), Blocks.GOLD_BLOCK);

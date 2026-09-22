@@ -50,7 +50,7 @@ public interface IChallengeComponent {
 
     /**
      * isolated challenge sun each player holds when entering the challenge range.
-     * 0 means not configured, the amount then follows the player's tree level cap.
+     * 0 means not configured, the amount then scales with the player's tree level.
      */
     int getInitialSun();
 

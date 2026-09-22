@@ -837,6 +837,14 @@ public class Challenge implements IChallenge {
 		PVZFogCapability.modifyFogFeatures(this.world, this.getFogUUID(), PVZFogPacket.ModifyType.REMOVE, 0);
 		final ChallengeBarPacket removePacket = ChallengeBarPacket.remove(this.id);
 		this.getPlayers().forEach(player -> PVZPacketHandler.sendToClient(player, removePacket));
+		//曾参与但已离开范围（被 updatePlayers 移出 challengeBar）的在线玩家收不到上面的 remove 包，
+		//其客户端 BGM 会残留一直播放，此处按 heroes 补齐停曲；重复发送幂等无害
+		this.heroes.forEach(uuid -> {
+			final Player player = this.world.getPlayerByUUID(uuid);
+			if(player instanceof ServerPlayer serverPlayer && ! this.challengeBar.getPlayers().contains(serverPlayer)) {
+				PVZPacketHandler.sendToClient(serverPlayer, removePacket);
+			}
+		});
 		this.challengeBar.removeAllPlayers();
 		this.raiders.forEach(e -> e.remove(net.minecraft.world.entity.Entity.RemovalReason.KILLED));
 	}
@@ -924,9 +932,10 @@ public class Challenge implements IChallenge {
 		final SunSession session = this.sunSessions.get(player.getUUID());
 		PlayerUtil.setSunLimitOverride(player, this.challenge.getSunLimit());
 		if(session == null) {
-			//未配置initial_sun时取非挑战阳光上限的十分之一：1级500→50、100级2000→200
+			//未配置initial_sun时按智慧树等级线性映射：1级150、100级250
 			final int configuredSun = this.challenge.getInitialSun();
-			final int initialSun = configuredSun > 0 ? configuredSun : PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(player, Resources.TREE_LVL)) / 10;
+			final int treeLevel = Math.min(100, PlayerUtil.getResource(player, Resources.TREE_LVL));
+			final int initialSun = configuredSun > 0 ? configuredSun : 150 + (treeLevel - 1) * 100 / 99;
 			this.sunSessions.put(player.getUUID(), new SunSession(PlayerUtil.getResource(player, Resources.SUN_NUM), initialSun));
 			PlayerUtil.setResource(player, Resources.SUN_NUM, initialSun);
 		} else {

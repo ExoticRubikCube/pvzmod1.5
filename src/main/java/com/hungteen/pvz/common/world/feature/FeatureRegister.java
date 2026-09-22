@@ -12,9 +12,6 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -49,8 +46,6 @@ public class FeatureRegister {
 	public static Holder<PlacedFeature> ORE_ORIGIN_PF;
 	public static Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_AMETHYST_CF;
 	public static Holder<PlacedFeature> ORE_AMETHYST_PF;
-	public static Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> PLANTERN_CF;
-	public static Holder<PlacedFeature> PLANTERN_PF;
 
 	private static boolean initialized = false;
 
@@ -87,11 +82,5 @@ public class FeatureRegister {
 				List.of(CountPlacement.of(15),
 						InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128)),
 						BiomeFilter.biome()));
-		PLANTERN_CF = FeatureUtils.register("pvz:plantern", Feature.FLOWER,
-				new RandomPatchConfiguration(1, 1, 1, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-						new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegister.PLANTERN.get())))));
-
-		PLANTERN_PF = PlacementUtils.register("pvz:plantern", PLANTERN_CF,
-				List.of(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 	}
 }

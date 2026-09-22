@@ -66,6 +66,7 @@ public class BlockRegister {
 	public static final RegistryObject<Block> TOXIC_SHROOM = BLOCKS.register("toxic_shroom", () -> new ToxicShroomBlock(Block.Properties.copy(Blocks.SWEET_BERRY_BUSH)));
 	public static final RegistryObject<Block> CABBAGE = BLOCKS.register("cabbage", () -> new CabbageBlock(Block.Properties.copy(Blocks.WHEAT)));
 	public static final RegistryObject<Block> CORN = BLOCKS.register("corn", () -> new CornBlock(Block.Properties.copy(Blocks.WHEAT)));
+	public static final RegistryObject<Block> PEPPER = BLOCKS.register("pepper", () -> new PepperBlock(Block.Properties.copy(Blocks.WHEAT)));
 	
 	//plants
 	public static final RegistryObject<Block> NUT_LEAVES = BLOCKS.register("nut_leaves", () -> new PVZLeavesBlock(Block.Properties.copy(Blocks.OAK_LEAVES), 30, 60));

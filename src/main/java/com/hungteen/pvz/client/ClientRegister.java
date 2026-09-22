@@ -130,8 +130,6 @@ public class ClientRegister {
         event.register(ParticleRegister.RED_BOMB.get(), CherryBombParticle.Provider::new);
         event.register(ParticleRegister.YELLOW_BOMB.get(), PotatoMineParticle.Provider::new);
         event.register(ParticleRegister.DIRT_BURST_OUT.get(), DirtBurstOutParticle.Provider::new);
-        event.register(ParticleRegister.YELLOW_FLAME.get(), YellowFlameParticle.Provider::new);
-        event.register(ParticleRegister.BLUE_FLAME.get(), BlueFlameParticle.Provider::new);
         event.register(ParticleRegister.SLEEP.get(), SleepParticle.Provider::new);
         event.register(ParticleRegister.SPORE.get(), SporeParticle.Provider::new);
         event.register(ParticleRegister.FUME.get(), FumeParticle.Provider::new);
@@ -169,6 +167,7 @@ public class ClientRegister {
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.CABBAGE.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.BUTTER_BLOCK.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.CORN.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegister.PEPPER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.ESSENCE_ALTAR.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.STEEL_LADDER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.SILVER_SUNFLOWER_TROPHY.get(), RenderType.cutout());

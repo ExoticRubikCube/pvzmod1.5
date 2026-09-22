@@ -24,7 +24,7 @@ public class PumpkinZombieEntity extends AbstractZombotanyEntity {
 	@Override
 	public boolean doHurtTarget(Entity entityIn) {
 		if(!level.isClientSide()) {
-			this.heal(20);
+			this.heal(2);
 		}
 		return super.doHurtTarget(entityIn);
 	}

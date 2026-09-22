@@ -39,29 +39,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
-
+//TODO 明暗会受到玩家视角的俯仰影响，待处理(立正效果最好)
 @Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, value = Dist.CLIENT)
-public class PVZScreenshotCommand {
+public class PAZShotCommand {
 
-	private static final Path OUT_DIR = Path.of("mods", "pvz_screenshot");
+	private static final Path OUT_DIR = Path.of("mods", "pazshot");
 	private static final int IMAGE_SIZE = 32;
 	/** 实际渲染内容最大维占画布的比例 */
 	private static final float FILL_FRACTION = 0.75F;
 	private static final float VIEW_ANGLE = 45F;
 	private static final float PITCH_ANGLE = (float) Math.toDegrees(Math.asin(Math.tan(Math.toRadians(30))));
-	/** 小于此高度的实体保持贴地不放大（方块单位） */
-	private static final float MIN_GRID_HEIGHT = 1.25F;
-
 	private static final List<Entity> queue = new ArrayList<>();
 	private static int index = -1;
 	private static TextureTarget offscreen;
 	private static CommandSourceStack source;
 
-
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("pvzscreenshot");
-		builder.then(Commands.literal("all_plants").executes(ctx -> startExport(ctx.getSource(), allPlants())));
-		builder.then(Commands.literal("all_zombie").executes(ctx -> startExport(ctx.getSource(), allZombies())));
+		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("pazshot");
+		builder.then(Commands.literal("plants").executes(ctx -> startExport(ctx.getSource(), allPlants())));
+		builder.then(Commands.literal("zombies").executes(ctx -> startExport(ctx.getSource(), allZombies())));
 		builder.then(Commands.literal("all")
 				.then(Commands.argument("modid", StringArgumentType.word())
 						.executes(ctx -> startExport(ctx.getSource(), allOfNamespace(StringArgumentType.getString(ctx, "modid"))))));
@@ -106,18 +102,18 @@ public class PVZScreenshotCommand {
 		}
 		EntityType<?> matched = ForgeRegistries.ENTITY_TYPES.getValue(register);
 		if (matched == null) {
-			PVZMod.LOGGER.error("plant screenshot: 未找到实体类型 {}", register);
+			PVZMod.LOGGER.error("PAZShot : can not find entity type {} !", register);
 			return List.of();
 		}
 		try {
 			final Entity entity = matched.create(mc.level);
 			if (entity == null) {
-				PVZMod.LOGGER.error("plant screenshot: create {} 返回空实体", register);
+				PVZMod.LOGGER.error("PAZShot : create {} returns null entity !", register);
 				return List.of();
 			}
 			return List.of(entity);
 		} catch (RuntimeException e) {
-			PVZMod.LOGGER.error("plant screenshot: create {} 失败", register, e);
+			PVZMod.LOGGER.error("PAZShot : create {} failed !", register, e);
 		}
 		return List.of();
 	}
@@ -145,10 +141,10 @@ public class PVZScreenshotCommand {
 			index = -1;
 			queue.clear();
 			queue.addAll(entities);
-			sendFeedback("command.pvz.screenshot.start", true, queue.size());
+			sendFeedback("command.paz.shot.start", true, queue.size());
 			result = entities.size();
 		} else {
-			sendFeedback("command.pvz.screenshot.empty", false);
+			sendFeedback("command.paz.shot.empty", false);
 			result = 0;
 		}
 		return result;
@@ -162,7 +158,7 @@ public class PVZScreenshotCommand {
 				offscreen = new TextureTarget(IMAGE_SIZE, IMAGE_SIZE, true, false);
 			}
 			if (++index >= queue.size()) {
-				sendFeedback("command.pvz.screenshot.finish", true);
+				sendFeedback("command.paz.shot.finish", true);
 				queue.clear();
 			} else {
 				renderEntity(queue.get(index), offscreen);
@@ -190,13 +186,10 @@ public class PVZScreenshotCommand {
 			}
 			float spanX = bounds.maxX() - bounds.minX();
 			float spanY = bounds.maxY() - bounds.minY();
-			float meshViewSide = Math.max(spanX, spanY) / FILL_FRACTION;
-			float boxMaxSpan = Math.max(current.getBbWidth(), current.getBbHeight());
-			float boxViewSide = boxMaxSpan / FILL_FRACTION;
-			float viewSide = Math.max(meshViewSide, Math.max(boxViewSide, MIN_GRID_HEIGHT));
+			float viewSide = Math.max(spanX, spanY) / FILL_FRACTION;
 			float half = viewSide / 2;
 			float cx = (bounds.minX() + bounds.maxX()) / 2;
-			float bottom = bounds.minY() - viewSide * 0.10F;
+			float bottom = bounds.minY() - viewSide * 0.85F;
 
 			target.setClearColor(0F, 0F, 0F, 0F);
 			target.clear(false);

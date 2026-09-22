@@ -34,7 +34,7 @@ public class ImpEntity extends PVZZombieEntity {
 			else if(now == 1) this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1));
 			else if(now == 2) this.addEffect(new MobEffectInstance(MobEffects.JUMP, 600, 1));
 			else if(now == 3) this.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 600, 1));
-			else if(now == 3) this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 1));
+			else if(now == 4) this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 1));
 		}
 		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 	}

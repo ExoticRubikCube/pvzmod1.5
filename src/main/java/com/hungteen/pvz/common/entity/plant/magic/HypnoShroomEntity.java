@@ -37,8 +37,8 @@ public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {
         if (!this.getSensing().hasLineOfSight(target)) {
             return false;
         }
-        if (target instanceof Mob) {
-            return !(((Mob) target).getTarget() instanceof HypnoShroomEntity);
+        if (target instanceof Mob mob) {
+            return !(mob.getTarget() instanceof HypnoShroomEntity);
         }
         return false;
     }
@@ -61,14 +61,13 @@ public class HypnoShroomEntity extends PVZPlantEntity implements ICanAttract {
         if (!level.isClientSide() && this.canNormalUpdate()) {
             if (source instanceof PVZEntityDamageSource && ((PVZEntityDamageSource) source).isEatDamage()) {
                 if (this.isPlantInSuperMode()) {
-                    if (source.getEntity() != null) {
-                        source.getEntity().remove(RemovalReason.DISCARDED);
-                        GargantuarEntity gar = EntityRegister.GARGANTUAR.get().create(level);
-                        EntityUtil.onEntitySpawn(level, gar, source.getEntity().blockPosition());
-                        gar.setZombieType(PVZZombieEntity.VariantType.NORMAL);
-                        gar.setHealth(gar.getMaxHealth() * this.getSummonHealth());
-                        gar.setCharmed(!this.isCharmed());
-                    }
+                    source.getEntity();
+                    source.getEntity().remove(RemovalReason.DISCARDED);
+                    GargantuarEntity gar = EntityRegister.GARGANTUAR.get().create(level);
+                    EntityUtil.onEntitySpawn(level, gar, source.getEntity().blockPosition());
+                    gar.setZombieType(PVZZombieEntity.VariantType.NORMAL);
+                    gar.setHealth(gar.getMaxHealth() * this.getSummonHealth());
+                    gar.setCharmed(!this.isCharmed());
                 } else {
                     if (source.getEntity() instanceof ICanBeCharmed) {
 						((ICanBeCharmed) source.getEntity()).onCharmedBy(this);

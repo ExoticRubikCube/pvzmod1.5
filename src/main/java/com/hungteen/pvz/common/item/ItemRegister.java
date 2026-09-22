@@ -61,7 +61,7 @@ public class ItemRegister {
     public static final RegistryObject<Item> SNOW_PEA = ITEMS.register("snow_pea", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
     public static final RegistryObject<Item> FLAME_PEA = ITEMS.register("flame_pea", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
     public static final RegistryObject<Item> SMALL_MEAT = ITEMS.register("small_meat", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
-    public static final RegistryObject<Item> PEPPER = ITEMS.register("pepper", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> PEPPER = ITEMS.register("pepper", () -> new BlockItem(BlockRegister.PEPPER.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
     public static final RegistryObject<Item> FROZEN_MELON_SLICE = ITEMS.register("frozen_melon_slice", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
     public static final RegistryObject<Item> STARFRUIT = ITEMS.register("starfruit", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
     public static final RegistryObject<Item> ANGEL_STARFRUIT = ITEMS.register("angel_starfruit", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));

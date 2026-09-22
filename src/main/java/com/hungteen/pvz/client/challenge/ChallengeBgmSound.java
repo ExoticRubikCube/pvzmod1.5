@@ -39,6 +39,12 @@ public class ChallengeBgmSound extends AbstractTickableSoundInstance {
 	}
 
 	@Override
+	public boolean canStartSilent() {
+		//初始音量 0 用于淡入，须声明允许静音启动，否则 SoundEngine.play 直接跳过本实例
+		return true;
+	}
+
+	@Override
 	public boolean canPlaySound() {
 		return ChallengeBgmManager.isActive(this);
 	}

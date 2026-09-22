@@ -8,10 +8,7 @@ import com.hungteen.pvz.common.entity.plant.defence.PumpkinEntity;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
 // Made with Blockbench 4.1.3
@@ -19,8 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 // Paste this class into your mod and generate all required imports
 public class PumpkinModel extends PVZPlantModel<PumpkinEntity> {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(PVZMod.MOD_ID, "pumpkin"), "main");
-
 	private final ModelPart total;
+
+	public static CubeListBuilder cubes = CubeListBuilder.create().texOffs(0, 0).addBox(-8.5F, -10.0F, -8.5F, 17.0F, 10.0F, 17.0F, new CubeDeformation(0.0F))
+			.texOffs(50, 0).addBox(-8.5F, -5.999F, -9.0F, 17.0F, 6.0F, 1.0F, new CubeDeformation(0.0F))
+			.texOffs(0, 34).addBox(-8.0F, -9.5F, -8.0F, 16.0F, 9.0F, 16.0F, new CubeDeformation(0.0F));
+
+	public static PartPose pose = PartPose.offset(0.0F, 24.0F, 0.0F);
 
 	public PumpkinModel(ModelPart root) {
 		this.total = root.getChild("total");
@@ -29,15 +31,11 @@ public class PumpkinModel extends PVZPlantModel<PumpkinEntity> {
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
-	
-		PartDefinition total = partdefinition.addOrReplaceChild("total",
-			CubeListBuilder.create()
-				.texOffs(0, 0).addBox(-8.5F, -10.0F, -8.5F, 17.0F, 10.0F, 17.0F)
-				.texOffs(2, 27).addBox(8.0F, -6.0F, -8.5F, 1.0F, 6.0F, 17.0F),
-			PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+		PartDefinition total = partdefinition.addOrReplaceChild("total", cubes, pose);
+
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
-
 
 	@Override
 	public void setupAnim(PumpkinEntity p_225597_1_, float p_225597_2_, float p_225597_3_, float p_225597_4_, float p_225597_5_, float p_225597_6_) {

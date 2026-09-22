@@ -2,16 +2,13 @@ package com.hungteen.pvz.common.entity.plant.flame;
 
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
-import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.utils.EntityUtil;
-import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -43,12 +40,6 @@ public class TorchWoodEntity extends PVZPlantEntity {
 		super.normalPlantTick();
 		if(!level.isClientSide()) {
 			this.heatPeas();
-		}else {
-			ParticleOptions particle = ParticleRegister.YELLOW_FLAME.get();
-			if(this.getFlameType() == FlameTypes.BLUE) {
-				particle = ParticleRegister.BLUE_FLAME.get();
-			}
-			WorldUtil.spawnRandomSpeedParticle(this.level, particle, this.position().add(0, 1.2F, 0), 0.1F);
 		}
 	}
 	

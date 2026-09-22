@@ -2,7 +2,6 @@ package com.hungteen.pvz.common.register;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
-import com.hungteen.pvz.common.world.feature.FeatureRegister;
 import com.hungteen.pvz.common.world.feature.PVZFeatures;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
@@ -31,6 +31,7 @@ public class PVZBiomes {
 
 	public static Holder<PlacedFeature> NUT_TREE_PF = null;
 	public static Holder<PlacedFeature> CHOMPER_PATCH_PF = null;
+	public static Holder<PlacedFeature> PLANTERN_PF = null;
 	private static boolean features;
 
 	private static void checkFeatures() {
@@ -46,6 +47,11 @@ public class PVZBiomes {
 				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome(), RarityFilter.onAverageOnceEvery(48));
 		NUT_TREE_PF = PlacementUtils.register("pvz:nut_tree", PVZFeatures.NUT_TREE,
 				VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.05F, 1), BlockRegister.NUT_SAPLING.get()));
+		Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> plantern = FeatureUtils.register("pvz:plantern", Feature.FLOWER,
+				new RandomPatchConfiguration(1, 1, 1, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+						new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegister.PLANTERN.get())))));
+		PLANTERN_PF = PlacementUtils.register("pvz:plantern", plantern,
+				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
 		features = true;
 	}
 
@@ -69,7 +75,7 @@ public class PVZBiomes {
 		BiomeDefaultFeatures.addDefaultExtraVegetation(biomeGenBuilder);
 		BiomeDefaultFeatures.addSurfaceFreezing(biomeGenBuilder);
 		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, CHOMPER_PATCH_PF);
-		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FeatureRegister.PLANTERN_PF);
+		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PLANTERN_PF);
 		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NUT_TREE_PF);
 
 		return new Biome.BiomeBuilder()

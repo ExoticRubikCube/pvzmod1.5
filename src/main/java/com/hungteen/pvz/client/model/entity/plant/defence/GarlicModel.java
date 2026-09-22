@@ -24,7 +24,6 @@ public class GarlicModel extends PVZPlantModel<GarlicEntity> {
 	private final ModelPart cube_r5;
 	private final ModelPart cube_r6;
 
-
 	public GarlicModel(ModelPart root) {
 		this.total = root.getChild("total");
 		this.body = this.total.getChild("body");

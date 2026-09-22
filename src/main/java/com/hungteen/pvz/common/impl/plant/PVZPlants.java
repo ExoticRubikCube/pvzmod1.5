@@ -295,7 +295,7 @@ public final class PVZPlants extends PlantType {
 			.entityType(() -> EntityRegister.TORCH_WOOD.get())
 			.summonCard(() -> ItemRegister.TORCH_WOOD_CARD.get())
 			.enjoyCard(() -> ItemRegister.TORCH_WOOD_ENJOY_CARD.get())
-			.plantModel(() -> () -> new TorchWoodModel(TorchWoodModel.createBodyLayer().bakeRoot())).scale(1F)
+			.plantModel(() -> () -> new TorchWoodModel(TorchWoodModel.createBodyLayer().bakeRoot())).scale(0.95F)
 			.cdSkill(Arrays.asList(SkillTypes.WOOD_MORE_LIFE, SkillTypes.HEAT_PEA_RANGE, SkillTypes.LESS_SUN))
 	);
 	

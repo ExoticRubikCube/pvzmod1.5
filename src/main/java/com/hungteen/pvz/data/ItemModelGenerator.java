@@ -47,7 +47,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         ));
 
         // single add
-        Arrays.asList(ItemRegister.PEA.get(), ItemRegister.SPORE.get(), ItemRegister.CABBAGE_SEEDS.get(), ItemRegister.CORN_SEEDS.get()
+        Arrays.asList(ItemRegister.PEA.get(), ItemRegister.SPORE.get(), ItemRegister.CABBAGE_SEEDS.get(), ItemRegister.CORN_SEEDS.get(), ItemRegister.PEPPER.get()
         ).forEach(i -> {
             genNormalModel(i);
             this.addedItems.add(i);
