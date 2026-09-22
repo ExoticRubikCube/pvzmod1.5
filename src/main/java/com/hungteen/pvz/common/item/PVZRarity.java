@@ -22,15 +22,25 @@ public class PVZRarity{
     public static final Rarity BLACK = Rarity.create("black", ChatFormatting.DARK_GRAY);
 
     public static Rarity getRarityByRank(IRankType rankType){
-        return (rankType == RankTypes.GRAY) ? GRAY : 
-        	(rankType == RankTypes.WHITE) ? WHITE : 
-        		(rankType == RankTypes.GREEN) ? GREEN : 
-        			(rankType == RankTypes.BLUE) ? BLUE : 
-        				(rankType == RankTypes.PURPLE) ? PURPLE : 
-        					(rankType == RankTypes.GOLD) ? GOLD : 
-        						(rankType == RankTypes.RED) ? RED : 
-        							(rankType == RankTypes.BLACK) ? BLACK : 
-        								Rarity.COMMON;
+        Rarity rarity = Rarity.COMMON;
+        if (rankType == RankTypes.GRAY) {
+            rarity = GRAY;
+        } else if (rankType == RankTypes.WHITE) {
+            rarity = WHITE;
+        } else if (rankType == RankTypes.GREEN) {
+            rarity = GREEN;
+        } else if (rankType == RankTypes.BLUE) {
+            rarity = BLUE;
+        } else if (rankType == RankTypes.PURPLE) {
+            rarity = PURPLE;
+        } else if (rankType == RankTypes.GOLD) {
+            rarity = GOLD;
+        } else if (rankType == RankTypes.RED) {
+            rarity = RED;
+        } else if (rankType == RankTypes.BLACK) {
+            rarity = BLACK;
+        }
+        return rarity;
     }
 
 }

@@ -191,8 +191,6 @@ public class TwinSunFlowerModel extends PVZPlantModel<TwinSunFlowerEntity> {
 		final int T = 60;
 		final int time = entity.getExistTick() % 60;
 		final float degree = 5F;
-		//this.left_flower.zRot = AnimationUtil.getUpDown(time, T, degree);
-		//this.right_flower.zRot = AnimationUtil.getUpDown(time, T, - degree);
 	}
 
 	@Override

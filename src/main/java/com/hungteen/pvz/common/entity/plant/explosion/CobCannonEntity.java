@@ -46,6 +46,8 @@ public class CobCannonEntity extends PVZPlantEntity {
 
 	protected static final EntityDataAccessor<Integer> CORN_NUM = SynchedEntityData.defineId(CobCannonEntity.class,
 			EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> RELOAD_TICK = SynchedEntityData.defineId(CobCannonEntity.class,
+			EntityDataSerializers.INT);
 	protected Optional<LivingEntity> lockTarget = Optional.empty();
 	protected Optional<BlockPos> lockPos = Optional.empty();
 	protected int cornCnt = 0;
@@ -64,6 +66,7 @@ public class CobCannonEntity extends PVZPlantEntity {
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		this.entityData.define(CORN_NUM, 1);
+		this.entityData.define(RELOAD_TICK, 0);
 	}
 
 	protected void initAttributes() {
@@ -84,19 +87,19 @@ public class CobCannonEntity extends PVZPlantEntity {
 			++ this.preTick;
 			if (this.getAttackTime() == 0 && this.preTick >= this.getPreCD()) {
 				this.preTick = 0;
-				this.setCornNum(Math.min(2, this.getCornNum() + 1));
+				this.setCornNum(Math.min(1, this.getCornNum() + 1));
 			}
-			if(this.getCornNum() >= 2 && !this.isPlayerRiding() && this.getTarget() != null) {
+			if(this.getCornNum() >= 1 && !this.isPlayerRiding() && this.getTarget() != null) {
 				this.setAttackTime(this.getAnimCD());
 				this.setCornNum(this.getCornNum() - 1);
 			}
 			if (this.getAttackTime() > 0) {
 				this.setAttackTime(this.getAttackTime() - 1);
-				this.getPassengers().forEach(Entity::stopRiding);
 				if (this.getAttackTime() == this.getAnimCD() / 2) {
 					this.startAttack();
 				}
 			}
+			this.entityData.set(RELOAD_TICK, this.preTick);
 		}
 	}
 	
@@ -303,7 +306,20 @@ public class CobCannonEntity extends PVZPlantEntity {
 
 	@Override
 	public double getPassengersRidingOffset() {
-		return 0.8D;
+		return 0;
+	}
+
+	/**
+	 * 骑乘者位于炮台身后,跟随玩家朝向反向偏移 0.5 格站立,对齐 htpvz2 机枪射手骑乘方式。
+	 */
+	@Override
+	public void positionRider(Entity entity) {
+		entity.setPos(this.getPosition(0).add(this.getViewVector(0).normalize().scale(-0.5)));
+	}
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
 	}
 
 	@Override
@@ -404,6 +420,13 @@ public class CobCannonEntity extends PVZPlantEntity {
 
 	public void setCornNum(int num) {
 		this.entityData.set(CORN_NUM, num);
+	}
+
+	/**
+	 * 当前装弹进度(0 ~ {@link #getPreCD()}),供客户端装弹冷却条显示。
+	 */
+	public int getReloadTick() {
+		return this.entityData.get(RELOAD_TICK);
 	}
 	
 	@Override

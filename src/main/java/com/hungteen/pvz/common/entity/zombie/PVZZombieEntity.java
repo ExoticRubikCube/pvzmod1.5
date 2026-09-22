@@ -67,6 +67,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -98,6 +99,9 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	public static final UUID CHALLENGE_SLOW_MODIFIER_UUID = UUID.nameUUIDFromBytes("pvz_challenge_zombie_slow".getBytes(StandardCharsets.UTF_8));
 	private static final AttributeModifier CHALLENGE_SLOW_MODIFIER = new AttributeModifier(
 			CHALLENGE_SLOW_MODIFIER_UUID, "Challenge speed debuff", -0.2D, AttributeModifier.Operation.MULTIPLY_TOTAL);
+	public static final UUID CHALLENGE_SWIM_SLOW_MODIFIER_UUID = UUID.nameUUIDFromBytes("pvz_challenge_zombie_swim_slow".getBytes(StandardCharsets.UTF_8));
+	private static final AttributeModifier CHALLENGE_SWIM_SLOW_MODIFIER = new AttributeModifier(
+			CHALLENGE_SWIM_SLOW_MODIFIER_UUID, "Challenge swim speed debuff", -0.2D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
 	public PVZZombieEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
@@ -147,7 +151,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	@Override
 	protected PathNavigation createNavigation(Level world) {
 		return super.createNavigation(world);
-//		return new ZombiePathNavigation(this, world);
 	}
 	
 	/* handle spawn */
@@ -192,6 +195,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getEatDamage());
 		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(this.getFollowRange());
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(this.getWalkSpeed());
+		this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(this.getSwimSpeed());
 		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getKBValue());
 	}
 
@@ -230,11 +234,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 		}
 
 		//natural spawn zombie will heal in lava.
-		//if(!this.level.isClientSide()){
-		//	if(ConfigUtil.immuineToDamage() && this.getExistTick() % 10 == 0 && ! this.getOwnerUUID().isPresent()){
-		//		this.heal(20);
-		//	}
-		//}
 	}
 
 	/**
@@ -261,14 +260,27 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 * {@link #zombieTick()}
 	 */
 	protected void updateChallengeSlow() {
-		final AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
-		if(! this.level.isClientSide() && speed != null) {
-			if(this.isInChallengeRange()) {
-				if(speed.getModifier(CHALLENGE_SLOW_MODIFIER_UUID) == null) {
-					speed.addTransientModifier(CHALLENGE_SLOW_MODIFIER);
+		if(! this.level.isClientSide()) {
+			final boolean inRange = this.isInChallengeRange();
+			final AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			if(speed != null) {
+				if(inRange) {
+					if(speed.getModifier(CHALLENGE_SLOW_MODIFIER_UUID) == null) {
+						speed.addTransientModifier(CHALLENGE_SLOW_MODIFIER);
+					}
+				} else {
+					speed.removeModifier(CHALLENGE_SLOW_MODIFIER_UUID);
 				}
-			} else {
-				speed.removeModifier(CHALLENGE_SLOW_MODIFIER_UUID);
+			}
+			final AttributeInstance swimSpeed = this.getAttribute(ForgeMod.SWIM_SPEED.get());
+			if(swimSpeed != null) {
+				if(inRange) {
+					if(swimSpeed.getModifier(CHALLENGE_SWIM_SLOW_MODIFIER_UUID) == null) {
+						swimSpeed.addTransientModifier(CHALLENGE_SWIM_SLOW_MODIFIER);
+					}
+				} else {
+					swimSpeed.removeModifier(CHALLENGE_SWIM_SLOW_MODIFIER_UUID);
+				}
 			}
 		}
 	}
@@ -562,6 +574,10 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 		return ZombieUtil.WALK_NORMAL;
 	}
 
+	public float getSwimSpeed(){
+		return 1.75F;
+	}
+
 	public float getKBValue(){
 		return 0.92F;
 	}
@@ -679,11 +695,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	}
 
 	@Override
-	protected float getWaterSlowDown() {
-		return 1.0f;//原作僵尸水中速度与陆地一致，不减速
-	}
-	
-	@Override
 	public boolean isPushedByFluid() {
 		return false;
 	}
@@ -750,13 +761,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 			}
 		}
 	}
-	
-//	public void healZombie(float health) {
-//		final float need1 = this.getMaxHealth() - this.getHealth();
-//		this.heal(Math.min(need1, health));
-//		health -= need1;
-////		this.setDefenceLife(Math.max(this.getInnerLife(), this.getDefenceLife() + health));
-//	}
 	
 	@Override
 	public boolean isInvulnerableTo(DamageSource source) {

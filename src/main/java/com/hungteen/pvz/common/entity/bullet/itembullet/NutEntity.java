@@ -17,10 +17,6 @@ public class NutEntity extends PVZItemBulletEntity {
 		super(type, worldIn);
 	}
 	
-//	public NutEntity(Level worldIn, LivingEntity thrower) {
-//		super(EntityRegister.NUT.get(), worldIn, thrower);
-//	}
-//	
 	public void shoot(double x, double y, double z) {
 		this.setDeltaMovement(x, y, z);
 	}
@@ -55,7 +51,6 @@ this.discard();
 	}
 	
 	private void dealNutDamage(Entity target) {
-//		target.hurt(PVZDamageSource.causeNormalDamage(this, this.getThrower()), 2);
 	}
 	
 	@Override

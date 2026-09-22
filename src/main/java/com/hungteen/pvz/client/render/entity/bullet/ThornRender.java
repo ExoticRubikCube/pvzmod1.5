@@ -25,7 +25,6 @@ public class ThornRender extends PVZEntityRender<ThornEntity> {
 	@Override
 	public void render(ThornEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
 			MultiBufferSource bufferIn, int packedLightIn) {
-//		System.out.println(entityIn.rotationYaw);
 		matrixStackIn.pushPose();
 		matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) + 180.0F));
 		matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));

@@ -38,6 +38,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -93,7 +94,6 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
     public AbstractPAZEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
         this.refreshDimensions();
-//        this.setPersistenceRequired();
     }
 
     /**
@@ -133,12 +133,11 @@ public abstract class AbstractPAZEntity extends PathfinderMob implements IPAZEnt
                 .add(Attributes.ARMOR)
                 .add(Attributes.ARMOR_TOUGHNESS)
                 .add(Attributes.ATTACK_DAMAGE)
-                .add(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get())
-                .add(net.minecraftforge.common.ForgeMod.NAMETAG_DISTANCE.get())
-                .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get())
+                .add(ForgeMod.SWIM_SPEED.get())
+                .add(ForgeMod.NAMETAG_DISTANCE.get())
+                .add(ForgeMod.ENTITY_GRAVITY.get())
                 .add(PVZAttributes.INNER_DEFENCE_HP.get())
-                .add(PVZAttributes.OUTER_DEFENCE_HP.get())
-                ;
+                .add(PVZAttributes.OUTER_DEFENCE_HP.get());
     }
 
     /**

@@ -1,0 +1,253 @@
+{
+  "authors": [
+    "susen36"
+  ],
+  "tags": [
+    "overworld",
+    "fog",
+    "night"
+  ],
+  "bar_color": "green",
+  "trade_price": 100,
+  "trade_weight": 80,
+  "recommend_level": 36,
+  "waves": [
+    {
+      "pre_tick": 360,
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    },
+    {
+      "pre_tick": 200,
+      "is_big_wave": true,
+      "minimum_wait_time": 880,
+      "maximum_wait_time": 880,
+      "threat": 15,
+      "spawns": [
+        {
+          "entity_type": "pvz:flag_zombie",
+          "is_flag": true,
+          "weight": 0
+        },
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:digger_zombie",
+          "threat": 4,
+          "weight": 1000,
+          "start_from": 0.9
+        }
+      ]
+    }
+  ],
+  "messages": [],
+  "rewards": {
+    "unlocks": [
+      "pvz:split_pea"
+    ],
+    "items": [
+      {
+        "item": "pvz:split_pea_enjoy_card",
+        "amount": {
+          "count": 3
+        }
+      }
+    ]
+  },
+  "sounds": {
+    "bgm_sound": "pvz:rigormormist_complete"
+  }
+}

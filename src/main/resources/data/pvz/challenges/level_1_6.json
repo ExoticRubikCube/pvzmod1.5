@@ -1,0 +1,252 @@
+{
+  "authors": [
+    "susen36"
+  ],
+  "tags": [
+    "overworld",
+    "day"
+  ],
+  "bar_color": "green",
+  "trade_price": 50,
+  "trade_weight": 100,
+  "recommend_level": 6,
+  "waves": [
+    {
+      "pre_tick": 360,
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    },
+    {
+      "pre_tick": 200,
+      "is_big_wave": true,
+      "minimum_wait_time": 880,
+      "maximum_wait_time": 880,
+      "threat": 15,
+      "spawns": [
+        {
+          "entity_type": "pvz:flag_zombie",
+          "is_flag": true,
+          "weight": 0
+        },
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:pole_zombie",
+          "threat": 2,
+          "weight": 2000,
+          "start_from": 0.4
+        }
+      ]
+    }
+  ],
+  "messages": [],
+  "rewards": {
+    "unlocks": [
+      "pvz:potato_mine"
+    ],
+    "items": [
+      {
+        "item": "pvz:potato_mine_enjoy_card",
+        "amount": {
+          "count": 3
+        }
+      }
+    ]
+  },
+  "sounds": {
+    "bgm_sound": "pvz:grasswalk_complete"
+  }
+}

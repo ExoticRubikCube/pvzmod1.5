@@ -21,6 +21,12 @@ import net.minecraft.world.level.Level;
 public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 
 	protected final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+	//挑战 boss 战由挑战方血条接管，禁止此实体自带 Boss 条广播
+	private boolean bossBarVisible = true;
+
+	public void setBossBarVisible(boolean bossBarVisible) {
+		this.bossBarVisible = bossBarVisible;
+	}
 	protected int refreshCountCD = 30; 
 	protected int spawnImmuneCD = 100;
 	protected float kickRange = 0;
@@ -91,12 +97,16 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 	
 	public void startSeenByPlayer(ServerPlayer player) {
 		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
+		if(this.bossBarVisible) {
+			this.bossInfo.addPlayer(player);
+		}
 	}
 
 	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
+		if(this.bossBarVisible) {
+			this.bossInfo.removePlayer(player);
+		}
 	}
 	
 	@Override

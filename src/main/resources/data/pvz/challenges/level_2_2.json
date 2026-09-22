@@ -1,0 +1,551 @@
+{
+  "authors": [
+    "susen36"
+  ],
+  "tags": [
+    "overworld",
+    "night"
+  ],
+  "bar_color": "green",
+  "trade_price": 60,
+  "trade_weight": 100,
+  "recommend_level": 12,
+  "waves": [
+    {
+      "pre_tick": 360,
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "pre_tick": 200,
+      "is_big_wave": true,
+      "minimum_wait_time": 880,
+      "maximum_wait_time": 880,
+      "threat": 15,
+      "spawns": [
+        {
+          "entity_type": "pvz:flag_zombie",
+          "is_flag": true,
+          "weight": 0
+        },
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 4,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 4,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 5,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 5,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 5,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 6,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 6,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 6,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "threat": 7,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    },
+    {
+      "pre_tick": 200,
+      "is_big_wave": true,
+      "minimum_wait_time": 880,
+      "maximum_wait_time": 880,
+      "threat": 25,
+      "spawns": [
+        {
+          "entity_type": "pvz:flag_zombie",
+          "is_flag": true,
+          "weight": 0
+        },
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:buckethead_zombie",
+          "threat": 4,
+          "weight": 3000
+        },
+        {
+          "entity_type": "pvz:newspaper_zombie",
+          "threat": 2,
+          "weight": 1000
+        }
+      ]
+    }
+  ],
+  "messages": [],
+  "rewards": {
+    "unlocks": [
+      "pvz:sun_shroom"
+    ],
+    "items": [
+      {
+        "item": "pvz:sun_shroom_enjoy_card",
+        "amount": {
+          "count": 3
+        }
+      }
+    ]
+  },
+  "sounds": {
+    "bgm_sound": "pvz:moongrains_complete"
+  }
+}

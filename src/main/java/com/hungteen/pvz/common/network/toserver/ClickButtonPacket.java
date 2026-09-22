@@ -43,11 +43,6 @@ public class ClickButtonPacket {
 			final ServerPlayer player = ctx.get().getSender();
 			ctx.get().enqueueWork(() -> {
 				if (message.type == GuiHandler.PLAYER_INVENTORY) { 
-//					if(player.containerMenu instanceof PlayerInventoryContainer) {
-//						PlayerInventoryContainer inv = (PlayerInventoryContainer) player.containerMenu;
-//						inv.currentPage+=message.num;
-//						inv.onPageChange();
-//					}
 				} else if(message.type == GuiHandler.SHOP) {
 					if(player.containerMenu instanceof AbstractDaveShopContainer) {
 						((AbstractDaveShopContainer) player.containerMenu).onSell(message.num);

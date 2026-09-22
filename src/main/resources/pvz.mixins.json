@@ -5,13 +5,13 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "pvz.refmap.json",
   "mixins": [
-    "OverworldBiomeBuilderMixin"
+    "OverworldBiomeBuilderMixin",
+    "SlotMixin"
   ],
   "server": [
   ],
   "client": [
-    "client.ItemEntityRendererMixin",
-    "client.MinecraftMixin"
+    "client.ItemEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

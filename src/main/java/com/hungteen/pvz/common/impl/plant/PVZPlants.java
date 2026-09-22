@@ -54,7 +54,6 @@ public final class PVZPlants extends PlantType {
 	/*
 	 * grass day.
 	 */
-	
 	public static final IPlantType PEA_SHOOTER = new PVZPlants("pea_shooter", new PlantFeatures()
 			.cost(100).requiredLevel(1)
 			.cd(CoolDowns.SUPER_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.APPEASE)
@@ -141,7 +140,6 @@ public final class PVZPlants extends PlantType {
 	/*
 	 * grass night.
 	 */
-	
 	public static final IPlantType PUFF_SHROOM = new PVZPlants("puff_shroom", new PlantFeatures().isShroomPlant()
                         .cost(0).requiredLevel(21)
 			.cd(CoolDowns.SUPER_FAST).rank(RankTypes.WHITE).essence(EssenceTypes.TOXIC)

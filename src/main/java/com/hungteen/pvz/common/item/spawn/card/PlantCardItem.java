@@ -24,10 +24,13 @@ import com.hungteen.pvz.common.impl.plant.PlantType;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
+import com.hungteen.pvz.common.world.challenge.Challenge;
+import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.ConfigUtil;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import com.hungteen.pvz.utils.others.WeightList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -63,10 +66,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -87,6 +87,10 @@ public class PlantCardItem extends SummonCardItem {
 	private static final Set<IPlantType> TOOL_TIP_TYPES = new HashSet<>(Arrays.asList(
 			PVZPlants.DOOM_SHROOM, OtherPlants.GOLD_LEAF
 	));
+	/**
+	 * 挑战绑定标记：体验卡归属挑战的 bar uuid，无此标记即无限制。
+	 */
+	public static final String CHALLENGE_TAG = "challenge_uuid";
 	public final IPlantType plantType;
 
 	public PlantCardItem(IPlantType plant, boolean isFragment) {
@@ -286,6 +290,30 @@ public class PlantCardItem extends SummonCardItem {
 		if(! costCard.isEnjoyCard && PlayerUtil.isPAZLocked(player, costCard.plantType) && ConfigUtil.needUnlockToPlant() && ! player.isCreative()) {
 			plantEntity.discard();
 			return PlacementErrors.LOCK_ERROR.getTextByArg(costCard.plantType.getRequiredLevel(), ChatFormatting.RED);
+		}
+		/* challenge bound check：挑战绑定体验卡只能在其对应挑战范围内种植 */
+		final UUID challengeUuid = getChallengeUuid(heldStack);
+		if(challengeUuid != null && ! ChallengeManager.isPlayerInChallengeRange(serverLevel, challengeUuid, player)) {
+			plantEntity.discard();
+			return PlacementErrors.CHALLENGE_ERROR.getTextByArg(0, ChatFormatting.RED);
+		}
+		/* level seed pool：关卡配置了种子池时，只允许种植池内植物 */
+		final Challenge playerChallenge = player instanceof ServerPlayer serverPlayer ? ChallengeManager.getPlayerChallenge(serverPlayer) : null;
+		if(playerChallenge != null) {
+			final WeightList<ItemStack> levelSeedPool = playerChallenge.getRaidComponent().getSeedPool();
+			if(levelSeedPool != null) {
+				boolean allowed = false;
+				for(ItemStack poolEntry : levelSeedPool.getItemList()) {
+					if(poolEntry.getItem() == heldStack.getItem()) {
+						allowed = true;
+						break;
+					}
+				}
+				if(! allowed) {
+					plantEntity.discard();
+					return PlacementErrors.SEED_POOL_ERROR.getTextByArg(0, ChatFormatting.RED);
+				}
+			}
 		}
 		/* check sun */
 		if(resourceEvent.cost > PlayerUtil.getResource(player, Resources.SUN_NUM) && ! player.isCreative()) {
@@ -717,6 +745,10 @@ public class PlantCardItem extends SummonCardItem {
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		tooltip.add(Component.translatable("tooltip.pvz.plant_card_info").withStyle(ChatFormatting.GREEN));
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		//挑战绑定体验卡：红色下划线标注，只能在该挑战内种植
+		if(getChallengeUuid(stack) != null) {
+			tooltip.add(Component.translatable("tooltip.pvz.challenge_bound").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE));
+		}
 		final PlantCardItem item = (PlantCardItem) stack.getItem();
 		if(item != null) {
 		    final IPlantType plant = item.plantType;
@@ -757,6 +789,10 @@ public class PlantCardItem extends SummonCardItem {
 	 * the cost of plant card without consider range plants count.
 	 */
 	public int getBasisSunCost(ItemStack stack) {
+		//挑战绑定体验卡种植无需阳光
+		if(getChallengeUuid(stack) != null) {
+			return 0;
+		}
 		//less sun skill boost.
 		final int level = SkillTypes.getSkillLevel(stack, SkillTypes.LESS_SUN);
 		int vary = (int) SkillTypes.LESS_SUN.getValueAt(level);
@@ -809,6 +845,37 @@ public class PlantCardItem extends SummonCardItem {
 	
 	private static ItemStack getPlantStack(ItemStack stack) {
 		return ImitaterCardItem.getDoubleStack(stack).getSecond();
+	}
+
+	/**
+	 * 体验卡绑定的挑战 bar uuid，未绑定或无此标记返回 null。
+	 */
+	@Nullable
+	public static UUID getChallengeUuid(ItemStack stack) {
+		if(stack.hasTag() && stack.getTag().contains(CHALLENGE_TAG)) {
+			try {
+				return UUID.fromString(stack.getTag().getString(CHALLENGE_TAG));
+			} catch (IllegalArgumentException e) {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	public static void setChallengeUuid(ItemStack stack, UUID uuid) {
+		stack.getOrCreateTag().putString(CHALLENGE_TAG, uuid.toString());
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+		super.inventoryTick(stack, level, entity, slotId, isSelected);
+		if(! level.isClientSide && entity instanceof Player player) {
+			final UUID challengeUuid = getChallengeUuid(stack);
+			//挑战已移除或玩家不在其范围（含待移除阶段）时体验卡自然消失，对齐 htpvz2
+			if(challengeUuid != null && ! ChallengeManager.isPlayerInChallengeRange((ServerLevel) level, challengeUuid, player)) {
+				stack.shrink(stack.getCount());
+			}
+		}
 	}
 	
 	@Override

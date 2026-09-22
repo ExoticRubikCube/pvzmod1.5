@@ -46,6 +46,7 @@ public class OverlayEvents {
                 if(cob.getCornNum() > 0) {
 					PVZOverlayHandler.renderTargetAim(stack, width, height);
 				}
+				PVZOverlayHandler.renderCobReload(stack, width, height);
 			}
 
 			/* render card slots on left side */

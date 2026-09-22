@@ -4,6 +4,9 @@ import com.hungteen.pvz.common.container.CardPackContainer;
 import com.hungteen.pvz.common.container.inventory.ItemInventory;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
+import com.hungteen.pvz.common.world.challenge.ChallengeManager;
+import com.hungteen.pvz.utils.PlayerUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -58,7 +61,11 @@ public class CardPackItem extends Item {
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		if (!worldIn.isClientSide) {
 			if (playerIn instanceof ServerPlayer && handIn == InteractionHand.MAIN_HAND) {
-				NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
+				if (ChallengeManager.isPlayerInChallenge((ServerPlayer) playerIn)) {
+					//挑战进行中禁止打开召唤卡背包
+					PlayerUtil.sendMsgTo(playerIn, Component.translatable("help.pvz.in_challenge").withStyle(ChatFormatting.RED));
+				} else {
+					NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
 					
 					@Override
 					public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
@@ -71,6 +78,7 @@ public class CardPackItem extends Item {
 						return Component.translatable("gui.pvz.card_pack.show");
 					}
 				});
+				}
 			}
 		}
 		return InteractionResultHolder.success(playerIn.getItemInHand(handIn));

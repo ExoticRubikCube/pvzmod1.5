@@ -37,29 +37,6 @@ public class SlotMachineContainer extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
-//		if (slot != null && slot.hasItem()) {
-//			ItemStack itemstack1 = slot.getItem();
-//			itemstack = itemstack1.copy();
-//			if (index < 3) {
-//				if (!this.moveItemStackTo(itemstack1, 3, this.slots.size(), true)) {
-//					return ItemStack.EMPTY;
-//				}
-//			} else if (index < 3 + 27) {
-//				if(!moveItemStackTo(itemstack1, 0, 3, false) && !moveItemStackTo(itemstack1, 3 + 27, this.slots.size(), false)) {
-//					return ItemStack.EMPTY;
-//				}
-//			} else {
-//				if (!this.moveItemStackTo(itemstack1, 0, 3 + 27, false)) {
-//					return ItemStack.EMPTY;
-//				}
-//			}
-//			if (itemstack1.isEmpty()) {
-//				slot.set(ItemStack.EMPTY);
-//			} else {
-//				slot.setChanged();
-//			}
-//		}
-//		return itemstack;
 		return ItemStack.EMPTY;
     }
 	

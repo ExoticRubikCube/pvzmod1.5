@@ -11,7 +11,10 @@ import com.hungteen.pvz.common.advancement.trigger.ChallengeTrigger;
 import com.hungteen.pvz.common.capability.CapabilityHandler;
 import com.hungteen.pvz.common.capability.level.PVZFogCapability;
 import com.hungteen.pvz.common.entity.AbstractPAZEntity;
+import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.ChallengeMoveGoal;
+import com.hungteen.pvz.common.entity.misc.drop.SeedPacketEntity;
+import com.hungteen.pvz.common.entity.zombie.base.AbstractBossZombieEntity;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.network.PVZFogPacket;
 import com.hungteen.pvz.common.network.PVZPacketHandler;
@@ -20,6 +23,7 @@ import com.hungteen.pvz.common.world.PVZFog;import com.hungteen.pvz.utils.Config
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import com.hungteen.pvz.utils.others.WeightList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -38,8 +42,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -56,6 +62,8 @@ public class Challenge implements IChallenge {
 	private static final int FOG_LIFE_TICK = 1200;
 	private static final double FOG_STRENGTH = 1.5D;
 	private static final double FOG_RANGE = 18.0D;
+	private static final String TAG_FOG = "fog";
+	private static final String TAG_SEED_RAIN = "seed_rain";
 	private static final int MAX_ZOMBIES_IN_WAVE = 50;
 	private static final int SWITCH_INTERVAL = 5;
 	//对齐pvz2D mHugeWaveCountDown：旗帜波刷怪前750cs（7.5秒）红字预警
@@ -66,8 +74,8 @@ public class Challenge implements IChallenge {
 	//对齐pvz2D StartReadySetPlant.reanim总时长1830ms（约37tick）：5+27+5
 	private static final int READY_TITLE_STAY_TICK = 27;
 	//减速与玩家伤害减半已下放至PVZZombieEntity，由僵尸实体依据isInChallengeRange()自管理
-	//复刻原版末影龙 dragonEvent：playBossMusic 随 add 包全量下发，音乐由客户端原版 MusicManager 驱动
-	private final ServerBossEvent challengeBar = (ServerBossEvent)(new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS).setPlayBossMusic(true));
+	//BGM 随 ChallengeBarPacket 下发，由客户端灾变式 looping 声音持有，关闭原版 boss 音乐机制
+	private final ServerBossEvent challengeBar = (ServerBossEvent)(new ServerBossEvent(CHALLENGE_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS).setPlayBossMusic(false));
 	private final int id;//unique specify id.
 	public final ServerLevel world;
 	public final ResourceLocation resource;//res to read raid component.
@@ -80,6 +88,10 @@ public class Challenge implements IChallenge {
 	protected int currentWave = 0;
 	protected int waveSwitchThreshold = 0;
 	protected int waveStartThreat = 0;
+	//波次超时且未召唤出任何僵尸时置位，客户端对应波次显示白旗（对齐 htpvz2 Invasion.trySwitchWave）
+	protected BitSet givenUpWaves = new BitSet();
+	//boss 挑战开局生成的 boss 实体（对齐 pvz1 5-10）
+	protected UUID bossId;
 	protected Set<Entity> raiders = new HashSet<>();
 	protected Set<UUID> heroes = new HashSet<>();
 	private boolean firstTick = false;
@@ -110,6 +122,9 @@ public class Challenge implements IChallenge {
 		this.currentWave = nbt.getInt("current_wave");
 		this.waveSwitchThreshold = nbt.getInt("wave_switch_threshold");
 		this.waveStartThreat = nbt.getInt("wave_start_threat");
+		if(nbt.contains("given_up_waves")) {
+			this.givenUpWaves = BitSet.valueOf(nbt.getLongArray("given_up_waves"));
+		}
 		this.firstTick = nbt.getBoolean("first_tick");
 		this.warningSent = nbt.getBoolean("warning_sent");
 		this.finalWaveSoundDelay = nbt.getInt("final_wave_sound_delay");
@@ -153,6 +168,7 @@ public class Challenge implements IChallenge {
 		nbt.putInt("current_wave", this.currentWave);
 		nbt.putInt("wave_switch_threshold", this.waveSwitchThreshold);
 		nbt.putInt("wave_start_threat", this.waveStartThreat);
+		nbt.putLongArray("given_up_waves", this.givenUpWaves.toLongArray());
 		nbt.putBoolean("first_tick", this.firstTick);
 		nbt.putBoolean("warning_sent", this.warningSent);
 		nbt.putInt("final_wave_sound_delay", this.finalWaveSoundDelay);
@@ -259,6 +275,11 @@ public class Challenge implements IChallenge {
 				if(this.trySwitchWave()) {
 					this.syncBar();
 				}
+				//boss 挑战：boss 死亡即胜利（对齐 pvz1 5-10 进度条打满过关）
+				if(this.isBossChallenge() && ! this.isBossAlive()) {
+					this.status = Status.VICTORY;
+					this.syncBar();
+				}
 				if(this.isVictory()) {
 					this.onVictory();
 					return ;
@@ -277,6 +298,10 @@ public class Challenge implements IChallenge {
 		}
 		if(! this.firstTick){//first tick.
 			this.firstTick = true;
+			//boss 挑战开局生成 boss，血条随后按 boss 血量驱动
+			if(this.isBossChallenge()) {
+				this.summonBoss();
+			}
 			if(this.currentWave == 0){
 				//首tick先于updatePlayers，立即为范围内玩家建立独立阳光，保证READY过场前HUD已是挑战余额
 				this.world.getPlayers(this.validPlayer()).forEach(p -> {
@@ -292,23 +317,50 @@ public class Challenge implements IChallenge {
 					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.ready").withStyle(ChatFormatting.DARK_RED));
 				}
 			});
-			if(this.hasTag("fog")) {
-				PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
-			}
 		}
-		if(this.firstTick && this.hasTag("fog") && ! this.isRemoving()) {
+		this.tickFog();
+	}
+
+	/**
+	 * 首tick按tag造雾；此后处理三叶草移除后的延迟重蔓延，以及自然到期/重载缺失的同tick补造。
+	 */
+	protected void tickFog() {
+		if(this.hasFog() && ! this.isRemoving()) {
 			PVZFog fog = PVZFogCapability.getFog(this.world, this.getFogUUID());
-			if(fog != null && fog.lifeLeft < 0) {
-				//三叶草已标记移除，Capability下一tick清理，按原作24秒后重新蔓延
-				this.fogRecoverDelay = FOG_RECOVER_TICK;
-			} else if(fog == null && this.fogRecoverDelay > 0) {
+			if(fog == null && this.fogRecoverDelay > 0) {
 				-- this.fogRecoverDelay;
 				if(this.fogRecoverDelay == 0) {
 					PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
 				}
-			} else if(fog == null) {
-				//雾自然到期或重载后缺失，与Capability移除同一tick补造，客户端视觉无断层
-				PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
+			} else {
+				//fog 存在但 lifeLeft<0：三叶草标记移除，Capability下一tick清理，按原作24秒后重新蔓延
+				//fog==null 且无延迟：首tick造雾，或自然到期/重载缺失，与Capability移除同tick补造，视觉无断层
+				if(fog != null && fog.lifeLeft < 0) {
+					this.fogRecoverDelay = FOG_RECOVER_TICK;
+				} else if(fog == null) {
+					PVZFogCapability.addOrResetFog(this.world, this.center, FOG_LIFE_TICK, FOG_STRENGTH, FOG_RANGE, this.getFogUUID());
+				}
+			}
+		}
+	}
+
+	private boolean hasFog() {
+		return this.hasTag(TAG_FOG);
+	}
+
+	public boolean hasSeedRain() {
+		return this.hasTag(TAG_SEED_RAIN) && this.challenge.getSeedPool() != null;
+	}
+
+	public void spawnSeedPacket(BlockPos pos) {
+		final WeightList<ItemStack> pool = this.challenge.getSeedPool();
+		final Optional<ItemStack> card = pool.getRandomItem(this.world.random);
+		if(card.isPresent()) {
+			final SeedPacketEntity seedPacket = EntityRegister.SEED_PACKET.get().create(this.world);
+			if(seedPacket != null) {
+				seedPacket.moveTo(pos, 0.0F, 0.0F);
+				seedPacket.setCardStack(card.get());
+				this.world.addFreshEntity(seedPacket);
 			}
 		}
 	}
@@ -461,7 +513,8 @@ public class Challenge implements IChallenge {
 		final IWaveComponent wave = this.getCurrentWaveComponent();
 		final boolean isFinalWave = this.currentWave >= this.challenge.getTotalWaveCount() - 1;
 		if(isFinalWave) {
-			if(this.raiders.isEmpty()) {
+			//boss 挑战胜利由 boss 死亡单独判定，小怪清空不结算
+			if(this.raiders.isEmpty() && ! this.isBossChallenge()) {
 				this.status = Status.VICTORY;
 				return true;
 			}
@@ -472,6 +525,10 @@ public class Challenge implements IChallenge {
 		}
 		if(this.tick < wave.getMaximumWaitTime() && this.getLivingMembersThreat(this.currentWave) > this.waveSwitchThreshold) {
 			return false;
+		}
+		//波次超时且一只僵尸都没召唤出来（如生成点全被占用），标记放弃波次，客户端显示白旗
+		if(this.waveStartThreat == 0 && this.tick > wave.getMaximumWaitTime()) {
+			this.givenUpWaves.set(this.currentWave);
 		}
 		this.currentWave += 1;
 		this.tick = 0;
@@ -490,7 +547,8 @@ public class Challenge implements IChallenge {
 		this.challengeBar.setColor(this.challenge.getBarColor());
 		this.challengeBar.setName(this.getBarName());
 		if(this.isPreparing() || this.isRunning()) {
-			this.challengeBar.setProgress(this.getWaveProgress());
+			//boss 挑战进度条显示对 boss 造成的伤害比例，其余挑战沿用波次进度
+			this.challengeBar.setProgress(this.isBossChallenge() ? this.getBossProgress() : this.getWaveProgress());
 		} else {
 			this.challengeBar.setProgress(1F);
 		}
@@ -542,7 +600,17 @@ public class Challenge implements IChallenge {
 				bigWaves.set(i);
 			}
 		}
-		PVZPacketHandler.sendToClient(player, new ChallengeBarPacket(this.id, this.challengeBar.getId(), this.resource, this.challenge.getTotalWaveCount(), this.currentWave, bigWaves));
+		//BGM 随 bar 包下发：仅准备/进行态播放，终态重发本包即驱动客户端淡出，bar 本身保留到 remove
+		final boolean bossChallenge = this.isBossChallenge();
+		final boolean bgmPlaying = this.isPreparing() || this.isRunning();
+		PVZPacketHandler.sendToClient(player, new ChallengeBarPacket(this.id, this.challengeBar.getId(), this.resource, this.challenge.getTotalWaveCount(), this.currentWave, bigWaves, this.givenUpWaves, bossChallenge, bgmPlaying));
+	}
+
+	/**
+	 * 挑战唯一标识（ServerBossEvent bar id），供挑战绑定的体验卡校验。
+	 */
+	public UUID getBarUuid() {
+		return this.challengeBar.getId();
 	}
 
 	/**
@@ -552,11 +620,18 @@ public class Challenge implements IChallenge {
 		return this::isInRange;
 	}
 
-	private boolean isInRange(Entity entity) {
+	public boolean isInRange(Entity entity) {
 		final int range = ConfigUtil.getRaidRange();
 		return Math.abs(entity.getX() - this.center.getX()) < range
 				&& Math.abs(entity.getY() - this.center.getY()) < range
 				&& Math.abs(entity.getZ() - this.center.getZ()) < range;
+	}
+
+	/**
+	 * 玩家是否曾参与本挑战（heroes 记录，含离开范围后的 ChallengeWaitTime 等待移除阶段）。
+	 */
+	public boolean isParticipant(ServerPlayer player) {
+		return this.heroes.contains(player.getUUID());
 	}
 
 	/**
@@ -580,7 +655,7 @@ public class Challenge implements IChallenge {
 		oldPlayers.forEach(p -> {
 			if(! newPlayers.contains(p)) {
 				this.challengeBar.removePlayer(p);
-				this.leaveSunExchange(p);
+				//阳光不随离开范围立即恢复，保留挑战余额至 remove() 时 releaseAllSunSessions 统一写回
 			}
 		});
 
@@ -612,6 +687,53 @@ public class Challenge implements IChallenge {
 		} else {
 			this.stopTick = 0;
 		}
+	}
+
+	/**
+	 * boss 挑战开局生成 boss 实体，并禁用其自带 Boss 条（挑战 bar 接管，对齐 pvz1 5-10）。
+	 */
+	protected void summonBoss() {
+		final ISpawnComponent boss = this.challenge.getBossSpawn();
+		final Entity entity = this.createEntity(boss);
+		if(entity == null) {
+			PVZMod.LOGGER.warn("Challenge Boss Summon Fail : {}", this.resource);
+			return;
+		}
+		this.raiders.add(entity);
+		this.bossId = entity.getUUID();
+		if(entity instanceof Mob) {
+			((Mob) entity).setPersistenceRequired();
+		}
+		if(entity instanceof AbstractBossZombieEntity) {
+			((AbstractBossZombieEntity) entity).setBossBarVisible(false);
+		}
+	}
+
+	/**
+	 * boss 挑战当前 boss 实体，未生成或已移除时为 null。
+	 */
+	public Entity getBossEntity() {
+		return this.bossId == null ? null : this.world.getEntity(this.bossId);
+	}
+
+	private boolean isBossAlive() {
+		final Entity boss = this.getBossEntity();
+		return boss instanceof LivingEntity living && living.isAlive();
+	}
+
+	/**
+	 * 对齐 pvz2D Board::UpdateProgressMeter：进度条 = 对 boss 已造成伤害比例，boss 死亡时打满。
+	 */
+	private float getBossProgress() {
+		final Entity boss = this.getBossEntity();
+		if(boss instanceof LivingEntity living && living.isAlive() && living.getMaxHealth() > 0) {
+			return Mth.clamp((float) (living.getMaxHealth() - living.getHealth()) / living.getMaxHealth(), 0.0F, 1.0F);
+		}
+		return 1.0F;
+	}
+
+	public boolean isBossChallenge() {
+		return this.getRaidComponent() != null && this.getRaidComponent().isBossChallenge();
 	}
 
 	/**
@@ -680,8 +802,8 @@ public class Challenge implements IChallenge {
 		this.tick = 0;
 		//onHeroDeath返回后PlayerEventHandler会按真实阳光处理死亡掉落，必须先恢复
 		this.releaseAllSunSessions();
-		//终态翻平音乐标志，客户端情境音乐随下一拍自动停止
-		this.challengeBar.setPlayBossMusic(false);
+		//终态重发bar包驱动BGM淡出，bar标题仍保留到remove
+		this.syncBar();
 		this.getPlayers().forEach(p -> PlayerUtil.playClientSound(p, this.challenge.getLossSound()));
 		MinecraftForge.EVENT_BUS.post(new RaidEvent.RaidLossEvent(this));
 	}
@@ -692,8 +814,8 @@ public class Challenge implements IChallenge {
 	protected void onVictory() {
 		this.tick = 0;
 		this.releaseAllSunSessions();
-		//终态翻平音乐标志，客户端情境音乐随下一拍自动停止
-		this.challengeBar.setPlayBossMusic(false);
+		//终态重发bar包驱动BGM淡出，bar标题仍保留到remove
+		this.syncBar();
 		this.getPlayers().forEach(p -> {
 			PlayerUtil.playClientSound(p, this.challenge.getWinSound());
 			ChallengeTrigger.INSTANCE.trigger(p, this.resource.toString());
@@ -802,7 +924,9 @@ public class Challenge implements IChallenge {
 		final SunSession session = this.sunSessions.get(player.getUUID());
 		PlayerUtil.setSunLimitOverride(player, this.challenge.getSunLimit());
 		if(session == null) {
-			final int initialSun = this.challenge.getInitialSun();
+			//未配置initial_sun时取非挑战阳光上限的十分之一：1级500→50、100级2000→200
+			final int configuredSun = this.challenge.getInitialSun();
+			final int initialSun = configuredSun > 0 ? configuredSun : PlayerUtil.getPlayerMaxSunNum(PlayerUtil.getResource(player, Resources.TREE_LVL)) / 10;
 			this.sunSessions.put(player.getUUID(), new SunSession(PlayerUtil.getResource(player, Resources.SUN_NUM), initialSun));
 			PlayerUtil.setResource(player, Resources.SUN_NUM, initialSun);
 		} else {
@@ -813,7 +937,7 @@ public class Challenge implements IChallenge {
 	}
 
 	/**
-	 * 离开范围：当前槽位值存回挑战余额，真实阳光快照写回槽位。
+	 * 玩家登出时：当前槽位值存回挑战余额，真实阳光快照写回槽位；离开范围不再调用，余额保留至挑战移除统一恢复。
 	 */
 	private void leaveSunExchange(ServerPlayer player) {
 		final SunSession session = this.sunSessions.get(player.getUUID());

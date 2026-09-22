@@ -26,23 +26,12 @@ public class CardPackItemHandler extends ItemStackHandler {
 				    ++ pos;
 			    }
 		     }
-//		} else {
-//			int pos = 0;
-//		    for (int i = 0; i <= this.slotNum; ++ i) {
-//			    if(i != ClientPlayerResources.emptySlot) {
-//				    setItem(pos, ClientPlayerResources.SUMMON_CARDS.get(i));
-//				    ++ pos;
-//			    }
-//		     }
 		}
 	}
 	
 	@Override
 	protected void onContentsChanged(int slot) {
 		super.onContentsChanged(slot);
-//		for(int i = 0; i < this.getContainerSize(); ++ i) {
-//			System.out.println(this.getItem(i));
-//		}
 		if(! player.level.isClientSide) {
 			PlayerUtil.setItemStack(this.player, this.getStackInSlot(slot), this.map.get(slot));
 		}

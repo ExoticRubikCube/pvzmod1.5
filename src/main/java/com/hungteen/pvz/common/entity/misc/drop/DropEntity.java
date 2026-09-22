@@ -106,7 +106,7 @@ public abstract class DropEntity extends Mob implements ICollectible {
 
 	@Override
 	public boolean isPickable() {
-		return false;
+		return true;
 	}
 	
 	@Override

@@ -43,9 +43,6 @@ public class TorchWoodModel extends PVZPlantModel<TorchWoodEntity> {
 
 	@Override
 	public void setupAnim(TorchWoodEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-//		this.yellow.visible = entity.getFlameType() == FlameTypes.YELLOW;
-//		this.blue.visible = entity.getFlameType() == FlameTypes.BLUE;
-//		this.purple.visible = entity.getFlameType() == FlameTypes.PURPLE;
 	}
 
 	@Override

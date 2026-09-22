@@ -37,7 +37,6 @@ public class ThreePeaterEntity extends PeaShooterEntity {
 	@Override
 	public int getSuperTimeLength() {
 		return SUPER_CD;
-//		return (this.isPlantInStage(1) ? 1 : this.isPlantInStage(2) ? 2 : 3) * SUPER_CD;
 	}
 	
 	@Override

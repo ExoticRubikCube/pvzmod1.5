@@ -147,7 +147,9 @@ public abstract class SummonCardItem extends Item{
 		UPGRADE_ERROR("upgrade"),
 		GROUND_ERROR("ground"),
 		OUTER_ERROR("outer"),
-		OUTER_FULL("outer_full");
+		OUTER_FULL("outer_full"),
+		CHALLENGE_ERROR("challenge"),
+		SEED_POOL_ERROR("seed_pool");
 
 		private final String info;
 

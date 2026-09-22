@@ -28,16 +28,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ChallengeManager {
@@ -78,7 +76,7 @@ public class ChallengeManager {
 			data.tick();
 		}
 	}
-	
+
 	public static boolean hasChallengeNearby(ServerLevel world, BlockPos pos) {
 		return getChallengeNearBy(world, pos).isPresent();
 	}
@@ -160,6 +158,39 @@ public class ChallengeManager {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 玩家是否处于任意未移除挑战中：参与过（heroes）或位于范围内均算，覆盖离开范围后的 ChallengeWaitTime 等待移除阶段。
+	 */
+	public static boolean isPlayerInChallenge(ServerPlayer player) {
+		return getPlayerChallenge(player) != null;
+	}
+
+	/**
+	 * 玩家当前所在范围且未移除的挑战，没有则返回null，供关卡白名单等玩法校验。
+	 */
+	@Nullable
+	public static Challenge getPlayerChallenge(ServerPlayer player) {
+		final PVZChallengeData data = PVZChallengeData.getInvasionData((ServerLevel) player.level);
+		for(Challenge raid : data.getChallenges()) {
+			if(! raid.isRemoving() && (raid.isParticipant(player) || raid.isInRange(player))) {
+				return raid;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 指定挑战（按 bar uuid）是否仍存在且玩家位于其范围内；挑战已移除或玩家不在范围均返回 false，供挑战绑定物品判定。
+	 */
+	public static boolean isPlayerInChallengeRange(ServerLevel world, UUID barUuid, Player player) {
+		for(Challenge raid : PVZChallengeData.getInvasionData(world).getChallenges()) {
+			if(! raid.isRemoving() && raid.getBarUuid().equals(barUuid) && raid.isInRange(player)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Nullable

@@ -32,7 +32,6 @@ public class EnergyEntity extends DropEntity{
 		super.tick();
 		if(this.liveTime % this.changeVTime == 0) {
 			double mult = 0.2f;
-//			System.out.println(this.getMotion().y);
 			Vec3 v = new Vec3(this.random.nextInt(1000) - 500, this.random.nextInt(1000) - 500, this.random.nextInt(1000) - 500).normalize();
 			v = v.scale(mult);
 			this.setDeltaMovement(v.x ,v.y / 5, v.z);

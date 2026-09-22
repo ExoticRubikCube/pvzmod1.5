@@ -35,7 +35,6 @@ public class CardInventoryPacket{
 		public static void onMessage(CardInventoryPacket message, Supplier<NetworkEvent.Context> ctx) {
 		    ctx.get().enqueueWork(() -> {
 				if(ctx.get().getDirection().getReceptionSide().isClient()){
-//					System.out.println("Server to Client");
 					if(message.pos >= 0 && message.pos <= Resources.SLOT_NUM.max) {
 						PlayerUtil.getOptManager(PVZMod.PROXY.getPlayer()).ifPresent(l -> l.setItemAt(ItemStack.of(message.data), message.pos, false));
 					} else {
@@ -46,7 +45,6 @@ public class CardInventoryPacket{
 						}
 					}
 				} else{
-//					System.out.println("Client to Server");
 					if(message.pos >= 0 && message.pos <= Resources.SLOT_NUM.max) {
 						PlayerUtil.getOptManager(ctx.get().getSender()).ifPresent(l -> l.setItemAt(ItemStack.of(message.data), message.pos, false));
 					} else {

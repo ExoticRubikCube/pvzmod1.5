@@ -1,7 +1,7 @@
 package com.hungteen.pvz.common.item.spawn.bullet;
 
 import com.hungteen.pvz.common.entity.bullet.itembullet.FireCrackerEntity;
-import com.hungteen.pvz.common.item.PVZToolItem;
+import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.utils.EntityUtil;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -12,13 +12,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class FireCrackerItem extends PVZToolItem {
+public class FireCrackerItem extends Item {
 
 	private static final int CD = 10;
 	
 	public FireCrackerItem() {
-		super(new Item.Properties());
-	}
+        super(new Properties().tab(PVZItemGroups.PVZ_USEFUL));
+    }
 	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {

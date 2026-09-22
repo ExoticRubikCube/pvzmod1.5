@@ -129,7 +129,7 @@ public class DolphinRiderEntity extends PVZZombieEntity{
 		ZombieDolphinEntity dolphin = EntityRegister.ZOMBIE_DOLPHIN.get().create(level);
 		ZombieUtil.copySummonZombieData(this, dolphin);
 		EntityUtil.onEntityRandomPosSpawn(level, dolphin, blockPosition(), 3);
-this.discard();
+		this.discard();
 	}
 	
 	/**
@@ -149,8 +149,8 @@ this.discard();
 	}
 
 	@Override
-	protected float getWaterSlowDown() {
-		return 2.9f;
+	public float getSwimSpeed() {
+		return 2.75F;
 	}
 	
 	@Override

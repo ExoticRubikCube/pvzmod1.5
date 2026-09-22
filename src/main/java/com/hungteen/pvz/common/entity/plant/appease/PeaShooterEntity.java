@@ -38,22 +38,12 @@ public class PeaShooterEntity extends PlantShooterEntity{
 	@Override
 	protected AbstractBulletEntity createBullet() {
 		final PeaEntity pea = new PeaEntity(this.level, this, this.getShootType(), this.getShootState());
-//		if(this.getRandom().nextFloat() < this.getKBChance()){
-//		}
 		return pea;
 	}
 
 	public float getAttackDamage() {
 		return this.getSkillValue(SkillTypes.PEA_DAMAGE);
 	}
-
-//	public float getBigChance(){
-//		return this.getSkillValue(SkillTypes.BIG_PEA);
-//	}
-//
-//	public float getKBChance(){
-//		return this.getSkillValue(SkillTypes.KB_PEA);
-//	}
 
 	/**
 	 * get how many peas need shoot per tick, when super.

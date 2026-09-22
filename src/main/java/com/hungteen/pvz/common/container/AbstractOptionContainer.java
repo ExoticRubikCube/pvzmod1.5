@@ -11,6 +11,4 @@ public abstract class AbstractOptionContainer extends PVZContainer {
 
 	public abstract boolean isCraftSlot(Slot slot);
 	
-//	public abstract boolean clearCraftSlots();
-	
 }

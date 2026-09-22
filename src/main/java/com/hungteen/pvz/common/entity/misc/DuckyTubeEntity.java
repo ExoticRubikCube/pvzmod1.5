@@ -8,8 +8,6 @@ import net.minecraftforge.fluids.FluidType;
 
 public class DuckyTubeEntity extends PVZZombieToolBase {
 
-//	private static final float UP_SPEED = 0.05f;
-
 	public DuckyTubeEntity(EntityType<? extends Mob> type, Level worldIn) {
 		super(type, worldIn);
 	}
@@ -18,23 +16,6 @@ public class DuckyTubeEntity extends PVZZombieToolBase {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 	}
-
-//	@Override
-//	protected void func_110147_ax() {
-//		super.func_110147_ax();
-//		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(ZombieUtil.LITTLE_FAST);
-//	}
-
-//	@Override
-//	public void livingTick() {
-//		super.livingTick();
-//		if(!world.isRemote) {//swim up
-//			if(this.isInWater() && this.getSubmergedHeight() > this.getEyeHeight()){
-//				Vec3d v = this.getMotion();
-//				this.setMotion(v.getX(), UP_SPEED, v.getZ());
-//			}
-//		}
-//	}
 
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {

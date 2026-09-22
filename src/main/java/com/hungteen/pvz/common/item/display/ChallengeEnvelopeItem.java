@@ -105,12 +105,22 @@ public class ChallengeEnvelopeItem extends Item {
             if(challengeComponent == null){
                 PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.no_challenge").withStyle(ChatFormatting.RED));
             } else{
-                if(ChallengeManager.hasChallengeNearby((ServerLevel) context.getLevel(), context.getClickedPos().above())){
+                final Level level = context.getLevel();
+                //tag 限制：day/night 校验昼夜，rain/thunder 校验天气
+                if(challengeComponent.hasTag("day") && ! isDayTime(level)){
+                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.day_only").withStyle(ChatFormatting.RED));
+                } else if(challengeComponent.hasTag("night") && isDayTime(level)){
+                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.night_only").withStyle(ChatFormatting.RED));
+                } else if(challengeComponent.hasTag("rain") && ! level.isRaining()){
+                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.rain_only").withStyle(ChatFormatting.RED));
+                } else if(challengeComponent.hasTag("thunder") && ! level.isThundering()){
+                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.thunder_only").withStyle(ChatFormatting.RED));
+                } else if(ChallengeManager.hasChallengeNearby((ServerLevel) level, context.getClickedPos().above())){
                     PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.full_challenge").withStyle(ChatFormatting.RED));
-                } else if(ChallengeManager.hasPlantNearby((ServerLevel) context.getLevel(), context.getClickedPos().above())){
+                } else if(ChallengeManager.hasPlantNearby((ServerLevel) level, context.getClickedPos().above())){
                     PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.plant_inside").withStyle(ChatFormatting.RED));
                 } else{
-                    if(ChallengeManager.createChallenge((ServerLevel) context.getLevel(), getChallengeType(context.getItemInHand()), context.getClickedPos().above())) {
+                    if(ChallengeManager.createChallenge((ServerLevel) level, getChallengeType(context.getItemInHand()), context.getClickedPos().above())) {
                         if (PlayerUtil.isPlayerSurvival(context.getPlayer())) {
                             context.getItemInHand().shrink(1);
                         }
@@ -121,6 +131,13 @@ public class ChallengeEnvelopeItem extends Item {
             }
         }
         return InteractionResult.CONSUME;
+    }
+
+    /**
+     * 白天为世界时间 [0, 12000)。
+     */
+    private static boolean isDayTime(Level world) {
+        return world.getDayTime() % 24000 < 12000;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.hungteen.pvz.api.raid;
 
 import com.google.gson.JsonObject;
+import com.hungteen.pvz.utils.others.WeightList;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -8,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -48,6 +50,7 @@ public interface IChallengeComponent {
 
     /**
      * isolated challenge sun each player holds when entering the challenge range.
+     * 0 means not configured, the amount then follows the player's tree level cap.
      */
     int getInitialSun();
 
@@ -81,6 +84,20 @@ public interface IChallengeComponent {
 
     List<IWaveComponent> getWaves();
 
+    /**
+     * boss entity configured by the challenge json, null for regular wave-based challenge.
+     */
+    default ISpawnComponent getBossSpawn() {
+        return null;
+    }
+
+    /**
+     * boss challenge shows boss health bar instead of wave progress, aligned with pvz1 5-10.
+     */
+    default boolean isBossChallenge() {
+        return this.getBossSpawn() != null;
+    }
+
     List<IRewardComponent> getRewards();
 
     IPlacementComponent getPlacement(int wavePos);
@@ -112,7 +129,16 @@ public interface IChallengeComponent {
         return Optional.empty();
     }
 
+
+    /**
+     * optional allowed-plant pool, null means no restriction and also disables seed rain.
+     */
+    default WeightList<ItemStack> getSeedPool() {
+        return null;
+    }
+    
     List<Pair<MutableComponent, Integer>> getMessages();
 
     void setMessages(List<Pair<MutableComponent, Integer>> list);
+
 }

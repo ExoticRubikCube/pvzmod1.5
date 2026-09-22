@@ -98,15 +98,11 @@ public class ScaredyShroomEntity extends PlantShooterEntity {
 	 * get how many spores need shoot per tick, when super.
 	 */
 	public int getSuperShootCount() {
-//		final int min = this.isPlantInStage(3) ? 2 : 1;
-//		final int max = this.isPlantInStage(1) ? 2 : 3;
-//		return MathUtil.getRandomMinMax(getRandom(), min, max);
 		return 2;
 	}
 	
 	public float getScareDistance() {
 		return 5;
-//		return MathUtil.getProgressByDif(4, -1, this.getSkills(), PlantUtil.MAX_PLANT_LEVEL, 5, 1);
 	}
 	
 	@Override

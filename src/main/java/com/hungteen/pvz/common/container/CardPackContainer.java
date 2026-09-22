@@ -21,18 +21,8 @@ public class CardPackContainer extends PVZContainer {
 		this.player = player;
 		this.stack = player.getMainHandItem();
 		this.backpack = CardPackItem.getInventory(this.stack);
-//		this.slotNum = Resources.SLOT_NUM.max;
-//		this.cardBar = new CardPackItemHandler(this.player, this.slotNum);
 		
 		/* summon card hot bar */
-//		for(int i = 0; i < this.slotNum; ++ i) {
-//			this.addSlot(new SlotItemHandler(this.cardBar, i, 19 + 18 * i, 21){
-//				@Override
-//				public boolean mayPlace(ItemStack stack) {
-//					return CardPackItem.isValidItemStack(stack);
-//				}
-//			});
-//		}
 		
 		/* back pack */
 		for(int i = 0; i < 4; ++ i) {

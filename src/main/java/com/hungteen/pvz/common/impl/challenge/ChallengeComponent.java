@@ -6,8 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.api.raid.*;
+import com.hungteen.pvz.common.datapack.ChallengeTagTypeLoader;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
+import com.hungteen.pvz.utils.others.WeightList;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,6 +20,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -27,6 +31,7 @@ import java.util.Map.Entry;
 public class ChallengeComponent implements IChallengeComponent {
 
 	public static final String NAME = "default";
+	private static final int DEFAULT_SEED_WEIGHT = 100;
 	private final List<IWaveComponent> waves = new ArrayList<>();
 	private final List<IRewardComponent> rewards = new ArrayList<>();
 	private final Set<String> tags = new HashSet<>();
@@ -34,6 +39,7 @@ public class ChallengeComponent implements IChallengeComponent {
 	private final List<String> authors = new ArrayList<>();
 	private final List<Pair<MutableComponent, Integer>> messages = new ArrayList<>();
 	private IPlacementComponent placement;
+	private ISpawnComponent bossSpawn;
 	private Component title = Component.translatable("challenge.pvz.title");
 	private Component winTitle = Component.translatable("challenge.pvz.win_title");
 	private Component lossTitle = Component.translatable("challenge.pvz.loss_title");
@@ -53,8 +59,11 @@ public class ChallengeComponent implements IChallengeComponent {
 	private boolean showRound;
 	private int recommendLevel;
 	private boolean shouldCloseToCenter;
-	private int initialSun = 50;
+	//0 表示未配置，开局余额跟随玩家智慧树等级
+	private int initialSun = 0;
 	private int sunLimit = 9999;
+	/* seed rain */
+	private WeightList<ItemStack> seedPool;
 	
 	@Override
 	public boolean readJson(JsonObject json) {
@@ -90,17 +99,17 @@ public class ChallengeComponent implements IChallengeComponent {
 			}
 		}
 		/* tags */
-		{
-			final JsonArray array = GsonHelper.getAsJsonArray(json, "tags", new JsonArray());
-			if(array != null) {
-				for(int i = 0; i < array.size(); ++ i) {
-					final JsonElement e = array.get(i);
-					if(e.isJsonPrimitive()) {
-						this.tags.add(e.getAsString());
-					}
+	{
+		final JsonArray array = GsonHelper.getAsJsonArray(json, "tags", new JsonArray());
+		if(array != null) {
+			for(int i = 0; i < array.size(); ++ i) {
+				final JsonElement e = array.get(i);
+				if(e.isJsonPrimitive()) {
+					this.tags.addAll(ChallengeTagTypeLoader.resolveToken(e.getAsString()));
 				}
 			}
 		}
+	}
 		/* dimensions */
 		{
 			final JsonArray array = GsonHelper.getAsJsonArray(json, "dimensions", new JsonArray());
@@ -131,7 +140,7 @@ public class ChallengeComponent implements IChallengeComponent {
 			this.showRound = GsonHelper.getAsBoolean(json, "show_round", true);
 			this.recommendLevel = GsonHelper.getAsInt(json, "recommend_level", 1);
 			this.shouldCloseToCenter = GsonHelper.getAsBoolean(json, "close_to_center", true);
-			this.initialSun = GsonHelper.getAsInt(json, "initial_sun", 50);
+			this.initialSun = GsonHelper.getAsInt(json, "initial_sun", 0);
 			this.sunLimit = GsonHelper.getAsInt(json, "sun_limit", 9999);
 		}
 		/* sounds */
@@ -192,6 +201,17 @@ public class ChallengeComponent implements IChallengeComponent {
 	    if(this.waves.isEmpty()) {// mandatory !
 		    throw new JsonSyntaxException("Wave list cannot be empty");
 	    }
+
+	    /* boss spawn */
+	    {
+		    final JsonObject obj = GsonHelper.getAsJsonObject(json, "boss", null);
+		    if(obj != null) {
+			    final ISpawnComponent spawn = ChallengeManager.getSpawnComponent(SpawnComponent.NAME);
+			    if(spawn.readJson(obj)) {
+				    this.bossSpawn = spawn;
+			    }
+		    }
+	    }
 	    
 	    /* rewards */
 	    {
@@ -209,16 +229,43 @@ public class ChallengeComponent implements IChallengeComponent {
 		    }
 	    }
 	    
-	    return true;
-	}
+	    /* optional seed pool：内联条目，缺省则不限制种植也不下种子雨 */
+    {
+	    final JsonArray array = GsonHelper.getAsJsonArray(json, "seed_pool", null);
+	    if(array != null) {
+		    final WeightList<ItemStack> pool = new WeightList<>();
+		    for(JsonElement element : array) {
+			    if(element.isJsonObject()) {
+				    final JsonObject entry = element.getAsJsonObject();
+				    final Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(entry, "item", "")));
+				    if(item == null) {
+					    throw new JsonSyntaxException("seed pool item cannot be empty or wrong format");
+				    }
+				    pool.addItem(new ItemStack(item), Math.max(0, GsonHelper.getAsInt(entry, "weight", DEFAULT_SEED_WEIGHT)));
+			    }
+		    }
+		    if(! pool.isEmpty()) {
+			    this.seedPool = pool;
+		    }
+	    }
+    }
+
+    return true;
+}
 	
 	@Override
 	public List<ISpawnComponent> getSpawns(int wavePos) {
 		return this.waves.get(this.wavePos(wavePos)).getSpawns();
 	}
 
+	@Override
 	public List<IWaveComponent> getWaves() {
 		return waves;
+	}
+
+	@Override
+	public ISpawnComponent getBossSpawn() {
+		return this.bossSpawn;
 	}
 
 	@Override
@@ -377,6 +424,11 @@ public class ChallengeComponent implements IChallengeComponent {
 	@Override
 	public boolean shouldCloseToCenter() {
 		return this.shouldCloseToCenter;
+	}
+
+	@Override
+	public WeightList<ItemStack> getSeedPool() {
+		return this.seedPool;
 	}
 
 }

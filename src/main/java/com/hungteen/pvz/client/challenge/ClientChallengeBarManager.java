@@ -15,8 +15,8 @@ public class ClientChallengeBarManager {
 
 	private static final Map<Integer, BarData> BARS = new HashMap<>();
 
-	public static void update(int challengeId, UUID challengeBarId, ResourceLocation resource, int totalWaves, int currentWave, BitSet bigWaves) {
-		BARS.put(challengeId, new BarData(challengeBarId, resource, totalWaves, currentWave, (BitSet) bigWaves.clone()));
+	public static void update(int challengeId, UUID challengeBarId, ResourceLocation resource, int totalWaves, int currentWave, BitSet bigWaves, BitSet givenUpWaves, boolean bossChallenge) {
+		BARS.put(challengeId, new BarData(challengeBarId, resource, totalWaves, currentWave, (BitSet) bigWaves.clone(), (BitSet) givenUpWaves.clone(), bossChallenge));
 	}
 
 	@Nullable
@@ -40,13 +40,17 @@ public class ClientChallengeBarManager {
 		private final int totalWaves;
 		private final int currentWave;
 		private final BitSet bigWaves;
+		private final BitSet givenUpWaves;
+		private final boolean bossChallenge;
 
-		public BarData(UUID barUuid, ResourceLocation resource, int totalWaves, int currentWave, BitSet bigWaves) {
+		public BarData(UUID barUuid, ResourceLocation resource, int totalWaves, int currentWave, BitSet bigWaves, BitSet givenUpWaves, boolean bossChallenge) {
 			this.barUuid = barUuid;
 			this.resource = resource;
 			this.totalWaves = totalWaves;
 			this.currentWave = currentWave;
 			this.bigWaves = bigWaves;
+			this.givenUpWaves = givenUpWaves;
+			this.bossChallenge = bossChallenge;
 		}
 
 		public ResourceLocation getResource() {
@@ -63,6 +67,14 @@ public class ClientChallengeBarManager {
 
 		public boolean isBigWave(int wave) {
 			return this.bigWaves.get(wave);
+		}
+
+		public boolean isGivenUp(int wave) {
+			return this.givenUpWaves.get(wave);
+		}
+
+		public boolean isBossChallenge() {
+			return this.bossChallenge;
 		}
 	}
 }

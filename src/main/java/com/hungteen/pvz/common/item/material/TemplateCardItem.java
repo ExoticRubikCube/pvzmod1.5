@@ -2,15 +2,15 @@ package com.hungteen.pvz.common.item.material;
 
 import com.hungteen.pvz.api.types.IRankType;
 import com.hungteen.pvz.common.item.PVZItemGroups;
-import com.hungteen.pvz.common.item.PVZMiscItem;
+import net.minecraft.world.item.Item;
 
-public class TemplateCardItem extends PVZMiscItem {
+public class TemplateCardItem extends Item {
 
 	public final IRankType Rank;
 	
 	public TemplateCardItem(IRankType rank) {
-		super(new Properties().tab(PVZItemGroups.PVZ_MISC));
-		this.Rank = rank;
+        super(new Properties().tab(PVZItemGroups.PVZ_MISC).tab(PVZItemGroups.PVZ_MISC));
+        this.Rank = rank;
 	}
 	
 }

@@ -13,9 +13,4 @@ public class ExplosionBowlingRender extends AbstractbowlingRender<ExplosionBowli
 		super(context);
 	}
 	
-//	@Override
-//	public ResourceLocation getTextureLocation(ExplosionBowlingEntity entity) {
-//		return PVZPlants.EXPLODE_O_NUT.getRenderResource();
-//	}
-
 }

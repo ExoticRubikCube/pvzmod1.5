@@ -66,12 +66,4 @@ public class ZombieUtil {
 		EntityUtil.onEntitySpawn(old.level, now, pos);
 	}
 	
-//	public static int caculateZombieLevel(PVZZombieEntity zombie) {
-//		final int difficulty = InvasionManager.getInvasionDifficulty() - 100;
-//		final int maxLevel = PVZConfig.COMMON_CONFIG.EntitySettings.ZombieSetting.ZombieMaxLevel.get();
-//		final int minLvl = Mth.clamp(difficulty / 50 + 1, 1, maxLevel);
-//		final int maxLvl = Mth.clamp(difficulty / 30 + 2, 1, maxLevel);
-//		return MathUtil.getRandomMinMax(zombie.getRandom(), minLvl, maxLvl);
-//	}
-	
 }

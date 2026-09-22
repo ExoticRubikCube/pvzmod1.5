@@ -1,0 +1,192 @@
+{
+  "authors": [
+    "susen36"
+  ],
+  "tags": [
+    "overworld",
+    "day"
+  ],
+  "bar_color": "green",
+  "trade_price": 60,
+  "trade_weight": 100,
+  "recommend_level": 21,
+  "waves": [
+    {
+      "pre_tick": 360,
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 1,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 2,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "threat": 3,
+      "spawns": [
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    },
+    {
+      "pre_tick": 200,
+      "is_big_wave": true,
+      "minimum_wait_time": 880,
+      "maximum_wait_time": 880,
+      "threat": 15,
+      "spawns": [
+        {
+          "entity_type": "pvz:flag_zombie",
+          "is_flag": true,
+          "weight": 0
+        },
+        {
+          "entity_type": "pvz:normal_zombie",
+          "threat": 1,
+          "weight": 4000
+        },
+        {
+          "entity_type": "pvz:conehead_zombie",
+          "threat": 2,
+          "weight": 4000
+        }
+      ]
+    }
+  ],
+  "messages": [],
+  "rewards": {
+    "unlocks": [
+      "pvz:lily_pad"
+    ],
+    "items": [
+      {
+        "item": "pvz:lily_pad_enjoy_card",
+        "amount": {
+          "count": 3
+        }
+      }
+    ]
+  },
+  "sounds": {
+    "bgm_sound": "pvz:waterygraves_complete"
+  }
+}

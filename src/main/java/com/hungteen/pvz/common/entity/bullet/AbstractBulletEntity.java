@@ -163,9 +163,8 @@ public abstract class AbstractBulletEntity extends AbstractOwnerEntity {
 		final double dxz = Math.sqrt(dx * dx + dz * dz);
 		if(down != 0){
 			dy = Mth.clamp(dy, - dxz / down, dxz / down);//fix dy by angle
-		}
-//		System.out.println(dy + "," + dxz);
-		final double degree = Mth.atan2(dz, dx) + Math.toRadians(angleOffset);
+	}
+	final double degree = Mth.atan2(dz, dx) + Math.toRadians(angleOffset);
 		dx = Math.cos(degree) * dxz;
 		dz = Math.sin(degree) * dxz;
 		final double totSpeed = Math.sqrt(dxz * dxz + dy * dy);

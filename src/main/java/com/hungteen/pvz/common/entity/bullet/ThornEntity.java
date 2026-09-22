@@ -61,11 +61,9 @@ public class ThornEntity extends AbstractBulletEntity {
 			}
 			//change speed.
 			if (this.getThornType() == ThornTypes.GUIDE || this.getThornType() == ThornTypes.AUTO) {
-//				if (vec != Vec3.ZERO) {
-					Vec3 sub = vec.subtract(this.getDeltaMovement().normalize());
-					Vec3 cut = sub.scale(0.04);
-					this.setDeltaMovement(this.getDeltaMovement().add(cut).normalize().scale(this.getBulletSpeed()));
-//				}
+				Vec3 sub = vec.subtract(this.getDeltaMovement().normalize());
+				Vec3 cut = sub.scale(0.04);
+				this.setDeltaMovement(this.getDeltaMovement().add(cut).normalize().scale(this.getBulletSpeed()));
 			}
 			if (this.getThornType() == ThornTypes.AUTO) {
 				//find new target.

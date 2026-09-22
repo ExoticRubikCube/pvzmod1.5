@@ -23,31 +23,7 @@ public class OpenGuiPacket {
 
 	public static class Handler {
 		public static void onMessage(OpenGuiPacket message, Supplier<NetworkEvent.Context> ctx) {
-//			final ServerPlayer player = ctx.get().getSender();
-//			ctx.get().enqueueWork(() -> {
-//				switch (Guis.values()[message.type]) {
-//				case PLAYER_INVENTORY: {
-//					NetworkHooks.openGui(player, new MenuProvider() {
-//
-//						@Override
-//						public Container createMenu(int p_createMenu_1_, Inventory p_createMenu_2_,
-//								Player p_createMenu_3_) {
-//							return new PlayerInventoryContainer(p_createMenu_1_, p_createMenu_3_);
-//						}
-//
-//						@Override
-//						public Component getDisplayName() {
-//							return Component.translatable("gui.pvz.player_inventory.show");
-//						}
-//					});
-//					return;
-//				}
-//				default: {
-//					PVZMod.LOGGER.debug("GUI ID ERROR!");
-//				}
-//				}
-//			});
-			ctx.get().setPacketHandled(true);
+		ctx.get().setPacketHandled(true);
 		}
 	}
 }

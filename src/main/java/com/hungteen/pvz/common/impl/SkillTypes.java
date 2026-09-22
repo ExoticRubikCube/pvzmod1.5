@@ -215,16 +215,6 @@ public class SkillTypes {
             Arrays.asList(1, 3, 4, 6, 10)
     );
 
-//    public static final ISkillType BIG_PEA = new SkillType("big_pea", "pvz:special_pea",
-//            ArrayUtil.getAverageArray(6, 0F, 0.04F),
-//            Arrays.asList(20, 30, 50, 75, 100)
-//    );
-//
-//    public static final ISkillType KB_PEA = new SkillType("kb_pea", "pvz:special_pea",
-//            ArrayUtil.getAverageArray(6, 0F, 0.1F),
-//            Arrays.asList(20, 30, 50, 75, 100)
-//    );
-
     /*
     Skills of zombies.
      */
@@ -311,14 +301,6 @@ public class SkillTypes {
             this.costs.addAll(costs);
             SKILLS.add(this);
         }
-
-//        public SkillType(String name, String group, Collection<Float> values, Collection<Integer> costs){
-//            this.name = name;
-//            this.group = group;
-//            this.values.addAll(values);
-//            this.costs.addAll(costs);
-//            SKILLS.add(this);
-//        }
 
         public static void register(){
             PVZAPI.get().registerSkillTypes(SKILLS);

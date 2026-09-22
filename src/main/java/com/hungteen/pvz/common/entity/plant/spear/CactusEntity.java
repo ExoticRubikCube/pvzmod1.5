@@ -80,16 +80,6 @@ public class CactusEntity extends PlantShooterEntity {
 		thorn.setExtraHitCount(this.isCactusPowered() ? this.getThornCount() : 1);
 		return thorn;
 	}
-	
-	
-//	@Override
-//	public boolean hurt(DamageSource source, float amount) {
-//		if(EntityUtil.canAttackEntity(this, source.getEntity())) {
-//			final float damage = this.isCactusPowered() ? this.getAttackDamage() * 4 : this.getAttackDamage() * 2;
-//			source.getEntity().hurt(PVZDamageSource.causeThornDamage(this, this), damage);
-//		}
-//		return super.hurt(source, amount);
-//	}
 
 	@Override
 	public float getAttackDamage() {

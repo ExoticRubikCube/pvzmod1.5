@@ -56,24 +56,7 @@ public class OtherStatsPacket{
 						PlayerUtil.getOptManager(PVZMod.PROXY.getPlayer()).ifPresent(l -> l.getInvasion().setWaveTriggered(message.pos, message.flag));
 					}
 				}
-//			    if(message.type == 0) {
-//			    	if(message.pos == -1) {
-//			    		ClientPlayerResources.updateGoodTick = message.data;
-//			    	} else {
-//			    		ClientPlayerResources.mysteryGoods[message.pos] = message.data;
-//			    	}
-//			    } else if(message.type == 1) {
-//			    	if(message.pos == -1) {
-//			    		ClientPlayerResources.totalWaveCount = message.data;
-//			    	} else {
-////			    		ClientPlayerResources.zombieWaveTime[message.pos] = message.data;
-//			    	}
-//			    } else if(message.type == 2) {
-//			    	if(message.pos == 0) {
-//			    		ClientPlayerResources.lightLevel = message.data;
-//			    	}
-//			    }
-		    });
+			    });
 		    ctx.get().setPacketHandled(true);
 	    }
 	}

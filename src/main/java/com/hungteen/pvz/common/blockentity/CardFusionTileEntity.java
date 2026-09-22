@@ -44,7 +44,6 @@ public class CardFusionTileEntity extends BlockEntity implements MenuProvider {
 	public void clearCraftingSlots(){
 		for(int i = 2; i < 11; ++ i){
 			this.handler.getStackInSlot(i).shrink(1);
-//			this.handler.setStackInSlot(i, ItemStack.EMPTY);
 		}
 	}
 

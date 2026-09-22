@@ -117,11 +117,6 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 						blit(stack, x, y, 176, 0, 16, 16);
 						break;
 					}
-//					case :{
-//						RenderSystem.enableBlend();
-//						this.minecraft.getTextureManager().bindForSetup(TEXTURE);
-//						blit(stack, x, y, 176, 32, 16, 16);
-//					}
 					case EVENT:{
 						RenderSystem.enableBlend();
 						RenderSystem.setShaderTexture(0, TEXTURE);

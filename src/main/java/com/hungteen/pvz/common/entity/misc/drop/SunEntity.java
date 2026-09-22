@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 public class SunEntity extends DropEntity {
 
 	private static final float SUN_FALL_SPEED = 0.03F;
-	//必须与 onCollectedByPlayer 的消耗条件保持一致，否则阳光会追上却无法消失
 	private static final Predicate<Entity> CAN_ABSORB_SUN = (target) -> target instanceof Player player && EntitySelector.NO_SPECTATORS.test(target)
 		&& (player.isCreative() || PlayerUtil.getResource(player, Resources.SUN_NUM) < PlayerUtil.getSunLimit(player)
 			|| EnchantmentHelper.getRandomItemWith(EnchantmentRegister.SUN_MENDING.get(), player, ItemStack::isDamaged) != null);
@@ -54,7 +53,7 @@ public class SunEntity extends DropEntity {
 	public void tick() {
 		super.tick();
 
-		if(! this.onGround && ! this.isInWater()) {
+		if(!this.onGround && ! this.isInWater()) {
 			this.setDeltaMovement(this.getDeltaMovement().x, - SUN_FALL_SPEED, this.getDeltaMovement().z);
 		} else{
 			this.setDeltaMovement(Vec3.ZERO);

@@ -25,7 +25,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
@@ -44,13 +43,12 @@ public class FeatureRegister {
 	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES =
 			DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, PVZMod.MOD_ID);
 
-	public static final RegistryObject<Feature<SimpleBlockConfiguration>> PLANTERN_FEATURE =
-			FEATURES.register("plantern_feature", PlanternFeatures::new);
-
 	public static Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_LUNAR_STONE_CF;
 	public static Holder<PlacedFeature> ORE_LUNAR_STONE_PF;
 	public static Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_ORIGIN_CF;
 	public static Holder<PlacedFeature> ORE_ORIGIN_PF;
+	public static Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_AMETHYST_CF;
+	public static Holder<PlacedFeature> ORE_AMETHYST_PF;
 	public static Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> PLANTERN_CF;
 	public static Holder<PlacedFeature> PLANTERN_PF;
 
@@ -79,12 +77,20 @@ public class FeatureRegister {
 				new OreConfiguration(new BlockMatchTest(Blocks.GRASS_BLOCK),
 						BlockRegister.ORIGIN_ORE.get().defaultBlockState(), 4));
 		ORE_ORIGIN_PF = PlacementUtils.register("pvz:ore_origin", ORE_ORIGIN_CF,
-				List.of(CountPlacement.of(3),
+				List.of(CountPlacement.of(5),
 						InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(200)),
 						BiomeFilter.biome()));
+		ORE_AMETHYST_CF = FeatureUtils.register("pvz:ore_amethyst", Feature.ORE,
+				new OreConfiguration(new BlockMatchTest(Blocks.END_STONE),
+						BlockRegister.AMETHYST_ORE.get().defaultBlockState(), 4));
+		ORE_AMETHYST_PF = PlacementUtils.register("pvz:ore_amethyst", ORE_AMETHYST_CF,
+				List.of(CountPlacement.of(15),
+						InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128)),
+						BiomeFilter.biome()));
 		PLANTERN_CF = FeatureUtils.register("pvz:plantern", Feature.FLOWER,
-				new RandomPatchConfiguration(1, 1, 1, PlacementUtils.onlyWhenEmpty(PLANTERN_FEATURE.get(),
+				new RandomPatchConfiguration(1, 1, 1, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
 						new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegister.PLANTERN.get())))));
+
 		PLANTERN_PF = PlacementUtils.register("pvz:plantern", PLANTERN_CF,
 				List.of(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 	}

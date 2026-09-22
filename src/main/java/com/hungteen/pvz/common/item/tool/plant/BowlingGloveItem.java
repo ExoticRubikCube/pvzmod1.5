@@ -113,20 +113,6 @@ public class BowlingGloveItem extends Item {
 	}
 
 	public static void onPickUp(PlayerInteractEvent.EntityInteractSpecific ev) {
-//		if(ev.getItemStack().getItem().equals(ItemRegister.BOWLING_GLOVE.get())) {
-//			if(ev.getTarget() instanceof PVZPlantEntity) {
-//			    final PVZPlantEntity plantEntity = (PVZPlantEntity) ev.getTarget();
-//			    if(isBowlingPlant(plantEntity)) {
-//				    setBowlingType(ev.getItemStack(), plantEntity.getPlantType());
-//				    ev.getTarget().remove(RemovalReason.KILLED);
-//				    return ;
-//			    }
-//			}
-//		    if(! ev.getSide().isClient()) {
-//			    PlayerUtil.sendMsgTo(ev.getPlayer(), Component.translatable("help.pvz.bowling_glove.fail").withStyle(ChatFormatting.RED));
-//			    ev.getPlayer().getCooldowns().addCooldown(ev.getItemStack().getItem(), 20);
-//		    }
-//		}
 	}
 	
 	/**

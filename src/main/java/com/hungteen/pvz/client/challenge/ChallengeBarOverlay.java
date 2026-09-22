@@ -26,7 +26,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = PVZMod.MOD_ID, value = Dist.CLIENT)
 public class ChallengeBarOverlay {
 
-	private static final ResourceLocation ICONS = new ResourceLocation(PVZMod.MOD_ID, "textures/gui/overlay/icons.png");
+	private static final ResourceLocation CHALLENGE = new ResourceLocation(PVZMod.MOD_ID, "textures/gui/overlay/challenge.png");
 	private static final int TEX_SIZE = 256;
 	private static final List<BarSnapshot> SNAPSHOTS = new ArrayList<>();
 
@@ -35,8 +35,11 @@ public class ChallengeBarOverlay {
 		//血条名称参数经网络 JSON 序列化后会丢失 Number 类型，只能按 bar UUID 匹配（服务端 ChallengeBarPacket 已同步该 UUID）
 		final BarData data = ClientChallengeBarManager.getByBarUuid(event.getBossEvent().getId());
 		if(data != null) {
-			SNAPSHOTS.add(new BarSnapshot(data, event.getX(), event.getY(), event.getBossEvent()));
-			event.setCanceled(true);
+			if(! data.isBossChallenge()) {
+				//普通挑战用自定义材质条；boss 挑战走原版 Boss 血条（对齐 pvz1 5-10），不拦截
+				SNAPSHOTS.add(new BarSnapshot(data, event.getX(), event.getY(), event.getBossEvent()));
+				event.setCanceled(true);
+			}
 		}
 	}
 
@@ -54,7 +57,7 @@ public class ChallengeBarOverlay {
 		RenderSystem.enableBlend();
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, ICONS);
+		RenderSystem.setShaderTexture(0, CHALLENGE);
 		for(BarSnapshot snapshot : SNAPSHOTS) {
 			renderBar(stack, width, snapshot, snapshot.data);
 		}
@@ -66,13 +69,12 @@ public class ChallengeBarOverlay {
 		final int x = snapshot.x;
 		final int y = snapshot.y;
 		final float progress = snapshot.event.getProgress();
-		blit(stack, x - 2, y + 2, 0, 45, 186, 9);
-		blit(stack, x, y + 4, 0, 54, (int) (182 * progress), 5);
+		blit(stack, x - 2, y + 2, 0, 0, 186, 9);
+		blit(stack, x, y + 4, 0, 9, (int) (182 * progress), 5);
 		for(int i = 0; i < data.getTotalWaves(); ++ i) {
 			if(data.isBigWave(i)) {
 				final boolean reached = data.getCurrentWave() >= i;
-				blit(stack, (int) (x + 170 * ((float) (i + 1) / data.getTotalWaves())),
-						y + (reached ? -2 : 1), 234, 0, 11, reached ? 11 : 8);
+				blit(stack, (int) (x + 170 * ((float) (i + 1) / data.getTotalWaves())), reached ? y - 2 : y + 1, 0, data.isGivenUp(i) ? 25 : 14, 11, reached ? 11 : 8);
 			}
 		}
 		final Component name = snapshot.event.getName();

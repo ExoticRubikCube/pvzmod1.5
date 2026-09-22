@@ -2,7 +2,7 @@ package com.hungteen.pvz.common.item.spawn;
 
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.misc.LawnMowerEntity;
-import com.hungteen.pvz.common.item.PVZToolItem;
+import com.hungteen.pvz.common.item.PVZItemGroups;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,11 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-public class LawnMowerItem extends PVZToolItem {
+public class LawnMowerItem extends Item {
 
 	public LawnMowerItem() {
-		super(new Item.Properties());
-	}
+        super(new Properties().tab(PVZItemGroups.PVZ_USEFUL));
+    }
 	
 	@Override
 	public InteractionResult useOn(UseOnContext context) {

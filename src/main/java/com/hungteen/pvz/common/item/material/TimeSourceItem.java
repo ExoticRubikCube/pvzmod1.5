@@ -1,8 +1,9 @@
 package com.hungteen.pvz.common.item.material;
 
-import com.hungteen.pvz.common.item.PVZMiscItem;
+import com.hungteen.pvz.common.item.PVZItemGroups;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -15,7 +16,11 @@ import java.util.List;
  * @author: HungTeen
  * @create: 2022-02-05 22:07
  **/
-public class TimeSourceItem extends PVZMiscItem {
+public class TimeSourceItem extends Item {
+
+    public TimeSourceItem() {
+        super(new Properties().tab(PVZItemGroups.PVZ_MISC));
+    }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> textComponents, TooltipFlag tooltipFlag) {

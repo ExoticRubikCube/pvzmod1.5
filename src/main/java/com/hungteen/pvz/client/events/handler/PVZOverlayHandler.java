@@ -4,6 +4,7 @@ import com.hungteen.pvz.client.ClientProxy;
 import com.hungteen.pvz.client.events.OverlayEvents;
 import com.hungteen.pvz.client.events.PVZInputEvents;
 import com.hungteen.pvz.common.capability.player.PlayerDataManager;
+import com.hungteen.pvz.common.entity.plant.explosion.CobCannonEntity;
 import com.hungteen.pvz.common.world.invasion.InvasionManager;
 import com.hungteen.pvz.common.world.invasion.MissionManager;
 import com.hungteen.pvz.utils.ConfigUtil;
@@ -18,6 +19,8 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -88,60 +91,6 @@ public class PVZOverlayHandler {
 		RenderSystem.disableBlend();
 		stack.popPose();
 	}
-
-//	@SuppressWarnings("deprecation")
-//	public static void drawCardInventory(Player player, PoseStack stack, int w, int h) {
-//		if(player.getMainHandItem().getItem() instanceof SummonCardItem) {
-//			final PlayerDataManager manager = PlayerUtil.getManager(ClientProxy.MC.player);
-//			if(manager == null ) {
-//				return ;
-//			}
-//			if(! manager.getItemAt(manager.getCurrentPos()).equals(player.getMainHandItem())) {
-//				PVZPacketHandler.CHANNEL.sendToServer(new PVZMouseScrollPacket(0));
-//			}
-//			if(SlotDelay < SLOT_DELAY_CD) {
-//				++ SlotDelay;
-//			}
-//		} else {
-//			if(SlotDelay > 0) {
-//				-- SlotDelay;
-//			}
-//		}
-//		final PlayerDataManager manager = PlayerUtil.getManager(ClientProxy.MC.player);
-//		if(SlotDelay > 0) {
-//			final int maxSlot = PlayerUtil.getResource(ClientProxy.MC.player, Resources.SLOT_NUM) + 1;
-//			final int totHeight = (SLOT_SIDE - 2) * maxSlot;
-//			final int startHeight = (h - totHeight) / 2;
-//			final float offset = - 10 + 10F * SlotDelay / SLOT_DELAY_CD;
-//			stack.pushPose();
-//			RenderSystem.pushMatrix();
-//			RenderSystem.enableBlend();
-//			
-//			bindTexture(RESOURCE);
-//			stack.translate(offset, 0, 0);
-//			/* render slots */
-//			for(int i = 0; i < maxSlot; ++ i) {
-//				if(i == manager.getCurrentPos()) {
-//					blitTex(stack, 0, startHeight + i * (SLOT_SIDE - 2), 162, 22, SLOT_SIDE, SLOT_SIDE);
-//				} else {
-//					blitTex(stack, 0, startHeight + i * (SLOT_SIDE - 2), 162, 0, SLOT_SIDE, SLOT_SIDE);
-//				}
-//			}
-//			/* render itemstack */
-//			for(int i = 0; i < Math.min(manager.getCardsSize(), maxSlot); ++ i) {
-//				RenderSystem.pushMatrix();
-//				RenderSystem.translated(offset, 0, 0);
-//				ClientProxy.MC.getItemRenderer().renderGuiItem(manager.getItemAt(i), 3, startHeight + 3 + i * (SLOT_SIDE - 2));
-//				ClientProxy.MC.getItemRenderer().renderGuiItemDecorations(ClientProxy.MC.font, manager.getItemAt(i), 3, startHeight + 3 + i * (SLOT_SIDE - 2));
-//			    RenderSystem.popMatrix();
-//			}
-//			
-//			RenderSystem.disableBlend();
-//			RenderSystem.popMatrix();
-//			stack.popPose();
-//		}
-//		
-//	}
 
 	public static void renderInvasionProgress(PoseStack stack, int w, int h) {
 		final PlayerDataManager manager = PlayerUtil.getManager(ClientProxy.MC.player);
@@ -228,6 +177,29 @@ public class PVZOverlayHandler {
 		final int WIDTH = 32, HEIGHT = 32;
 		blitTex(stack, (w - WIDTH) / 2, (h - HEIGHT) / 2, 0, 0, WIDTH, HEIGHT);
 		stack.popPose();
+	}
+
+	/**
+	 * 骑行玉米炮时在经验条下方渲染装弹冷却条,UI 形式对齐 htpvz2 机枪射手的过热条。
+	 * 有弹药时保持满格,弹药耗尽后按装弹进度增长。
+	 * {@link OverlayEvents#onPostRenderOverlay(RenderGuiEvent.Post)}
+	 */
+	public static void renderCobReload(PoseStack stack, int width, int height) {
+		final Player player = ClientProxy.MC.player;
+		if(player != null && player.getVehicle() instanceof CobCannonEntity cob) {
+			final float progress = cob.getCornNum() > 0 ? 1F : Mth.clamp(cob.getReloadTick() * 1F / cob.getPreCD(), 0F, 1F);
+			final int len = (int) (182 * progress);
+			final int y = height - 32 + 3;
+			stack.pushPose();
+			RenderSystem.enableBlend();
+			bindTexture(TARGET);
+			blitTex(stack, width / 2 - 91, y, 0, 32, 182, 5);
+			if(len > 0) {
+				blitTex(stack, width / 2 - 91, y, 0, 37, len, 5);
+			}
+			RenderSystem.disableBlend();
+			stack.popPose();
+		}
 	}
 
 	@SuppressWarnings("deprecation")

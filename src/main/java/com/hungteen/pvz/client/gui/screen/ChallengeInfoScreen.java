@@ -109,81 +109,10 @@ public class ChallengeInfoScreen extends Screen{
 	}
 
 	protected void renderBar(PoseStack stack, SearchOption a) {
-//		stack.pushPose();
-//		//Do not change the position values, if changed pls modify with the below method.
-//		final int len = 22;
-//		int posX = 53;
-//		int posY = 25;
-//		{//guide book.
-//			ItemStack guideBook = PVZPatchouliHandler.getPatchouliGuide();
-//			if(guideBook != ItemStack.EMPTY){
-//				this.itemRenderer.renderGuiItem(guideBook, this.leftPos + posX, this.topPos + posY);
-//			} else{
-//				this.minecraft.getTextureManager().bindForSetup(TEXTURE);
-//				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 0, 16, 16);
-//			}
-//		}
-//		posX += len;
-//		{
-//			if(a.getType() instanceof IPlantType){
-//				ItemStack itemStack = new ItemStack(((IPlantType) a.getType()).getEssence().getEssenceItem());
-//				this.itemRenderer.renderGuiItem(itemStack, this.leftPos + posX, this.topPos + posY);
-//			}
-//		}
-//		posX += len;
-//		{
-//			this.itemRenderer.renderGuiItem(new ItemStack(a.getType().getRank().getTemplateCard()), this.leftPos + posX, this.topPos + posY);
-//		}
-//		posX += len;
-//		{
-//			this.minecraft.getTextureManager().bindForSetup(TEXTURE);
-//			if(a.getType().getSkills().isEmpty()) {
-//				blit(stack, this.leftPos + posX, this.topPos + posY, 224, 16, 16, 16);
-//			} else {
-//				blit(stack, this.leftPos + posX, this.topPos + posY, 240, 16, 16, 16);
-//			}
-//		}
-//		stack.popPose();
+		//Do not change the position values, if changed pls modify with the below method.
 	}
 
 	protected void renderTooltip(PoseStack stack, int mouseX, int mouseY) {
-//		if(this.option != null){
-//			final int len = 22;
-//			int posX = this.leftPos + 53;
-//			int posY = this.topPos + 25;
-//			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
-//
-//			}
-//			posX += len;
-//			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
-//
-//				if(this.option.getType() instanceof IPlantType){
-//					Item item = ((IPlantType) this.option.getType()).getEssence().getEssenceItem();
-//					this.minecraft.screen.renderComponentTooltip(stack, Arrays.asList(
-//							Component.translatable("item.pvz." + item.getRegistryName().getPath())
-//					), mouseX, mouseY);
-//				}
-//			}
-//			posX += len;
-//			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
-//				this.minecraft.screen.renderComponentTooltip(stack, Arrays.asList(
-//						Component.translatable("item.pvz." + this.option.getType().getRank().getTemplateCard().getRegistryName().getPath())
-//				), mouseX, mouseY);
-//			}
-//			posX += len;
-//			if(MathUtil.isInArea(mouseX, mouseY, posX, posY, 16, 16)){
-//				List<Component> list = new ArrayList<>();
-//				this.option.getType().getSkills().forEach(skill -> {
-//					list.add(skill.getText().withStyle(ChatFormatting.GREEN));
-//				});
-//				if(list.isEmpty()) {
-////					list.add(Component.translatable("gui.))
-//					this.minecraft.screen.renderComponentTooltip(stack, list, mouseX, mouseY);
-//				} else {
-//					this.minecraft.screen.renderComponentTooltip(stack, list, mouseX, mouseY);
-//				}
-//			}
-//		}
 	}
 	
 }

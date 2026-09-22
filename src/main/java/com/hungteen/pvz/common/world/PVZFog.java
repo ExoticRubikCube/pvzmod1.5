@@ -109,7 +109,7 @@ public class PVZFog {
 		if (player != null) {
 			double strength = getFogStrengthAt(player.level, player.position());
 			if (player.hasEffect(EffectRegister.LIGHT_EYE_EFFECT.get())) {
-				bufferStrength = (float) (bufferStrength * 0.995 + strength * 0.0005);
+				bufferStrength = (float) (bufferStrength * 0.995 + strength * 0.003);
 			} else {
 				bufferStrength = (float) (bufferStrength * 0.995 + strength * 0.005);
 			}

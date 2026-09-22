@@ -16,7 +16,6 @@ public interface IPlantType extends IPAZType {
     /**
      * get (plant type, plant entity interface) pair.
      */
-//	Optional<Pair<Mob, IPlantEntity>> getPlantEntityType();
 
     /**
      * get the entity model of plant (Client Side).

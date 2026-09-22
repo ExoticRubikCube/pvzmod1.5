@@ -31,7 +31,7 @@ public class TwinSunFlowerEntity extends SunFlowerEntity{
 	
 	@Override
 	public EntityDimensions getDimensions(Pose poseIn) {
-		return EntityDimensions.scalable(0.9f, 1.85f);
+		return EntityDimensions.scalable(0.9f, 1.295f);
 	}
 	
 	@Override

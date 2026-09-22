@@ -35,7 +35,6 @@ import static java.lang.Math.round;
 
 public class PlayerUtil {
 
-//	public static final int[] TREE_LVL_XP = new int[] {100, 250, 500, 1000, 2000, 4000, 5000, 6000, 7000, 8000, 10000, 12000, 15000, 18000, 21000, 25000, 30000, 350000, 40000, 50000};
 	private static int OLD_PLAYER_LEVEL = 0;
 	private static int CACHE_MAX_SUN = 0;
 

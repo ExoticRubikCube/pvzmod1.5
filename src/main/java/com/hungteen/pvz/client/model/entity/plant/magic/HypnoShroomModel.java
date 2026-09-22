@@ -60,8 +60,6 @@ public class HypnoShroomModel extends PVZPlantModel<HypnoShroomEntity> {
 	@Override
 	public void setupAnim(HypnoShroomEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		this.hat.yRot = ageInTicks / 30;
-//		this.leye.zRot = entity.getExistTick() / 10f;
-//		this.reye.zRot = entity.getExistTick() / 10f;
 
 	}
 

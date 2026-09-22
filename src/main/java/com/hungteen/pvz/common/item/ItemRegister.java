@@ -51,22 +51,21 @@ public class ItemRegister {
      */
     
     /* seeds & crops */
-  	public static final RegistryObject<Item> PEA = ITEMS.register("pea",() -> new BlockItem(BlockRegister.PEA_PLANT.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
-  	public static final RegistryObject<Item> NUT = ITEMS.register("nut", PVZMiscItem::new);
-  	public static final RegistryObject<Item> SPORE = ITEMS.register("spore", SporeItem::new);
-  	public static final RegistryObject<Item> CABBAGE_SEEDS = ITEMS.register("cabbage_seeds", () -> new BlockItem(BlockRegister.CABBAGE.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
-  	public static final RegistryObject<Item> CORN_SEEDS = ITEMS.register("corn_seeds", () -> new BlockItem(BlockRegister.CORN.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
-  	
-  	/* materials */
-  	public static final RegistryObject<Item> SNOW_PEA = ITEMS.register("snow_pea", PVZMiscItem::new);
-  	public static final RegistryObject<Item> FLAME_PEA = ITEMS.register("flame_pea", PVZMiscItem::new);
-//  	public static final RegistryObject<Item> BLUE_FLAME_PEA = ITEMS.register("blue_flame_pea", PVZItemBase::new);
-  	public static final RegistryObject<Item> SMALL_MEAT = ITEMS.register("small_meat", PVZMiscItem::new);
-  	public static final RegistryObject<Item> PEPPER = ITEMS.register("pepper", PVZMiscItem::new);
-  	public static final RegistryObject<Item> FROZEN_MELON_SLICE = ITEMS.register("frozen_melon_slice", PVZMiscItem::new);
-	public static final RegistryObject<Item> STARFRUIT = ITEMS.register("starfruit", PVZMiscItem::new);
-	public static final RegistryObject<Item> ANGEL_STARFRUIT = ITEMS.register("angel_starfruit", PVZMiscItem::new);
-  	
+    public static final RegistryObject<Item> PEA = ITEMS.register("pea", () -> new BlockItem(BlockRegister.PEA_PLANT.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> NUT = ITEMS.register("nut", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> SPORE = ITEMS.register("spore", SporeItem::new);
+    public static final RegistryObject<Item> CABBAGE_SEEDS = ITEMS.register("cabbage_seeds", () -> new BlockItem(BlockRegister.CABBAGE.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> CORN_SEEDS = ITEMS.register("corn_seeds", () -> new BlockItem(BlockRegister.CORN.get(), new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+
+    /* materials */
+    public static final RegistryObject<Item> SNOW_PEA = ITEMS.register("snow_pea", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> FLAME_PEA = ITEMS.register("flame_pea", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> SMALL_MEAT = ITEMS.register("small_meat", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> PEPPER = ITEMS.register("pepper", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> FROZEN_MELON_SLICE = ITEMS.register("frozen_melon_slice", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> STARFRUIT = ITEMS.register("starfruit", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> ANGEL_STARFRUIT = ITEMS.register("angel_starfruit", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+
     /* essences */
     public static final RegistryObject<Item> ORIGIN_ESSENCE = ITEMS.register("origin_essence", () -> new EssenceItem(EssenceTypes.ORIGIN));
     public static final RegistryObject<Item> APPEASE_ESSENCE = ITEMS.register("appease_essence", () -> new EssenceItem(EssenceTypes.APPEASE));
@@ -85,9 +84,9 @@ public class ItemRegister {
     public static final RegistryObject<Item> SHADOW_ESSENCE = ITEMS.register("shadow_essence", () -> new EssenceItem(EssenceTypes.SHADOW));
     
     /* ingots */
-    public static final RegistryObject<Item> ORIGIN_INGOT = ITEMS.register("origin_ingot", PVZMiscItem::new);
-    public static final RegistryObject<Item> AMETHYST_INGOT = ITEMS.register("amethyst_ingot", PVZMiscItem::new);
-    
+    public static final RegistryObject<Item> ORIGIN_INGOT = ITEMS.register("origin_ingot", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+    public static final RegistryObject<Item> AMETHYST_INGOT = ITEMS.register("amethyst_ingot", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
+
     /* card models */
     public static final RegistryObject<Item> GRAY_CARD = ITEMS.register("gray_card", () -> new TemplateCardItem(RankTypes.GRAY));
     public static final RegistryObject<Item> WHITE_CARD = ITEMS.register("white_card", () -> new TemplateCardItem(RankTypes.WHITE));
@@ -100,7 +99,7 @@ public class ItemRegister {
     public static final RegistryObject<Item> MEGA_CARD = ITEMS.register("mega_card", () -> new TemplateCardItem(RankTypes.MEGA));
 
     /* misc */
-    public static final RegistryObject<Item> TIME_SOURCE = ITEMS.register("time_source", PVZMiscItem::new);
+    public static final RegistryObject<Item> TIME_SOURCE = ITEMS.register("time_source", () -> new Item(new Item.Properties().tab(PVZItemGroups.PVZ_MISC)));
 
     /* spawn eggs */
   	public static final RegistryObject<PVZSpawnEggItem> FOODIE_ZOMBIE_SPAWN_EGG = registerSpawnEgg("foodie_zombie", EntityRegister.FOODIE_ZOMBIE, Colors.ZOMBIE_SKIN, Colors.WHITE);
@@ -184,12 +183,11 @@ public class ItemRegister {
     public static final RegistryObject<Item> WARNING_SIGN = ITEMS.register("warning_sign", () -> new SwordItem(Tiers.IRON, 6, - 2.4F, new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL).stacksTo(1)));
     public static final RegistryObject<Item> POLE = ITEMS.register("pole", () -> new AxeItem(Tiers.IRON, 8, - 3F, new Item.Properties().tab(PVZItemGroups.PVZ_USEFUL).stacksTo(1)));
     public static final RegistryObject<Item> PEA_GUN = ITEMS.register("pea_gun", PeaGunItem::new);
-//  	public static final RegistryObject<Item> BOWLING_GLOVE = ITEMS.register("bowling_glove", BowlingGloveItem::new);
   	public static final RegistryObject<Item> FIRE_CRACKER = ITEMS.register("fire_cracker", FireCrackerItem::new);
     public static final RegistryObject<Item> ALMANAC = ITEMS.register("almanac", AlmanacItem::new);
     public static final RegistryObject<Item> GARDEN_COMPASS = ITEMS.register("garden_compass", GardenCompassItem::new);
     public static final RegistryObject<Item> CARD_PACK = ITEMS.register("card_pack", CardPackItem::new);
-    public static final RegistryObject<Item> CAR_KEY = ITEMS.register("car_key", PVZToolItem::new);
+    public static final RegistryObject<Item> CAR_KEY = ITEMS.register("car_key", LawnMowerItem::new);
   	public static final RegistryObject<Item> LAWN_MOWER = ITEMS.register("lawn_mower", LawnMowerItem::new);
     public static final RegistryObject<Item> GARDEN_RAKE = ITEMS.register("garden_rake", GardenRakeItem::new);
     public static final RegistryObject<Item> ZOMBIE_DOLL = ITEMS.register("zombie_doll", ZombieDollItem::new);

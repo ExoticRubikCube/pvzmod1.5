@@ -22,7 +22,6 @@ public class FragmentSpliceTileEntity extends BlockEntity implements MenuProvide
 	public void clearCraftingSlots(){
 		for(int i = 0; i < 25; ++ i){
 			this.handler.getStackInSlot(i + 1).shrink(1);
-//			this.handler.setStackInSlot(i + 1, ItemStack.EMPTY);
 		}
 	}
 

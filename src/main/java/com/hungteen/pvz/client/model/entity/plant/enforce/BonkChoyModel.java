@@ -290,7 +290,6 @@ public class BonkChoyModel extends PVZPlantModel<BonkChoyEntity> {
 			int now = - entity.getAttackTime();
 			int tot = entity.getAttackCD();
 			this.left_arm.xRot = AnimationUtil.getUpDown(now, tot, - 60);
-			//this.left_arm.yRot = - (3.1416F - AnimationUtil.getUpDown(now, tot, 60));
 		}
 	}
 

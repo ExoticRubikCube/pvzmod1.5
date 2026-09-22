@@ -30,16 +30,6 @@ public class PVZInputEvents {
 				ShowOverlay = ! ShowOverlay;
 			}
 			
-//			/* change card slot position */
-//			if(ClientProxy.MC.player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SummonCardItem) {
-//				if(KeyBindRegister.UP_TOGGLE.consumeClick()) {
-//					PVZSwitchSlotHander.changeCardSlot(1F);
-//				}
-//			    if(KeyBindRegister.DOWN_TOGGLE.consumeClick()) {
-//					PVZSwitchSlotHander.changeCardSlot(- 1F);
-//			    }
-//			}
-			
 			/* change resource to display */
 			if(KeyBindRegister.LEFT_TOGGLE.consumeClick()) {
 				changeToggle(- 1);
@@ -63,13 +53,6 @@ public class PVZInputEvents {
 	
 	@SubscribeEvent
     public static void onMouseScroll(InputEvent.MouseScrollingEvent ev) {
-//		double delta = ev.getScrollDelta();
-//		if(delta != 0.0 && EntityUtil.isEntityValid(ClientProxy.MC.player) && KeyBindRegister.SHIFT.isDown()) {
-//			if(ClientProxy.MC.player.getMainHandItem().getItem() instanceof SummonCardItem) {
-//				PVZSwitchSlotHander.changeCardSlot(delta);
-//				ev.setCanceled(true);
-//			}
-//		}
     }
 	
 	/**

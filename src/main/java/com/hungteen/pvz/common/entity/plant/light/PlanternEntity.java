@@ -24,6 +24,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -31,8 +32,15 @@ import java.util.Optional;
 
 public class PlanternEntity extends PVZPlantEntity implements ILightEffect {
 
-	private static final int EFFECT_CD = 100;
-	
+	//ref htpvz2 OfferBrightnessGoal: refresh every 10 ticks, effect lasts 30 ticks.
+	private static final int EFFECT_CD = 10;
+	private static final int LIGHT_EYE_TIME = 30;
+	//ref htpvz2: base range is XZ +/-8, Y +/-3, more light range skill enlarges it.
+	private static final double LIGHT_RANGE = 8.0D;
+	private static final double LIGHT_HEIGHT = 3.0D;
+	private static final double RANGE_BONUS_PER_LEVEL = 4.0D;
+	private static final double HEIGHT_BONUS_PER_LEVEL = 1.0D;
+
 	public PlanternEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
@@ -41,7 +49,7 @@ public class PlanternEntity extends PVZPlantEntity implements ILightEffect {
 	protected void normalPlantTick() {
 		super.normalPlantTick();
 		if(! level.isClientSide()) {
-			if(this.getExistTick() % EFFECT_CD == 10) {
+			if(this.getExistTick() % EFFECT_CD == 0) {
 				this.giveLightToPlayers();
 			}
 		}
@@ -67,13 +75,23 @@ public class PlanternEntity extends PVZPlantEntity implements ILightEffect {
 	 */
 	private void giveLightToPlayers() {
 		final float range = this.getEffectRange();
-		EntityUtil.getFriendlyLivings(this, EntityUtil.getEntityAABB(this, range, range)).forEach(entity -> {
-			entity.addEffect(this.getLightEyeEffect());
-			final int nightVisionTime = this.getNightVisionTime();
+		final float height = this.getEffectHeight();
+		//ref htpvz2: AABB centers on entity position.
+		final AABB aabb = new AABB(this.getX() - range, this.getY() - height, this.getZ() - range,
+				this.getX() + range, this.getY() + height, this.getZ() + range);
+		final int nightVisionTime = this.getNightVisionTime();
+		//ref htpvz2: grant light eye to itself and every teammate in range.
+		this.addEffect(this.getLightEyeEffect(), this);
+		EntityUtil.getFriendlyLivings(this, aabb).forEach(entity -> {
+			entity.addEffect(this.getLightEyeEffect(), this);
 			if(nightVisionTime > 0){
-				entity.addEffect(EffectUtil.viewEffect(MobEffects.NIGHT_VISION, nightVisionTime, 0));
+				entity.addEffect(EffectUtil.viewEffect(MobEffects.NIGHT_VISION, nightVisionTime, 0), this);
 			}
 		});
+		//ref htpvz2: bright light removes enemies' invisibility.
+		this.level.getEntitiesOfClass(LivingEntity.class, aabb, target ->
+				! EntityUtil.isFriendly(this, target) && target.hasEffect(MobEffects.INVISIBILITY)
+		).forEach(target -> target.removeEffect(MobEffects.INVISIBILITY));
 	}
 
 	private void displayAllRaider(){
@@ -91,11 +109,16 @@ public class PlanternEntity extends PVZPlantEntity implements ILightEffect {
 	}
 
 	public float getEffectRange(){
-		return this.getSkillValue(SkillTypes.MORE_LIGHT_RANGE);
+		return (float) (LIGHT_RANGE + SkillTypes.getSkillLevel(this.getSkills(), SkillTypes.MORE_LIGHT_RANGE) * RANGE_BONUS_PER_LEVEL);
 	}
 
+	public float getEffectHeight(){
+		return (float) (LIGHT_HEIGHT + SkillTypes.getSkillLevel(this.getSkills(), SkillTypes.MORE_LIGHT_RANGE) * HEIGHT_BONUS_PER_LEVEL);
+	}
+
+	//night vision skill only acts as the unlock gate, its duration equals the light eye time.
 	public int getNightVisionTime(){
-		return (int) this.getSkillValue(SkillTypes.NIGHT_VISION);
+		return SkillTypes.getSkillLevel(this.getSkills(), SkillTypes.NIGHT_VISION) > 0 ? LIGHT_EYE_TIME : 0;
 	}
 
 	@Override
@@ -105,7 +128,7 @@ public class PlanternEntity extends PVZPlantEntity implements ILightEffect {
 
 	@Override
 	public MobEffectInstance getLightEyeEffect() {
-		return EffectUtil.viewEffect(EffectRegister.LIGHT_EYE_EFFECT.get(), this.getLightEyeTime(), 0);
+		return EffectUtil.effect(EffectRegister.LIGHT_EYE_EFFECT.get(), this.getLightEyeTime(), 0);
 	}
 
 	@Override
@@ -115,7 +138,7 @@ public class PlanternEntity extends PVZPlantEntity implements ILightEffect {
 	}
 
 	public int getLightEyeTime() {
-		return 1800;
+		return LIGHT_EYE_TIME;
 	}
 
 	@Override

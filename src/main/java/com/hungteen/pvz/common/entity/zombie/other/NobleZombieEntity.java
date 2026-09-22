@@ -73,10 +73,6 @@ public class NobleZombieEntity extends AbstractBossZombieEntity {
 			//TODO MournerZombie level deleted
 			EntityUtil.playSound(this, SoundRegister.DIRT_RISE.get());
 			ZombieHandEntity.spawnRangeZombieHands(level, this, 6);
-//			for(int i = 0; i < this.getSkills() / 2 + 5; ++ i) {
-//				MournerZombieEntity zombie = EntityRegister.MOURNER_ZOMBIE.get().create(level);
-//				this.onBossSummon(zombie, WorldUtil.getSuitableHeightRandomPos(level, blockPosition(), 10, 20));
-//			}
 		}
 		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 	}

@@ -49,6 +49,8 @@ public class PVZScreenshotCommand {
 	private static final float FILL_FRACTION = 0.75F;
 	private static final float VIEW_ANGLE = 45F;
 	private static final float PITCH_ANGLE = (float) Math.toDegrees(Math.asin(Math.tan(Math.toRadians(30))));
+	/** 小于此高度的实体保持贴地不放大（方块单位） */
+	private static final float MIN_GRID_HEIGHT = 1.25F;
 
 	private static final List<Entity> queue = new ArrayList<>();
 	private static int index = -1;
@@ -188,7 +190,10 @@ public class PVZScreenshotCommand {
 			}
 			float spanX = bounds.maxX() - bounds.minX();
 			float spanY = bounds.maxY() - bounds.minY();
-			float viewSide = Math.max(spanX, spanY) / FILL_FRACTION;
+			float meshViewSide = Math.max(spanX, spanY) / FILL_FRACTION;
+			float boxMaxSpan = Math.max(current.getBbWidth(), current.getBbHeight());
+			float boxViewSide = boxMaxSpan / FILL_FRACTION;
+			float viewSide = Math.max(meshViewSide, Math.max(boxViewSide, MIN_GRID_HEIGHT));
 			float half = viewSide / 2;
 			float cx = (bounds.minX() + bounds.maxX()) / 2;
 			float bottom = bounds.minY() - viewSide * 0.10F;

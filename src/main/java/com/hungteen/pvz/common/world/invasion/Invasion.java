@@ -179,11 +179,6 @@ public class Invasion {
             PlayerUtil.playClientSound(player, SoundRegister.HUGE_WAVE.get());
             PlayerUtil.sendSubTitleToPlayer(player, InvasionManager.HUGE_WAVE);
             // TODO extra summon a-huge-wave
-//		    PVZFlagData data = PVZFlagData.getGlobalFlagData(world);
-//		    if(data.isZombossDefeated()) {
-//		        this.activateTombStone();
-//		        this.checkAndSummonBungee();
-//		    }
         }
         PVZMod.LOGGER.info("wave "+ currentWave +" zombies of "+player.getName().getString()+" launched at "+(int) world.getDayTime());
         return spawned;
@@ -245,7 +240,6 @@ public class Invasion {
             }
         }
         //already add to world.
-//        world.addFreshEntity(entity);
     }
 
     /**
@@ -571,11 +565,6 @@ public class Invasion {
 
     public void updateKillQueue() {
         final int next = (killPos + 1) % MissionManager.KILL_IN_SECOND;
-//        for(int i = 0; i < 10; ++ i) {
-//        	System.out.print(this.killQueue[i] + ", ");
-//        }
-//        System.out.print("Kills : " + PlayerUtil.getResource(player, Resources.MISSION_VALUE) + ", sub : " + this.killQueue[next]);
-//        System.out.println();
         PlayerUtil.addResource(player, Resources.MISSION_VALUE, - this.killQueue[next]);
         this.killQueue[next] = this.killInSecond;
         this.killPos = next;

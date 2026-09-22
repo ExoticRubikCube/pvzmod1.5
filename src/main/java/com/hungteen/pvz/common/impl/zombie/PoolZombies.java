@@ -102,7 +102,7 @@ public final class PoolZombies extends ZombieType {
 	public static final ZombieType YETI_ZOMBIE = new PoolZombies("yeti_zombie", new ZombieFeatures()
 		    .rank(RankTypes.PURPLE).xp(21)
 			.entityType(() -> EntityRegister.YETI_ZOMBIE.get())
-			.zombieModel(() -> () -> new YetiZombieModel(YetiZombieModel.createBodyLayer().bakeRoot())).scale(0.5F)
+			.zombieModel(() -> () -> new YetiZombieModel(YetiZombieModel.createBodyLayer().bakeRoot())).scale(0.45F)
 			.eatCommonSkill(List.of())
 	);
 	

@@ -65,8 +65,8 @@ public class LavaZombieEntity extends SwimmerZombieEntity {
 	}
 
 	@Override
-	protected float getWaterSlowDown() {
-		return 1.175f;//潜岩浆(熔岩僵尸)水中速度：普通4.7s/格 ÷ 4s/格
+	public float getSwimSpeed() {
+		return 2.25F;
 	}
 
 	@Override

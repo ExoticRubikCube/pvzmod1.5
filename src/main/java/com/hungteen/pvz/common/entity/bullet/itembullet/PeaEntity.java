@@ -207,9 +207,6 @@ this.discard();
 		if (this.getPeaState() == State.FIRE) {
 			return new ItemStack(ItemRegister.FLAME_PEA.get());
 		}
-//		if(this.getPeaState() == State.BLUE_FIRE) {
-//			return new ItemStack(ItemRegister.BLUE_FLAME_PEA.get());
-//		}
 		return new ItemStack(ItemRegister.PEA.get());
 	}
 	

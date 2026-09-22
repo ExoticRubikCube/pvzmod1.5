@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.register;
 
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.block.BlockRegister;
+import com.hungteen.pvz.common.world.feature.FeatureRegister;
 import com.hungteen.pvz.common.world.feature.PVZFeatures;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -42,7 +43,7 @@ public class PVZBiomes {
 		CHOMPER_PATCH_PF = PlacementUtils.register("pvz:chomper_patch",
 				FeatureUtils.register("pvz:chomper_patch", Feature.RANDOM_PATCH,
 						new RandomPatchConfiguration(64, 7, 3, chomper)),
-				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome(), RarityFilter.onAverageOnceEvery(32));
+				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome(), RarityFilter.onAverageOnceEvery(48));
 		NUT_TREE_PF = PlacementUtils.register("pvz:nut_tree", PVZFeatures.NUT_TREE,
 				VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.05F, 1), BlockRegister.NUT_SAPLING.get()));
 		features = true;
@@ -68,6 +69,7 @@ public class PVZBiomes {
 		BiomeDefaultFeatures.addDefaultExtraVegetation(biomeGenBuilder);
 		BiomeDefaultFeatures.addSurfaceFreezing(biomeGenBuilder);
 		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, CHOMPER_PATCH_PF);
+		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FeatureRegister.PLANTERN_PF);
 		biomeGenBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NUT_TREE_PF);
 
 		return new Biome.BiomeBuilder()

@@ -120,15 +120,6 @@ public class PVZPlayerEvents {
 	
 	@SubscribeEvent
 	public static void onSummonCardUse(SummonCardUseEvent ev) {
-//		Player player = ev.getPlayer();
-//		if(! player.level.isClientSide) { //unlock almanac
-//			SearchOption a = null;
-//			if(ev.getHeldStack().getItem() instanceof PlantCardItem) {// unlock plant card
-//			    IPlantType plant = ((PlantCardItem) ev.getHeldStack().getItem()).plantType;
-//			    a = SearchOption.get(plant);
-//			}
-//			PlayerUtil.unLockAlmanac(player, a);
-//		}
 	}
 	
 }

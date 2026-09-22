@@ -14,10 +14,5 @@ public class BloverRender extends PVZPlantRender<BloverEntity> {
 	public BloverRender(EntityRendererProvider.Context context) {
 		super(context, new BloverModel(context.bakeLayer(BloverModel.LAYER)), 0.4F);
 	}
-
-//	@Override
-//	public float getScaleByEntity(BloverEntity entity) {
-//		return 1.2F + entity.getLiveTick() * 0.3F / entity.getReadyTime();
-//	}
-
+	
 }
