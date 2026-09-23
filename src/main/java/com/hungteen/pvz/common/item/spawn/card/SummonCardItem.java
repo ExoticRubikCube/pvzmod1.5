@@ -123,28 +123,27 @@ public abstract class SummonCardItem extends Item{
 		return 20;//0 ~ 45
 	}
 
-	public void notifyPlayerAndCD(Player player, ItemStack stack, PlacementErrors error) {
-		this.notifyPlayerAndCD(player, stack, error, 0);
-	}
-
 	/**
 	 * send helpful info.
 	 */
-	public void notifyPlayerAndCD(Player player, ItemStack stack, PlacementErrors error, int arg) {
+	public void notifyPlayerAndCD(Player player, ItemStack stack, PlacementHints error, Object arg) {
 		if(! player.level.isClientSide) {
-			PlayerUtil.sendMsgTo(player, error.getTextByArg(arg, ChatFormatting.RED));
-//			PlayerUtil.setItemStackCD(player, stack, 10);
+			player.displayClientMessage(error.getTextByArg(ChatFormatting.RED, arg), true);
 			//*0.6.4 to fix imitator cd calculation bug.
 			PlayerUtil.playClientSound(player, SoundRegister.NO.get());
 		}
 	}
 
-	protected enum PlacementErrors{
-		SUN_ERROR("sun"),
+	public enum PlacementHints{
+		NO_ENOUGH_RESOURCE("no_enough_resource"),
 		MULTIPLE_SUN_ERROR("multiple_sun"),
-		CD_ERROR("cd"),
+		ON_COOL_DOWN("on_cool_down"),
 		LOCK_ERROR("lock"),
 		UPGRADE_ERROR("upgrade"),
+		CANT_PLANT_ON("cant_plant_on"),
+		CAN_ONLY_PLANT_IN_WATER("can_only_plant_in_water"),
+		CANT_PLANT_IN_WATER("cant_plant_in_water"),
+		NO_ENOUGH_PLACE("no_enough_place"),
 		GROUND_ERROR("ground"),
 		OUTER_ERROR("outer"),
 		OUTER_FULL("outer_full"),
@@ -153,12 +152,12 @@ public abstract class SummonCardItem extends Item{
 
 		private final String info;
 
-		PlacementErrors(String s){
+		PlacementHints(String s){
 			this.info = s;
 		}
 
-		public MutableComponent getTextByArg(int arg, ChatFormatting color){
-			return Component.translatable("help.pvz."+ this.info, arg).withStyle(color);
+		public MutableComponent getTextByArg(ChatFormatting color, Object... args){
+			return Component.translatable("help.pvz."+ this.info, args).withStyle(color);
 		}
 	}
 	

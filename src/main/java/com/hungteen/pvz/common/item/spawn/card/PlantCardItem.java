@@ -133,7 +133,7 @@ public class PlantCardItem extends SummonCardItem {
 		}
 		/* check cool down */
 		if(player.getCooldowns().isOnCooldown(heldStack.getItem())) {
-			this.notifyPlayerAndCD(player, heldStack, PlacementErrors.CD_ERROR);
+			this.notifyPlayerAndCD(player, heldStack, PlacementHints.ON_COOL_DOWN, heldStack.getHoverName());
 			return InteractionResultHolder.fail(heldStack);
 		}
 		/* do ray check */
@@ -141,15 +141,19 @@ public class PlantCardItem extends SummonCardItem {
 		if (result.getType() == HitResult.Type.BLOCK) {
 			final BlockPos waterPos = result.getBlockPos();
 			/* can not place here */
-			if (world.getFluidState(waterPos).getType() != Fluids.WATER || result.getDirection() != Direction.UP || ! world.isEmptyBlock(waterPos.above())) {
-				this.notifyPlayerAndCD(player, heldStack, PlacementErrors.GROUND_ERROR);
+			if(world.getFluidState(waterPos).getType() != Fluids.WATER || ! this.plantType.isWaterPlant()) {
+				this.notifyPlayerAndCD(player, heldStack, this.plantType.isWaterPlant() ? PlacementHints.CAN_ONLY_PLANT_IN_WATER : PlacementHints.CANT_PLANT_IN_WATER, getPlantName(this.plantType));
 				return InteractionResultHolder.fail(heldStack);
 		    }
+			if(result.getDirection() != Direction.UP || ! world.isEmptyBlock(waterPos.above())) {
+				this.notifyPlayerAndCD(player, heldStack, PlacementHints.NO_ENOUGH_PLACE, 0);
+				return InteractionResultHolder.fail(heldStack);
+			}
 			final MutableComponent plantResult = plantOnBlock(player, heldStack, world, waterPos, null);
 			if (plantResult == null) {
 				return InteractionResultHolder.success(heldStack);
 			}
-			PlayerUtil.sendMsgTo(player, plantResult);
+			player.displayClientMessage(plantResult, true);
 			PlayerUtil.playClientSound(player, SoundRegister.NO.get());
 			return InteractionResultHolder.fail(heldStack);
 		} else {
@@ -180,7 +184,7 @@ public class PlantCardItem extends SummonCardItem {
 		}
 		/* check cool down */
         if (player != null && player.getCooldowns().isOnCooldown(heldStack.getItem())) {
-            this.notifyPlayerAndCD(player, heldStack, PlacementErrors.CD_ERROR);
+            this.notifyPlayerAndCD(player, heldStack, PlacementHints.ON_COOL_DOWN, heldStack.getHoverName());
             return InteractionResult.FAIL;
         }
 
@@ -192,11 +196,18 @@ public class PlantCardItem extends SummonCardItem {
 		if (plantResult == null) {
 			return InteractionResult.SUCCESS;
 		}
-		PlayerUtil.sendMsgTo(player, plantResult);
+		player.displayClientMessage(plantResult, true);
 		PlayerUtil.playClientSound(player, SoundRegister.NO.get());
 		return InteractionResult.FAIL;
 	}
 	
+	/**
+	 * plant display name used as the first argument of htpvz2 style fail messages.
+	 */
+	private static Component getPlantName(IPlantType plantType) {
+		return plantType.getEntityType().map(entityType -> entityType.getDescription()).orElse(Component.empty());
+	}
+
 	/**
 	 * plant card on a block position with pre/post condition events. <br>
 	 * the plant entity is pre-created and discarded when condition checks fail,
@@ -217,7 +228,7 @@ public class PlantCardItem extends SummonCardItem {
 		final boolean isImitater = heldStack.getItem() instanceof ImitaterCardItem;
 		/* check cool down */
 		if(player.getCooldowns().isOnCooldown(heldStack.getItem())) {
-			return PlacementErrors.CD_ERROR.getTextByArg(0, ChatFormatting.RED);
+			return PlacementHints.ON_COOL_DOWN.getTextByArg(ChatFormatting.RED, heldStack.getHoverName());
 		}
 		/* check position */
 		final boolean inWater = direction == null;
@@ -225,28 +236,33 @@ public class PlantCardItem extends SummonCardItem {
 		MutableComponent positionError = null;
 		if(inWater) {
 			spawnPos = clickPos.above();
-			if(level.getFluidState(clickPos).getType() != Fluids.WATER || ! level.isEmptyBlock(spawnPos)
-					|| ! plantType.isWaterPlant()
-					|| plantType == PVZPlants.CAT_TAIL) {
-				positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			/* 非水生植物（含猫尾草，它只能种在睡莲上）不能种进流体；水生植物只能种在水里；水面被占则是空间不足 */
+			if(! plantType.isWaterPlant() || plantType == PVZPlants.CAT_TAIL) {
+				positionError = PlacementHints.CANT_PLANT_IN_WATER.getTextByArg(ChatFormatting.RED, getPlantName(plantType));
+			} else if(level.getFluidState(clickPos).getType() != Fluids.WATER) {
+				positionError = PlacementHints.CAN_ONLY_PLANT_IN_WATER.getTextByArg(ChatFormatting.RED, getPlantName(plantType));
+			} else if(! level.isEmptyBlock(spawnPos)) {
+				positionError = PlacementHints.NO_ENOUGH_PLACE.getTextByArg(ChatFormatting.RED, 0);
 			}
-		} else if(direction != Direction.UP || ! level.isEmptyBlock(clickPos.above())) {
-			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+		} else if(direction != Direction.UP) {
+			positionError = PlacementHints.CANT_PLANT_ON.getTextByArg(ChatFormatting.RED, getPlantName(plantType), level.getBlockState(clickPos).getBlock().getName());
+		} else if(! level.isEmptyBlock(clickPos.above())) {
+			positionError = PlacementHints.NO_ENOUGH_PLACE.getTextByArg(ChatFormatting.RED, 0);
 		} else if(plantType.getUpgradeFrom().isPresent()) {
-			positionError = PlacementErrors.UPGRADE_ERROR.getTextByArg(0, ChatFormatting.RED);
+			positionError = PlacementHints.UPGRADE_ERROR.getTextByArg(ChatFormatting.RED, 0);
 		} else if(! plantType.getPlacement().canPlaceOnBlock(level.getBlockState(clickPos).getBlock())) {
-			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			positionError = PlacementHints.CANT_PLANT_ON.getTextByArg(ChatFormatting.RED, getPlantName(plantType), level.getBlockState(clickPos).getBlock().getName());
 		} else if(! level.getBlockState(clickPos).getCollisionShape(level, clickPos).isEmpty()) {
 			spawnPos = clickPos.relative(direction);
 		}
 		if(positionError == null && ! level.getEntitiesOfClass(PVZPlantEntity.class, new AABB(spawnPos)).isEmpty()) {
-			positionError = PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			positionError = PlacementHints.NO_ENOUGH_PLACE.getTextByArg(ChatFormatting.RED, 0);
 		}
 		/* pre-create entity without adding to world */
 		final IPlantType entityPlantType = isImitater ? PVZPlants.IMITATER : plantType;
 		if(entityPlantType.getEntityType().isEmpty()) {
 			PVZMod.LOGGER.error("Plant Card : Summon wrong plant entity !");
-			return PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			return PlacementHints.GROUND_ERROR.getTextByArg(ChatFormatting.RED, 0);
 		}
 		final Mob spawnedMob = entityPlantType.getEntityType().get().create(serverLevel, plantStack.getTag(),
 				plantStack.hasCustomHoverName() ? plantStack.getHoverName() : null, player,
@@ -256,7 +272,7 @@ public class PlantCardItem extends SummonCardItem {
 			if(spawnedMob != null) {
 				spawnedMob.discard();
 			}
-			return PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			return PlacementHints.GROUND_ERROR.getTextByArg(ChatFormatting.RED, 0);
 		}
 		/* create(...,true,true) settles on block collision tops; fluid has none, so water
 		 * plants end up at the fluid-cell bottom. Lift them onto the surface, matching
@@ -284,18 +300,18 @@ public class PlantCardItem extends SummonCardItem {
 		MinecraftForge.EVENT_BUS.post(preEvent);
 		if(preEvent.isCanceled()) {
 			plantEntity.discard();
-			return preEvent.result != null ? preEvent.result : PlacementErrors.GROUND_ERROR.getTextByArg(0, ChatFormatting.RED);
+			return preEvent.result != null ? preEvent.result : PlacementHints.GROUND_ERROR.getTextByArg(ChatFormatting.RED, 0);
 		}
 		/* check lock */
 		if(! costCard.isEnjoyCard && PlayerUtil.isPAZLocked(player, costCard.plantType) && ConfigUtil.needUnlockToPlant() && ! player.isCreative()) {
 			plantEntity.discard();
-			return PlacementErrors.LOCK_ERROR.getTextByArg(costCard.plantType.getRequiredLevel(), ChatFormatting.RED);
+			return PlacementHints.LOCK_ERROR.getTextByArg(ChatFormatting.RED, costCard.plantType.getRequiredLevel());
 		}
 		/* challenge bound check：挑战绑定体验卡只能在其对应挑战范围内种植 */
 		final UUID challengeUuid = getChallengeUuid(heldStack);
 		if(challengeUuid != null && ! ChallengeManager.isPlayerInChallengeRange(serverLevel, challengeUuid, player)) {
 			plantEntity.discard();
-			return PlacementErrors.CHALLENGE_ERROR.getTextByArg(0, ChatFormatting.RED);
+			return PlacementHints.CHALLENGE_ERROR.getTextByArg(ChatFormatting.RED, 0);
 		}
 		/* level seed pool：关卡配置了种子池时，只允许种植池内植物 */
 		final Challenge playerChallenge = player instanceof ServerPlayer serverPlayer ? ChallengeManager.getPlayerChallenge(serverPlayer) : null;
@@ -311,7 +327,7 @@ public class PlantCardItem extends SummonCardItem {
 				}
 				if(! allowed) {
 					plantEntity.discard();
-					return PlacementErrors.SEED_POOL_ERROR.getTextByArg(0, ChatFormatting.RED);
+					return PlacementHints.SEED_POOL_ERROR.getTextByArg(ChatFormatting.RED, 0);
 				}
 			}
 		}
@@ -319,9 +335,9 @@ public class PlantCardItem extends SummonCardItem {
 		if(resourceEvent.cost > PlayerUtil.getResource(player, Resources.SUN_NUM) && ! player.isCreative()) {
 			plantEntity.discard();
 			if(sunCost == cardItem.getBasisSunCost(plantStack)) {
-				return PlacementErrors.SUN_ERROR.getTextByArg(resourceEvent.cost, ChatFormatting.RED);
+				return PlacementHints.NO_ENOUGH_RESOURCE.getTextByArg(ChatFormatting.RED, Resources.SUN_NUM.getText());
 			}
-			return PlacementErrors.MULTIPLE_SUN_ERROR.getTextByArg(resourceEvent.cost, ChatFormatting.RED);
+			return PlacementHints.MULTIPLE_SUN_ERROR.getTextByArg(ChatFormatting.RED, resourceEvent.cost);
 		}
 		/* post condition */
 		final PlantConditionMatchingEvent.OnBlock postEvent = new PlantConditionMatchingEvent.OnBlock(
@@ -640,12 +656,12 @@ public class PlantCardItem extends SummonCardItem {
 	private static boolean checkSunAndCD(Player player, PlantCardItem cardItem, ItemStack stack, boolean ignore, Predicate<Player> pre) {
 		/* check cool down */
 		if(player.getCooldowns().isOnCooldown(cardItem)) {
-			cardItem.notifyPlayerAndCD(player, stack, PlacementErrors.CD_ERROR);
+			cardItem.notifyPlayerAndCD(player, stack, PlacementHints.ON_COOL_DOWN, stack.getHoverName());
 			return false;
 		}
 		/* check lock */
 		if(! cardItem.isEnjoyCard && (PlayerUtil.isPAZLocked(player, cardItem.plantType) && ConfigUtil.needUnlockToPlant() && !player.isCreative())) {
-			cardItem.notifyPlayerAndCD(player, stack, PlacementErrors.LOCK_ERROR, cardItem.plantType.getRequiredLevel());
+			cardItem.notifyPlayerAndCD(player, stack, PlacementHints.LOCK_ERROR, cardItem.plantType.getRequiredLevel());
 			return false;
 		}
 		/* whether consider surrounding plants number */
@@ -653,10 +669,10 @@ public class PlantCardItem extends SummonCardItem {
 		/* check sun */
 		if(sunCost > PlayerUtil.getResource(player, Resources.SUN_NUM) && !player.isCreative()) {
 			if (sunCost == cardItem.getBasisSunCost(stack)) {
-				cardItem.notifyPlayerAndCD(player, stack, PlacementErrors.SUN_ERROR, sunCost);
+				cardItem.notifyPlayerAndCD(player, stack, PlacementHints.NO_ENOUGH_RESOURCE, Resources.SUN_NUM.getText());
 			}
 			else {
-				cardItem.notifyPlayerAndCD(player, stack, PlacementErrors.MULTIPLE_SUN_ERROR, sunCost);
+				cardItem.notifyPlayerAndCD(player, stack, PlacementHints.MULTIPLE_SUN_ERROR, sunCost);
 			}
 			return false;
 		}

@@ -189,7 +189,7 @@ public class PotatoMineEntity extends PlantCloserEntity{
 	 */
 	private Optional<BlockPos> getRandomPlantableGround() {
 		for(int i = 0; i < 8; ++ i) {
-			final BlockPos offset = MathUtil.getRandomRangePos(this.getRandom(), 2, 8);
+			final BlockPos offset = MathUtil.getRandomRangePos(this.getRandom(), 2, 16);
 			final BlockPos groundPos = this.blockPosition().offset(offset.getX(), -1, offset.getZ());
 			if(this.level.isEmptyBlock(groundPos.above())
 					&& this.level.getEntitiesOfClass(PVZPlantEntity.class, new AABB(groundPos.above())).isEmpty()

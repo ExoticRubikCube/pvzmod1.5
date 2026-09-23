@@ -89,7 +89,8 @@ public class TorchWoodEntity extends PVZPlantEntity {
 	
 	@Override
 	public int getSuperTimeLength() {
-		return 0;
+		/* 大招只用来永久切换蓝火，非零时长才能被 canStartSuperMode 放行，时长对齐坚果的超级模式 */
+		return 20;
 	}
 	
 	@Override

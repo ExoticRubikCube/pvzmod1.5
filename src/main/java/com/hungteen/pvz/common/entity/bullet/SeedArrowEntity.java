@@ -2,9 +2,10 @@ package com.hungteen.pvz.common.entity.bullet;
 
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
+import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
@@ -42,7 +43,7 @@ public class SeedArrowEntity extends Arrow {
     protected void onHitEntity(EntityHitResult result) {
         if (this.owner instanceof Player player && this.seedPacket != null && this.seedPacket.getItem() instanceof PlantCardItem) {
             if (player.getCooldowns().isOnCooldown(this.seedPacket.getItem())) {
-                player.displayClientMessage(Component.translatable("help.pvz.cd"), true);
+                player.displayClientMessage(SummonCardItem.PlacementHints.ON_COOL_DOWN.getTextByArg(ChatFormatting.RED, this.seedPacket.getHoverName()), true);
             } else {
                 MutableComponent plantResult = this.plantOnEntity(player, result.getEntity());
                 if (plantResult != null) {
@@ -58,7 +59,7 @@ public class SeedArrowEntity extends Arrow {
     protected void onHitBlock(BlockHitResult result) {
         if (this.owner instanceof Player player && this.seedPacket != null && this.seedPacket.getItem() instanceof PlantCardItem) {
             if (player.getCooldowns().isOnCooldown(this.seedPacket.getItem())) {
-                player.displayClientMessage(Component.translatable("help.pvz.cd"), true);
+                player.displayClientMessage(SummonCardItem.PlacementHints.ON_COOL_DOWN.getTextByArg(ChatFormatting.RED, this.seedPacket.getHoverName()), true);
             } else {
                 MutableComponent plantResult = PlantCardItem.plantOnBlock(player, this.seedPacket, this.level, result.getBlockPos(), result.getDirection());
                 if (plantResult != null) {
