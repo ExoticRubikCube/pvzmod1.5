@@ -23,12 +23,17 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 	@Override
 	public void zombieTick() {
 		super.zombieTick();
-		if(level.isClientSide() && this.isCarShaking()) {
+		if(level.isClientSide() && this.isZombieDying()) {
 			for(int i = 1; i <= 3; i ++) {
 			    this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), (this.getRandom().nextFloat() - 0.5) / 10, 0.05, (this.getRandom().nextFloat() - 0.5) / 10);
 			}
 		}
-		
+
+	}
+
+	@Override
+	public boolean isZombieDying() {
+		return this.getHealth() < (float) 20;
 	}
 	
 	@Override
@@ -49,10 +54,6 @@ public abstract class CarZombieEntity extends PVZZombieEntity {
 		return 1;
 	}
 
-	public boolean isCarShaking() {
-		return this.getHealth() <= 20;
-	}
-	
 	@Override
 	public boolean canBreakPlantBlock() {
 		return false;

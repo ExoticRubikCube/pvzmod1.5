@@ -95,13 +95,6 @@ public class PVZPlayerEvents {
 		BowlingGloveItem.onPickUp(ev);
 	}
 
-	@SubscribeEvent
-	public static void onPlayerRightClickItem(PlayerInteractEvent.RightClickItem ev) {
-		if(! ev.getLevel().isClientSide && ev.getHand() == InteractionHand.MAIN_HAND) {
-			PlayerEventHandler.collectDropByReachSword(ev.getEntity(), ev.getItemStack());
-		}
-	}
-
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void banBucket(PlayerInteractEvent.EntityInteractSpecific ev) {
 		if(! CompatUtil.canBucketEntity(ev.getEntity().level, ev.getTarget(), ev.getItemStack())){

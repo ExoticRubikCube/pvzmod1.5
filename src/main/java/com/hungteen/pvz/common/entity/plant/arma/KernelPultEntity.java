@@ -81,7 +81,7 @@ public class KernelPultEntity extends PlantPultEntity {
 	 * switch butter or kernel.
 	 */
 	protected void changeBullet() {
-		if(this.isPlantInSuperMode() && ! this.isSuperOut) {
+		if(SkillTypes.getSkillLevel(this.getSkills(), SkillTypes.BUTTER_PULT) > 0 || (this.isPlantInSuperMode() && ! this.isSuperOut)) {
 			this.setCurrentBullet(CornTypes.BUTTER);
 			return ;
 		}
@@ -109,7 +109,8 @@ public class KernelPultEntity extends PlantPultEntity {
 
     @Override
 	public float getAttackDamage() {
-		return this.getSkillValue(SkillTypes.MORE_KERNEL_DAMAGE);
+		final float damage = this.getSkillValue(SkillTypes.MORE_KERNEL_DAMAGE);
+		return SkillTypes.getSkillLevel(this.getSkills(), SkillTypes.BUTTER_PULT) > 0 ? damage * 0.5F : damage;
 	}
 
 	public MobEffectInstance getButterEffect() {

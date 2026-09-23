@@ -22,7 +22,7 @@ public class ZomboniRender extends PVZZombieRender<ZomboniEntity>{
 	
 	@Override
 	protected boolean isShaking(ZomboniEntity zombie) {
-		return zombie.isCarShaking();
+		return zombie.isZombieDying();
 	}
 
 	@Override

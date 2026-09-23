@@ -86,6 +86,7 @@ import com.hungteen.pvz.client.render.entity.zombie.zombotany.*;
 import com.hungteen.pvz.common.block.BlockRegister;
 import com.hungteen.pvz.common.blockentity.TileEntityRegister;
 import com.hungteen.pvz.common.item.ItemRegister;
+import com.hungteen.pvz.common.item.tool.mc.SeedCrossbowItem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -155,6 +156,7 @@ public class ClientRegister {
 	@SuppressWarnings("removal")
 	@SubscribeEvent
 	public static void reigsterRenderType(FMLClientSetupEvent ev){
+		ev.enqueueWork(() -> SeedCrossbowItem.registerProperties(ItemRegister.SEED_CROSSBOW.get()));
 		TileEntityRegister.bindRenderers(ev);
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.ORIGIN_BLOCK.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegister.PEA_PLANT.get(), RenderType.cutout());
@@ -194,6 +196,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(STAR.get(), ctx -> new StarRender(ctx));
 		ev.registerEntityRenderer(NUT.get(), ctx -> new NutRender(ctx));
 		ev.registerEntityRenderer(CABBAGE.get(), ctx -> new CabbageRender(ctx));
+		ev.registerEntityRenderer(ICE_CABBAGE.get(), ctx -> new IceCabbageRender(ctx));
 		ev.registerEntityRenderer(KERNEL.get(), ctx -> new KernelRender(ctx));
 		ev.registerEntityRenderer(BUTTER.get(), ctx -> new ButterRender(ctx));
 		ev.registerEntityRenderer(TARGET_ARROW.get(), ctx -> new TargetArrowRender(ctx));
@@ -203,6 +206,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(CORN.get(), ctx -> new CornRender(ctx));
 		ev.registerEntityRenderer(FOG_IN_BOTTLE.get(), ctx -> new ThrownItemRenderer<>(ctx, 1, false));
 		ev.registerEntityRenderer(ORIGIN_EFFECT.get(), ctx -> new OriginEffectRender(ctx));
+		ev.registerEntityRenderer(SEED_ARROW.get(), ctx -> new SeedArrowRender(ctx));
 		ev.registerEntityRenderer(DOOM_FIXER.get(), ctx -> new DoomFixerRender(ctx));
 		ev.registerEntityRenderer(SMALL_CHOMPER.get(), ctx -> new SmallChomperRender(ctx));
 		ev.registerEntityRenderer(BOBSLE_CAR.get(), ctx -> new BobsleCarRender(ctx));
@@ -333,6 +337,8 @@ public class ClientRegister {
 	public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions ev) {
 		ev.registerLayerDefinition(BallModel.LAYER,
 			BallModel::createBodyLayer);
+		ev.registerLayerDefinition(CabbageModel.LAYER,
+			CabbageModel::createBodyLayer);
 		ev.registerLayerDefinition(CornModel.LAYER,
 			CornModel::createBodyLayer);
 		ev.registerLayerDefinition(KernelModel.LAYER,

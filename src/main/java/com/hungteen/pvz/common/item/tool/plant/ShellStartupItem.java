@@ -69,6 +69,9 @@ public class ShellStartupItem extends Item {
 
 	@SubscribeEvent
 	public static void shellStartupPlantGoal(PlantConditionMatchingEvent.OnBlock event) {
+		if(event.event == null || event.event.getEntity() == null) {
+			return;
+		}
 		if(contextStack.isEmpty()) {
 			if(event.phase == PlantConditionMatchingEvent.Phase.POST && event.isPlanting && event.result != null
 					&& event.event.spawningEntity instanceof PVZPlantEntity

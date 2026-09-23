@@ -219,7 +219,7 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 	 */
 	public void zombieTick() {
 		this.updateChallengeSlow();
-		if (!this.hasHead() && this.canBleedWhenDying() && !this.isDeadOrDying()) {
+		if (!this.isDeadOrDying() && this.isZombieDying() && this.canBleedWhenDying()) {
 			this.setHealth(this.getHealth() - 0.3F);
 		}
 		if (this.tickCount <= 2) {
@@ -232,8 +232,6 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
 				ParticleUtil.spawnSplash(this.level, this.position(), 1);
 			}
 		}
-
-		//natural spawn zombie will heal in lava.
 	}
 
 	/**
@@ -988,10 +986,19 @@ public abstract class PVZZombieEntity extends AbstractPAZEntity implements IZomb
     /**
 	 * 是否在垂死状态(PHASE_ZOMBIE_DYING)流血：断头后每秒匀速掉血，默认true；飞行中气球僵尸等特殊僵尸按需覆写为false。
 	 */
-    protected boolean canBleedWhenDying() {
+	protected boolean canBleedWhenDying() {
 		return true;
 	}
-    
+
+	/**
+	 * 是否处于垂死状态(对齐 PVZ1 源码 isDying)：普通僵尸=断头；车系等特殊僵尸覆写为准临界(固定临界血量)。
+	 * 与 {@link #canBleedWhenDying()} 共同决定每 tick 匀速掉血。
+	 * {@link #zombieTick()}
+	 */
+	protected boolean isZombieDying() {
+		return !this.hasHead();
+	}
+
     private void setStateByFlag(boolean is, int flag) {
 		this.setPAZState(AlgorithmUtil.BitOperator.setBit(this.getPAZState(), flag, is));
 	}

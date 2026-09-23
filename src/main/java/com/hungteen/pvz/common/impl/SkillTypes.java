@@ -71,6 +71,12 @@ public class SkillTypes {
             Arrays.asList(3, 3, 4, 6)
     );
 
+    //potato mine.
+    public static final ISkillType POISON_ENRICHMENT = new SkillType("poison_enrichment",
+            ArrayUtil.getAverageArray(2, 0F, 1F),
+            Arrays.asList(8)
+    );
+
     //chomper.
     public static final ISkillType NORMAL_ENHANCE_STRENGTH = new SkillType("normal_enhance_strength",
             ArrayUtil.getAverageArray(5, 140F, 300F),
@@ -167,10 +173,22 @@ public class SkillTypes {
             Arrays.asList(2, 3, 6, 7)
     );
 
+    //cabbage pult.
+    public static final ISkillType COLESLAW = new SkillType("coleslaw",
+            Arrays.asList(0F, 0F, 0.05F, 0.1F, 0.15F, 0.2F),
+            Arrays.asList(2, 3, 4, 6, 8)
+    );
+
     //kernel pult
     public static final ISkillType MORE_KERNEL_DAMAGE = new SkillType("more_kernel_damage",
             ArrayUtil.getAverageArray(4, 1.5F, 3F),
             Arrays.asList(3, 5, 8)
+    );
+
+    //kernel pult
+    public static final ISkillType BUTTER_PULT = new SkillType("butter_pult",
+            ArrayUtil.getAverageArray(2, 0F, 1F),
+            Arrays.asList(8)
     );
 
     //garlic

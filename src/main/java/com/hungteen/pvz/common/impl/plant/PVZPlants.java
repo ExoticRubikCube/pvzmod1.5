@@ -102,7 +102,7 @@ public final class PVZPlants extends PlantType {
 			.summonCard(() -> ItemRegister.POTATO_MINE_CARD.get())
 			.enjoyCard(() -> ItemRegister.POTATO_MINE_ENJOY_CARD.get())
 			.plantModel(() -> () -> new PotatoMineModel(PotatoMineModel.createBodyLayer().bakeRoot())).scale(1F)
-			.commonSkill(Arrays.asList(SkillTypes.NORMAL_BOMB_DAMAGE, SkillTypes.MINE_FAST_PREPARE))
+			.commonSkill(Arrays.asList(SkillTypes.NORMAL_BOMB_DAMAGE, SkillTypes.MINE_FAST_PREPARE, SkillTypes.POISON_ENRICHMENT))
 			.placement(Placements.STABLE)
 	);
 	
@@ -405,7 +405,7 @@ public final class PVZPlants extends PlantType {
 			.summonCard(() -> ItemRegister.CABBAGE_PULT_CARD.get())
 			.enjoyCard(() -> ItemRegister.CABBAGE_PULT_ENJOY_CARD.get())
 			.plantModel(() -> () -> new CabbagePultModel(CabbagePultModel.createBodyLayer().bakeRoot())).scale(1F)
-			.commonSkill(List.of(SkillTypes.MORE_CABBAGE_DAMAGE))
+			.commonSkill(List.of(SkillTypes.MORE_CABBAGE_DAMAGE, SkillTypes.COLESLAW))
 	);
 	
 	public static final IPlantType FLOWER_POT = new PVZPlants("flower_pot", new PlantFeatures()
@@ -429,7 +429,7 @@ public final class PVZPlants extends PlantType {
 			.enjoyCard(() -> ItemRegister.KERNEL_PULT_ENJOY_CARD.get())
 			.plantModel(() -> () -> new KernelPultModel(KernelPultModel.createBodyLayer().bakeRoot())).scale(0.9F)
 			.upgradeTo(() -> PVZPlants.COB_CANNON)
-			.commonSkill(List.of(SkillTypes.MORE_KERNEL_DAMAGE))
+			.commonSkill(List.of(SkillTypes.MORE_KERNEL_DAMAGE, SkillTypes.BUTTER_PULT))
 	);
 	
 	public static final IPlantType COFFEE_BEAN = new PVZPlants("coffee_bean", new PlantFeatures()

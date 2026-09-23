@@ -59,7 +59,7 @@ public class ChallengeComponent implements IChallengeComponent {
 	private boolean showRound;
 	private int recommendLevel;
 	private boolean shouldCloseToCenter;
-	//0 表示未配置，开局余额跟随玩家智慧树等级
+	//0 表示未配置
 	private int initialSun = 0;
 	private int sunLimit = 9999;
 	/* seed rain */

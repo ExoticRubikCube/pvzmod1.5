@@ -43,7 +43,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         addedItems.addAll(Arrays.asList(ItemRegister.PEA_GUN.get(), ItemRegister.ZOMBIE_FLAG.get(), ItemRegister.BOBSLE_CAR.get(),
                 ItemRegister.SCREEN_DOOR.get(), ItemRegister.JACK_BOX.get(), ItemRegister.BALLOON.get(),
                 ItemRegister.WARNING_SIGN.get(), ItemRegister.ZOMBIE_DOLL.get(), ItemRegister.POLE.get(),
-                ItemRegister.BUCKET_HEAD.get(), ItemRegister.GARDEN_COMPASS.get()
+                ItemRegister.BUCKET_HEAD.get(), ItemRegister.GARDEN_COMPASS.get(), ItemRegister.SEED_CROSSBOW.get(),
+                BlockRegister.PLANTERN.get().asItem()
         ));
 
         // single add

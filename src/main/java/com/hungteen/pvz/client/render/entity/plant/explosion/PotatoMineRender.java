@@ -3,8 +3,10 @@ package com.hungteen.pvz.client.render.entity.plant.explosion;
 import com.hungteen.pvz.client.model.entity.plant.explosion.PotatoMineModel;
 import com.hungteen.pvz.client.render.entity.plant.PVZPlantRender;
 import com.hungteen.pvz.common.entity.plant.explosion.PotatoMineEntity;
+import com.hungteen.pvz.utils.StringUtil;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,8 +14,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class PotatoMineRender extends PVZPlantRender<PotatoMineEntity>{
 
+	private static final ResourceLocation POISONOUS_TEX = StringUtil.prefix("textures/entity/plant/explosion/poisonous_potato_mine.png");
+
 	public PotatoMineRender(EntityRendererProvider.Context context) {
 		super(context, new PotatoMineModel(context.bakeLayer(PotatoMineModel.LAYER)), 0.3F);
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(PotatoMineEntity entity) {
+		return entity.isPoisonous() ? POISONOUS_TEX : super.getTextureLocation(entity);
 	}
 
 	@Override

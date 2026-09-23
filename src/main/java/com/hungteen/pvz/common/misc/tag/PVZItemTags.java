@@ -29,6 +29,7 @@ public class PVZItemTags {
 	public static final TagKey<Item> PLANT_CARDS = pvzTag("cards/plant_card");
 	public static final TagKey<Item> TEMPLATE_CARDS = pvzTag("cards/template_card");
 	public static final TagKey<Item> ESSENCE_ORES = pvzTag("ores/essence");
+	public static final TagKey<Item> REACH_ITEMS = pvzTag("reach_items");
 	public static final TagKey<Item> GRAY_MATERIALS = pvzTag("card/gray_materials");
 	public static final TagKey<Item> WHITE_MATERIALS = pvzTag("card/white_materials");
 	public static final TagKey<Item> GREEN_MATERIALS = pvzTag("card/green_materials");

@@ -49,4 +49,8 @@ public class EffectRegister {
 		return new PVZEffect(MobEffectCategory.BENEFICIAL, Colors.CREEPER_GREEN);
 	});
 
+	public static final RegistryObject<MobEffect> PHYTOTOXIN_EFFECT = EFFECTS.register("phytotoxin", () -> {
+		return new PhytotoxinEffect(MobEffectCategory.HARMFUL, Colors.TOXIC_GREEN);
+	});
+
 }

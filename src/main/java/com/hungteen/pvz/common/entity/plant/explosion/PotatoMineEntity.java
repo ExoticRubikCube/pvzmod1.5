@@ -12,11 +12,20 @@ import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
+import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -24,15 +33,24 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PotatoMineEntity extends PlantCloserEntity{
 
 	public static final int RISING_ANIM_CD = 20;
+
+	private static final EntityDataAccessor<Boolean> POISONOUS = SynchedEntityData.defineId(PotatoMineEntity.class, EntityDataSerializers.BOOLEAN);
 	
 	public PotatoMineEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
 		super(type, worldIn);
 	}
-	
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(POISONOUS, false);
+	}
+
 	@Override
 	protected void normalPlantTick() {
 		super.normalPlantTick();
@@ -46,6 +64,26 @@ public class PotatoMineEntity extends PlantCloserEntity{
 					Vec3 offset = new Vec3(MathUtil.getRandomFloat(getRandom()), 0, MathUtil.getRandomFloat(getRandom())).normalize();
 					WorldUtil.spawnRandomSpeedParticle(level, ParticleRegister.DIRT_BURST_OUT.get(), this.position().add(offset), MathUtil.getRandomFloat(getRandom()) / 8, 0.06F);
 				}
+			}
+			if(this.isPoisonous() && this.getRandom().nextBoolean()) {
+				final int color = EffectRegister.PHYTOTOXIN_EFFECT.get().getColor();
+				final double r = (double) (color >> 16 & 255) / 255.0D;
+				final double g = (double) (color >> 8 & 255) / 255.0D;
+				final double b = (double) (color & 255) / 255.0D;
+				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.getRandom().nextFloat() * 0.6F - 0.3F,
+						this.getY() + this.getRandom().nextFloat() - 0.3F, this.getZ() + this.getRandom().nextFloat() * 0.6F - 0.3F, r, g, b);
+			}
+		}
+	}
+
+	@Override
+	public void pazTick() {
+		super.pazTick();
+		if(! this.level.isClientSide()) {
+			if(this.hasEffect(MobEffects.POISON) || this.hasEffect(EffectRegister.PHYTOTOXIN_EFFECT.get())) {
+				this.setPoisonous(true);
+				this.removeEffect(MobEffects.POISON);
+				this.removeEffect(EffectRegister.PHYTOTOXIN_EFFECT.get());
 			}
 		}
 	}
@@ -74,8 +112,21 @@ public class PotatoMineEntity extends PlantCloserEntity{
 				EntityUtil.spawnParticle(this, 3);
 				EntityUtil.spawnParticle(this, 4);
 			}
+			if(this.isPoisonous()) {
+				this.spawnPoisonCloud();
+			}
 			this.discard();
 		}
+	}
+	
+	private void spawnPoisonCloud() {
+		AreaEffectCloud cloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+		cloud.setRadius(2F);
+		cloud.setDuration(400);
+		cloud.setWaitTime(0);
+		cloud.setOwner(this);
+		cloud.addEffect(new MobEffectInstance(EffectRegister.PHYTOTOXIN_EFFECT.get(), 400));
+		this.level.addFreshEntity(cloud);
 	}
 	
 	@Override
@@ -99,22 +150,54 @@ public class PotatoMineEntity extends PlantCloserEntity{
 			this.setRisingFromDirt();
 		}
 	}
-	
+
+	@Override
+	public void finalizeSpawn(CompoundTag tag) {
+		super.finalizeSpawn(tag);
+		if(! this.level.isClientSide()) {
+			/* 技能只决定出生时是否毒化，此后毒化状态独立于技能表存在 */
+			final boolean bySkill = SkillTypes.getSkillLevel(this.getSkills(), SkillTypes.POISON_ENRICHMENT) > 0;
+			final boolean byRandom = this.getRandom().nextFloat() <= 0.02F;
+			if(bySkill || byRandom) {
+				this.setPoisonous(true);
+			}
+		}
+	}
+
 	/**
 	 * shoot some potato to the sky
 	 */
 	protected void shootPotatos() {
 		int num = this.getShootNum();
-		for(int i = 1; i <= num; ++ i) {
+		for(int i = 0; i < num; ++ i) {
+			/* 只朝附近可种植土豆雷的地面投掷，避免土豆落在不可种植方块上白炸 */
+			final Optional<BlockPos> targetPos = this.getRandomPlantableGround();
+			if(targetPos.isEmpty()) {
+				continue;
+			}
 			PotatoEntity potato = new PotatoEntity(level, this);
+			potato.setPoisonous(this.isPoisonous());
 			potato.setPos(this.getX(), this.getY() + 1, this.getZ());
-		    final float dx = MathUtil.getRandomFloat(getRandom()) * i / 2;
-		    final float dy = 0.5F;
-		    final float dz = MathUtil.getRandomFloat(getRandom()) * i / 2;
-		    potato.shoot(dx, dy, dz);
+			potato.shootTo(targetPos.get());
 		    potato.summonByOwner(this);
 		    this.level.addFreshEntity(potato);
 		}
+	}
+
+	/**
+	 * 在自身附近随机找一块可种植土豆雷的地面（含上方一格空间），找不到就返回空
+	 */
+	private Optional<BlockPos> getRandomPlantableGround() {
+		for(int i = 0; i < 8; ++ i) {
+			final BlockPos offset = MathUtil.getRandomRangePos(this.getRandom(), 2, 8);
+			final BlockPos groundPos = this.blockPosition().offset(offset.getX(), -1, offset.getZ());
+			if(this.level.isEmptyBlock(groundPos.above())
+					&& this.level.getEntitiesOfClass(PVZPlantEntity.class, new AABB(groundPos.above())).isEmpty()
+					&& PVZPlants.POTATO_MINE.getPlacement().canPlaceOnBlock(this.level.getBlockState(groundPos).getBlock())) {
+				return Optional.of(groundPos);
+			}
+		}
+		return Optional.empty();
 	}
 	
 	public int getShootNum() {
@@ -126,11 +209,34 @@ public class PotatoMineEntity extends PlantCloserEntity{
 	}
 
 	public float getExplodeDamage(){
-		return this.getSkillValue(SkillTypes.NORMAL_BOMB_DAMAGE);
+		final float damage = this.getSkillValue(SkillTypes.NORMAL_BOMB_DAMAGE);
+		return this.isPoisonous() ? damage * 0.75F : damage;
 	}
 
 	public int getPrepareCD(){
 		return (int) this.getSkillValue(SkillTypes.MINE_FAST_PREPARE);
+	}
+
+	public boolean isPoisonous() {
+		return this.entityData.get(POISONOUS);
+	}
+
+	public void setPoisonous(boolean poisonous) {
+		this.entityData.set(POISONOUS, poisonous);
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if(compound.contains("poisonous")) {
+			this.setPoisonous(compound.getBoolean("poisonous"));
+		}
+	}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("poisonous", this.isPoisonous());
 	}
 
 	/**

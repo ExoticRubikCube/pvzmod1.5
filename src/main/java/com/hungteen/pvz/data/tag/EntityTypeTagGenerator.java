@@ -6,6 +6,7 @@ import com.hungteen.pvz.common.entity.PVZMobCategorys;
 import com.hungteen.pvz.common.misc.tag.PVZEntityTypeTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -24,6 +25,7 @@ public class EntityTypeTagGenerator extends EntityTypeTagsProvider {
     @Override
     public void addTags() {
         /* mc tags */
+        this.tag(EntityTypeTags.ARROWS).add(EntityRegister.SEED_ARROW.get());
 
         /* forge tags */
 

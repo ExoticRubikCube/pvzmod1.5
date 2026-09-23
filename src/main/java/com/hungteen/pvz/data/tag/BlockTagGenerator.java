@@ -45,6 +45,9 @@ public class BlockTagGenerator extends BlockTagsProvider {
         this.tag(PVZBlockTags.PLANT_SUIT_BLOCKS).addTag(PVZBlockTags.GOLD_TILES)
                 .add(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, BlockRegister.FLOWER_POT.get(), BlockRegister.LILY_PAD.get());
         this.tag(BlockTags.LOGS).add(BlockRegister.NUT_LOG.get());
+        //crops.
+        this.tag(BlockTags.CROPS).add(BlockRegister.PEA_PLANT.get(), BlockRegister.CABBAGE.get(),
+                BlockRegister.CORN.get(), BlockRegister.PEPPER.get());
     }
 
     private Block[] getFilterBlocks(Predicate<Block> predicate) {

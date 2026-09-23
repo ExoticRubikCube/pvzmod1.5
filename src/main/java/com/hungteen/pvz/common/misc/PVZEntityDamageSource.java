@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.misc;
 
 import com.hungteen.pvz.common.entity.bullet.*;
 import com.hungteen.pvz.common.entity.bullet.itembullet.CabbageEntity;
+import com.hungteen.pvz.common.entity.bullet.itembullet.IceCabbageEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.MetalItemEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.PeaEntity;
 import com.hungteen.pvz.common.entity.bullet.itembullet.SporeEntity;
@@ -84,6 +85,10 @@ public class PVZEntityDamageSource extends EntityDamageSource {
 	
 	public static PVZEntityDamageSource cabbage(CabbageEntity pea, Entity shooter) {
 		return new PVZEntityDamageSource("cabbage", pea, shooter).setParabola();
+	}
+	
+	public static PVZEntityDamageSource iceCabbage(IceCabbageEntity cabbage, Entity shooter) {
+		return new PVZEntityDamageSource("ice_cabbage", cabbage, shooter).setParabola().setIceDamage();
 	}
 	
 	public static PVZEntityDamageSource kernel(KernelEntity pea, Entity shooter) {

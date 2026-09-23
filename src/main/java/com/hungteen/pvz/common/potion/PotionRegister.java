@@ -17,4 +17,8 @@ public class PotionRegister {
 	public static final RegistryObject<Potion> LIGHT_EYE_POTION_1 = POTIONS.register("light_eye_potion_1", () -> {return new Potion(new MobEffectInstance(EffectRegister.LIGHT_EYE_EFFECT.get(), 1200, 0));});
 	public static final RegistryObject<Potion> LIGHT_EYE_POTION_2 = POTIONS.register("light_eye_potion_2", () -> {return new Potion(new MobEffectInstance(EffectRegister.LIGHT_EYE_EFFECT.get(), 9600, 0));});
 
+	public static final RegistryObject<Potion> PHYTOTOXIN_POTION_1 = POTIONS.register("phytotoxin_potion_1", () -> {return new Potion(new MobEffectInstance(EffectRegister.PHYTOTOXIN_EFFECT.get(), 400, 0));});
+	public static final RegistryObject<Potion> PHYTOTOXIN_POTION_2 = POTIONS.register("phytotoxin_potion_2", () -> {return new Potion(new MobEffectInstance(EffectRegister.PHYTOTOXIN_EFFECT.get(), 400, 1));});
+	public static final RegistryObject<Potion> PHYTOTOXIN_POTION_3 = POTIONS.register("phytotoxin_potion_3", () -> {return new Potion(new MobEffectInstance(EffectRegister.PHYTOTOXIN_EFFECT.get(), 1000, 0));});
+
 }

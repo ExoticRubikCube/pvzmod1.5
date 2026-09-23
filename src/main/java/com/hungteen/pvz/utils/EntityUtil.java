@@ -67,8 +67,6 @@ import java.util.stream.Collectors;
 public class EntityUtil {
 
     public static final Random RAND = new Random();
-    public static final float LIMITED_DAMAGE = 100;
-
     public static Vec3 getNormalisedVector2d(@Nonnull Entity a, @Nonnull Entity b) {
         final double dx = b.getX() - a.getX();
         final double dz = b.getZ() - a.getZ();
@@ -116,11 +114,11 @@ public class EntityUtil {
     }
 
     public static boolean canHelpAttackOthers(@Nonnull Entity entity) {
-        if (entity instanceof PVZZombieEntity) {
-            return ((PVZZombieEntity) entity).canHelpAttack();
+        if (entity instanceof PVZZombieEntity zombie) {
+            return zombie.canHelpAttack();
         }
-        if (entity instanceof PVZPlantEntity) {
-            return ((PVZPlantEntity) entity).canHelpAttack();
+        if (entity instanceof PVZPlantEntity plant) {
+            return plant.canHelpAttack();
         }
         return true;
     }
@@ -611,7 +609,7 @@ public class EntityUtil {
      * is entity has frozen effect.
      */
     public static boolean isEntityFrozen(LivingEntity entity) {
-        return entity.hasEffect(EffectRegister.FROZEN_EFFECT.get());
+        return entity.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(EffectRegister.FROZEN_EFFECT_UUID) != null;
     }
 
     /**
@@ -628,7 +626,7 @@ public class EntityUtil {
         if (entity instanceof FlyingAnimal || entity instanceof Bat) {
             return true;
         }
-        if (entity instanceof BalloonZombieEntity && ((BalloonZombieEntity) entity).hasBalloon()) {
+        if (entity instanceof BalloonZombieEntity balloonZombie && balloonZombie.hasBalloon()) {
             return true;
         }
         return !entity.isOnGround() && !entity.isInWater() && !entity.isInLava();

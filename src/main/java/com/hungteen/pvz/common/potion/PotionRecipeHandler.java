@@ -19,6 +19,9 @@ public class PotionRecipeHandler {
 	public static final ItemStack EXCITE_POTION_3 = PotionUtils.setPotion(new ItemStack(Items.POTION), PotionRegister.EXCITE_POTION_3.get());
 	public static final ItemStack LIGHT_EYE_POTION_1 = PotionUtils.setPotion(new ItemStack(Items.POTION), PotionRegister.LIGHT_EYE_POTION_1.get());
 	public static final ItemStack LIGHT_EYE_POTION_2 = PotionUtils.setPotion(new ItemStack(Items.POTION), PotionRegister.LIGHT_EYE_POTION_2.get());
+	public static final ItemStack PHYTOTOXIN_POTION_1 = PotionUtils.setPotion(new ItemStack(Items.POTION), PotionRegister.PHYTOTOXIN_POTION_1.get());
+	public static final ItemStack PHYTOTOXIN_POTION_2 = PotionUtils.setPotion(new ItemStack(Items.POTION), PotionRegister.PHYTOTOXIN_POTION_2.get());
+	public static final ItemStack PHYTOTOXIN_POTION_3 = PotionUtils.setPotion(new ItemStack(Items.POTION), PotionRegister.PHYTOTOXIN_POTION_3.get());
 	
 	/**
 	 * register potion recipes.
@@ -27,6 +30,9 @@ public class PotionRecipeHandler {
 		add(Ingredient.of(AWKWARD_POTION), Ingredient.of(ItemRegister.CHOCOLATE.get()), EXCITE_POTION_1);
 		add(Ingredient.of(EXCITE_POTION_1), GLOWSTONE, EXCITE_POTION_2);
 		add(Ingredient.of(EXCITE_POTION_1), REDSTONE, EXCITE_POTION_3);
+		add(Ingredient.of(AWKWARD_POTION), Ingredient.of(Items.POISONOUS_POTATO), PHYTOTOXIN_POTION_1);
+		add(Ingredient.of(PHYTOTOXIN_POTION_1), GLOWSTONE, PHYTOTOXIN_POTION_2);
+		add(Ingredient.of(PHYTOTOXIN_POTION_1), REDSTONE, PHYTOTOXIN_POTION_3);
 	}
 	
 	private static void add(Ingredient a, Ingredient b, ItemStack c) {

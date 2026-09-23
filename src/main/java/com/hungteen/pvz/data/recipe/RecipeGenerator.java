@@ -94,6 +94,18 @@ public class RecipeGenerator extends RecipeProvider {
         registerStoneSmelting(consumer, BlockRegister.AMETHYST_ORE.get(), ItemRegister.AMETHYST_INGOT.get(), 1.4F, 250, "amethyst_ingot");
         registerFoodSmelting(consumer, ItemRegister.FAKE_BRAIN.get(), ItemRegister.COOKED_BRAIN.get(), 0.4F, 200, "cooked_brain");
 
+        //seed crossbow.
+        ShapedRecipeBuilder.shaped(ItemRegister.SEED_CROSSBOW.get())
+                .pattern("&%&")
+                .pattern("#$#")
+                .pattern(" & ")
+                .define('$', Items.TRIPWIRE_HOOK)
+                .define('&', Items.STICK)
+                .define('%', ItemRegister.ORIGIN_INGOT.get())
+                .define('#', Items.VINE)
+                .unlockedBy("has_origin_ingot", has(ItemRegister.ORIGIN_INGOT.get()))
+                .save(consumer);
+
         //fragment splice
         PVZAPI.get().getPlants().forEach(p -> {
             if (p != OtherPlants.GOLD_LEAF) {

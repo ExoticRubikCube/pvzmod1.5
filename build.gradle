@@ -165,15 +165,15 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
-
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77:api")
-    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${mc_version}-77")
+    runtimeOnly fg.deobf("curse.maven:patchouli-306770:4031402")
 
     implementation fg.deobf("curse.maven:jei-238222:5846858")
     implementation fg.deobf("curse.maven:jade-324717:4914105")
     implementation fg.deobf("curse.maven:configured-457570:4462837")
+    runtimeOnly fg.deobf("curse.maven:spark-361579:4057111")
 }
 
 tasks.register('apiJar', Jar) {

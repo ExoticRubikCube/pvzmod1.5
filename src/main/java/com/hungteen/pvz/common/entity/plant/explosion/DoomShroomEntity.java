@@ -5,6 +5,7 @@ import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.misc.DoomFixerEntity;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
+import com.hungteen.pvz.common.entity.plant.assist.FlowerPotEntity;
 import com.hungteen.pvz.common.entity.plant.base.PlantBomberEntity;
 import com.hungteen.pvz.common.impl.SkillTypes;
 import com.hungteen.pvz.common.impl.plant.PVZPlants;
@@ -64,6 +65,10 @@ public class DoomShroomEntity extends PlantBomberEntity {
 				}
 			});
 			PVZPlantEntity.clearLadders(this, aabb);
+			//the carrying flower pot is the rider vehicle, which is excluded from targetable entities.
+			if(this.getVehicle() instanceof FlowerPotEntity flowerPot) {
+				flowerPot.hurt(PVZEntityDamageSource.explode(this), this.getExplodeDamage());
+			}
 			EntityUtil.playSound(this, SoundRegister.DOOM_SHROOM.get());
 			//destroy block and spawn drops
 			if(net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
@@ -77,13 +82,17 @@ public class DoomShroomEntity extends PlantBomberEntity {
 	}
 
 	protected void destroyBlocks() {
-		List<BlockPos> posList = new ArrayList<>();
+		final List<BlockPos> destroyedList = new ArrayList<>();
 
 		final int len = 1;
 		for (int i = -len; i <= len; ++i) {
 			for (int j = -len; j <= len; ++j) {
 				for (int k = -2; k < 0; ++k) {
-					posList.add(this.blockPosition().offset(i, k, j));
+					final BlockPos pos = this.blockPosition().offset(i, k, j);
+					final BlockState state = level.getBlockState(pos);
+					if (! state.isAir() && state.getBlock().getExplosionResistance() <= MAX_EXPLOSION_LEVEL) {
+						destroyedList.add(pos.immutable());
+					}
 				}
 			}
 		}
@@ -93,20 +102,19 @@ public class DoomShroomEntity extends PlantBomberEntity {
 			for (int i = -range; i <= range; ++i) {
 				for (int j = -range; j <= range; ++j) {
 					if (new Vec3(i, h - 5, j).lengthSqr() <= range * range) {
-						posList.add(this.blockPosition().offset(i, h, j));
+						final BlockPos pos = this.blockPosition().offset(i, h, j);
+						final BlockState state = level.getBlockState(pos);
+						if (! state.isAir() && state.getBlock().getExplosionResistance() <= MAX_EXPLOSION_LEVEL) {
+							destroyedList.add(pos.immutable());
+						}
 					}
 				}
 			}
 		}
 
-		final Explosion explosion = new Explosion(this.level, this, this.getX(), this.getY(), this.getZ(), this.getExplodeRange(), false, Explosion.BlockInteraction.DESTROY);
-		posList.forEach(pos -> {
-			BlockState state = level.getBlockState(pos);
-			if (state.isAir() || state.getBlock().getExplosionResistance() > MAX_EXPLOSION_LEVEL) {
-				return;
-			}
-			state.onBlockExploded(level, pos, explosion);
-		});
+		//feed custom shape into vanilla explosion so its finalizeExplosion handles loot drops exactly like vanilla.
+		final Explosion explosion = new Explosion(this.level, this, this.getX(), this.getY(), this.getZ(), this.getExplodeRange(), false, Explosion.BlockInteraction.DESTROY, destroyedList);
+		explosion.finalizeExplosion(false);
 	}
 
 	@Override

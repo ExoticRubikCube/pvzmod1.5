@@ -98,6 +98,7 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<StarEntity>> STAR = registerEntityType(StarEntity::new, "star", MobCategory.MISC);
 	public static final RegistryObject<EntityType<NutEntity>> NUT = registerEntityType(NutEntity::new, "nut", MobCategory.MISC);
 	public static final RegistryObject<EntityType<CabbageEntity>> CABBAGE = registerEntityType(CabbageEntity::new, "cabbage", MobCategory.MISC);
+	public static final RegistryObject<EntityType<IceCabbageEntity>> ICE_CABBAGE = registerEntityType(IceCabbageEntity::new, "ice_cabbage", MobCategory.MISC);
 	public static final RegistryObject<EntityType<KernelEntity>> KERNEL = registerEntityType(KernelEntity::new, "kernel", MobCategory.MISC);
 	public static final RegistryObject<EntityType<ButterEntity>> BUTTER = registerEntityType(ButterEntity::new, "butter", MobCategory.MISC);
 	public static final RegistryObject<EntityType<TargetArrowEntity>> TARGET_ARROW = registerEntityType(TargetArrowEntity::new, "target_arrow", MobCategory.MISC);
@@ -105,6 +106,9 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<FireCrackerEntity>> FIRE_CRACKER = registerEntityType(FireCrackerEntity::new, "fire_cracker", MobCategory.MISC);
 	public static final RegistryObject<EntityType<BallEntity>> BALL = registerEntityType(BallEntity::new, "ball", MobCategory.MISC);
 	public static final RegistryObject<EntityType<CornEntity>> CORN = registerEntityType(CornEntity::new, "corn", MobCategory.MISC);
+	public static final RegistryObject<EntityType<SeedArrowEntity>> SEED_ARROW = ENTITY_TYPES.register("seed_arrow",
+			() -> EntityType.Builder.<SeedArrowEntity>of(SeedArrowEntity::new, MobCategory.MISC).sized(0.2F, 0.2F)
+					.clientTrackingRange(4).updateInterval(20).build(StringUtil.prefix("seed_arrow").toString()));
 	public static final RegistryObject<EntityType<ThrownFogInBottle>> FOG_IN_BOTTLE = ENTITY_TYPES.register("fog_in_bottle",
 			() -> EntityType.Builder.<ThrownFogInBottle>of(ThrownFogInBottle::new, MobCategory.MISC).sized(0.25F, 0.25F)
 					.clientTrackingRange(4).updateInterval(20).build(StringUtil.prefix("fog_in_bottle").toString()));

@@ -24,6 +24,7 @@ public class PVZClientEvents {
 		final int light = ev.getPackedLight();
 //		ev.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(180F));
 		PVZEntityRenderHandler.checkBungeeHandStand(ev.getEntity(), stack);
+		PVZEntityRenderHandler.checkAndRenderFrozenIce(ev.getEntity(), stack, buffer, light);
 		PVZEntityRenderHandler.checkAndRenderButter(ev.getRenderer(), ev.getEntity(), stack, buffer, light);
 	}
 	

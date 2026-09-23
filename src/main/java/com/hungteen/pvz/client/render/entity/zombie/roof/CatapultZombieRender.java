@@ -22,7 +22,7 @@ public class CatapultZombieRender extends PVZZombieRender<CatapultZombieEntity> 
 
 	@Override
 	protected boolean isShaking(CatapultZombieEntity zombie) {
-		return zombie.isCarShaking();
+		return zombie.isZombieDying();
 	}
 
 	@Override

@@ -47,6 +47,7 @@ public class ItemTagGenerator extends ItemTagsProvider {
 
         //pvz tag
         this.tag(PVZItemTags.SPIKE_WEED_MATERIALS).add(Items.GLOW_LICHEN, Items.MOSS_CARPET);
+        this.tag(PVZItemTags.REACH_ITEMS).add(ItemRegister.RESOURCE_COLLECTOR.get());
         for (Item item : ForgeRegistries.ITEMS) {
             if (item instanceof SummonCardItem) {
                 if (item instanceof PlantCardItem) {

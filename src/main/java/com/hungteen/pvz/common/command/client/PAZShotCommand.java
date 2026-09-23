@@ -189,7 +189,7 @@ public class PAZShotCommand {
 			float viewSide = Math.max(spanX, spanY) / FILL_FRACTION;
 			float half = viewSide / 2;
 			float cx = (bounds.minX() + bounds.maxX()) / 2;
-			float bottom = bounds.minY() - viewSide * 0.85F;
+			float bottom = bounds.minY() - viewSide * 0.1F;
 
 			target.setClearColor(0F, 0F, 0F, 0F);
 			target.clear(false);
