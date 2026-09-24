@@ -64,6 +64,7 @@ public class ChallengeInfoScreen extends Screen{
 
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(stack);
 		super.render(stack, mouseX, mouseY, partialTicks);
 		int cornerX = (this.width - this.xSize) / 2;
 		int cornerY = (this.height - this.ySize) / 2;

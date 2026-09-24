@@ -184,9 +184,6 @@ public class PotatoMineEntity extends PlantCloserEntity{
 		}
 	}
 
-	/**
-	 * 在自身附近随机找一块可种植土豆雷的地面（含上方一格空间），找不到就返回空
-	 */
 	private Optional<BlockPos> getRandomPlantableGround() {
 		for(int i = 0; i < 8; ++ i) {
 			final BlockPos offset = MathUtil.getRandomRangePos(this.getRandom(), 2, 16);

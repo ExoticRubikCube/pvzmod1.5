@@ -25,7 +25,7 @@ public class EntityTypeTagGenerator extends EntityTypeTagsProvider {
     @Override
     public void addTags() {
         /* mc tags */
-        this.tag(EntityTypeTags.ARROWS).add(EntityRegister.SEED_ARROW.get());
+        this.tag(EntityTypeTags.ARROWS).add(EntityRegister.SEED_ARROW.get(), EntityRegister.ORIGIN_ARROW.get());
 
         /* forge tags */
 

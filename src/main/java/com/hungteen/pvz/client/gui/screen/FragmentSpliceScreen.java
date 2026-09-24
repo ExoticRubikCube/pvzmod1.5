@@ -32,6 +32,7 @@ public class FragmentSpliceScreen extends PVZContainerScreen<FragmentSpliceConta
 
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(stack);
 		super.render(stack, mouseX, mouseY, partialTicks);
 		StringUtil.drawScaledString(stack, font, this.title.getString(), this.leftPos + 17, this.topPos + 6, 4210752, 1F);
 		this.renderTooltip(stack, mouseX, mouseY);

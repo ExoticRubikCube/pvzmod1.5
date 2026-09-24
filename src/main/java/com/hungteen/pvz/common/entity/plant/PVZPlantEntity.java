@@ -527,8 +527,8 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 
 	@Override
 	public InteractionResult interactAt(Player player, Vec3 vec3d, InteractionHand hand) {
+		final ItemStack stack = player.getItemInHand(hand);
 		if (! level.isClientSide()) {
-			ItemStack stack = player.getItemInHand(hand);
 			if (stack.getItem() instanceof PlantCardItem item) {// plant card right click plant entity
                 /* short-circuit order defines the interaction priority: heal > upgrade > carry(takeover) > hold. */
                 if(PlantCardItem.checkSunAndHealPlant(player, this, item, stack)
@@ -538,6 +538,8 @@ public abstract class PVZPlantEntity extends AbstractPAZEntity implements IPlant
 					return InteractionResult.SUCCESS;
 				}
 			}
+		} else if (stack.getItem() instanceof PlantCardItem) {
+			return InteractionResult.SUCCESS;
 		}
 		return super.interactAt(player, vec3d, hand);
 	}

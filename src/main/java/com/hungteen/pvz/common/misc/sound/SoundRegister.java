@@ -113,14 +113,11 @@ public class SoundRegister {
 	public static final RegistryObject<SoundEvent> BGM_GRASSWALK_COMPLETE = registerSound("grasswalk_complete");
 	public static final RegistryObject<SoundEvent> BGM_MOONGRAINS_COMPLETE = registerSound("moongrains_complete");
 	public static final RegistryObject<SoundEvent> BGM_WATERYGRAVES = registerSound("waterygraves_complete");
-	public static final RegistryObject<SoundEvent> BGM_POOL = registerSound("pool_complete");
 	public static final RegistryObject<SoundEvent> BGM_RIGORMORMIST_COMPLETE = registerSound("rigormormist_complete");
 	public static final RegistryObject<SoundEvent> BGM_GRAZETHEROOF_COMPLETE = registerSound("grazetheroof_complete");
 	public static final RegistryObject<SoundEvent> BGM_CEREBRAWL = registerSound("cerebrawl");
 	public static final RegistryObject<SoundEvent> BGM_LOONBOON = registerSound("loonboon");
 	public static final RegistryObject<SoundEvent> BGM_CONVEYER = registerSound("conveyer_bgm");
-	public static final RegistryObject<SoundEvent> BGM_ULTIMATE_BATTLE = registerSound("ultimate_battle");
-	public static final RegistryObject<SoundEvent> BGM_FINAL_BOSS = registerSound("final_boss");
 	public static final RegistryObject<SoundEvent> BGM_BRAINIAC_MANIAC = registerSound("brainiac_maniac");
 
 	//disc

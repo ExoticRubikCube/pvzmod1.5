@@ -10,6 +10,7 @@ import com.hungteen.pvz.utils.StringUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -80,7 +81,11 @@ public class PVZEntityProvider implements IEntityComponentProvider {
 				if(nbt != null){
 					final int lvl = SkillTypes.getSkillLevel(nbt, skillType);
 					if(lvl > 0){
-						tooltip.add(skillType.getText().append(StringUtil.getRomanString(lvl)).withStyle(ChatFormatting.DARK_PURPLE));
+						final MutableComponent text = skillType.getText();
+						if(lvl != 1 || skillType.getMaxLevel() != 1){
+							text.append(StringUtil.getRomanString(lvl));
+						}
+						tooltip.add(text.withStyle(ChatFormatting.DARK_PURPLE));
 					}
 				}
 			});

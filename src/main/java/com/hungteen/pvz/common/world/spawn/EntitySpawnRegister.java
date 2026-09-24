@@ -3,7 +3,6 @@ package com.hungteen.pvz.common.world.spawn;
 import com.hungteen.pvz.PVZMod;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.creature.MooBloom;
-import com.hungteen.pvz.common.entity.misc.drop.SunEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -27,10 +26,6 @@ public class EntitySpawnRegister {
 	}
 
 	private static void registerSpawnPlacements() {
-		SpawnPlacements.register(EntityRegister.SUN.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(EntityType<SunEntity> type, ServerLevelAccessor world, MobSpawnType spawnType, BlockPos pos, RandomSource random) ->
-						world.canSeeSky(pos) && world.canSeeSky(pos.offset(0, -5, 0)) && SunEntity.canSunSpawn(type, world, spawnType, pos, random));
-
 		SpawnPlacements.register(EntityRegister.CRAZY_DAVE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
 
 		SpawnPlacements.register(EntityRegister.MOOBLOOM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MooBloom::checkMooBloomSpawnRules);

@@ -97,6 +97,7 @@
   "item.pvz.resource_collector": "资源收集器",
   "item.pvz.seed_crossbow": "种子弩",
   "item.pvz.origin_sword": "原始精华剑",
+  "item.pvz.origin_arrow": "原始精华箭",
   "item.pvz.origin_axe": "原始精华斧",
   "item.pvz.origin_pickaxe": "原始精华镐",
   "item.pvz.origin_shovel": "原始精华铲",
@@ -200,9 +201,11 @@
   "entity.pvz.sun": "阳光",
   "entity.pvz.jewel": "宝石",
   "entity.pvz.energy": "能量豆",
+  "entity.pvz.coin": "钱币",
 
   "entity.pvz.pea": "豌豆",
   "entity.pvz.potato": "土豆",
+  "entity.pvz.origin_arrow": "原始精华箭",
 
   "entity.pvz.ducky_tube": "鸭子救生圈",
   "entity.pvz.bobsle_car": "雪橇车",

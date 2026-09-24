@@ -3,8 +3,8 @@ package com.hungteen.pvz.common.entity.misc.drop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +19,7 @@ public class SeedPacketEntity extends DropEntity {
 	private static final float FALL_SPEED = 0.03F;
 	private ItemStack cardStack = ItemStack.EMPTY;
 
-	public SeedPacketEntity(EntityType<? extends Mob> type, Level worldIn) {
+	public SeedPacketEntity(EntityType<? extends Entity> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(true);
 	}
@@ -52,7 +52,7 @@ public class SeedPacketEntity extends DropEntity {
 	}
 
 	@Override
-	public InteractionResult mobInteract(Player player, InteractionHand hand) {
+	public InteractionResult interact(Player player, InteractionHand hand) {
 		if(! this.level.isClientSide() && ! this.cardStack.isEmpty()) {
 			final ItemEntity item = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.cardStack.copy());
 			item.setDefaultPickUpDelay();

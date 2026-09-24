@@ -622,9 +622,9 @@ public class Challenge implements IChallenge {
 
 	public boolean isInRange(Entity entity) {
 		final int range = ConfigUtil.getRaidRange();
-		return Math.abs(entity.getX() - this.center.getX()) < range
-				&& Math.abs(entity.getY() - this.center.getY()) < range
-				&& Math.abs(entity.getZ() - this.center.getZ()) < range;
+		return Math.abs(entity.getX() - this.center.getX()) <= range
+				&& Math.abs(entity.getY() - this.center.getY()) <= range
+				&& Math.abs(entity.getZ() - this.center.getZ()) <= range;
 	}
 
 	/**

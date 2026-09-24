@@ -55,6 +55,7 @@ public class SlotMachineScreen extends PVZContainerScreen<SlotMachineContainer> 
 
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(stack);
 		super.render(stack, mouseX, mouseY, partialTicks);
 
 		final boolean canLottery = this.canLottery();

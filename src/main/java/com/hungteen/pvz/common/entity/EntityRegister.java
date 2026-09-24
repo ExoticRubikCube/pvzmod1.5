@@ -109,6 +109,9 @@ public class EntityRegister {
 	public static final RegistryObject<EntityType<SeedArrowEntity>> SEED_ARROW = ENTITY_TYPES.register("seed_arrow",
 			() -> EntityType.Builder.<SeedArrowEntity>of(SeedArrowEntity::new, MobCategory.MISC).sized(0.2F, 0.2F)
 					.clientTrackingRange(4).updateInterval(20).build(StringUtil.prefix("seed_arrow").toString()));
+	public static final RegistryObject<EntityType<OriginArrowEntity>> ORIGIN_ARROW = ENTITY_TYPES.register("origin_arrow",
+			() -> EntityType.Builder.<OriginArrowEntity>of(OriginArrowEntity::new, MobCategory.MISC).sized(0.2F, 0.2F)
+					.clientTrackingRange(4).updateInterval(20).build(StringUtil.prefix("origin_arrow").toString()));
 	public static final RegistryObject<EntityType<ThrownFogInBottle>> FOG_IN_BOTTLE = ENTITY_TYPES.register("fog_in_bottle",
 			() -> EntityType.Builder.<ThrownFogInBottle>of(ThrownFogInBottle::new, MobCategory.MISC).sized(0.25F, 0.25F)
 					.clientTrackingRange(4).updateInterval(20).build(StringUtil.prefix("fog_in_bottle").toString()));
@@ -286,8 +289,6 @@ public class EntityRegister {
 			});
 		}
 		Arrays.asList(
-				SUN.get(), COIN.get(), JEWEL.get(), ENERGY.get(),
-				SEED_PACKET.get(),
 				CRAZY_DAVE.get(),
 				FOODIE_ZOMBIE.get()
 		).forEach(obj -> {

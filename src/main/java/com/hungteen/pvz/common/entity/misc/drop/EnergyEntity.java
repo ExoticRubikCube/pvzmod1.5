@@ -4,8 +4,8 @@ import com.hungteen.pvz.PVZConfig;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 public class EnergyEntity extends DropEntity{
 
 	private final int changeVTime = 50;
-	public EnergyEntity(EntityType<? extends Mob> type, Level worldIn) {
+	public EnergyEntity(EntityType<? extends Entity> type, Level worldIn) {
 		super(type, worldIn);
 		this.setAmount(1);//always 1
 		this.setNoGravity(true);

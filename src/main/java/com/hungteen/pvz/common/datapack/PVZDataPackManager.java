@@ -18,8 +18,8 @@ public class PVZDataPackManager {
         event.addListener(new PlantType.PlantTypeLoader());
         event.addListener(new LotteryTypeLoader());
         event.addListener(new InvasionTypeLoader());
-        event.addListener(new ChallengeTagTypeLoader());
         event.addListener(new ChallengeTypeLoader());
+           event.addListener(new ChallengeTagTypeLoader());
         event.addListener(new TransactionTypeLoader());
     }
 

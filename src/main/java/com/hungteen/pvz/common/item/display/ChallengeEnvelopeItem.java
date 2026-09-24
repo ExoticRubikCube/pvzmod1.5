@@ -81,18 +81,23 @@ public class ChallengeEnvelopeItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (playerIn.getItemInHand(handIn).getItem() instanceof ChallengeEnvelopeItem) {
-            if (worldIn.isClientSide) {
-                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                    ChallengeEnvelopeItem.getRaidComponent(playerIn.getItemInHand(handIn)).ifPresent(challengeComponent -> {
-                        if(handIn == InteractionHand.MAIN_HAND){
-                            Minecraft.getInstance().setScreen(new ChallengeEnvelopeScreen(challengeComponent));
-                        } else{
-                            Minecraft.getInstance().setScreen(new ChallengeInfoScreen(challengeComponent));
-                        }
-                    });
-                });
+            final Optional<IChallengeComponent> component = getRaidComponent(playerIn.getItemInHand(handIn));
+            if (component.isPresent()) {
+                final IChallengeComponent challengeComponent = component.get();
+                /* 原版挥手动画只在结果为 SUCCESS 时触发 */
+                if (handIn == InteractionHand.OFF_HAND || ! challengeComponent.getMessages().isEmpty()) {
+                    if (worldIn.isClientSide) {
+                        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                            if(handIn == InteractionHand.MAIN_HAND){
+                                Minecraft.getInstance().setScreen(new ChallengeEnvelopeScreen(challengeComponent));
+                            } else{
+                                Minecraft.getInstance().setScreen(new ChallengeInfoScreen(challengeComponent));
+                            }
+                        });
+                    }
+                    return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
+                }
             }
-            return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
         }
         return InteractionResultHolder.fail(playerIn.getItemInHand(handIn));
     }

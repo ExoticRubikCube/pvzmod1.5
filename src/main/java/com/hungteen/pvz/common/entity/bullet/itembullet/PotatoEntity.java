@@ -46,9 +46,6 @@ public class PotatoEntity extends PVZItemBulletEntity{
 		entityData.define(POISONOUS, false);
 	}
 	
-	/**
-	 * 抛物线瞄准指定方块的顶面：与投手子弹 shootPultBullet(BlockPos) 同一套解算，竖直初速改用土豆自身的抛射值
-	 */
 	public void shootTo(BlockPos pos) {
 		final double g = this.getGravityVelocity();
 		final double t1 = SHOOT_SPEED_Y / g;
@@ -95,7 +92,6 @@ public class PotatoEntity extends PVZItemBulletEntity{
             /* 毒化随子弹走，不从技能表推断 */
             mine.setPoisonous(this.isPoisonous());
             boolean planted = false;
-            /* 参考种子弩：命中方块与命中面即种植依据，只有从上方命中的可种植地面才种雷 */
             if(result instanceof BlockHitResult blockResult && blockResult.getDirection() == Direction.UP) {
             	final BlockPos groundPos = blockResult.getBlockPos();
             	final BlockPos spawnPos = groundPos.above();
@@ -109,7 +105,6 @@ public class PotatoEntity extends PVZItemBulletEntity{
             	}
             }
             if(! planted) {
-            	/* 落点不可种：雷不入世界，直接按土豆雷自身的爆炸方法结算（含毒化毒云） */
             	mine.setPos(this.getX(), this.getY(), this.getZ());
             	mine.performAttack(null);
             }

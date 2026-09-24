@@ -65,6 +65,13 @@
         "pvz:seed": 1
       },
       "model": "pvz:item/seed_crossbow_plant"
+    },
+    {
+      "predicate": {
+        "charged": 1,
+        "pvz:essence": 1
+      },
+      "model": "pvz:item/seed_crossbow_essence"
     }
   ]
 }

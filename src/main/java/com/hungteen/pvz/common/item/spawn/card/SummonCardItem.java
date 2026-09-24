@@ -94,7 +94,11 @@ public abstract class SummonCardItem extends Item{
 			type.getSkills().forEach(skill -> {
 				final int lvl = SkillTypes.getSkillLevel(stack, skill);
 				if(lvl > 0){
-					tooltip.add(skill.getText().append(StringUtil.getRomanString(lvl)).withStyle(ChatFormatting.DARK_PURPLE));
+					final MutableComponent text = skill.getText();
+					if(lvl != 1 || skill.getMaxLevel() != 1){
+						text.append(StringUtil.getRomanString(lvl));
+					}
+					tooltip.add(text.withStyle(ChatFormatting.DARK_PURPLE));
 				}
 			});
 		}
@@ -136,19 +140,19 @@ public abstract class SummonCardItem extends Item{
 
 	public enum PlacementHints{
 		NO_ENOUGH_RESOURCE("no_enough_resource"),
-		MULTIPLE_SUN_ERROR("multiple_sun"),
+		MULTIPLE_SUN("multiple_sun"),
 		ON_COOL_DOWN("on_cool_down"),
-		LOCK_ERROR("lock"),
-		UPGRADE_ERROR("upgrade"),
+		LOCKED("lock"),
+		UPGRADE_ONLY("upgrade"),
 		CANT_PLANT_ON("cant_plant_on"),
 		CAN_ONLY_PLANT_IN_WATER("can_only_plant_in_water"),
 		CANT_PLANT_IN_WATER("cant_plant_in_water"),
 		NO_ENOUGH_PLACE("no_enough_place"),
-		GROUND_ERROR("ground"),
-		OUTER_ERROR("outer"),
+		GROUND("ground"),
+		OUTER("outer"),
 		OUTER_FULL("outer_full"),
-		CHALLENGE_ERROR("challenge"),
-		SEED_POOL_ERROR("seed_pool");
+		CHALLENGE_ONLY("challenge"),
+		SEED_POOL_ONLY("seed_pool");
 
 		private final String info;
 

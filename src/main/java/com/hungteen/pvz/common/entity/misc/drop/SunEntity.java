@@ -12,6 +12,7 @@ import com.hungteen.pvz.utils.MathUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.*;
@@ -43,7 +44,7 @@ public class SunEntity extends DropEntity {
 	public Vec3 ColorChange = new Vec3(0,25,15);
 	private Entity following;
 
-	public SunEntity(EntityType<? extends Mob> type, Level worldIn) {
+	public SunEntity(EntityType<? extends Entity> type, Level worldIn) {
 		super(type, worldIn);
 		setAmount(this.getDefaultAmount());
 		this.setNoGravity(true);

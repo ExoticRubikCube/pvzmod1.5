@@ -73,7 +73,7 @@ public class PVZConfig {
                 ChallengeSettings.ChallengeRange = builder
                         .comment("how far will a player join the raid.")
                         .translation("config.pvz.challenge_range")
-                        .defineInRange("ChallengeRange", 50, 1, 1000);
+                        .defineInRange("ChallengeRange", 42, 18, 64);
             }
             builder.pop();
 

@@ -207,6 +207,7 @@ public class ClientRegister {
 		ev.registerEntityRenderer(FOG_IN_BOTTLE.get(), ctx -> new ThrownItemRenderer<>(ctx, 1, false));
 		ev.registerEntityRenderer(ORIGIN_EFFECT.get(), ctx -> new OriginEffectRender(ctx));
 		ev.registerEntityRenderer(SEED_ARROW.get(), ctx -> new SeedArrowRender(ctx));
+		ev.registerEntityRenderer(ORIGIN_ARROW.get(), ctx -> new OriginArrowRender(ctx));
 		ev.registerEntityRenderer(DOOM_FIXER.get(), ctx -> new DoomFixerRender(ctx));
 		ev.registerEntityRenderer(SMALL_CHOMPER.get(), ctx -> new SmallChomperRender(ctx));
 		ev.registerEntityRenderer(BOBSLE_CAR.get(), ctx -> new BobsleCarRender(ctx));

@@ -19,6 +19,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -92,8 +93,13 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 
 			this.renderLogo(stack, pazType.getRank(), x + 2, y + 2);
 
+			final int nextLevel = lvl + 1;
+			final MutableComponent text = type.getText();
+			if(nextLevel != 1 || type.getMaxLevel() != 1){
+				text.append(StringUtil.getRomanString(nextLevel));
+			}
 			StringUtil.drawCenteredScaledString(stack, this.minecraft.font, type.getCostAt(lvl) + "", x + 13, y + 12, Colors.WHITE, 0.6F);
-			StringUtil.drawScaledString(stack, this.minecraft.font, type.getText().append(StringUtil.getRomanString(lvl + 1)).getString(), x + 18, y + 5, Colors.WHITE, 1F);
+			StringUtil.drawScaledString(stack, this.minecraft.font, text.getString(), x + 18, y + 5, Colors.WHITE, 1F);
 
 			if(this.buttons[buttonPos].visible && this.buttons[buttonPos].isHoveredOrFocused()){
 				this.minecraft.screen.renderComponentTooltip(stack, Collections.singletonList(type.getDescription()), this.mouseX, this.mouseY);
@@ -127,6 +133,7 @@ public class EssenceAltarScreen extends PVZContainerScreen<EssenceAltarContainer
 	
 	@Override
 	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(stack);
 		super.render(stack, mouseX, mouseY, partialTicks);
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;

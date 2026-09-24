@@ -97,6 +97,7 @@
     "item.pvz.resource_collector":"Resource Collector",
     "item.pvz.seed_crossbow":"Seed Crossbow",
     "item.pvz.origin_sword": "Origin Sword",
+    "item.pvz.origin_arrow": "Origin Essence Arrow",
     "item.pvz.origin_axe": "Origin Axe",
     "item.pvz.origin_pickaxe": "Origin Pickaxe",
     "item.pvz.origin_shovel": "Origin Shovel",
@@ -200,9 +201,11 @@
     "entity.pvz.sun":"Sun",
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
+    "entity.pvz.coin":"Coin",
     
     "entity.pvz.pea":"Pea",
     "entity.pvz.potato":"Potato",
+    "entity.pvz.origin_arrow":"Origin Essence Arrow",
     
     "entity.pvz.ducky_tube":"Ducky Tube",
     "entity.pvz.bobsle_car":"Bobsle Car",

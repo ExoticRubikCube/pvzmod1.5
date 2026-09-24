@@ -6,16 +6,16 @@ import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.enums.Resources;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class JewelEntity extends DropEntity{
 
-	public JewelEntity(EntityType<? extends Mob> type, Level worldIn) {
+	public JewelEntity(EntityType<? extends Entity> type, Level worldIn) {
 		super(type, worldIn);
 		this.setAmount(1);
 	}

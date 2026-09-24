@@ -63,6 +63,7 @@ public abstract class AbstractDaveShopScreen extends PVZContainerScreen<Abstract
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
         final List<AbstractDaveEntity.GoodType> goods = this.getAvailableGoods();
 

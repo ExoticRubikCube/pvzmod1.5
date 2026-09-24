@@ -9,7 +9,7 @@ import com.hungteen.pvz.utils.enums.Resources;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ public class CoinEntity extends DropEntity {
 
 	public static final int COIN_TYPES = 3;
 
-	public CoinEntity(EntityType<? extends Mob> type, Level worldIn) {
+	public CoinEntity(EntityType<? extends Entity> type, Level worldIn) {
 		super(type, worldIn);
 		this.setAmountByType(this.getRandomType());
 	}

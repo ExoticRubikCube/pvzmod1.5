@@ -32,6 +32,7 @@ import com.hungteen.pvz.common.item.tool.plant.CardPackItem;
 import com.hungteen.pvz.common.item.tool.plant.PeaGunItem;
 import com.hungteen.pvz.common.item.tool.plant.ResourceCollectorItem;
 import com.hungteen.pvz.common.item.tool.plant.ShellStartupItem;
+import com.hungteen.pvz.common.item.tool.mc.OriginArrowItem;
 import com.hungteen.pvz.common.item.tool.mc.OriginAxeItem;
 import com.hungteen.pvz.common.item.tool.mc.OriginHoeItem;
 import com.hungteen.pvz.common.item.tool.mc.OriginPickaxeItem;
@@ -195,6 +196,7 @@ public class ItemRegister {
     public static final RegistryObject<Item> ORIGIN_PICKAXE = ITEMS.register("origin_pickaxe", OriginPickaxeItem::new);
     public static final RegistryObject<Item> ORIGIN_AXE = ITEMS.register("origin_axe", OriginAxeItem::new);
     public static final RegistryObject<Item> ORIGIN_HOE = ITEMS.register("origin_hoe", OriginHoeItem::new);
+    public static final RegistryObject<Item> ORIGIN_ARROW = ITEMS.register("origin_arrow", OriginArrowItem::new);
     public static final RegistryObject<Item> RESOURCE_COLLECTOR = ITEMS.register("resource_collector", ResourceCollectorItem::new);
     public static final RegistryObject<Item> SEED_CROSSBOW = ITEMS.register("seed_crossbow",
             () -> new SeedCrossbowItem(new Item.Properties().stacksTo(1).durability(465).tab(PVZItemGroups.PVZ_USEFUL)));

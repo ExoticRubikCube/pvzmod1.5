@@ -21,6 +21,7 @@
     "_comment_20": "Misc",
     "_comment1": "--------------------------------------------Item-------------------------------------------",
     "item.pvz.origin_essence":"Природная Эссенция",
+    "item.pvz.origin_arrow":"Стрела Природной Эссенции",
     "item.pvz.appease_essence":"Умиротворяющая Эссенция",
     "item.pvz.light_essence":"Эссенция Света",
     "item.pvz.explosion_essence":"Взрывная Эссенция",
@@ -184,9 +185,11 @@
     "entity.pvz.sun":"Sun",
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
+    "entity.pvz.coin":"Монета",
     
     "entity.pvz.pea":"Pea",
     "entity.pvz.potato":"Potato",
+    "entity.pvz.origin_arrow":"Стрела Природной Эссенции",
     
     "entity.pvz.ducky_tube":"Ducky Tube",
     "entity.pvz.bobsle_car":"Bobsle Car",

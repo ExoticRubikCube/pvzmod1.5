@@ -56,8 +56,11 @@ public class ChallengeCommand {
     }
 
     private static int removeNearby(CommandSourceStack source, BlockPos pos) {
+        final int range = ConfigUtil.getRaidRange();
         ChallengeManager.getChallenges(source.getLevel()).forEach(raid -> {
-            if (raid.getCenter().closerThan(pos, ConfigUtil.getRaidRange())) {
+            if (Math.abs(raid.getCenter().getX() - pos.getX()) <= range
+                    && Math.abs(raid.getCenter().getY() - pos.getY()) <= range
+                    && Math.abs(raid.getCenter().getZ() - pos.getZ()) <= range) {
                 raid.remove();
             }
         });

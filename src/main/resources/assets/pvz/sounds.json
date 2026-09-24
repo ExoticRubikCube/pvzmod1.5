@@ -944,14 +944,6 @@
       }
     ]
   },
-  "pool_complete": {
-    "sounds": [
-      {
-        "name": "pvz:music/pool_complete",
-        "stream": true
-      }
-    ]
-  },
   "rigormormist_complete": {
     "sounds": [
       {
@@ -988,22 +980,6 @@
     "sounds": [
       {
         "name": "pvz:music/conveyer_bgm",
-        "stream": true
-      }
-    ]
-  },
-  "ultimate_battle": {
-    "sounds": [
-      {
-        "name": "pvz:music/ultimate_battle",
-        "stream": true
-      }
-    ]
-  },
-  "final_boss": {
-    "sounds": [
-      {
-        "name": "pvz:music/final_boss",
         "stream": true
       }
     ]

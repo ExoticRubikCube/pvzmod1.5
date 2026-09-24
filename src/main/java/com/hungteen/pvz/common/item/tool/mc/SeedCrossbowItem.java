@@ -1,9 +1,12 @@
 package com.hungteen.pvz.common.item.tool.mc;
 
+import com.hungteen.pvz.common.entity.bullet.OriginArrowEntity;
 import com.hungteen.pvz.common.entity.bullet.SeedArrowEntity;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
+import com.hungteen.pvz.utils.PlayerUtil;
 import com.hungteen.pvz.utils.StringUtil;
+import com.hungteen.pvz.utils.enums.Resources;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -35,6 +38,8 @@ public class SeedCrossbowItem extends CrossbowItem {
 
     public static final Predicate<ItemStack> ACCEPTABLE_BULLETS = ARROW_OR_FIREWORK.or((itemStack) -> {
         return itemStack.getItem() instanceof PlantCardItem;
+    }).or((itemStack) -> {
+        return itemStack.getItem() instanceof OriginArrowItem;
     });
 
     public SeedCrossbowItem(Properties properties) {
@@ -61,6 +66,12 @@ public class SeedCrossbowItem extends CrossbowItem {
         return ACCEPTABLE_BULLETS;
     }
 
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
+        return ARROW_ONLY.or((itemStack) -> {
+            return itemStack.getItem() instanceof OriginArrowItem;
+        });
+    }
+
     public static void shootProjectile(Level level, LivingEntity entity, InteractionHand hand, ItemStack itemStack, ItemStack bullet, float p_40900_, boolean p_40901_, float p_40902_, float p_40903_, float p_40904_) {
         if (!level.isClientSide) {
             boolean flag = bullet.is(Items.FIREWORK_ROCKET);
@@ -69,6 +80,21 @@ public class SeedCrossbowItem extends CrossbowItem {
                 projectile = new FireworkRocketEntity(level, bullet, entity, entity.getX(), entity.getEyeY() - (double)0.15F, entity.getZ(), true);
             } else if (bullet.getItem() instanceof PlantCardItem) {
                 projectile = new SeedArrowEntity(level, entity, bullet);
+                projectile.setPos(entity.getX(), entity.getEyeY() - (double)0.15F, entity.getZ());
+            } else if (bullet.getItem() instanceof OriginArrowItem) {
+                boolean energy = false;
+                // p_40904_ 是散射角度偏移，只有 0.0F 那支是多重射击的中间箭，能量豆只扣这一支
+                if (p_40904_ == 0.0F && entity instanceof Player player) {
+                    if (PlayerUtil.isPlayerSurvival(player)) {
+                        if (PlayerUtil.getResource(player, Resources.ENERGY_NUM) > 0) {
+                            PlayerUtil.addResource(player, Resources.ENERGY_NUM, -1);
+                            energy = true;
+                        }
+                    } else {
+                        energy = true;
+                    }
+                }
+                projectile = new OriginArrowEntity(level, entity, energy);
                 projectile.setPos(entity.getX(), entity.getEyeY() - (double)0.15F, entity.getZ());
             } else {
                 projectile = getArrow(level, entity, itemStack, bullet);
@@ -186,6 +212,12 @@ public class SeedCrossbowItem extends CrossbowItem {
         });
     }
 
+    public static boolean containsOriginArrow(ItemStack p_40872_) {
+        return getChargedProjectiles(p_40872_).stream().anyMatch((p_40870_) -> {
+            return p_40870_.getItem() instanceof OriginArrowItem;
+        });
+    }
+
     public static void registerProperties(Item crossbowItem) {
         ItemProperties.register(crossbowItem, new ResourceLocation("pull"), (itemStack, level, entity, seed) -> {
             if (entity == null) {
@@ -205,6 +237,9 @@ public class SeedCrossbowItem extends CrossbowItem {
         });
         ItemProperties.register(crossbowItem, StringUtil.prefix("seed"), (itemStack, level, entity, seed) -> {
             return entity != null && CrossbowItem.isCharged(itemStack) && containsSeed(itemStack) ? 1.0F : 0.0F;
+        });
+        ItemProperties.register(crossbowItem, StringUtil.prefix("essence"), (itemStack, level, entity, seed) -> {
+            return entity != null && CrossbowItem.isCharged(itemStack) && containsOriginArrow(itemStack) ? 1.0F : 0.0F;
         });
     }
 }

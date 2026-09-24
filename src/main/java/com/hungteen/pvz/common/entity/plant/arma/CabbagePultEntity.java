@@ -31,9 +31,6 @@ public class CabbagePultEntity extends PlantPultEntity {
 		this.entityData.define(ICE_CABBAGE, false);
 	}
 
-	/**
-	 * 冰冻形态要求存在对应技能，由大招触发后永久保留（同仙人掌的增强方式）
-	 */
 	@Override
 	public void startSuperMode(boolean first) {
 		super.startSuperMode(first);
