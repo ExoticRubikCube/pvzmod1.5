@@ -2,6 +2,7 @@ package com.hungteen.pvz.common.entity.plant.enforce;
 
 import com.hungteen.pvz.api.interfaces.IAlmanacEntry;
 import com.hungteen.pvz.api.types.IPlantType;
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.entity.ai.goal.target.PVZNearestTargetGoal;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
 import com.hungteen.pvz.common.entity.zombie.pool.BalloonZombieEntity;
@@ -41,7 +42,7 @@ public class BonkChoyEntity extends PVZPlantEntity {
 				final float range = 5F;
 				EntityUtil.getTargetableEntities(this, EntityUtil.getEntityAABB(this, range, range)).forEach((target) -> {
 					target.hurt(PVZEntityDamageSource.normal(this), this.getAttackDamage() * 5);
-					EntityUtil.spawnParticle(target, 7);
+					EntityUtil.spawnParticle(target, ParticleRegister.GREEN_SWEEP.get());
 					EntityUtil.playSound(this, SoundRegister.SWING.get());
 				});
 			}
@@ -50,7 +51,7 @@ public class BonkChoyEntity extends PVZPlantEntity {
 	
 	public void attackTarget(LivingEntity target) {
 		EntityUtil.playSound(this, SoundRegister.SWING.get());
-		EntityUtil.spawnParticle(target, 7);
+		EntityUtil.spawnParticle(target, ParticleRegister.GREEN_SWEEP.get());
 		target.hurt(PVZEntityDamageSource.normal(this), this.getAttackDamage());
 	}
 	

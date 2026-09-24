@@ -6,6 +6,7 @@ import com.hungteen.pvz.client.gui.screen.ChallengeEnvelopeScreen;
 import com.hungteen.pvz.client.gui.screen.ChallengeInfoScreen;
 import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.item.PVZItemGroups;
+import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.PlayerUtil;
 import net.minecraft.ChatFormatting;
@@ -105,32 +106,41 @@ public class ChallengeEnvelopeItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (! context.getLevel().isClientSide && context.getItemInHand().getItem() instanceof ChallengeEnvelopeItem && context.getClickedFace() == Direction.UP) {
+            final Player player = context.getPlayer();
             final ResourceLocation res = getChallengeType(context.getItemInHand());
             final IChallengeComponent challengeComponent = ChallengeManager.getChallengeByResource(res);
             if(challengeComponent == null){
-                PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.no_challenge").withStyle(ChatFormatting.RED));
+                player.displayClientMessage(Component.translatable("help.pvz.no_challenge").withStyle(ChatFormatting.RED), true);
+                PlayerUtil.playClientSound(player, SoundRegister.NO.get());
             } else{
                 final Level level = context.getLevel();
                 //tag 限制：day/night 校验昼夜，rain/thunder 校验天气
                 if(challengeComponent.hasTag("day") && ! isDayTime(level)){
-                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.day_only").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("help.pvz.day_only").withStyle(ChatFormatting.RED), true);
+                    PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                 } else if(challengeComponent.hasTag("night") && isDayTime(level)){
-                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.night_only").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("help.pvz.night_only").withStyle(ChatFormatting.RED), true);
+                    PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                 } else if(challengeComponent.hasTag("rain") && ! level.isRaining()){
-                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.rain_only").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("help.pvz.rain_only").withStyle(ChatFormatting.RED), true);
+                    PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                 } else if(challengeComponent.hasTag("thunder") && ! level.isThundering()){
-                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.thunder_only").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("help.pvz.thunder_only").withStyle(ChatFormatting.RED), true);
+                    PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                 } else if(ChallengeManager.hasChallengeNearby((ServerLevel) level, context.getClickedPos().above())){
-                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.full_challenge").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("help.pvz.full_challenge").withStyle(ChatFormatting.RED), true);
+                    PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                 } else if(ChallengeManager.hasPlantNearby((ServerLevel) level, context.getClickedPos().above())){
-                    PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.plant_inside").withStyle(ChatFormatting.RED));
+                    player.displayClientMessage(Component.translatable("help.pvz.plant_inside").withStyle(ChatFormatting.RED), true);
+                    PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                 } else{
                     if(ChallengeManager.createChallenge((ServerLevel) level, getChallengeType(context.getItemInHand()), context.getClickedPos().above())) {
                         if (PlayerUtil.isPlayerSurvival(context.getPlayer())) {
                             context.getItemInHand().shrink(1);
                         }
                     } else{
-                        PlayerUtil.sendMsgTo(context.getPlayer(), Component.translatable("help.pvz.wrong_challenge").withStyle(ChatFormatting.RED));
+                        player.displayClientMessage(Component.translatable("help.pvz.wrong_challenge").withStyle(ChatFormatting.RED), true);
+                        PlayerUtil.playClientSound(player, SoundRegister.NO.get());
                     }
                 }
             }

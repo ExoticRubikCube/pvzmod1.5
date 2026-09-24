@@ -5,6 +5,7 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.plant.explosion.BambooLordEntity;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -54,7 +55,7 @@ this.discard();
 			target.setDeltaMovement(target.getDeltaMovement().add(0, BambooLordEntity.UP_SPEED, 0));
 		});
 		for(int i = 0; i < 2; ++ i) {
-		    EntityUtil.spawnParticle(this, 5);
+		    EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 	    }
 	}
 	

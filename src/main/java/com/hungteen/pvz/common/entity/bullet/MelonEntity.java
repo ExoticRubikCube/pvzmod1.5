@@ -1,6 +1,7 @@
 package com.hungteen.pvz.common.entity.bullet;
 
 import com.hungteen.pvz.api.paz.IPAZEntity;
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
@@ -73,7 +74,7 @@ public class MelonEntity extends PultBulletEntity {
 			}
 		});
 		for(int i = 0; i < 10; ++ i) {
-			EntityUtil.spawnParticle(this, (this.getMelonState() == MelonStates.ICE ? 2 : 1));
+			EntityUtil.spawnParticle(this, (this.getMelonState() == MelonStates.ICE ? ParticleRegister.FROZEN_MELON_SLICE.get() : ParticleRegister.MELON_SLICE.get()));
 		}
 		EntityUtil.playSound(this, SoundRegister.MELON_HIT.get());
 	}

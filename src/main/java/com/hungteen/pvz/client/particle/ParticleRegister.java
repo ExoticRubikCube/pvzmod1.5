@@ -24,5 +24,6 @@ public class ParticleRegister {
 	public static final RegistryObject<SimpleParticleType> GREEN_SWEEP = PARTICLE_TYPES.register("green_sweep", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> POP_CORN = PARTICLE_TYPES.register("pop_corn", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> FOG = PARTICLE_TYPES.register("fog", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> MASHED_POTATO = PARTICLE_TYPES.register("mashed_potato", () -> new SimpleParticleType(false));
 
 }

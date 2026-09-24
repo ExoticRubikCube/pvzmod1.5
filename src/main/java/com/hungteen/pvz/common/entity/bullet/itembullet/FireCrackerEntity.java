@@ -5,6 +5,7 @@ import com.hungteen.pvz.common.item.ItemRegister;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.item.ItemStack;
@@ -72,7 +73,7 @@ this.discard();
 			    entity.hurt(PVZEntityDamageSource.explode(this, this.getThrower()), this.getAttackDamage());
 		    });
 		    for(int i = 0;i < 3; ++ i) {
-			    EntityUtil.spawnParticle(this, 5);
+			    EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 		    }
 		} 
 	}

@@ -13,9 +13,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class PotatoMineParticle extends BombParticle {
+public class YellowBombParticle extends BombParticle {
 
-	public PotatoMineParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+	public YellowBombParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
                               SpriteSet sprite) {
 		super(world, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
 		this.lifetime = 6 + this.random.nextInt(4);
@@ -36,7 +36,7 @@ public class PotatoMineParticle extends BombParticle {
 		@Override
 		public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z,
 				double xSpeed, double ySpeed, double zSpeed) {
-			return new PotatoMineParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.sprite);
+			return new YellowBombParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.sprite);
 		}
 	}
 }

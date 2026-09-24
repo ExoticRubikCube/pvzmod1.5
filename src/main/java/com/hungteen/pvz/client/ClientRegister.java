@@ -40,7 +40,7 @@ import com.hungteen.pvz.client.model.entity.zombie.roof.*;
 import com.hungteen.pvz.client.model.entity.zombie.zombotany.*;
 import com.hungteen.pvz.client.particle.*;
 import com.hungteen.pvz.client.particle.bomb.CherryBombParticle;
-import com.hungteen.pvz.client.particle.bomb.PotatoMineParticle;
+import com.hungteen.pvz.client.particle.bomb.YellowBombParticle;
 import com.hungteen.pvz.client.render.entity.bullet.*;
 import com.hungteen.pvz.client.render.entity.creature.FoodieZombieRender;
 import com.hungteen.pvz.client.render.entity.creature.MooBloomRender;
@@ -129,7 +129,7 @@ public class ClientRegister {
 	@SubscribeEvent
     public static void registerFactories(RegisterParticleProvidersEvent event) {
         event.register(ParticleRegister.RED_BOMB.get(), CherryBombParticle.Provider::new);
-        event.register(ParticleRegister.YELLOW_BOMB.get(), PotatoMineParticle.Provider::new);
+        event.register(ParticleRegister.YELLOW_BOMB.get(), YellowBombParticle.Provider::new);
         event.register(ParticleRegister.DIRT_BURST_OUT.get(), DirtBurstOutParticle.Provider::new);
         event.register(ParticleRegister.SLEEP.get(), SleepParticle.Provider::new);
         event.register(ParticleRegister.SPORE.get(), SporeParticle.Provider::new);
@@ -141,6 +141,7 @@ public class ClientRegister {
         event.register(ParticleRegister.GREEN_SWEEP.get(), GreenSweepParticle.Provider::new);
         event.register(ParticleRegister.POP_CORN.get(), PopCornParticle.Provider::new);
         event.register(ParticleRegister.FOG.get(), FogParticle.Provider::new);
+        event.register(ParticleRegister.MASHED_POTATO.get(), MashedPotatoParticle.Provider::new);
 	}
 
 

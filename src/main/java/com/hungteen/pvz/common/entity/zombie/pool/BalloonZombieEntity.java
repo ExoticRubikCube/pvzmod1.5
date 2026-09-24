@@ -16,9 +16,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -52,19 +54,25 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 	@Override
 	public void resetParts() {
 		removeParts();
-		this.part = new PVZHealthPartEntity(this, 0.6f, -0.45f);
+		this.part = new PVZHealthPartEntity(this, 0.6f, 0.7f);
 		this.part.setOwner(this);
 	}
-	
+
 	@Override
-	protected float getPartHeightOffset() {
-		if(this.isMiniZombie()) return 1.0F;
-		return 2.4F;
+	public float getPartHeightOffset() {
+		if(this.isMiniZombie()) return 0.55F;
+		return 1.7F;
 	}
 	
 	@Override
 	public float getPartWidthOffset() {
 		return 0F;
+	}
+	
+	@Override
+	public EntityDimensions getDimensions(Pose pose) {
+		final EntityDimensions dimensions = super.getDimensions(pose);
+		return this.hasBalloon() ? EntityDimensions.scalable(dimensions.width, dimensions.height * 0.7F) : dimensions;
 	}
 	
 	@Override
@@ -113,6 +121,7 @@ public class BalloonZombieEntity extends DefenceZombieEntity {
 		if(data.equals(HAS_BALLOON)) {
 			this.setNoGravity(this.hasBalloon());
 			this.moveControl = this.hasBalloon() ? FlyController : GroundController;
+			this.refreshDimensions();
 		}
 	}
 	

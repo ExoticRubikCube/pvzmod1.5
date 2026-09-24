@@ -15,21 +15,21 @@ import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.MathUtil;
-import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,9 +60,15 @@ public class PotatoMineEntity extends PlantCloserEntity{
 			}
 		} else {
 			if(this.isRisingFromDirt()) {
-				for(int i = 0; i < 1; ++ i) {
-					Vec3 offset = new Vec3(MathUtil.getRandomFloat(getRandom()), 0, MathUtil.getRandomFloat(getRandom())).normalize();
-					WorldUtil.spawnRandomSpeedParticle(level, ParticleRegister.DIRT_BURST_OUT.get(), this.position().add(offset), MathUtil.getRandomFloat(getRandom()) / 8, 0.06F);
+				final BlockPos groundPos = this.getOnPos();
+				for(int i = 0; i < 3; ++ i) {
+					this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.level.getBlockState(groundPos)).setPos(groundPos),
+							this.getX() + (this.getRandom().nextDouble() - 0.5D),
+							this.getY() + 0.1D,
+							this.getZ() + (this.getRandom().nextDouble() - 0.5D),
+							(this.getRandom().nextDouble() - 0.5D) * 6.0D,
+							2D,
+							(this.getRandom().nextDouble() - 0.5D) * 4.0D);
 				}
 			}
 			if(this.isPoisonous() && this.getRandom().nextBoolean()) {
@@ -108,10 +114,11 @@ public class PotatoMineEntity extends PlantCloserEntity{
 			});
 			PVZPlantEntity.clearLadders(this, aabb);
 			EntityUtil.playSound(this, SoundRegister.POTATO_MINE.get());
-			for(int i = 1; i <= 10; ++ i) {
-				EntityUtil.spawnParticle(this, 3);
-				EntityUtil.spawnParticle(this, 4);
-			}
+			((ServerLevel) this.level).sendParticles(ParticleRegister.MASHED_POTATO.get(),
+					this.getX() + this.getRandom().nextFloat() * 0.5 - 0.25,
+					this.getY() + this.getRandom().nextFloat() * 0.5 + 0.25,
+					this.getZ() + this.getRandom().nextFloat() * 0.5 - 0.25,
+					20, 0.5, 0.5, 0.5, 0.1);
 			if(this.isPoisonous()) {
 				this.spawnPoisonCloud();
 			}

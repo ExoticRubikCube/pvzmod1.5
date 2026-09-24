@@ -202,6 +202,7 @@
     "entity.pvz.jewel":"Jewel",
     "entity.pvz.energy":"Energy",
     "entity.pvz.coin":"Coin",
+    "entity.pvz.seed_packet":"Seed Packet",
     
     "entity.pvz.pea":"Pea",
     "entity.pvz.potato":"Potato",
@@ -1327,6 +1328,7 @@
     "challenge.pvz.level_5_8.name": "5-8",
     "challenge.pvz.level_5_9.name": "5-9",
     "challenge.pvz.level_5_10.name": "5-10",
+    "challenge.pvz.seed_rain.name": "It's Raining Seeds",
     "challenge.pvz.level_1_10.msg1": "Hello,",
     "challenge.pvz.level_1_10.msg2": "",
     "challenge.pvz.level_1_10.msg3": "We are about to launch an",

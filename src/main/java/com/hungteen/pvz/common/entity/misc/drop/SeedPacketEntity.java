@@ -1,6 +1,9 @@
 package com.hungteen.pvz.common.entity.misc.drop;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -17,11 +20,18 @@ import javax.annotation.Nullable;
 public class SeedPacketEntity extends DropEntity {
 
 	private static final float FALL_SPEED = 0.03F;
+	private static final EntityDataAccessor<ItemStack> DATA_CARD_STACK = SynchedEntityData.defineId(SeedPacketEntity.class, EntityDataSerializers.ITEM_STACK);
 	private ItemStack cardStack = ItemStack.EMPTY;
 
 	public SeedPacketEntity(EntityType<? extends Entity> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(true);
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(DATA_CARD_STACK, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -39,16 +49,19 @@ public class SeedPacketEntity extends DropEntity {
 	 */
 	public void setCardStack(ItemStack cardStack) {
 		this.cardStack = cardStack.copy();
+		this.entityData.set(DATA_CARD_STACK, this.cardStack);
 	}
 
 	public ItemStack getCardStack() {
-		return this.cardStack;
+		//cardStack 字段只在服务端有效，客户端渲染器必须读同步值
+		return this.level.isClientSide() ? this.entityData.get(DATA_CARD_STACK) : this.cardStack;
 	}
 
 	@Nullable
 	@Override
 	public ItemStack getPickResult() {
-		return this.cardStack.isEmpty() ? null : this.cardStack.copy();
+		final ItemStack card = this.getCardStack();
+		return card.isEmpty() ? null : card.copy();
 	}
 
 	@Override
@@ -75,7 +88,7 @@ public class SeedPacketEntity extends DropEntity {
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("card_stack")) {
-			this.cardStack = ItemStack.of(compound.getCompound("card_stack"));
+			this.setCardStack(ItemStack.of(compound.getCompound("card_stack")));
 		}
 	}
 

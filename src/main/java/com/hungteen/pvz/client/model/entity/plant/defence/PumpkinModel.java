@@ -64,8 +64,8 @@ public class PumpkinModel extends PVZPlantModel<PumpkinEntity> {
 			PartDefinition root = mesh.getRoot();
 			root.addOrReplaceChild("total",
 				CubeListBuilder.create()
-					.texOffs(0, 0).addBox(-8.5F, -10.0F, -8.5F, 17.0F, 10.0F, 17.0F)
-					.texOffs(2, 27).addBox(8.0F, -6.0F, -8.5F, 1.0F, 6.0F, 17.0F),
+					.texOffs(0, 0).addBox(-8.5F, -10.0F, -8.5F, 17.0F, 10.0F, 17.0F, new CubeDeformation(1.0F))
+					.texOffs(2, 27).addBox(8.0F, -6.0F, -8.5F, 1.0F, 6.0F, 17.0F, new CubeDeformation(1.0F)),
 				PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
 			return LayerDefinition.create(mesh, 128, 128);
 		}

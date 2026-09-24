@@ -9,6 +9,7 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.utils.EntityUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -28,7 +29,7 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
 	@Override
 	public void performAttack(LivingEntity target) {
 		for(int i = 0; i < 2; ++ i) {
-			EntityUtil.spawnParticle(this, 5);
+			EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 		}
 		EntityUtil.playSound(this, SoundRegister.FROZEN.get());
 		this.dealDamageTo(target);
@@ -40,7 +41,7 @@ public class IcebergLettuceEntity extends PlantCloserEntity implements IIceEffec
 		super.startSuperMode(first);
 		final float range = this.getSuperRange();
 		for(int i = 0; i < 2; ++ i) {
-			EntityUtil.spawnParticle(this, 5);
+			EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 		}
 		EntityUtil.playSound(this, SoundRegister.FROZEN.get());
 		int cnt = 0;

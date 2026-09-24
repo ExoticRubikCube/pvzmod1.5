@@ -104,7 +104,7 @@ public abstract class DefenceZombieEntity extends PVZZombieEntity implements IMu
 		return super.canOuterDefend(source) && this.hitDefence;
 	}
 
-	protected float getPartHeightOffset() {
+	public float getPartHeightOffset() {
 		if(this.isMiniZombie()) return 0.1F;
 		return 0.2f;
 	}

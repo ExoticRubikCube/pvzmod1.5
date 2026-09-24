@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.entity.bullet;
 
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.advancement.trigger.EntityEffectAmountTrigger;
 import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.plant.PVZPlantEntity;
@@ -66,10 +67,10 @@ public class CornEntity extends PultBulletEntity {
 		level.addFreshEntity(item);
 		this.cornCnt = 0;
 		for(int i = 0; i < 3; ++ i) {
-			EntityUtil.spawnParticle(this, 8);
+			EntityUtil.spawnParticle(this, ParticleRegister.YELLOW_BOMB.get());
 		}
 		for(int i = 0; i < 20; ++ i) {
-			EntityUtil.spawnParticle(this, 9);
+			EntityUtil.spawnParticle(this, ParticleRegister.POP_CORN.get());
 		}
 		EntityUtil.playSound(this, SoundRegister.CHERRY_BOMB.get());
 	}

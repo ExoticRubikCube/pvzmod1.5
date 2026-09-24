@@ -15,6 +15,7 @@ import com.hungteen.pvz.common.entity.EntityRegister;
 import com.hungteen.pvz.common.entity.ai.goal.ChallengeMoveGoal;
 import com.hungteen.pvz.common.entity.misc.drop.SeedPacketEntity;
 import com.hungteen.pvz.common.entity.zombie.base.AbstractBossZombieEntity;
+import com.hungteen.pvz.common.item.spawn.card.PlantCardItem;
 import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.network.PVZFogPacket;
 import com.hungteen.pvz.common.network.PVZPacketHandler;
@@ -249,7 +250,7 @@ public class Challenge implements IChallenge {
 				if(this.getRaidComponent().showRoundTitle()) {
 					this.getPlayers().forEach(p -> {
 						p.connection.send(new ClientboundSetTitlesAnimationPacket(10, WAVE_WARNING_TICK - 20, 10));
-						PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
+						PlayerUtil.sendSubTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
 					});
 				}
 			}
@@ -314,7 +315,7 @@ public class Challenge implements IChallenge {
 				PlayerUtil.playClientSound(p, this.challenge.getPrepareSound());
 				if(this.currentWave == 0){
 					p.connection.send(new ClientboundSetTitlesAnimationPacket(5, READY_TITLE_STAY_TICK, 5));
-					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.ready").withStyle(ChatFormatting.DARK_RED));
+					PlayerUtil.sendSubTitleToPlayer(p, Component.translatable("challenge.pvz.ready").withStyle(ChatFormatting.DARK_RED));
 				}
 			});
 		}
@@ -359,7 +360,10 @@ public class Challenge implements IChallenge {
 			final SeedPacketEntity seedPacket = EntityRegister.SEED_PACKET.get().create(this.world);
 			if(seedPacket != null) {
 				seedPacket.moveTo(pos, 0.0F, 0.0F);
-				seedPacket.setCardStack(card.get());
+				//种子池条目是 WeightList 里共享的同一个 ItemStack，直接写 uuid 会把标记永久留进池子
+				final ItemStack cardStack = card.get().copy();
+				PlantCardItem.setChallengeUuid(cardStack, this.getBarUuid());
+				seedPacket.setCardStack(cardStack);
 				this.world.addFreshEntity(seedPacket);
 			}
 		}
@@ -722,14 +726,17 @@ public class Challenge implements IChallenge {
 	}
 
 	/**
-	 * 对齐 pvz2D Board::UpdateProgressMeter：进度条 = 对 boss 已造成伤害比例，boss 死亡时打满。
+	 * 对齐 pvz2D Board::UpdateProgressMeter：进度条 = 对 boss 已造成伤害比例（总量含内防护盾），boss 死亡时打满。
 	 */
 	private float getBossProgress() {
 		final Entity boss = this.getBossEntity();
-		if(boss instanceof LivingEntity living && living.isAlive() && living.getMaxHealth() > 0) {
-			return Mth.clamp((float) (living.getMaxHealth() - living.getHealth()) / living.getMaxHealth(), 0.0F, 1.0F);
+		float progress = 1.0F;
+		if(boss instanceof AbstractPAZEntity pazEntity && boss.isAlive() && pazEntity.getCurrentMaxHealth() > 0) {
+			progress = Mth.clamp((float) (1.0D - pazEntity.getCurrentHealth() / pazEntity.getCurrentMaxHealth()), 0.0F, 1.0F);
+		} else if(boss instanceof LivingEntity living && living.isAlive() && living.getMaxHealth() > 0) {
+			progress = Mth.clamp((float) (living.getMaxHealth() - living.getHealth()) / living.getMaxHealth(), 0.0F, 1.0F);
 		}
-		return 1.0F;
+		return progress;
 	}
 
 	public boolean isBossChallenge() {
@@ -760,12 +767,12 @@ public class Challenge implements IChallenge {
 			if(this.getRaidComponent().showRoundTitle()){
 				if(isFinalWave){
 					p.connection.send(new ClientboundSetTitlesAnimationPacket(10, 60, 10));
-					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.final_wave").withStyle(ChatFormatting.DARK_RED));
+					PlayerUtil.sendSubTitleToPlayer(p, Component.translatable("challenge.pvz.final_wave").withStyle(ChatFormatting.DARK_RED));
 				} else if(this.warningSent){
 					p.connection.send(new ClientboundClearTitlesPacket(false));
 				} else if(wave.isBigWave()){
 					p.connection.send(new ClientboundSetTitlesAnimationPacket(10, WAVE_WARNING_TICK - 20, 10));
-					PlayerUtil.sendTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
+					PlayerUtil.sendSubTitleToPlayer(p, Component.translatable("challenge.pvz.huge_wave").withStyle(ChatFormatting.DARK_RED));
 				}
 			}
 			if(wave.isBigWave()){

@@ -114,6 +114,14 @@ public class CactusEntity extends PlantShooterEntity {
 		}
 		return super.canPAZTarget(entity);
 	}
+
+	@Override
+	protected float getShootPointHeight(LivingEntity target) {
+		if(target instanceof BalloonZombieEntity balloon && balloon.hasBalloon()) {
+			return balloon.getPartHeightOffset();
+		}
+		return super.getShootPointHeight(target);
+	}
 	
 	@Override
 	public boolean checkY(Entity target) {

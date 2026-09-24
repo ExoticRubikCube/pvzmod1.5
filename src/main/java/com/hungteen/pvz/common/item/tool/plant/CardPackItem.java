@@ -4,6 +4,7 @@ import com.hungteen.pvz.common.container.CardPackContainer;
 import com.hungteen.pvz.common.container.inventory.ItemInventory;
 import com.hungteen.pvz.common.item.PVZItemGroups;
 import com.hungteen.pvz.common.item.spawn.card.SummonCardItem;
+import com.hungteen.pvz.common.misc.sound.SoundRegister;
 import com.hungteen.pvz.common.world.challenge.ChallengeManager;
 import com.hungteen.pvz.utils.PlayerUtil;
 import net.minecraft.ChatFormatting;
@@ -63,7 +64,8 @@ public class CardPackItem extends Item {
 			if (playerIn instanceof ServerPlayer && handIn == InteractionHand.MAIN_HAND) {
 				if (ChallengeManager.isPlayerInChallenge((ServerPlayer) playerIn)) {
 					//挑战进行中禁止打开召唤卡背包
-					PlayerUtil.sendMsgTo(playerIn, Component.translatable("help.pvz.in_challenge").withStyle(ChatFormatting.RED));
+					playerIn.displayClientMessage(Component.translatable("help.pvz.in_challenge").withStyle(ChatFormatting.RED), true);
+					PlayerUtil.playClientSound(playerIn, SoundRegister.NO.get());
 				} else {
 					NetworkHooks.openScreen((ServerPlayer) playerIn, new MenuProvider() {
 					

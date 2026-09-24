@@ -6,6 +6,7 @@ import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
 import com.hungteen.pvz.utils.EntityUtil;
 import com.hungteen.pvz.utils.ZombieUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -21,11 +22,10 @@ import net.minecraft.world.level.Level;
 public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 
 	protected final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
-	//挑战 boss 战由挑战方血条接管，禁止此实体自带 Boss 条广播
-	private boolean bossBarVisible = true;
 
-	public void setBossBarVisible(boolean bossBarVisible) {
-		this.bossBarVisible = bossBarVisible;
+	//addPlayer 在不可见时仍会记录玩家（getPlayers 供音效与击杀统计使用），只拦血条包的下发
+	public void setBossBarVisible(boolean visible) {
+		this.bossInfo.setVisible(visible);
 	}
 	protected int refreshCountCD = 30; 
 	protected int spawnImmuneCD = 100;
@@ -87,6 +87,8 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 			if(++ this.noTargetTick >= 40) {
 				this.heal(1);
 			}
+		} else {
+			this.noTargetTick = 0;
 		}
 	}
 	
@@ -97,15 +99,25 @@ public abstract class AbstractBossZombieEntity extends PVZZombieEntity {
 	
 	public void startSeenByPlayer(ServerPlayer player) {
 		super.startSeenByPlayer(player);
-		if(this.bossBarVisible) {
-			this.bossInfo.addPlayer(player);
-		}
+		this.bossInfo.addPlayer(player);
 	}
 
 	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
-		if(this.bossBarVisible) {
-			this.bossInfo.removePlayer(player);
+		this.bossInfo.removePlayer(player);
+	}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("boss_bar_visible", this.bossInfo.isVisible());
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if(compound.contains("boss_bar_visible")) {
+			this.bossInfo.setVisible(compound.getBoolean("boss_bar_visible"));
 		}
 	}
 	

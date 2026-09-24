@@ -14,6 +14,7 @@ import com.hungteen.pvz.utils.WorldUtil;
 import com.hungteen.pvz.utils.enums.PAZAlmanacs;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 			});
 			this.setDeltaMovement(this.getDeltaMovement().add(0, UP_SPEED, 0));
 			for(int i = 0; i < 3; ++ i) {
-				EntityUtil.spawnParticle(this, 5);
+				EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 			}
 			EntityUtil.playSound(this, SoundRegister.POTATO_MINE.get());
 		}
@@ -49,7 +50,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 	@Override
 	public void performAttack(LivingEntity target1) {
 		for(int i = 0; i < 3; ++ i) {
-			EntityUtil.spawnParticle(this, 5);
+			EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 		}
 		final float range = 3F;
 		EntityUtil.getTargetableEntities(this, EntityUtil.getEntityAABB(this, range, range)).forEach((target) -> {
@@ -83,7 +84,7 @@ public class BambooLordEntity extends PlantCloserEntity {
 			}
 		}
 		for(int i = 0; i < 3; ++ i) {
-			EntityUtil.spawnParticle(this, 5);
+			EntityUtil.spawnParticle(this, ParticleTypes.EXPLOSION);
 		}
 this.discard();
 	}

@@ -1,5 +1,6 @@
 package com.hungteen.pvz.common.entity.zombie.roof;
 
+import com.hungteen.pvz.client.particle.ParticleRegister;
 import com.hungteen.pvz.common.impl.zombie.RoofZombies;
 import com.hungteen.pvz.common.impl.zombie.ZombieType;
 import com.hungteen.pvz.utils.EntityUtil;
@@ -26,7 +27,7 @@ public class GigaGargantuarEntity extends GargantuarEntity {
 			if(! target.is(entity)) {
 				target.hurt(getZombieAttackDamageSource(), EntityUtil.getMaxHealthDamage(target, 0.5F));
 				for(int i = 0; i < 5; ++ i) {
-					EntityUtil.spawnParticle(target, 6);
+					EntityUtil.spawnParticle(target, ParticleRegister.DIRT_BURST_OUT.get());
 				}
 			}
 		});

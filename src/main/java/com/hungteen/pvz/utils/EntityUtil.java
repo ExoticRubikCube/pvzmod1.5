@@ -22,8 +22,6 @@ import com.hungteen.pvz.common.entity.zombie.pool.BalloonZombieEntity;
 import com.hungteen.pvz.common.entity.zombie.pool.BobsleTeamEntity;
 import com.hungteen.pvz.common.event.handler.LivingEventHandler;
 import com.hungteen.pvz.common.misc.PVZEntityDamageSource;
-import com.hungteen.pvz.common.network.PVZPacketHandler;
-import com.hungteen.pvz.common.network.toclient.SpawnParticlePacket;
 import com.hungteen.pvz.common.potion.EffectRegister;
 import com.hungteen.pvz.compat.jade.provider.PVZEntityProvider;
 import com.hungteen.pvz.utils.interfaces.IHasMultiPart;
@@ -52,7 +50,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -126,10 +123,11 @@ public class EntityUtil {
     /**
      * spawn particle from server side to client side.
      */
-    public static void spawnParticle(Entity entity, int type) {
-        PVZPacketHandler.CHANNEL.send(PacketDistributor.NEAR.with(() -> {
-            return new PacketDistributor.TargetPoint(entity.getX(), entity.getY(), entity.getZ(), 40, entity.level.dimension());
-        }), new SpawnParticlePacket(type, entity.getX(), entity.getY(), entity.getZ()));
+    public static void spawnParticle(Entity entity, ParticleOptions type) {
+        /* TODO 原版粒子包 count>0 时在客户端走 alwaysShow 分支，不受“粒子效果”视频设置裁减 */
+        if(entity.level instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(type, entity.getX(), entity.getY(), entity.getZ(), 1, 0, 0, 0, 0);
+        }
     }
 
     /**

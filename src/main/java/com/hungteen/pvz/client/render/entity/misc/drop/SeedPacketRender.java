@@ -43,7 +43,6 @@ public class SeedPacketRender extends EntityRenderer<SeedPacketEntity> {
 			stack.translate(0.0D, 0.2F, 0.0D);
 			stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 			stack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-			stack.scale(1.5F, 1.5F, 1.5F);
 			final ItemStack card = entity.getCardStack();
 			if(! card.isEmpty()) {
 				this.itemRenderer.renderStatic(card, ItemTransforms.TransformType.FIXED, packedLight, OverlayTexture.NO_OVERLAY, stack, source, entity.getId());

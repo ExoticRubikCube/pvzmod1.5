@@ -202,6 +202,7 @@
   "entity.pvz.jewel": "宝石",
   "entity.pvz.energy": "能量豆",
   "entity.pvz.coin": "钱币",
+  "entity.pvz.seed_packet": "种子包",
 
   "entity.pvz.pea": "豌豆",
   "entity.pvz.potato": "土豆",
@@ -1329,6 +1330,7 @@
   "challenge.pvz.level_5_8.name": "5-8",
   "challenge.pvz.level_5_9.name": "5-9",
   "challenge.pvz.level_5_10.name": "5-10",
+  "challenge.pvz.seed_rain.name": "种子雨",
   "challenge.pvz.level_1_10.msg1": "你好",
   "challenge.pvz.level_1_10.msg2": "",
   "challenge.pvz.level_1_10.msg3": "我们即将发起一场全面的进攻",

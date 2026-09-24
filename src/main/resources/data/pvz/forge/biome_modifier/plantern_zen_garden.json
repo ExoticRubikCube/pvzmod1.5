@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "pvz:zen_garden",
+  "features": "pvz:plantern",
+  "step": "vegetal_decoration"
+}
